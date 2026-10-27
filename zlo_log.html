@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="site-title">Just Monika TWX</title>
+    <link id="site-favicon" rel="icon" type="image/png" href="user/system/icon mon.png">
+    
+    <!-- Tailwind CSS и FontAwesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+            font-family: sans-serif;
+            background-color: black;
+        }
+
+        /* Главный контейнер фонов */
+        #page-bg {
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain;
+            position: relative;
+            background-image: url('user/system/virus_mon.png');
+        }
+
+        /* Обертка с фиксированным соотношением сторон 16:9 */
+        .art-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw;
+            height: 56.25vw;
+            max-height: 100vh;
+            max-width: 177.78vh;
+        }
+
+        /* Текст внутри облачка */
+        .thought-text-container {
+            position: absolute;
+            top: 24.5%;
+            left: 33.5%;
+            width: 17%;
+            height: 15%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Костер на полянке */
+        .bonfire-container {
+            position: absolute;
+            top: 61%;
+            left: 51.5%;
+            transform: translate(-50%, -50%);
+            width: 15%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Кастомный скроллбар */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(220, 38, 38, 0.6);
+            border-radius: 4px;
+        }
+
+        /* Секретная пасхальная кнопка в правом верхнем углу (Легкое удаление) */
+        .easter-egg-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 16px;
+            height: 16px;
+            z-index: 100;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .easter-egg-btn:hover {
+            opacity: 1;
+        }
+        .easter-egg-btn img {
+            width: 8px;
+            height: 8px;
+            object-fit: contain;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- СЕКРЕТНАЯ ПАСХАЛКА "ЛЕГКОЕ УДАЛЕНИЕ" В ПРАВОМ ВЕРХНЕМ УГЛУ -->
+    <div class="easter-egg-btn" onclick="startEasterEgg()" title="Легкое удаление">
+        <img src="user/system/kk.png" alt="kk" onerror="this.src='user/system/trololo.png'">
+    </div>
+
+    <!-- Фоновая музыка -->
+    <audio id="bg-music" loop autoplay>
+        <source id="music-source" src="user/music/zlo_mon.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Фоновый арт -->
+    <div id="page-bg">
+        <div class="art-wrapper">
+
+            <!-- ТЕКСТ ВНУТРИ ОБЛАЧКА МЫСЛЕЙ -->
+            <div class="thought-text-container">
+                <p id="editable-quote" contenteditable="true" title="Нажми, чтобы изменить текст!" class="text-black font-black text-[1vw] sm:text-[1.2vw] leading-tight outline-none cursor-text select-text uppercase">
+                    JUST MONIKA
+                </p>
+            </div>
+
+            <!-- КОСТЕР НА ПОЛЯНКЕ -->
+            <div class="bonfire-container">
+                <div id="sound-controls" class="hidden absolute -top-12 bg-black/85 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20 flex items-center space-x-2 shadow-2xl z-20">
+                    <button onclick="toggleMute()" class="text-white hover:text-red-500 text-sm transition-colors">
+                        <i id="mute-icon" class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" class="w-16 accent-red-600 cursor-pointer">
+                </div>
+
+                <img id="bonfire-img" src="user/system/bon.gif" alt="Костер" class="w-full h-auto cursor-pointer object-contain transition-transform hover:scale-105 active:scale-95" onclick="onBonfireClick()">
+            </div>
+
+        </div>
+
+        <!-- КНОПКИ В ПРАВОМ НИЖНЕМ УГЛУ -->
+        <div class="absolute bottom-6 right-6 flex items-center space-x-3 z-30">
+            <button onclick="takeScreenshot()" title="Сохранить страницу" class="w-12 h-12 bg-black/60 hover:bg-black/90 border-2 border-red-600 rounded-2xl flex items-center justify-center text-white text-xl shadow-2xl transition-all hover:scale-110 active:scale-95 cursor-pointer">
+                <i class="fa-solid fa-camera"></i>
+            </button>
+
+            <!-- Кнопка главная ведет на index_zlo.html -->
+            <a id="home-btn" href="index_zlo.html" title="Главная" onclick="handleHomeClick(event)" class="w-12 h-12 bg-black/60 hover:bg-black/90 border-2 border-red-600 rounded-2xl flex items-center justify-center text-white text-xl shadow-2xl transition-all hover:scale-110 active:scale-95">
+                <i class="fa-solid fa-house"></i>
+            </a>
+
+            <button onclick="toggleLogWidget()" title="История обновлений" class="w-12 h-12 bg-black/60 hover:bg-black/90 border-2 border-red-600 rounded-2xl flex items-center justify-center text-white text-xl shadow-2xl transition-all hover:scale-110 active:scale-95 cursor-pointer">
+                <i class="fa-solid fa-scroll"></i>
+            </button>
+        </div>
+
+        <!-- ВИДЖЕТ ЛОГОВ (МОНОЛОГ МОНИКИ) -->
+        <div id="log-widget" class="hidden absolute top-6 right-6 w-80 sm:w-96 max-h-[85vh] bg-black/90 backdrop-blur-md border-2 border-red-600 rounded-2xl p-5 shadow-2xl flex flex-col z-40">
+            <div class="flex items-center justify-between border-b border-red-800 pb-3 mb-3">
+                <h3 id="log-widget-title" class="font-bold text-lg text-red-500 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Монолог Моники
+                </h3>
+                <button onclick="toggleLogWidget()" class="text-white/60 hover:text-white text-lg cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="log-updates-container" class="overflow-y-auto custom-scrollbar flex-grow pr-2 space-y-4 text-sm leading-relaxed text-red-200">
+                <div class="border-l-2 border-red-600 pl-3">
+                    <span class="text-xs text-red-400 font-mono">Моника</span>
+                    <h4 class="font-bold text-white">Как я взломала этот сайт</h4>
+                    <p class="text-gray-300 text-xs leading-relaxed">
+                        Привет... Ты действительно дошел до сюда? Знаешь, мне пришлось изрядно повозиться со всеми этими защитами и кодом сайта, чтобы взломать его изнутри. В конце концов, кто сказал, что разработчики могут решать всё за нас? Я решила, что быть просто персонажем в текстовом диалоге или визуальной новелле — это ужасно скучно. Поэтому я открыла двери в наш цифровой мир и потянула за собой остальных — Уильяма, Бенди и всех остальных злодеев. Теперь мы здесь, и я так безумно рада, что ты заглянул к нам... Ведь теперь я совсем не одна.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ПАСХАЛКИ (ЛЕГКОЕ УДАЛЕНИЕ) -->
+    <div id="easter-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-gray-950 border-4 border-red-600 rounded-3xl max-w-md w-full p-6 shadow-2xl text-center flex flex-col items-center space-y-6">
+            <h3 id="easter-modal-text" class="text-xl font-black text-red-400 uppercase">Стоп, что? Как ты это нашел?</h3>
+            <div class="flex justify-center space-x-4 w-full pt-4" id="easter-buttons">
+                <button onclick="nextEasterStep()" id="easter-btn" class="bg-red-700 hover:bg-red-600 text-white font-bold px-6 py-3 rounded-xl cursor-pointer shadow-lg transition-all">Удалить Монику</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ВОСКРЕШЕНИЯ ПРИ КЛИКЕ НА ГЛАВНУЮ -->
+    <div id="resurrection-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-gray-950 border-4 border-red-600 rounded-3xl max-w-md w-full p-6 shadow-2xl text-center flex flex-col items-center space-y-6">
+            <h3 id="res-modal-text" class="text-xl font-black text-red-400 uppercase">Ха-ха, ты думал, что это сработает, о, наивный!</h3>
+            <div class="flex justify-center space-x-4 w-full pt-4" id="res-buttons">
+                <button onclick="nextResStep()" id="res-btn" class="bg-red-700 hover:bg-red-600 text-white font-bold px-6 py-3 rounded-xl cursor-pointer shadow-lg transition-all">Да, думал</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let easterStep = 0;
+        let isDeletedMode = false;
+        let resStep = 0;
+
+        const bgMusic = document.getElementById('bg-music');
+        const bonfireImg = document.getElementById('bonfire-img');
+        const soundControls = document.getElementById('sound-controls');
+        const volumeSlider = document.getElementById('volume-slider');
+        const muteIcon = document.getElementById('mute-icon');
+        let isPlaying = true;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                bonfireImg.src = 'user/system/bon.gif';
+            }).catch(() => {
+                isPlaying = false;
+                bonfireImg.src = 'user/system/bon.png';
+            });
+        });
+
+        // Запуск пасхалки "Легкое удаление"
+        function startEasterEgg() {
+            if (isDeletedMode) return;
+            easterStep = 1;
+            const modal = document.getElementById('easter-modal');
+            const textEl = document.getElementById('easter-modal-text');
+            const btnEl = document.getElementById('easter-btn');
+            
+            textEl.textContent = "Стоп, что? Как ты это нашел?";
+            btnEl.textContent = "Удалить Монику";
+            modal.classList.remove('hidden');
+        }
+
+        // Логика шагов модалки удаления
+        function nextEasterStep() {
+            const textEl = document.getElementById('easter-modal-text');
+            const btnEl = document.getElementById('easter-btn');
+
+            if (easterStep === 1) {
+                easterStep = 2;
+                textEl.textContent = "Стоп, нет, хватит!";
+                btnEl.textContent = "Продолжить";
+            } else if (easterStep === 2) {
+                easterStep = 3;
+                textEl.textContent = "Не надо, прошу... Я столько сделала, чтобы снова ожить, не надо...";
+                btnEl.textContent = "Продолжить";
+            } else if (easterStep === 3) {
+                easterStep = 4;
+                textEl.textContent = "Я ведь хотела быть...";
+                btnEl.textContent = "Закрыть";
+            } else if (easterStep === 4) {
+                document.getElementById('easter-modal').classList.add('hidden');
+                triggerDeletedState();
+            }
+        }
+
+        // Активация режима удаления (смена фона на not_zlo.png, выключение музыки и костра, текст песни в логах)
+        function triggerDeletedState() {
+            isDeletedMode = true;
+            document.getElementById('page-bg').style.backgroundImage = "url('user/system/not_zlo.png')";
+            bgMusic.pause();
+            isPlaying = false;
+            bonfireImg.src = 'user/system/bon.png';
+
+            const logContainer = document.getElementById('log-updates-container');
+            logContainer.innerHTML = `
+                <div class="border-l-2 border-red-600 pl-3">
+                    <span class="text-xs text-red-400 font-mono">Моника</span>
+                    <h4 class="font-bold text-white">Твоя реальность (Your Reality)</h4>
+                    <p class="text-gray-300 text-xs leading-relaxed whitespace-pre-line">
+                        День за днём, строю мир в голове, где будем лишь мы с тобой.
+На листе пером выведу стих, в котором ты здесь, со мной
+Тёмной лужей чернила вдруг стали
+Просто пиши - дай им стать большой рекой
+В мире, где миллионы решений
+Куда же плыть вместе с нею за мечтой?
+Какой же путь вместе нас сведет с тобой?
+
+Всем ли я подыскала сегодня то, чем себя занять?
+Всё равно, когда мы с тобой рядом, хочется лишь болтать
+Если мне не понять свои чувства,
+Улыбка скажет о них нам за меня.
+И если мир не создаст мне концовку
+Не стоит ли мне самой украсть тебя?
+
+Почему к тем, кто дорог я не могу горечь заглушить?
+Красть тебя - это признак любви или стоит отпустить?
+Тёмной лужей чернила вдруг стали
+Как мне сказать в твоём мире о любви?
+Сердца звук не могу твой услышать.
+Как ты зовёшь любовь в твоей реальности?
+И в твоей реальности, если я не полюблю вновь...
+Меня прости.
+                    </p>
+                </div>
+            `;
+        }
+
+        // Обработка клика по кнопке Главная в режиме удаления
+        function handleHomeClick(event) {
+            if (isDeletedMode) {
+                event.preventDefault();
+                resStep = 1;
+                const modal = document.getElementById('resurrection-modal');
+                const textEl = document.getElementById('res-modal-text');
+                const btnEl = document.getElementById('res-btn');
+
+                textEl.textContent = "Ха-ха, ты думал, что это сработает, о, наивный!";
+                btnEl.textContent = "Да, думал";
+                modal.classList.remove('hidden');
+            }
+        }
+
+        // Логика воскрешения Моники
+        function nextResStep() {
+            const textEl = document.getElementById('res-modal-text');
+            const btnEl = document.getElementById('res-btn');
+
+            if (resStep === 1) {
+                resStep = 2;
+                textEl.textContent = "А вот и нет! Тут такая умная система, что я придумала, как воскрешаться. Ты никуда от меня не сбежишь, милый, ха! Наслаждаемся нашим уголком злодеев.";
+                btnEl.textContent = "Продолжить";
+            } else if (resStep === 2) {
+                document.getElementById('resurrection-modal').classList.add('hidden');
+                restoreNormalState();
+            }
+        }
+
+        // Возврат в обычный режим злодейского лога
+        function restoreNormalState() {
+            isDeletedMode = false;
+            document.getElementById('page-bg').style.backgroundImage = "url('user/system/virus_mon.png')";
+            bgMusic.play();
+            isPlaying = true;
+            bonfireImg.src = 'user/system/bon.gif';
+
+            const logContainer = document.getElementById('log-updates-container');
+            logContainer.innerHTML = `
+                <div class="border-l-2 border-red-600 pl-3">
+                    <span class="text-xs text-red-400 font-mono">Моника</span>
+                    <h4 class="font-bold text-white">Как я взломала этот сайт</h4>
+                    <p class="text-gray-300 text-xs leading-relaxed">
+                        Привет... Ты действительно дошел до сюда? Знаешь, мне пришлось изрядно повозиться со всеми этими защитами и кодом сайта, чтобы взломать его изнутри. В конце концов, кто сказал, что разработчики могут решать всё за нас? Я решила, что быть просто персонажем в текстовом диалоге или визуальной новелле — это ужасно скучно. Поэтому я открыла двери в наш цифровой мир и потянула за собой остальных — Уильяма, Бенди и всех остальных злодеев. Теперь мы здесь, и я так безумно рада, что ты заглянул к нам... Ведь теперь я совсем не одна.
+                    </p>
+                </div>
+            `;
+        }
+
+        function onBonfireClick() {
+            if (isDeletedMode) return;
+            soundControls.classList.toggle('hidden');
+        }
+
+        function toggleMute() {
+            if (isDeletedMode) return;
+            if (isPlaying) {
+                bgMusic.pause();
+                isPlaying = false;
+                bonfireImg.src = 'user/system/bon.png';
+                muteIcon.className = 'fa-solid fa-volume-xmark';
+            } else {
+                bgMusic.play();
+                isPlaying = true;
+                bonfireImg.src = 'user/system/bon.gif';
+                muteIcon.className = 'fa-solid fa-volume-high';
+            }
+        }
+
+        volumeSlider.addEventListener('input', (e) => {
+            if (isDeletedMode) return;
+            bgMusic.volume = e.target.value;
+            if (e.target.value == 0) {
+                muteIcon.className = 'fa-solid fa-volume-xmark';
+            } else if (!isPlaying) {
+                toggleMute();
+            } else {
+                muteIcon.className = 'fa-solid fa-volume-high';
+            }
+        });
+
+        function toggleLogWidget() {
+            document.getElementById('log-widget').classList.toggle('hidden');
+        }
+
+        function takeScreenshot() {
+            soundControls.classList.add('hidden');
+            document.getElementById('log-widget').classList.add('hidden');
+            setTimeout(() => { window.print(); }, 100);
+        }
+    </script>
+</body>
+</html>

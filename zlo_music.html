@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="site-title">НАША МУЗЫКА TWX</title>
+    <link id="site-favicon" rel="icon" type="image/png" href="user/system/icon mymy.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: url('user/system/virus.png') no-repeat center center fixed;
+            background-size: cover;
+            overflow: hidden;
+            user-select: none;
+            color: #f3e8ff;
+            font-family: 'Inter', sans-serif;
+        }
+        .dot-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px), url('user/system/virus.png');
+            background-size: 24px 24px, cover;
+        }
+        
+        /* Кроваво-фиолетовый скроллбар */
+        .custom-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #110214;
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #dc2626;
+            border-radius: 4px;
+        }
+
+        .retro-box {
+            background: #14051e;
+            border: 3px solid #7f1d1d;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.9);
+        }
+
+        /* Секретная пасхалка в правом углу */
+        .easter-egg-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 16px;
+            height: 16px;
+            z-index: 100;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .easter-egg-btn:hover {
+            opacity: 1;
+        }
+        .easter-egg-btn img {
+            width: 8px;
+            height: 8px;
+            object-fit: contain;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="dot-pattern h-screen w-screen flex flex-col justify-between p-4 sm:p-6 relative">
+
+    <!-- СЕКРЕТНАЯ ПАСХАЛКА В ПРАВОМ ВЕРХНЕМ УГЛУ -->
+    <div class="easter-egg-btn" onclick="openMonikaModal()" title="???">
+        <img src="user/system/kk.png" alt="kk" onerror="this.src='rick.png'">
+    </div>
+
+    <!-- Иконка сайта в левом верхнем углу (ведет на index_zlo.html) -->
+    <div class="absolute top-4 left-6 z-30">
+        <a href="index_zlo.html" class="cursor-pointer hover:scale-105 transition-transform inline-block">
+            <img src="user/system/icon zlo.png" alt="Иконка Злодеев" class="w-12 h-12 object-contain drop-shadow-[0_0_8px_rgba(220,38,38,0.8)]">
+        </a>
+    </div>
+
+    <!-- Аудио элемент -->
+    <audio id="audio-player"></audio>
+
+    <!-- =======================================================================
+    🎵 БАЗА ДАННЫХ ПРОФИЛЕЙ И МУЗЫКИ ЗЛОДЕЕВ 🎵
+    ======================================================================== -->
+    <script>
+        const ProfilesData = [
+           {
+                id: "zlo_twx",
+                name: "Злодей TWX",
+                avatar: "user/system/icon zlo.png",
+                playlist: [
+                    {
+                        title: "Все мы Злодей",
+                        author: "Злодей TWX",
+                        source: "ТЕМА МИРА ЗЛОДЕЕВ",
+                        file: "user/music/zlo.mp3",
+                        cover: "user/system/icon zlo.png"
+                    }
+                ]
+            },
+            {
+                id: "afton",
+                name: "Уильям Афтон",
+                avatar: "user/zlo/afton_ava.png",
+                playlist: [
+                    {
+                        title: "Its Been So Long",
+                        author: "The Living Tombstone",
+                        source: "Игра: Five Nights at Freddy's 2",
+                        file: "user/music/play/mab/fnaf.mp3",
+                        cover: "https://cdn-image.zvuk.com/pic?hash=5f828b5e-1c39-4a5c-b628-da3c97a4bf45&id=10864517&size=large&type=release"
+                    }
+                ]
+            },
+            {
+                id: "bendy",
+                name: "Бенди",
+                avatar: "user/zlo/bendy_ava.png",
+                playlist: [
+                    {
+                        title: "Build Our Machine",
+                        author: "DAGames",
+                        source: "Игра: Bendy and the Ink Machine",
+                        file: "user/zlo/music/bendy_theme.mp3",
+                        cover: "https://cdn-image.zvuk.com/pic?hash=057749e5-21dc-4c8c-9b1c-ccdfe0b32758&id=40650866&size=large&type=release"
+                    }
+                ]
+            },
+            {
+                id: "monika",
+                name: "Моника",
+                avatar: "user/zlo/monika_ava.png",
+                playlist: [
+                    {
+                        title: "Main Theme",
+                        author: "Dan Salvato",
+                        source: "Игра: Doki Doki Literature Club",
+                        file: "user/zlo/music/main doki.mp3",
+                        cover: "https://gamefaqs.gamespot.com/a/box/0/0/1/803001_front.jpg"
+                    },
+                    {
+                        title: "Dreams of Love and Literature",
+                        author: "Dan Salvato",
+                        source: "Игра: Doki Doki Literature Club",
+                        file: "user/zlo/music/dream.mp3",
+                        cover: "https://i1.sndcdn.com/artworks-epGpJpzTE1nzmoHQ-k03zGw-t1080x1080.jpg"
+                    },
+                    {
+                        title: "Okay, Everyone! (Monika)",
+                        author: "Dan Salvato",
+                        source: "Игра: Doki Doki Literature Club",
+                        file: "user/zlo/music/okey.mp3",
+                        cover: "https://static.wikia.nocookie.net/doki-doki-literature-club/images/2/2f/SoundtrackImage.jpg/revision/latest/scale-to-width-down/1200?cb=20180316135222&path-prefix=ru"
+                    },
+                    {
+                        title: "Just Monika",
+                        author: "Dan Salvato",
+                        source: "Игра: Doki Doki Literature Club",
+                        file: "user/music/zlo_mon.mp3",
+                        cover: "https://i.ytimg.com/vi/tryLLFy4GOU/maxresdefault.jpg"
+                    },
+                    {
+                        title: "I Still Love You",
+                        author: "Dan Salvato",
+                        source: "Игра: Doki Doki Literature Club",
+                        file: "user/zlo/music/love.mp3",
+                        cover: "https://cdn-images.dzcdn.net/images/cover/96074d9c8b36fa96c1ffe1dc2f60deb4/1000x1000.jpg"
+                    },
+                    {
+                        title: "Your Reality",
+                        author: "Dan Salvato",
+                        source: "Игра: Doki Doki Literature Club",
+                        file: "user/music/play/mab/doki.mp3",
+                        cover: "https://avatars.yandex.net/get-music-content/5966316/f093b66d.a.22981236-1/m1000x1000"
+                    },
+                    {
+                        title: "My Song, Your Note",
+                        author: "Nikki Kaelar",
+                        source: "Игра: Doki Doki Literature Club Plus",
+                        file: "user/zlo/music/note.mp3",
+                        cover: "https://images.launchbox-app.com/c4745813-5ee2-40ab-a59e-a26113c6b1a1.png"
+                    },
+                    {
+                        title: "Hug Energy",
+                        author: "Nikki Kaelar",
+                        source: "Игра: Doki Doki Literature Club Plus",
+                        file: "user/zlo/music/hug.mp3",
+                        cover: "https://i.ytimg.com/vi/k-PtlyLR-Mg/maxresdefault.jpg"
+                    },
+                    {
+                        title: "Stories of Friendship and Literature",
+                        author: "Nikki Kaelar",
+                        source: "Игра: Doki Doki Literature Club Plus",
+                        file: "user/zlo/music/plus.mp3",
+                        cover: "https://i.ytimg.com/vi/ExlCiWC9y_g/maxres2.jpg?sqp=-oaymwEoCIAKENAF8quKqQMcGADwAQH4Ac4FgALQBYoCDAgAEAEYciBHKEQwDw==&amp;rs=AOn4CLBtKTeCaF_7W8AExIEnqOpXVg_XsQ"
+                    },
+                    {
+                        title: "Dear Sunshine",
+                        author: "Azuria Sky",
+                        source: "Игра: Doki Doki Literature Club Plus",
+                        file: "user/zlo/music/sunshine.mp3",
+                        cover: "https://i1.sndcdn.com/artworks-4xTeRzQe0HD88gbR-iyoTtQ-t1080x1080.jpg"
+                    },
+                    {
+                        title: "Just Monika",
+                        author: "Random Encounters",
+                        source: "",
+                        file: "user/music/play/xahtep/monika.mp3",
+                        cover: "https://avatars.yandex.net/get-music-content/4388221/ad14fce0.a.17469861-1/m1000x1000"
+                    },
+                    {
+                        title: "Get Out Of My Head",
+                        author: "TryHardNinja",
+                        source: "",
+                        file: "user/zlo/music/head.mp3",
+                        cover: "https://cs7.pikabu.ru/post_img/2018/04/17/5/1523949704174750752.jpg"
+                    },
+                    {
+                        title: "Why Did I Say Okie Dokie",
+                        author: "The Stupenduim",
+                        source: "",
+                        file: "user/zlo/music/oki doki.mp3",
+                        cover: "https://avatars.yandex.net/get-music-content/139444/8164f1bc.a.5265535-1/m1000x1000"
+                    },
+                    {
+                        title: "Doki Doki Forever",
+                        author: "OR3O",
+                        source: "",
+                        file: "user/zlo/music/forever.mp3",
+                        cover: "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/ba/28/87/ba2887b3-e633-1757-70f6-eabbd0917bc5/121.jpg/800x800cc.jpg"
+                    }
+                ]
+            }
+        ];
+
+        // Денцеры для злодейской страницы
+        const DancersData = [
+            {
+                png: "user/system/gog/dancer0_stop.png",
+                gif: "user/system/gog/dancer0_dance.gif"
+            },
+            {
+                png: "user/system/gog/dancer1_stop.png",
+                gif: "user/system/gog/dancer1_dance.gif"
+            }
+        ];
+    </script>
+
+    <!-- Основной контейнер интерфейса -->
+    <div class="flex-grow flex items-center justify-center max-w-7xl mx-auto w-full px-4 pt-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full items-center">
+
+            <!-- ЛЕВАЯ ЧАСТЬ -->
+            <div class="lg:col-span-7 flex flex-col space-y-6">
+                
+                <!-- Верхняя панель управления плеером -->
+                <div class="retro-box p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 border-2 border-red-600">
+                    
+                    <div class="flex items-center space-x-3 w-full sm:w-auto">
+                        <i class="fa-solid fa-volume-high text-red-500 text-xl"></i>
+                        <input type="range" id="volume-range" min="0" max="1" step="0.05" value="0.7" 
+                               class="w-32 accent-red-600 cursor-pointer">
+                    </div>
+
+                    <div class="flex flex-col w-full px-2 space-y-1">
+                        <div class="flex justify-between text-xs font-bold text-red-300">
+                            <span id="current-time">00:00</span>
+                            <span id="total-duration">00:00</span>
+                        </div>
+                        <input type="range" id="progress-bar" min="0" max="100" value="0" step="0.1"
+                               class="w-full accent-red-600 cursor-pointer h-2 bg-black rounded-lg border border-red-900">
+                    </div>
+
+                    <div class="flex items-center space-x-2 text-white">
+                        <button onclick="prevTrack()" class="w-10 h-10 bg-red-950 hover:bg-red-900 rounded-lg font-bold flex items-center justify-center text-lg shadow border border-red-600 cursor-pointer">&lt;</button>
+                        <button onmousedown="startRewind()" onmouseup="stopRewind()" class="w-10 h-10 bg-red-950 hover:bg-red-900 rounded-lg font-bold flex items-center justify-center text-sm shadow border border-red-600 cursor-pointer">&lt;&lt;</button>
+                        <button onclick="pauseMusic()" class="w-10 h-10 bg-red-950 hover:bg-red-900 rounded-lg font-bold flex items-center justify-center text-sm shadow border border-red-600 cursor-pointer">||</button>
+                        <button onclick="playMusic()" class="w-12 h-12 bg-red-700 hover:bg-red-600 rounded-xl font-bold flex items-center justify-center text-lg shadow-lg border border-red-500 cursor-pointer">&#9658;</button>
+                        <button onmousedown="startForward()" onmouseup="stopForward()" class="w-10 h-10 bg-red-950 hover:bg-red-900 rounded-lg font-bold flex items-center justify-center text-sm shadow border border-red-600 cursor-pointer">&gt;&gt;</button>
+                        <button onclick="nextTrack()" class="w-10 h-10 bg-red-950 hover:bg-red-900 rounded-lg font-bold flex items-center justify-center text-lg shadow border border-red-600 cursor-pointer">&gt;</button>
+                    </div>
+
+                    <div class="w-20 h-20 bg-black rounded-lg border-2 border-red-600 overflow-hidden flex items-center justify-center shadow-inner flex-shrink-0">
+                        <img id="current-cover" src="user/system/icon zlo.png" alt="Обложка" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/511252/ffffff?text=Cover'">
+                    </div>
+                </div>
+
+                <!-- Блок с Денцером и Названием -->
+                <div class="flex flex-col sm:flex-row items-center gap-6">
+                    <div class="relative flex-shrink-0 flex flex-col items-center">
+                        <div class="w-36 h-36 rounded-full border-4 border-red-600 bg-black/60 overflow-hidden flex items-center justify-center shadow-2xl relative">
+                            <img id="dancer-avatar" src="" alt="Денцер" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex space-x-4 mt-2" id="dancer-controls">
+                            <button onclick="changeDancer(-1)" class="w-8 h-8 bg-red-900 hover:bg-red-800 text-white rounded-full font-bold shadow">&lt;</button>
+                            <button onclick="changeDancer(1)" class="w-8 h-8 bg-red-900 hover:bg-red-800 text-white rounded-full font-bold shadow">&gt;</button>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center sm:items-start text-center sm:text-left space-y-3 flex-grow">
+                        <h1 id="song-title" class="text-3xl sm:text-4xl font-extrabold text-red-500 drop-shadow-md tracking-wide">
+                            НАЗВАНИЕ ПЕСНИ
+                        </h1>
+                        <div class="border-2 border-red-600 bg-black/50 backdrop-blur px-4 py-1.5 rounded-lg text-sm font-semibold text-red-300">
+                            <span id="song-source">ИСТОЧНИК</span>
+                        </div>
+                        <div class="bg-red-800 text-white font-black px-4 py-1 rounded-full text-xs tracking-wider uppercase shadow-md">
+                            <span id="song-author">АВТОР</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Нижние кнопки: Повтор, Справка и кнопка Лузеры -->
+                <div class="flex items-center justify-between pt-2">
+                    <div class="flex items-center space-x-3">
+                        <button id="btn-loop-one" onclick="toggleLoopOne()" class="w-12 h-12 bg-black border-2 border-red-700 rounded-xl flex items-center justify-center text-white hover:bg-red-950 cursor-pointer shadow transition-all" title="Повтор трека">
+                            <i class="fa-solid fa-repeat text-lg text-red-400"></i>
+                        </button>
+                        <button id="btn-help" onclick="openHelpModal()" class="w-12 h-12 bg-red-900 border-2 border-red-500 rounded-xl flex items-center justify-center text-white font-extrabold text-xl hover:bg-red-800 cursor-pointer shadow transition-all" title="Справка">
+                            <i class="fa-solid fa-question"></i>
+                        </button>
+                    </div>
+
+                    <!-- Кнопка Лузеры ведет на zlo_about.html -->
+                    <a href="zlo_about.html" class="bg-purple-900 hover:bg-purple-800 text-purple-200 font-black px-8 py-3 rounded-2xl shadow-lg border-2 border-red-600 tracking-wider uppercase text-lg transition-transform hover:scale-105">
+                        Лузеры
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- ПРАВАЯ ЧАСТЬ: Виджет плейлиста -->
+            <div class="lg:col-span-5 flex flex-col h-[500px] retro-box rounded-2xl p-4 border-2 border-red-600">
+                <div class="flex items-center justify-between bg-black/60 p-3 rounded-xl border border-red-800 mb-4">
+                    <button id="btn-prev-profile" onclick="prevProfile()" class="w-9 h-9 bg-red-900 hover:bg-red-800 text-white rounded-full font-bold flex items-center justify-center shadow cursor-pointer">&lt;</button>
+                    
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-red-600 bg-black">
+                            <img id="profile-avatar" src="" alt="Ава" class="w-full h-full object-cover">
+                        </div>
+                        <span id="profile-name" class="font-extrabold text-red-400 text-lg tracking-wide uppercase">ПРОФИЛЬ</span>
+                    </div>
+
+                    <button id="btn-next-profile" onclick="nextProfile()" class="w-9 h-9 bg-red-900 hover:bg-red-800 text-white rounded-full font-bold flex items-center justify-center shadow cursor-pointer">&gt;</button>
+                </div>
+
+                <div id="playlist-container" class="custom-scroll flex-grow overflow-y-auto space-y-2 pr-1"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ПАСХАЛКИ ОТ МОНИКИ -->
+    <div id="monika-easter-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-gray-950 border-4 border-red-600 rounded-3xl max-w-md w-full p-6 shadow-2xl text-center flex flex-col items-center space-y-6">
+            <h3 class="text-xl font-black text-red-500 uppercase">Хм, ты действительно думал, что это сработает?</h3>
+            <div class="flex justify-center space-x-6 w-full pt-4">
+                <button onclick="closeMonikaModal()" class="bg-red-700 hover:bg-red-600 text-white font-bold px-8 py-3 rounded-xl cursor-pointer shadow-lg transition-all">Да</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО СПРАВКИ -->
+    <div id="help-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-gray-950 border-4 border-red-600 rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl relative overflow-hidden">
+            <div class="bg-red-950 p-4 px-6 border-b-2 border-red-600 flex justify-between items-center">
+                <h2 class="text-xl font-black text-red-400 uppercase">Справка по злодейскому аудио-архиву</h2>
+                <button onclick="closeHelpModal()" class="w-10 h-10 bg-red-600 hover:bg-red-500 text-white font-black rounded-xl flex items-center justify-center">✕</button>
+            </div>
+            <div class="p-6 overflow-y-auto custom-scroll space-y-4 text-red-200 text-sm">
+                <p>Добро пожаловать в аудио-архив злодеев. Здесь собраны мрачные композиции и темы персонажей игр.</p>
+                <p>Используйте стрелочки для переключения профилей злодеев, управляйте плейлистом и наслаждайтесь атмосферой.</p>
+            </div>
+            <div class="bg-red-950 p-3 px-6 border-t border-red-800 text-center">
+                <button onclick="closeHelpModal()" class="bg-red-700 hover:bg-red-600 text-white font-black px-6 py-2 rounded-xl uppercase text-xs cursor-pointer">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- СКРИПТЫ ПЛЕЕРА -->
+    <script>
+        let currentProfileIndex = 0;
+        let currentTrackIndex = 0;
+        let currentDancerIndex = 0;
+        let activePlayingProfileIndex = 0;
+        let isPlaying = false;
+        let loopOneActive = false;
+        let pendingProfileIndex = null;
+        
+        const audio = document.getElementById('audio-player');
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalDurationEl = document.getElementById('total-duration');
+        
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "00:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        window.onload = () => {
+            loadProfile(0);
+            loadDancer(0);
+            
+            const volRange = document.getElementById('volume-range');
+            audio.volume = volRange.value;
+            volRange.addEventListener('input', (e) => { audio.volume = e.target.value; });
+
+            audio.ontimeupdate = () => {
+                if (audio.duration) {
+                    const progress = (audio.currentTime / audio.duration) * 100;
+                    progressBar.value = progress;
+                    currentTimeEl.textContent = formatTime(audio.currentTime);
+                    totalDurationEl.textContent = formatTime(audio.duration);
+                }
+            };
+
+            progressBar.addEventListener('input', (e) => {
+                if (audio.duration) {
+                    audio.currentTime = (e.target.value / 100) * audio.duration;
+                }
+            });
+
+            audio.onended = () => { handleTrackEnd(); };
+        };
+
+        // Пасхалка Моника
+        function openMonikaModal() {
+            document.getElementById('monika-easter-modal').classList.remove('hidden');
+        }
+        function closeMonikaModal() {
+            document.getElementById('monika-easter-modal').classList.add('hidden');
+        }
+
+        function openHelpModal() { document.getElementById('help-modal').classList.remove('hidden'); }
+        function closeHelpModal() { document.getElementById('help-modal').classList.add('hidden'); }
+
+        function loadProfile(index) {
+            currentProfileIndex = index;
+            const profile = ProfilesData[currentProfileIndex];
+            document.getElementById('profile-name').textContent = profile.name;
+            document.getElementById('profile-avatar').src = profile.avatar;
+            renderPlaylist();
+        }
+
+        function renderPlaylist() {
+            const container = document.getElementById('playlist-container');
+            container.innerHTML = '';
+            const profile = ProfilesData[currentProfileIndex];
+            
+            profile.playlist.forEach((track, idx) => {
+                const isCurrent = (idx === currentTrackIndex && currentProfileIndex === activePlayingProfileIndex);
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-xl cursor-pointer font-bold text-sm transition-all border ${
+                    isCurrent 
+                    ? 'bg-red-950 border-red-500 text-white shadow-lg scale-[1.02]' 
+                    : 'bg-black/50 border-red-950 text-red-300 hover:bg-red-950/50'
+                }`;
+                item.innerHTML = `<div class="truncate">${track.title}</div><div class="text-xs text-red-400 font-normal">${track.author}</div>`;
+                item.onclick = () => selectTrack(currentProfileIndex, idx);
+                container.appendChild(item);
+            });
+        }
+
+        function selectTrack(profileIdx, trackIdx) {
+            activePlayingProfileIndex = profileIdx;
+            currentProfileIndex = profileIdx;
+            currentTrackIndex = trackIdx;
+            const track = ProfilesData[profileIdx].playlist[trackIdx];
+            
+            document.getElementById('song-title').textContent = track.title;
+            document.getElementById('song-author').textContent = track.author;
+            document.getElementById('song-source').textContent = track.source;
+            document.getElementById('current-cover').src = track.cover;
+            
+            audio.src = track.file;
+            playMusic();
+            renderPlaylist();
+        }
+
+        function playMusic() {
+            if (!audio.src || audio.src === window.location.href) {
+                selectTrack(currentProfileIndex, currentTrackIndex);
+                return;
+            }
+            audio.play().then(() => {
+                isPlaying = true;
+                updateDancerVisualState();
+            }).catch(e => console.log("Ожидание взаимодействия"));
+        }
+
+        function pauseMusic() {
+            audio.pause();
+            isPlaying = false;
+            updateDancerVisualState();
+        }
+
+        function nextTrack() {
+            const profile = ProfilesData[currentProfileIndex];
+            currentTrackIndex = (currentTrackIndex < profile.playlist.length - 1) ? currentTrackIndex + 1 : 0;
+            selectTrack(currentProfileIndex, currentTrackIndex);
+        }
+
+        function prevTrack() {
+            if (audio.currentTime > 3 || currentTrackIndex === 0) {
+                audio.currentTime = 0;
+            } else {
+                currentTrackIndex--;
+            }
+            selectTrack(currentProfileIndex, currentTrackIndex);
+        }
+
+        let rewindInterval = null;
+        function startRewind() { rewindInterval = setInterval(() => { audio.currentTime = Math.max(0, audio.currentTime - 1.5); }, 100); }
+        function stopRewind() { clearInterval(rewindInterval); }
+
+        let forwardInterval = null;
+        function startForward() { forwardInterval = setInterval(() => { audio.currentTime = Math.min(audio.duration, audio.currentTime + 1.5); }, 100); }
+        function stopForward() { clearInterval(forwardInterval); }
+
+        function nextProfile() { queueProfileChange((currentProfileIndex + 1) % ProfilesData.length); }
+        function prevProfile() { queueProfileChange((currentProfileIndex - 1 + ProfilesData.length) % ProfilesData.length); }
+        function queueProfileChange(newIdx) { pendingProfileIndex = newIdx; loadProfile(newIdx); }
+
+        function handleTrackEnd() {
+            if (loopOneActive) {
+                audio.currentTime = 0;
+                playMusic();
+                return;
+            }
+            const profile = ProfilesData[activePlayingProfileIndex];
+            if (currentTrackIndex < profile.playlist.length - 1) {
+                selectTrack(activePlayingProfileIndex, currentTrackIndex + 1);
+            } else {
+                if (pendingProfileIndex !== null) {
+                    activePlayingProfileIndex = pendingProfileIndex;
+                    pendingProfileIndex = null;
+                }
+                selectTrack(activePlayingProfileIndex, 0);
+            }
+        }
+
+        function toggleLoopOne() {
+            loopOneActive = !loopOneActive;
+            const btnOne = document.getElementById('btn-loop-one');
+            btnOne.className = `w-12 h-12 rounded-xl flex items-center justify-center text-white cursor-pointer shadow transition-all border-2 ${loopOneActive ? 'bg-red-700 border-red-400' : 'bg-black border-red-700'}`;
+        }
+
+        function loadDancer(index) { currentDancerIndex = index; updateDancerVisualState(); }
+        function changeDancer(direction) {
+            currentDancerIndex = (currentDancerIndex + direction + DancersData.length) % DancersData.length;
+            updateDancerVisualState();
+        }
+
+        function updateDancerVisualState() {
+            const imgEl = document.getElementById('dancer-avatar');
+            const dancer = DancersData[currentDancerIndex];
+            imgEl.src = isPlaying ? dancer.gif : dancer.png;
+        }
+    </script>
+</body>
+</html>

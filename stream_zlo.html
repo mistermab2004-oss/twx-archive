@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="site-title">ЧЬИТО СТРИМЫ TWX</title>
+    <link id="site-favicon" rel="icon" type="image/png" href="user/system/icon morg.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: url('user/system/virus.png') no-repeat center center fixed;
+            background-size: cover;
+            overflow-x: hidden;
+            user-select: none;
+            color: #f3e8ff;
+        }
+        .dot-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px), url('user/system/virus.png');
+            background-position: center center, center center;
+            background-size: 24px 24px, cover;
+            background-repeat: repeat, no-repeat;
+            background-attachment: scroll, fixed;
+        }
+        
+        /* ⚡ КРОВАВО-ФИОЛЕТОВЫЙ ПОЛЗУНОК-МОЛНИЯ (Скроллбар) ⚡ */
+        ::-webkit-scrollbar { width: 24px; }
+        ::-webkit-scrollbar-track {
+            background: #1f0524;
+            border-left: 3px dashed #dc2626;
+            border-right: 3px dashed #dc2626;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #dc2626 0%, #9333ea 50%, #581c87 100%);
+            border-radius: 12px;
+            border: 4px solid #1f0524;
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.6), 0 0 10px rgba(220, 38, 38, 0.6);
+        }
+        ::-webkit-scrollbar-thumb:active {
+            background: #7f1d1d;
+            border-width: 8px;
+            box-shadow: inset 0 6px 12px rgba(0,0,0,0.7);
+        }
+
+        /* ⚡ ПОЛЗУНОК ГРОМКОСТИ ⚡ */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 14px;
+            cursor: pointer;
+            background: #1f0524;
+            border-radius: 7px;
+            border: 2px dashed #dc2626;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 28px;
+            width: 28px;
+            margin-top: -8px;
+            background: linear-gradient(135deg, #dc2626 0%, #9333ea 50%, #581c87 100%);
+            border: 4px solid #1f0524;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.8), inset 0 2px 5px rgba(255,255,255,0.6);
+            transition: all 0.1s;
+        }
+        input[type=range]:active::-webkit-slider-thumb {
+            transform: scale(0.85);
+            border-width: 8px;
+            box-shadow: inset 0 6px 12px rgba(0,0,0,0.7);
+            background: #7f1d1d;
+        }
+
+        .gartic-header-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 100px;
+            background: linear-gradient(90deg, #1a001a 0%, #4a0033 50%, #1a001a 100%);
+            transform: skewY(-3deg);
+            z-index: 10;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            border-bottom: 4px solid #7f1d1d;
+        }
+        .retro-shadow { box-shadow: 4px 4px 0px #000000; }
+        .retro-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000000;
+        }
+        .dialogue-box {
+            background: rgba(20, 5, 30, 0.9);
+            border: 3px solid #dc2626;
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
+        }
+    </style>
+</head>
+<body class="dot-pattern min-h-screen flex flex-col justify-between text-white relative selection:bg-red-600 selection:text-white">
+
+    <!-- =======================================================================
+    🎀 👇 ДАННЫЕ СТРИМОВ (ДЕБЮТЫ ЗЛОДЕЕВ) 👇 🎀
+    isReady: true (Помним), isReady: false (Забыли)
+    ======================================================================== -->
+    <script>
+        const StreamsData = [
+            {
+                title: "В Fnaf с больным сердцем. Надеюсь не скопычусь",
+                url: "https://www.youtube.com/live/wM0nV1SUVv0?si=kxnyFQAdMwrH8_bd",
+                thumb: "https://i.ytimg.com/vi/wM0nV1SUVv0/maxresdefault.jpg",
+                isReady: true
+            },
+            {
+                title: "Bendy and the ink machine Глава 1",
+                url: "https://youtu.be/PTBJlDx5jVM?si=JsKYFJmE3NVEF2E4",
+                thumb: "https://i.ytimg.com/vi/PTBJlDx5jVM/maxresdefault.jpg",
+                isReady: true
+            },
+            {
+                title: "Doki Doki Literature Club! 16+ Только Моника?",
+                url: "https://www.youtube.com/live/fd5uJ8jNDc0?si=WIYIOZ6Y4es-s6oG",
+                thumb: "https://i.ytimg.com/vi/fd5uJ8jNDc0/sddefault.jpg",
+                isReady: true
+            },
+            {
+                title: "SCP containment breach #1 День Сурка",
+                url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+                thumb: "https://i.ytimg.com/vi/3bRZM1V5c_o/maxresdefault.jpg",
+                isReady: true
+            },
+            {
+                title: "Становимся человеком в Detroit",
+                url: "https://www.youtube.com/live/JtjXxEyLD3Q?si=6dl1r4hfyYAKcGUt",
+                thumb: "https://i.ytimg.com/vi/JtjXxEyLD3Q/sddefault.jpg",
+                isReady: true
+            },
+            {
+                title: "Играем в Resident evil VIIl-age #3",
+                url: "https://www.youtube.com/live/5hjxK1eq47w?si=TyvtjESAMputgOv-",
+                thumb: "https://i.ytimg.com/vi/5hjxK1eq47w/maxresdefault.jpg",
+                isReady: true
+            },
+            {
+                title: "Возвращение Хантера: Играем в Miside",
+                url: "https://www.youtube.com/live/nA0ImQnelhM?si=bq5oxYMJH5q6Nl1m",
+                thumb: "https://i.ytimg.com/vi/nA0ImQnelhM/maxresdefault.jpg",
+                isReady: true
+            },
+            {
+                title: "[Пацифист] Undertale #1 Руины",
+                url: "https://youtu.be/k9XfbwYQpjI?si=uFc90nmIAcqwvth0",
+                thumb: "https://i.ytimg.com/vi/k9XfbwYQpjI/sddefault.jpg",
+                isReady: true
+            },
+            {
+                title: "[Финал Геноцид] Undertale #27 Смерть Санса",
+                url: "https://youtu.be/WaRFa9TTwMo?si=x01pmZQwImAFvXzE",
+                thumb: "https://i.ytimg.com/vi/WaRFa9TTwMo/maxresdefault.jpg",
+                isReady: true
+            },
+            {
+                title: "Повар спрашивает повара (Little nightmares)",
+                url: "https://www.youtube.com/live/BXULs9UL_uY?si=O76jqjS75pHt7H_P",
+                thumb: "https://i.ytimg.com/vi/BXULs9UL_uY/maxresdefault.jpg",
+                isReady: true
+            },
+            {
+                title: "Заканчиваем в Little Nightmares II",
+                url: "https://www.youtube.com/live/qKG3kGmOW6I?si=CJfWLs5TAeF3jm3C",
+                thumb: "https://i.ytimg.com/vi/qKG3kGmOW6I/maxresdefault.jpg",
+                isReady: true
+            },
+            {
+                title: "Встречаем Плуто в Library of Ruina (режим тихо)",
+                url: "https://www.youtube.com/live/5n3pYM_1YB4?si=JhgcsZXpbC_c4Hzg",
+                thumb: "https://i.ytimg.com/vi/5n3pYM_1YB4/maxresdefault.jpg",
+                isReady: true
+            },
+            {
+                title: "Happy game и Gnarled Hag",
+                url: "https://www.youtube.com/live/yH88NQfNOt8?si=H--936F5mFBgLLEu",
+                thumb: "https://i.ytimg.com/vi/yH88NQfNOt8/sddefault.jpg",
+                isReady: true
+            }
+        ];
+    </script>
+    <!-- ======================================================================= -->
+
+    <!-- Аудио плеер (Музыка злодея) -->
+    <audio id="music-streams" loop autoplay>
+        <source src="user/music/zlo.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <div id="volume-panel" class="hidden bg-gray-900/95 backdrop-blur-sm border-4 border-red-600 p-5 rounded-2xl shadow-2xl mb-3 flex-col items-center space-y-4 w-40">
+            <span class="text-sm font-black text-red-400 uppercase">Громкость</span>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" class="w-full">
+            <button onclick="toggleMusic()" class="bg-red-700 text-white px-4 py-2 rounded-xl font-bold hover:bg-red-600 shadow-[0_4px_0_#450a0a] active:shadow-none active:translate-y-[4px] transition-all uppercase text-xs">Вкл / Выкл</button>
+        </div>
+        <button onclick="toggleVolumePanel()" class="w-16 h-16 bg-red-600 hover:bg-red-500 border-4 border-white rounded-full flex items-center justify-center text-3xl text-white shadow-[0_6px_0_#450a0a] active:shadow-none active:translate-y-[6px] cursor-pointer transition-all">
+            <i id="music-icon" class="fa-solid fa-volume-xmark"></i>
+        </button>
+    </div>
+
+    <!-- Шапка -->
+    <header class="sticky top-0 z-30 w-full pt-4 pb-5 px-4 sm:px-8 pointer-events-none">
+        <div class="gartic-header-bg"></div>
+        <div class="max-w-7xl mx-auto relative z-20 flex items-center justify-between pointer-events-auto">
+            <a href="index_zlo.html" class="flex items-center space-x-6 group cursor-pointer no-underline">
+                <div class="w-32 h-32 sm:w-40 sm:h-40 flex-shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
+                    <img id="main-logo-img" src="user/system/logo zlo.png" alt="Лого Злодеев" class="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]">
+                </div>
+                <span id="site-title-text" class="font-black text-3xl sm:text-5xl tracking-wider text-red-500 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)] uppercase group-hover:text-red-400 transition-colors">
+                    ЧЬИТО СТРИМЫ TWX
+                </span>
+            </a>
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <a href="index_zlo.html" class="bg-red-700 hover:bg-red-600 text-white font-black px-4 sm:px-5 py-2.5 rounded-xl retro-shadow border-2 border-white/60 text-xs sm:text-sm cursor-pointer transition-transform uppercase no-underline">
+                    Главная
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-12 z-25 flex flex-col space-y-6">
+        
+        <!-- Блок описания с издевкой от Моники и Деметреску -->
+        <div class="dialogue-box rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col sm:flex-row items-center gap-6">
+            <div class="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl border-4 border-red-600 bg-red-950 flex-shrink-0 flex items-center justify-center shadow-xl overflow-hidden group relative">
+                <i class="fa-solid fa-skull text-5xl sm:text-6xl text-red-500 drop-shadow-md"></i>
+            </div>
+            <div class="flex-grow space-y-3 text-center sm:text-left">
+                <h2 class="text-2xl sm:text-3xl font-black text-red-500 uppercase drop-shadow">📺 Записи Дебютов Злодеев</h2>
+                <div class="text-sm sm:text-base text-purple-100 font-medium leading-relaxed space-y-2">
+                    <p class="text-red-400 font-bold italic">«Опять этот цирк с <del>важностью инициативы</del> жалкими попытками самоутвердиться.»</p>
+                    <p>Пока смертные ностальгируют по своим убогим посиделкам, мы транслируем настоящее величие. Никаких сопливых рисунков — только жесткие дебюты настоящих хозяев игровых миров. Леди Деметреску считает это «неплохим представлением перед ужином», а Моника просто стирает лишние файлы. Наслаждайтесь, пока мы не отклюкли вам свет!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Виджет списка стримов -->
+        <div class="dialogue-box rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg sm:text-xl font-black text-red-400 uppercase">⚡ Трансляции и дебюты</h3>
+                
+                <div class="flex space-x-2">
+                    <button onclick="prevPage()" class="w-10 h-10 bg-red-700 text-white font-black rounded-xl hover:bg-red-600 retro-shadow cursor-pointer flex items-center justify-center text-lg">&lt;</button>
+                    <button onclick="nextPage()" class="w-10 h-10 bg-red-700 text-white font-black rounded-xl hover:bg-red-600 retro-shadow cursor-pointer flex items-center justify-center text-lg">&gt;</button>
+                </div>
+            </div>
+
+            <!-- Контейнер карточек -->
+            <div id="streams-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Рендерится из JS -->
+            </div>
+            
+            <div id="page-indicator" class="text-center text-sm font-bold text-red-400 mt-4">
+                Страница 1
+            </div>
+        </div>
+    </main>
+
+    <!-- Модальное окно для YouTube -->
+    <div id="yt-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="relative w-full max-w-5xl aspect-video bg-gray-950 border-4 border-red-600 rounded-3xl shadow-[0_0_40px_rgba(220,38,38,0.6)] overflow-hidden transform scale-95 transition-transform duration-300" id="yt-modal-content">
+            <button onclick="closeYtModal()" class="absolute top-4 right-4 z-10 w-12 h-12 bg-red-600 text-white font-black rounded-full border-4 border-white hover:bg-red-500 shadow-[0_4px_0_#450a0a] active:shadow-none active:translate-y-[4px] cursor-pointer text-xl">X</button>
+            <iframe id="yt-iframe" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer class="w-full bg-purple-950/95 backdrop-blur-md border-t-4 border-red-600 px-6 py-4 flex flex-col sm:flex-row items-center justify-between z-20 shadow-2xl mt-12">
+        <div class="flex items-center space-x-3 mb-3 sm:mb-0">
+            <div class="bg-red-950 text-red-400 px-4 py-2 rounded-xl font-extrabold tracking-widest text-sm border border-red-600/40 shadow">ZLO_ARCHIVE</div>
+            <span class="text-xs text-red-400 font-semibold">Контроль над трансляциями активен</span>
+        </div>
+        <div class="flex items-center space-x-3">
+            <span class="text-xs text-red-400">Monika & Lady Dimitrescu</span>
+        </div>
+    </footer>
+
+    <script>
+        const ITEMS_PER_PAGE = 6;
+        let currentPage = 0;
+
+        function getYouTubeVideoId(url) {
+            let videoId = '';
+            if (!url) return '';
+            if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+            } else if (url.includes('watch?v=')) {
+                videoId = url.split('watch?v=')[1].split('&')[0];
+            } else if (url.includes('embed/')) {
+                videoId = url.split('embed/')[1].split('?')[0];
+            } else if (url.includes('live/')) {
+                videoId = url.split('live/')[1].split('?')[0];
+            }
+            return videoId.trim();
+        }
+
+        function renderStreams() {
+            const container = document.getElementById('streams-container');
+            container.innerHTML = '';
+
+            const start = currentPage * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+            const pageItems = StreamsData.slice(start, end);
+
+            pageItems.forEach((st) => {
+                const videoId = getYouTubeVideoId(st.url);
+                const statusHtml = st.isReady 
+                    ? `<span class="bg-red-900 text-red-200 px-2 py-1 rounded-lg text-xs font-bold border-2 border-red-600 shadow-sm flex items-center gap-1"><i class="fa-solid fa-eye"></i> Помним</span>`
+                    : `<span class="bg-gray-800 text-gray-400 px-2 py-1 rounded-lg text-xs font-bold border-2 border-gray-600 shadow-sm flex items-center gap-1"><i class="fa-solid fa-eye-slash"></i> Забыли</span>`;
+
+                const card = document.createElement('div');
+                card.className = "bg-purple-950/80 border-2 border-red-600/60 rounded-2xl p-4 shadow-lg flex flex-col xl:flex-row items-center gap-4 text-left relative group hover:border-red-500 transition-colors";
+                
+                card.innerHTML = `
+                    <div onclick="openYtModal('${videoId}')" class="w-full xl:w-48 h-28 rounded-xl overflow-hidden flex-shrink-0 bg-black flex items-center justify-center border-2 border-red-500/50 shadow-md relative group/img cursor-pointer">
+                        <img src="${st.thumb}" alt="Превью" class="w-full h-full object-cover group-hover/img:scale-105 transition-transform">
+                        <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity">
+                            <i class="fa-solid fa-play text-4xl text-red-500 drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-grow space-y-2 w-full flex flex-col justify-between h-full py-1">
+                        <div>
+                            <div class="flex justify-between items-start mb-1 gap-2">
+                                <h4 class="text-sm font-black text-yellow-300 uppercase tracking-wide leading-snug line-clamp-2">
+                                    ${st.title}
+                                </h4>
+                            </div>
+                            ${statusHtml}
+                        </div>
+                        
+                        <div class="flex items-center justify-between pt-2 mt-auto">
+                            <a href="${st.url}" target="_blank" class="bg-red-700 hover:bg-red-600 text-white font-black px-3 py-1.5 rounded-xl text-xs uppercase retro-shadow flex items-center space-x-1.5 transition-transform transform hover:translate-y-[2px] active:shadow-none cursor-pointer no-underline w-full justify-center">
+                                <i class="fab fa-youtube"></i>
+                                <span>На YouTube</span>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            const totalPages = Math.ceil(StreamsData.length / ITEMS_PER_PAGE);
+            document.getElementById('page-indicator').textContent = `Страница ${currentPage + 1} из ${totalPages || 1}`;
+        }
+
+        function nextPage() {
+            if ((currentPage + 1) * ITEMS_PER_PAGE < StreamsData.length) {
+                currentPage++;
+                renderStreams();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                renderStreams();
+            }
+        }
+
+        function openYtModal(videoId) {
+            const modal = document.getElementById('yt-modal');
+            const content = document.getElementById('yt-modal-content');
+            const iframe = document.getElementById('yt-iframe');
+            
+            if (isMusicPlaying) {
+                audioMain.pause();
+            }
+
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeYtModal() {
+            const modal = document.getElementById('yt-modal');
+            const content = document.getElementById('yt-modal-content');
+            const iframe = document.getElementById('yt-iframe');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                iframe.src = "";
+                
+                if (isMusicPlaying) {
+                    audioMain.play().catch(e => console.log("Блокировка автоплея"));
+                }
+            }, 300);
+        }
+
+        // ==========================================
+        // 🎀 ФОНОВАЯ МУЗЫКА С АВТОЗАПУСКОМ 🎀
+        // ==========================================
+        const audioMain = document.getElementById('music-streams');
+        const volumeSlider = document.getElementById('volume-slider');
+        const icon = document.getElementById('music-icon');
+        let isMusicPlaying = false;
+
+        function updateMusicUI(playing) {
+            isMusicPlaying = playing;
+            if (playing) {
+                icon.classList.remove('fa-volume-xmark');
+                icon.classList.add('fa-volume-high');
+            } else {
+                icon.classList.remove('fa-volume-high');
+                icon.classList.add('fa-volume-xmark');
+            }
+        }
+
+        function toggleVolumePanel() {
+            const panel = document.getElementById('volume-panel');
+            panel.classList.toggle('hidden');
+            panel.classList.toggle('flex');
+        }
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                audioMain.pause();
+                updateMusicUI(false);
+            } else {
+                audioMain.play().then(() => {
+                    updateMusicUI(true);
+                }).catch(e => console.log("Ошибка воспроизведения:", e));
+            }
+        }
+
+        volumeSlider.addEventListener('input', (e) => {
+            audioMain.volume = e.target.value;
+        });
+
+        function tryPlayAudio() {
+            audioMain.volume = volumeSlider.value;
+            const promise = audioMain.play();
+
+            if (promise !== undefined) {
+                promise.then(() => {
+                    updateMusicUI(true);
+                    removeInteractionListeners();
+                }).catch(() => {
+                    updateMusicUI(false);
+                    addInteractionListeners();
+                });
+            }
+        }
+
+        function onUserInteraction() {
+            audioMain.play().then(() => {
+                updateMusicUI(true);
+                removeInteractionListeners();
+            }).catch(e => console.log(e));
+        }
+
+        function addInteractionListeners() {
+            document.addEventListener('click', onUserInteraction);
+            document.addEventListener('keydown', onUserInteraction);
+            document.addEventListener('touchstart', onUserInteraction);
+        }
+
+        function removeInteractionListeners() {
+            document.removeEventListener('click', onUserInteraction);
+            document.removeEventListener('keydown', onUserInteraction);
+            document.removeEventListener('touchstart', onUserInteraction);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            tryPlayAudio();
+            renderStreams();
+        });
+    </script>
+</body>
+</html>

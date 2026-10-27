@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="site-title">TWX АРХИВ - О нас</title>
+    <link rel="icon" type="image/png" href="user/system/icon about.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: url('user/system/yu.png') no-repeat center center fixed;
+            background-size: cover;
+            overflow-x: hidden;
+            user-select: none;
+            color: #f3e8ff;
+        }
+        .dot-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px), url('user/system/yu.png');
+            background-position: center center, center center;
+            background-size: 24px 24px, cover;
+            background-repeat: repeat, no-repeat;
+            background-attachment: scroll, fixed;
+        }
+        
+        /* ⚡ ФИОЛЕТОВЫЙ ПОЛЗУНОК-МОЛНИЯ (Скроллбар) ⚡ */
+        ::-webkit-scrollbar { width: 24px; }
+        ::-webkit-scrollbar-track {
+            background: #f3e8ff;
+            border-left: 3px dashed #c084fc;
+            border-right: 3px dashed #c084fc;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #d946ef 0%, #a855f7 50%, #7e22ce 100%);
+            border-radius: 12px;
+            border: 4px solid #f3e8ff;
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.6), 0 0 10px rgba(168, 85, 247, 0.6);
+        }
+        ::-webkit-scrollbar-thumb:active {
+            background: #6b21a8;
+            border-width: 8px;
+            box-shadow: inset 0 6px 12px rgba(0,0,0,0.7);
+        }
+
+        /* ⚡ ФИОЛЕТОВЫЙ ПОЛЗУНОК-МОЛНИЯ (Громкость) ⚡ */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 14px;
+            cursor: pointer;
+            background: #f3e8ff;
+            border-radius: 7px;
+            border: 2px dashed #c084fc;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 28px;
+            width: 28px;
+            margin-top: -8px;
+            background: linear-gradient(135deg, #d946ef 0%, #a855f7 50%, #7e22ce 100%);
+            border: 4px solid #f3e8ff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.8), inset 0 2px 5px rgba(255,255,255,0.6);
+            transition: all 0.1s;
+        }
+        input[type=range]:active::-webkit-slider-thumb {
+            transform: scale(0.85);
+            border-width: 8px;
+            box-shadow: inset 0 6px 12px rgba(0,0,0,0.7);
+            background: #6b21a8;
+        }
+
+        .gartic-header-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 100px;
+            background: linear-gradient(90deg, #4d1049 0%, #6d1b67 50%, #4d1049 100%);
+            transform: skewY(-3deg);
+            z-index: 10;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            border-bottom: 4px solid #2a0528;
+        }
+        .retro-shadow { box-shadow: 4px 4px 0px #21041e; }
+        .retro-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #21041e;
+        }
+        .image-slide-anim {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Таймер-обводка вокруг активной точки (35 секунд) */
+        @keyframes timerRing {
+            0% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.8), 0 0 0 0 rgba(236, 72, 153, 0.6); }
+            100% { box-shadow: 0 0 0 10px rgba(236, 72, 153, 0), 0 0 0 20px rgba(236, 72, 153, 0); }
+        }
+        .timer-dot-active {
+            position: relative;
+            animation: timerRing 35s linear infinite;
+        }
+    </style>
+</head>
+<body class="dot-pattern min-h-screen flex flex-col justify-between text-white relative selection:bg-pink-500 selection:text-white">
+
+    <!-- Аудио плеер -->
+    <audio id="music-bg" loop autoplay>
+        <source src="user/music/ack.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <div id="volume-panel" class="hidden bg-white/95 backdrop-blur-sm border-4 border-purple-400 p-5 rounded-2xl shadow-2xl mb-3 flex-col items-center space-y-4 w-40">
+            <span class="text-sm font-black text-purple-900 uppercase">Громкость</span>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" class="w-full">
+            <button onclick="toggleMusic()" class="bg-purple-600 text-white px-4 py-2 rounded-xl font-bold hover:bg-purple-500 shadow-[0_4px_0_#4c1d95] active:shadow-none active:translate-y-[4px] transition-all uppercase text-xs">Вкл / Выкл</button>
+        </div>
+        <button onclick="toggleVolumePanel()" class="w-16 h-16 bg-pink-500 hover:bg-pink-400 border-4 border-white rounded-full flex items-center justify-center text-3xl text-white shadow-[0_6px_0_#9d174d] active:shadow-none active:translate-y-[6px] cursor-pointer transition-all">
+            <i id="music-icon" class="fa-solid fa-volume-xmark"></i>
+        </button>
+    </div>
+
+    <!-- Шапка сайта -->
+    <header class="sticky top-0 z-30 w-full pt-4 pb-5 px-4 sm:px-8 pointer-events-none">
+        <div class="gartic-header-bg"></div>
+        <div class="max-w-7xl mx-auto relative z-20 flex items-center justify-between pointer-events-auto">
+            <a href="index.html" class="flex items-center space-x-6 group cursor-pointer no-underline">
+                <div class="w-32 h-32 sm:w-40 sm:h-40 flex-shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
+                    <img src="user/ava/logo.png" alt="Лого" class="w-full h-full object-contain drop-shadow-2xl">
+                </div>
+                <span id="site-title-text" class="font-black text-3xl sm:text-5xl tracking-wider text-yellow-300 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)] uppercase group-hover:text-yellow-200 transition-colors">
+                    TWX АРХИВ
+                </span>
+            </a>
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <a href="index.html" class="bg-[#a3ff00] hover:bg-[#8ee000] text-purple-950 font-black px-4 sm:px-5 py-2.5 rounded-xl retro-shadow border-2 border-white/60 text-xs sm:text-sm cursor-pointer transition-transform uppercase no-underline">
+                    Главная
+                </a>
+                <a href="music.html" class="bg-[#ffc0cb] hover:bg-[#fdbcb4] text-purple-950 font-black px-4 sm:px-5 py-2.5 rounded-xl retro-shadow border-2 border-white/60 text-xs sm:text-sm cursor-pointer transition-transform uppercase no-underline">
+                    Плейлист
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="flex-grow max-w-5xl mx-auto w-full px-4 z-25 flex flex-col my-12 space-y-8">
+        
+        <!-- ВЕРХНИЙ БЛОК -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+            
+            <!-- ТЕКСТ ОПИСАНИЯ О НАС -->
+            <div class="md:col-span-2 bg-purple-900/70 border-4 border-purple-400/60 rounded-3xl p-6 shadow-2xl backdrop-blur-md flex flex-col">
+                <h2 class="text-xl sm:text-2xl font-black text-yellow-300 uppercase mb-4">✨ Проект «Инициатива: TWX АРХИВ»</h2>
+                <div class="text-sm sm:text-base text-purple-100 font-medium leading-relaxed flex-grow space-y-3">
+                    <p class="text-pink-300 font-bold italic">мда было время пора наверстать и повспоминать.</p>
+                    <p>Бывают времена, которые навсегда остаются в нашей памяти теплым светом мониторов, звуками знакомого голоса и радостью совместного творчества. Помните те самые вечера, когда мы собирались на стримах Хантера по Gartic Phone? Мы сидели, увлеченно рисовали, смеялись и создавали маленькие шедевры прямо в реальном времени. Время шло, но память о тех моментах не должна исчезнуть в цифровой пыли.</p>
+                    <p><strong>«TWX АРХИВ»</strong> — это не просто сайт. Это живая капсула времени, созданная как искренний и теплый сюрприз для Хантера в знак благодарности за все те незабываемые моменты, когда мы были вместе. Это наша общая история, бережно сохраненная страница за страницей.</p>
+                </div>
+            </div>
+
+            <!-- ВИДЖЕТ-КАРУСЕЛЬ КАРТИНОК -->
+            <div class="bg-purple-950/80 border-4 border-pink-400 rounded-3xl p-4 shadow-2xl backdrop-blur-md flex flex-col items-center justify-between relative group min-h-[250px]">
+                <div class="relative w-full flex-grow flex items-center justify-center my-2">
+                    <img id="widget-image" src="user/system/as.png" alt="Слайд" class="max-w-full max-h-[180px] object-contain drop-shadow-xl image-slide-anim">
+                    <button onclick="prevSlide()" class="absolute left-0 top-1/2 -translate-y-1/2 w-9 h-9 bg-yellow-400 text-purple-900 font-black rounded-full hover:bg-yellow-300 retro-shadow cursor-pointer flex items-center justify-center text-base z-10">&lt;</button>
+                    <button onclick="nextSlide()" class="absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 bg-yellow-400 text-purple-900 font-black rounded-full hover:bg-yellow-300 retro-shadow cursor-pointer flex items-center justify-center text-base z-10">&gt;</button>
+                </div>
+                
+                <div id="slide-dots" class="flex items-center justify-center space-x-2 py-2 z-10">
+                </div>
+            </div>
+
+        </div>
+
+        <!-- НИЖНИЙ БЛОК С КАНАЛАМИ -->
+        <div class="w-full bg-purple-900/70 border-4 border-purple-400/60 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md space-y-6">
+            <h3 class="text-xl sm:text-2xl font-black text-pink-300 uppercase mb-6 text-center sm:text-left">📌 Порталы в прошлое (Наши каналы)</h3>
+
+            <div class="space-y-6">
+                
+                <!-- КАНАЛ 1 -->
+                <div class="bg-purple-950/75 border-2 border-purple-400/60 rounded-2xl p-5 shadow-lg flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left hover:border-pink-400 transition-colors">
+                    <img src="https://yt3.googleusercontent.com/ytc/AIdro_nS2PxIGM2NaLGx1J9WFc-4OP06l6jXgwZetwgTvzXZd3I=s160-c-k-c0x00ffffff-no-rj" alt="Аватар" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-yellow-400 shadow-xl object-cover flex-shrink-0">
+                    
+                    <div class="flex-grow space-y-2">
+                        <h4 class="text-lg sm:text-xl font-black text-yellow-300 uppercase tracking-wide">XaHTep Play Stream</h4>
+                        <p class="text-sm text-purple-100 font-medium">Первоисточник уюта и безумных рисунков в Gartic Phone, где и ковалась наша стримовая атмосфера.</p>
+                    </div>
+
+                    <div class="flex flex-col items-center sm:items-end gap-3 flex-shrink-0">
+                        <a href="https://www.youtube.com/@XaHTepplaystream" target="_blank" class="bg-red-600 hover:bg-red-500 text-white font-black px-6 py-2 rounded-xl text-sm uppercase retro-shadow flex items-center space-x-2 transition-transform transform hover:translate-y-[2px] active:shadow-none no-underline w-full justify-center">
+                            <i class="fab fa-youtube text-lg"></i>
+                            <span>На YouTube</span>
+                        </a>
+                        <a href="https://www.youtube.com/@XaHTepplaystream" target="_blank" class="hover:scale-105 transition-transform active:scale-95 block">
+                            <img src="user/ava/xahtep_ava.png" alt="Плашка" class="h-10 sm:h-12 object-contain drop-shadow-md">
+                        </a>
+                    </div>
+                </div>
+
+                <!-- КАНАЛ 2 -->
+                <div class="bg-purple-950/75 border-2 border-purple-400/60 rounded-2xl p-5 shadow-lg flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left hover:border-pink-400 transition-colors">
+                    <img src="https://yt3.googleusercontent.com/ytc/AIdro_lnTZmQ4ylIFIGTCYknEtBHW0dlGRpRNmWSWdKvXQ6E2Q=s160-c-k-c0x00ffffff-no-rj" alt="Аватар" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-yellow-400 shadow-xl object-cover flex-shrink-0">
+                    
+                    <div class="flex-grow space-y-2">
+                        <h4 class="text-lg sm:text-xl font-black text-yellow-300 uppercase tracking-wide">Time With XaHTep</h4>
+                        <p class="text-sm text-purple-100 font-medium">Главный канал, бьющийся в ритме любимого автора.</p>
+                    </div>
+
+                    <div class="flex flex-col items-center sm:items-end gap-3 flex-shrink-0">
+                        <a href="https://www.youtube.com/@timewithxahtep4954" target="_blank" class="bg-red-600 hover:bg-red-500 text-white font-black px-6 py-2 rounded-xl text-sm uppercase retro-shadow flex items-center space-x-2 transition-transform transform hover:translate-y-[2px] active:shadow-none no-underline w-full justify-center">
+                            <i class="fab fa-youtube text-lg"></i>
+                            <span>На YouTube</span>
+                        </a>
+                        <a href="https://www.youtube.com/@timewithxahtep4954" target="_blank" class="hover:scale-105 transition-transform active:scale-95 block">
+                            <img src="user/ava/xahtep_ava.png" alt="Плашка" class="h-10 sm:h-12 object-contain drop-shadow-md">
+                        </a>
+                    </div>
+                </div>
+
+                <!-- КАНАЛ 3 -->
+                <div class="bg-purple-950/75 border-2 border-purple-400/60 rounded-2xl p-5 shadow-lg flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left hover:border-pink-400 transition-colors">
+                    <img src="https://yt3.ggpht.com/s5kyRytvPT2rUdY9Ukq95SwJmAHRAZORw-cZamDE4LQva104TrZKwGb1Dn5OjjcacrVcYCfZkJQ=s600-c-k-c0x00ffffff-no-rj-rp-mo" alt="Аватар" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-yellow-400 shadow-xl object-cover flex-shrink-0">
+                    
+                    <div class="flex-grow space-y-2">
+                        <h4 class="text-lg sm:text-xl font-black text-yellow-300 uppercase tracking-wide">Mister MAB</h4>
+                        <p class="text-sm text-purple-100 font-medium">Канал главного двигателя, творца и создателя этого архива, который последние пару лет вкладывал душу в то, чтобы эта память жила.</p>
+                    </div>
+
+                    <div class="flex flex-col items-center sm:items-end gap-3 flex-shrink-0">
+                        <a href="https://www.youtube.com/@mistermab9054" target="_blank" class="bg-red-600 hover:bg-red-500 text-white font-black px-6 py-2 rounded-xl text-sm uppercase retro-shadow flex items-center space-x-2 transition-transform transform hover:translate-y-[2px] active:shadow-none no-underline w-full justify-center">
+                            <i class="fab fa-youtube text-lg"></i>
+                            <span>На YouTube</span>
+                        </a>
+                        <a href="https://www.youtube.com/@mistermab9054" target="_blank" class="hover:scale-105 transition-transform active:scale-95 block">
+                            <img src="user/ava/mab_ava.png" alt="Плашка" class="h-10 sm:h-12 object-contain drop-shadow-md">
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Футер -->
+    <footer class="w-full bg-purple-950/95 backdrop-blur-md border-t-4 border-purple-600 px-6 py-4 flex flex-col sm:flex-row items-center justify-between z-20 shadow-2xl mt-12">
+        <div class="flex items-center space-x-3 mb-3 sm:mb-0">
+            <div class="bg-purple-900 px-4 py-2 rounded-xl font-extrabold tracking-widest text-sm border border-white/20 shadow">
+                TWX_ARCHIVE
+            </div>
+            <span class="text-xs text-purple-300 font-semibold">Time With XaHTeP Project</span>
+        </div>
+        <div class="flex items-center space-x-3">
+            <span class="text-xs text-purple-300"></span>
+        </div>
+    </footer>
+
+    <script>
+        // ==========================================
+        // 🎄 ПРАЗДНИКИ И ФОНЫ 🎄
+        // ==========================================
+        function checkHolidayAndStyle() {
+            const now = new Date();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+
+            let bgImage = 'user/system/yu.png';
+            let titleDecoration = '';
+
+            // 1. Новый год (21 дек - 1 янв)
+            if ((month === 12 && day >= 21) || (month === 1 && day === 1)) {
+                bgImage = 'user/system/yu_newyear.png';
+                titleDecoration = '❄️ ';
+            }
+            // 2. Хэллоуин (Октябрь)
+            else if (month === 10) {
+                bgImage = 'user/system/yu_halloween.png';
+                titleDecoration = '🦇 ';
+            }
+            // 3. ДР создателя (21 мая)
+            else if (month === 5 && day === 21) {
+                bgImage = 'user/system/yu_creator_bd.png';
+                titleDecoration = '👑 ';
+            }
+            // 4. ДР Хантера (13 июля)
+            else if (month === 7 && day === 13) {
+                bgImage = 'user/system/yu_hunter_bd.png';
+                titleDecoration = '⭐ ';
+            }
+            // 5. 1 апреля
+            else if (month === 4 && day === 1) {
+                bgImage = 'user/system/yu_april1.png';
+                titleDecoration = '🃏 ';
+            }
+            // 6. День космонавтики (12 апреля)
+            else if (month === 4 && day === 12) {
+                bgImage = 'user/system/yu_space.png';
+                titleDecoration = '🚀 ';
+            }
+            // 7. День Победы (9 мая)
+            else if (month === 5 && day === 9) {
+                bgImage = 'user/system/yu_may9.png';
+                titleDecoration = '🎖️ ';
+            }
+            // 8. День лени (20 августа)
+            else if (month === 8 && day === 20) {
+                bgImage = 'user/system/yu_sloth.png';
+                titleDecoration = '🦥 ';
+            }
+            // 9. 1 сентября
+            else if (month === 9 && day === 1) {
+                bgImage = 'user/system/yu_sept1.png';
+                titleDecoration = '🎒 ';
+            }
+            // 10. День учителя (5 октября)
+            else if (month === 10 && day === 5) {
+                bgImage = 'user/system/yu_teacher.png';
+                titleDecoration = '🍎 ';
+            }
+            // 11. 8 Марта
+            else if (month === 3 && day === 8) {
+                bgImage = 'user/system/yu_march8.png';
+                titleDecoration = '🌷 ';
+            }
+
+            document.body.style.backgroundImage = `url('${bgImage}')`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundRepeat = 'no-repeat';
+            document.body.style.backgroundAttachment = 'fixed';
+
+            if (titleDecoration) {
+                const titleSpan = document.getElementById('site-title-text');
+                if (titleSpan) {
+                    titleSpan.textContent = titleDecoration + "TWX АРХИВ " + titleDecoration;
+                }
+                const titleEl = document.getElementById('site-title');
+                if (titleEl) {
+                    titleEl.textContent = titleDecoration + "TWX АРХИВ - О нас " + titleDecoration;
+                }
+            }
+        }
+        checkHolidayAndStyle();
+
+        // ==========================================
+        // 🎀 ВИДЖЕТ КАРТИНОК И ТОЧКИ С ТАЙМЕРОМ 🎀
+        // ==========================================
+        const widgetImages = [
+            "user/system/as.png",
+            "user/system/cu.png",
+            "user/system/fur.png",
+            "user/system/gu.png",
+            "user/system/hoy.png",
+            "user/system/lo.png",
+            "user/system/mu.png",
+            "user/system/pi.png",
+            "user/system/xu.png",
+            "user/system/zo.png"
+        ];
+        
+        let currentSlide = 0;
+        const imgElement = document.getElementById('widget-image');
+        const dotsContainer = document.getElementById('slide-dots');
+        let slideInterval;
+
+        function createDots() {
+            dotsContainer.innerHTML = '';
+            widgetImages.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = `w-3 h-3 rounded-full transition-all cursor-pointer ${index === currentSlide ? 'bg-pink-400 timer-dot-active scale-125' : 'bg-purple-600 hover:bg-purple-400'}`;
+                dot.onclick = () => {
+                    currentSlide = index;
+                    updateSlide();
+                    resetInterval();
+                };
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function updateDots() {
+            const dots = dotsContainer.children;
+            for (let i = 0; i < dots.length; i++) {
+                if (i === currentSlide) {
+                    dots[i].className = 'w-3 h-3 rounded-full transition-all cursor-pointer bg-pink-400 timer-dot-active scale-125';
+                } else {
+                    dots[i].className = 'w-3 h-3 rounded-full transition-all cursor-pointer bg-purple-600 hover:bg-purple-400';
+                }
+            }
+        }
+
+        function updateSlide() {
+            imgElement.classList.remove('image-slide-anim');
+            void imgElement.offsetWidth; 
+            imgElement.src = widgetImages[currentSlide];
+            imgElement.classList.add('image-slide-anim');
+            updateDots();
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % widgetImages.length;
+            updateSlide();
+            resetInterval();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + widgetImages.length) % widgetImages.length;
+            updateSlide();
+            resetInterval();
+        }
+
+        function startInterval() {
+            slideInterval = setInterval(() => {
+                currentSlide = (currentSlide + 1) % widgetImages.length;
+                updateSlide();
+            }, 35000);
+        }
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            startInterval();
+        }
+
+        createDots();
+        startInterval();
+
+        // ==========================================
+        // 🎀 ФОНОВАЯ МУЗЫКА С АВТОЗАПУСКОМ 🎀
+        // ==========================================
+        const audioBg = document.getElementById('music-bg');
+        const volumeSlider = document.getElementById('volume-slider');
+        const icon = document.getElementById('music-icon');
+        let isMusicPlaying = false;
+
+        function updateMusicUI(playing) {
+            isMusicPlaying = playing;
+            if (playing) {
+                icon.classList.remove('fa-volume-xmark');
+                icon.classList.add('fa-volume-high');
+            } else {
+                icon.classList.remove('fa-volume-high');
+                icon.classList.add('fa-volume-xmark');
+            }
+        }
+
+        function toggleVolumePanel() {
+            const panel = document.getElementById('volume-panel');
+            panel.classList.toggle('hidden');
+            panel.classList.toggle('flex');
+        }
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                audioBg.pause();
+                updateMusicUI(false);
+            } else {
+                audioBg.play().then(() => {
+                    updateMusicUI(true);
+                }).catch(e => console.log("Ошибка воспроизведения:", e));
+            }
+        }
+
+        volumeSlider.addEventListener('input', (e) => {
+            audioBg.volume = e.target.value;
+        });
+
+        // Функция попытки запуска
+        function tryPlayAudio() {
+            audioBg.volume = volumeSlider.value;
+            const promise = audioBg.play();
+
+            if (promise !== undefined) {
+                promise.then(() => {
+                    updateMusicUI(true);
+                    // Удаляем слушатели кликов, раз музыка уже запустилась
+                    removeInteractionListeners();
+                }).catch(() => {
+                    updateMusicUI(false);
+                    // Если браузер заблокировал, ждем первого клика от пользователя
+                    addInteractionListeners();
+                });
+            }
+        }
+
+        function onUserInteraction() {
+            audioBg.play().then(() => {
+                updateMusicUI(true);
+                removeInteractionListeners();
+            }).catch(e => console.log(e));
+        }
+
+        function addInteractionListeners() {
+            document.addEventListener('click', onUserInteraction);
+            document.addEventListener('keydown', onUserInteraction);
+            document.addEventListener('touchstart', onUserInteraction);
+        }
+
+        function removeInteractionListeners() {
+            document.removeEventListener('click', onUserInteraction);
+            document.removeEventListener('keydown', onUserInteraction);
+            document.removeEventListener('touchstart', onUserInteraction);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            tryPlayAudio();
+        });
+    </script>
+</body>
+</html>

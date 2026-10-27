@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="site-title">TWX АРХИВ - Музыкальный проигрыватель</title>
+    <link id="site-favicon" rel="icon" type="image/png" href="user/system/icon music.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: url('user/system/yu.png') no-repeat center center fixed;
+            background-size: cover;
+            overflow: hidden; /* Без скролла всей страницы */
+            user-select: none;
+            color: #f3e8ff;
+            font-family: 'Inter', sans-serif;
+        }
+        .dot-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px), url('user/system/yu.png');
+            background-size: 24px 24px, cover;
+        }
+        
+        /* Свой кастомный скроллбар только для виджета плейлиста и справки */
+        .custom-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #111;
+            border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #d946ef;
+            border-radius: 4px;
+        }
+
+        .retro-box {
+            background: #333333;
+            border: 3px solid #555;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.8);
+        }
+
+        /* Стиль секретной пасхальной кнопки в правом углу */
+        .easter-egg-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 16px;
+            height: 16px;
+            z-index: 100;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .easter-egg-btn:hover {
+            opacity: 1;
+        }
+        .easter-egg-btn img {
+            width: 8px;
+            height: 8px;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        /* Тролль-стили при активации пасхалки */
+        body.rickroll-active {
+            background-image: url('user/system/troll.png') !important;
+            background-size: cover !important;
+            background-repeat: no-repeat !important;
+            background-attachment: fixed !important;
+        }
+        body.rickroll-active .retro-box {
+            border-color: #22c55e !important;
+            box-shadow: 6px 6px 0px rgba(0, 255, 0, 0.4) !important;
+        }
+        body.rickroll-active #profile-name {
+            color: #4ade80 !important;
+        }
+    </style>
+</head>
+<body class="dot-pattern h-screen w-screen flex flex-col justify-between p-4 sm:p-6 relative">
+
+    <!-- СЕКРЕТНАЯ ПАСХАЛКА В ПРАВОМ ВЕРХНЕМ УГЛУ -->
+    <div class="easter-egg-btn" onclick="toggleRickroll()" title="???">
+        <img src="user/system/kk.png" alt="kk" onerror="this.src='rick.png'">
+    </div>
+
+    <!-- Иконка сайта в левом верхнем углу (без шапки) -->
+    <div class="absolute top-4 left-6 z-30">
+        <a href="index.html" class="cursor-pointer hover:scale-105 transition-transform inline-block">
+            <img src="user/system/icon index.png" alt="Иконка" class="w-12 h-12 object-contain drop-shadow-md">
+        </a>
+    </div>
+
+    <!-- Аудио элемент -->
+    <audio id="audio-player"></audio>
+
+    <!-- =======================================================================
+    🎵 1. ОБЛАСТЬ ДАННЫХ ПРОФИЛЕЙ (ДОБАВЛЯЙ СКОЛЬКО УГОДНО) 🎵
+    ======================================================================== -->
+    <script>
+        const ProfilesData = [
+           {
+                id: "twx",
+                name: "TWX АРХИВ",
+                avatar: "user/system/icon index.png",
+                playlist: [
+                    {
+                        title: "ГЛАВНОЕ МЕНЮ",
+                        author: "TWX",
+                        source: "ТЕМА САЙТА",
+                        file: "user/music/menu.mp3",
+                        cover: "user/system/about/icon monika.png"
+                    },
+                    {
+                        title: "ДОСЬЕ",
+                        author: "TWX",
+                        source: "ТЕМА САЙТА",
+                        file: "user/music/pro.mp3",
+                        cover: "user/system/about/icon freddy.png"
+                    },
+                    {
+                        title: "О НАС",
+                        author: "TWX",
+                        source: "ТЕМА САЙТА",
+                        file: "user/music/ack.mp3",
+                        cover: "user/system/about/icon axo.png"
+                    },
+                    {
+                        title: "ВСПОМНИМ ОБ ИГРЕ",
+                        author: "TWX",
+                        source: "ТЕМА САЙТА",
+                        file: "user/music/gartick.mp3",
+                        cover: "user/system/about/icon moontick.png"
+                    },
+                    {
+                        title: "ЛУЧШАЯ РАБОТА",
+                        author: "TWX",
+                        source: "ТЕМА САЙТА",
+                        file: "user/music/lol.mp3",
+                        cover: "user/system/about/icon fnf.png"
+                    },
+                    {
+                        title: "ВСЕ ЗДЕСЬ",
+                        author: "TWX",
+                        source: "ТЕМА САЙТА",
+                        file: "user/music/all.mp3",
+                        cover: "user/system/about/icon sans.png"
+                    },
+                    {
+                        title: "МОЛЧАНИЕ В ЧЕСТЬ СТРИМОВ",
+                        author: "TWX",
+                        source: "ТЕМА САЙТА",
+                        file: "user/music/streams.mp3",
+                        cover: "user/system/about/icon bendy.png"
+                    },
+                    {
+                        title: "ВОТ И ВСЕ",
+                        author: "TWX",
+                        source: "ТЕМА САЙТА",
+                        file: "user/music/wotivse.mp3",
+                        cover: "user/system/about/icon mita.png"
+                    }
+                ]
+            },
+            {
+                id: "mab",
+                name: "MAFIA MAB",
+                avatar: "user/ava/mab_ava.png",
+                playlist: [
+                    {
+                        title: "Your Reality",
+                        author: "Dan Salvato",
+                        source: "Игра: Doki Doki Literature Club",
+                        file: "user/music/play/mab/doki.mp3",
+                        cover: "https://avatars.yandex.net/get-music-content/5966316/f093b66d.a.22981236-1/m1000x1000"
+                    },
+                    {
+                        title: "Gangnam Style",
+                        author: "PSY",
+                        source: "",
+                        file: "user/music/play/mab/psy.mp3",
+                        cover: "https://avatars.yandex.net/get-music-content/2424959/2ac98e63.a.571465-2/m1000x1000"
+                    },
+                    {
+                        title: "День Гнева",
+                        author: "В. А. Моцарт",
+                        source: "",
+                        file: "user/music/play/mab/gnev.mp3",
+                        cover: "https://cdn-images.dzcdn.net/images/cover/a07f889ce0ef97885677d397f7a8c669/1000x1000.jpg"
+                    },
+                    {
+                        title: "Alice's Theme (1)",
+                        author: "Steve Duckworth",
+                        source: "Игра: Disney Universe",
+                        file: "user/music/play/mab/alica.mp3",
+                        cover: "https://cdn-images.dzcdn.net/images/cover/e56cc0cc453eeadfe560530f013cd2c2/1000x1000.jpg"
+                    },
+                    {
+                        title: "Cutie Mew Mew Magic",
+                        author: "Toby Fox",
+                        source: "Игра: DELTARUNE",
+                        file: "user/music/play/mab/mew.mp3",
+                        cover: "https://i.pinimg.com/originals/6c/92/a1/6c92a1d4e3b774ca62f5d076aa57d890.jpg"
+                    },
+                    {
+                        title: "The Amazing Digital Circus Theme",
+                        author: "Gooseworx",
+                        source: "Сериал: The Amazing Digital Circus",
+                        file: "user/music/play/mab/tads.mp3",
+                        cover: "https://static.wikia.nocookie.net/tadc/images/8/82/Pomni_Icon.png/revision/latest?cb=20260824223747"
+                    },
+                    {
+                        title: "Its Been So Long",
+                        author: "The Living Tombstone",
+                        source: "",
+                        file: "user/music/play/mab/fnaf.mp3",
+                        cover: "https://cdn-image.zvuk.com/pic?hash=5f828b5e-1c39-4a5c-b628-da3c97a4bf45&id=10864517&size=large&type=release"
+                    },
+                    {
+                        title: "Pursuit - Corner the Culprit",
+                        author: "Masakazu Sugimori",
+                        source: "Игра: Phoenix Wright: Ace Attorney",
+                        file: "user/music/play/mab/pwaa.mp3",
+                        cover: "https://static.wikia.nocookie.net/aceattorney/images/9/92/Piano_Album.png/revision/latest/scale-to-width-down/1200?cb=20260119001602"
+                    },
+                    {
+                        title: "Strike the Earth!",
+                        author: "Джейк Кауфман",
+                        source: "Игра: Shovel Knight",
+                        file: "user/music/play/mab/shovel.mp3",
+                        cover: "https://static.wikia.nocookie.net/shovelknight/images/0/05/Shovel_Knight_Original_Game_Soundtrack_Cover_Art.jpg/revision/latest?cb=20171029162259&path-prefix=ru"
+                    },
+                    {
+                        title: "Your Choice - Connor",
+                        author: "Ним Фахрар",
+                        source: "Игра: Detroit: Become Human",
+                        file: "user/music/play/mab/detroit.mp3",
+                        cover: "https://i.playground.ru/e/dcf-4xQIo-EHIjJfaIzwvg.jpeg"
+                    },
+                    {
+                        title: "Night of Nights",
+                        author: "ZUN",
+                        source: "Игра: Touhou Project",
+                        file: "user/music/play/mab/night.mp3",
+                        cover: "https://i.ytimg.com/vi/Pt38sDvH6vM/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgWShWMA8=&amp;rs=AOn4CLDXMde_WfvCVNNRVC1Za60KiObh_Q"
+                    },
+                    {
+                        title: "Against All Odds",
+                        author: "Chipzel",
+                        source: "Игра: Dicey Dungeons",
+                        file: "user/music/play/mab/Chipzel.mp3",
+                        cover: "https://cdn.mobygames.com/covers/11319520-dicey-dungeons-playstation-4-front-cover.jpg"
+                    },
+                    {
+                        title: "Sweden",
+                        author: "C418",
+                        source: "Игра: Minecraft",
+                        file: "user/music/play/mab/sweden.mp3",
+                        cover: "https://yt3.googleusercontent.com/ytc/AIdro_k3fFi3jEMJkmj17VykiG3BC7Sra4F_8OuAEjVRufivcA=s900-c-k-c0x00ffffff-no-rj"
+                    },
+                    {
+                        title: "Everybody Falls",
+                        author: "Jukio Kallio",
+                        source: "Игра: Fall Guys: Ultimate Knockout",
+                        file: "user/music/play/mab/fall.mp3",
+                        cover: "https://cdn-image.zvuk.com/pic?hash=15333f6b-84d3-4a5d-8b63-4c1d415fe4a4&id=43391429&size=large&type=release"
+                    },
+                    {
+                        title: "Dirtmouth",
+                        author: "Кристофер Ларкин",
+                        source: "Игра: Hollow Knight",
+                        file: "user/music/play/mab/hk.mp3",
+                        cover: "https://images.genius.com/b287499d11737f53c522112e53e1c397.1000x1000x1.png"
+                    },
+                    {
+                        title: "Murine Corps",
+                        author: "Кристофер Мэддиган",
+                        source: "Игра: Cuphead",
+                        file: "user/music/play/mab/cuphead.mp3",
+                        cover: "https://static.wikia.nocookie.net/cuphead/images/d/d7/Cuphead_OST.jpg/revision/latest?cb=20171010180240&path-prefix=ru"
+                    },
+                    {
+                        title: "From a Place of Love",
+                        author: "MILI",
+                        source: "Игра: Library of Ruin",
+                        file: "user/music/play/mab/love.mp3",
+                        cover: "https://images.genius.com/a982b81f82692db45faccb9ba8442909.1000x1000x1.jpg"
+                    },
+                    {
+                        title: "Hero",
+                        author: "MILI",
+                        source: "Игра: Linbus Company",
+                        file: "user/music/play/mab/hero.mp3",
+                        cover: "https://cdn-images.dzcdn.net/images/cover/c7c505974928001c6b35ed89009205b8/1000x1000.jpg"
+                    },
+                    {
+                        title: "Close to Me",
+                        author: "Subrepulse",
+                        source: "Игра: Just Shapes & Beats",
+                        file: "user/music/play/mab/me.mp3",
+                        cover: "https://i.ytimg.com/vi/7nYpBdH3g9M/maxresdefault.jpg"
+                    },
+                    {
+                        title: "Garden",
+                        author: "Lionel Payet Pigeon",
+                        source: "Игра: Garfield: A Tail of Two Kitties ",
+                        file: "user/music/play/mab/garden.mp3",
+                        cover: "https://i.ytimg.com/vi/PnxiwfrP4N0/maxresdefault.jpg"
+                    },
+                    {
+                        title: "Code Vein",
+                        author: "Go Shiina",
+                        source: "Игра: CODE VEIN",
+                        file: "user/music/play/mab/code.mp3",
+                        cover: "https://i.ytimg.com/vi/WakpgsU1Um0/maxresdefault.jpg"
+                    },
+                    {
+                        title: "I'm Here",
+                        author: "Tomoya Ohtani",
+                        source: "Игра: Sonic Frontiers",
+                        file: "user/music/play/mab/here.mp3",
+                        cover: "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ab/38/00/ab3800ea-a3ae-0166-0284-73211e2a2208/859789505462_cover.jpg/1200x1200bf-60.jpg"
+                    },
+                    {
+                        title: "Bilewater",
+                        author: "Кристофер Ларкин",
+                        source: "Игра: Hollow Knight: Silksong",
+                        file: "user/music/play/mab/hks.mp3",
+                        cover: "https://images.genius.com/cf2ae084086fa41c7f2f213e01096b96.1000x1000x1.png"
+                    },
+                    {
+                        title: "Nostalgia (Credits Theme)",
+                        author: "Hello Neighbour",
+                        source: "Игра: Hello Neighbor",
+                        file: "user/music/play/mab/hello.mp3",
+                        cover: "https://yt3.googleusercontent.com/ytc/AIdro_mNi5IWpKeyViFbfkQxiYCTE6MGF6XnFQ4Wl1g1BNC99g=s900-c-k-c0x00ffffff-no-rj"
+                    },
+                    {
+                        title: "Kill Command",
+                        author: "Masafumi Takada",
+                        source: "Игра: Danganronpa 2: Goodbye Despair",
+                        file: "user/music/play/mab/rom.mp3",
+                        cover: "https://avatars.mds.yandex.net/i?id=e51bed526fa926ffccb5c00d006d232b_l-4438981-images-thumbs&n=13"
+                    },
+                    {
+                        title: "Mystical Workshop",
+                        author: "Стивен Мелин",
+                        source: "Игра: Monster Sanctuary",
+                        file: "user/music/play/mab/ms.mp3",
+                        cover: "https://cdn-images.dzcdn.net/images/cover/67eb9a1e7c460b7892095718fac79cab/1000x1000.jpg"
+                    }
+                ]
+            },
+            {
+                id: "xahtep",
+                name: "ХАНТЕР",
+                avatar: "user/ava/xahtep_ava.png",
+                playlist: [
+                    {
+                        title: "Megalovania",
+                        author: "Toby Fox",
+                        source: "Игра: Undertale",
+                        file: "user/music/play/xahtep/sans.mp3",
+                        cover: "https://avatars.yandex.net/get-music-content/5587254/9d46cc6f.a.20194062-1/m1000x1000"
+                    },
+                    {
+                        title: "Just Monika",
+                        author: "Random Encounters",
+                        source: "",
+                        file: "user/music/play/xahtep/monika.mp3",
+                        cover: "https://avatars.yandex.net/get-music-content/4388221/ad14fce0.a.17469861-1/m1000x1000"
+                    },
+                    {
+                        title: "Iron Lotus",
+                        author: "Mili",
+                        source: "Игра: Library of Ruin",
+                        file: "user/music/play/xahtep/lotos.mp3",
+                        cover: "https://images.genius.com/66179b862f9f1521b10319874d2bb522.1000x1000x1.jpg"
+                    },
+                    {
+                        title: "Preparing - Before the Day Start",
+                        author: "ProjectMoon",
+                        source: "Игра: Lobotomy Corporation",
+                        file: "user/music/play/xahtep/net.mp3",
+                        cover: "https://i1.sndcdn.com/artworks-000206481028-o0n2dz-t1080x1080.jpg"
+                    }
+                ]
+            },
+            {
+                id: "boryan",
+                name: "BORYAN",
+                avatar: "user/ava/boryan_ava.png",
+                playlist: [
+                    {
+                        title: "Whirling of Vairambhaka",
+                        author: "HOYO-MiX",
+                        source: "Игра: Genshin Impact ",
+                        file: "user/music/play/boryan/hoy.mp3",
+                        cover: "https://avatars.yandex.net/get-music-content/9838169/4016a0a2.a.28939184-1/m1000x1000"
+                    },
+                    {
+                        title: "Alleikhreos Boss Theme",
+                        author: "Hybrid",
+                        source: "Игра: Arknights: Endfield",
+                        file: "user/music/play/boryan/boss.mp3",
+                        cover: "https://static.wikia.nocookie.net/vgost/images/5/5b/ArknightsEndfield.png/revision/latest?cb=20251213014750"
+                    },
+                    {
+                        title: "In Hell We Live, Lament",
+                        author: "MILI",
+                        source: "Игра: Limbus Company",
+                        file: "user/music/play/boryan/hell.mp3",
+                        cover: "https://avatars.yandex.net/get-music-content/19752797/d4932150.a.43583173-1/m1000x1000"
+                    }
+                ]
+            },
+            {
+                id: "stiven",
+                name: "StivvvvENN",
+                avatar: "user/ava/stiven_ava.png",
+                playlist: [
+                    {
+                        title: "Second Theme",
+                        author: "NoLongerNull",
+                        source: "Игра: Pressure",
+                        file: "user/music/play/stiv/pre.mp3",
+                        cover: "https://images.genius.com/9f9aea596b6e67fe6da44872312c3995.861x861x1.png"
+                    },
+                    {
+                        title: " 12 Am Remix",
+                        author: "Kuroba",
+                        source: "",
+                        file: "user/music/play/stiv/coc.mp3",
+                        cover: "https://i.ytimg.com/vi/wIey5uWI8uQ/sddefault.jpg"
+                    },
+                    {
+                        title: "NORTHERNLIGHT",
+                        author: "MONET",
+                        source: "",
+                        file: "user/music/play/stiv/NORTHERNLIGHT.mp3",
+                        cover: "https://i.ytimg.com/vi/CDLWwlN0CVM/maxresdefault.jpg"
+                    },
+                    {
+                        title: "Mechanic's Theme",
+                        author: "Caspar M.",
+                        source: "Игра: Aftonbuilt",
+                        file: "user/music/play/stiv/mor.mp3",
+                        cover: "https://i.ytimg.com/vi/H-Gxrtqcy_U/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AG2CIACuAiKAgwIABABGH8gOCgwMA8=&amp;rs=AOn4CLB1ZpYPkv8yUR6ui4ezjtMkVy-7vg"
+                    },
+                    {
+                        title: "heartstrings",
+                        author: "vss",
+                        source: "",
+                        file: "user/music/play/stiv/cor.mp3",
+                        cover: "https://pic.rtbcdn.ru/video/91/53/9153ec97cbc2f86b37d0075aad05e2b2.jpg?size=l"
+                    },
+                    {
+                        title: "Axetale-Frozen Snowdin",
+                        author: "Zizzo ",
+                        source: "",
+                        file: "user/music/play/stiv/vot.mp3",
+                        cover: "https://i.ytimg.com/vi/bV0t6PNVZ-o/maxresdefault.jpg"
+                    },
+                    {
+                        title: "FIRST 60 ROOMS",
+                        author: "McGee",
+                        source: "Игра: ROOMS REVISTED",
+                        file: "user/music/play/stiv/soy.mp3",
+                        cover: "https://i.ytimg.com/vi/fizP6dAguf0/maxresdefault.jpg"
+                    },
+                    {
+                        title: "Remains of Sanity",
+                        author: "Twigg's",
+                        source: "",
+                        file: "user/music/play/stiv/fot.mp3",
+                        cover: "https://i.ytimg.com/vi/__P-0DBhZCo/sddefault.jpg"
+                    },
+                    {
+                        title: "Egg Room Live Performance",
+                        author: "Trevor Alan Gomes",
+                        source: "",
+                        file: "user/music/play/stiv/egg.mp3",
+                        cover: "https://i.ytimg.com/vi/E58AP2i910g/maxresdefault.jpg"
+                    },
+                    {
+                        title: " СИНЬЮ КРЫТО НЕБО",
+                        author: "Stehiko",
+                        source: "",
+                        file: "user/music/play/stiv/pig.mp3",
+                        cover: "https://i.ytimg.com/vi/8SZgJd9iG4I/sddefault.jpg"
+                    }
+                ]
+            }
+        ];
+
+        // 🕵️ СЕКРЕТНЫЙ ТАЙНЫЙ ПЛЕЙЛИСТ ДЛЯ РИКРОЛЛА (МОЖНО РЕДАКТИРОВАТЬ ТАК ЖЕ)
+        const RickrollProfileData = {
+            id: "rickroll",
+            name: "Рик Ролл",
+            avatar: "user/system/rick.png",
+            playlist: [
+                {
+                    title: "Never Gonna Give You Up",
+                    author: "Rick Astley",
+                    source: "ВАС ЗА РИКРОЛИЛИ",
+                    file: "user/music/rick.mp3",
+                    cover: "https://static.wikia.nocookie.net/dqw4w9wgxcq/images/3/39/Site-community-image/revision/latest?cb=20220428173234"
+                }
+            ]
+        };
+
+        // =======================================================================
+        // 💃 2. ОБЛАСТЬ ДАННЫХ ДЕНЦЕРОВ (ПАРЫ PNG СТОЯЧИЕ И GIF АНИМАЦИИ) 💃
+        // =======================================================================
+        const DancersData = [
+            {
+                png: "user/system/gog/dancer0_stop.png",
+                gif: "user/system/gog/dancer0_dance.gif"
+            },
+            {
+                png: "user/system/gog/dancer1_stop.png",
+                gif: "user/system/gog/dancer1_dance.gif"
+            },
+            {
+                png: "user/system/gog/dancer2_stop.png",
+                gif: "user/system/gog/dancer2_dance.gif"
+            },
+            {
+                png: "user/system/gog/dancer3_stop.png",
+                gif: "user/system/gog/dancer3_dance.gif"
+            },
+            {
+                png: "user/system/gog/dancer4_stop.png",
+                gif: "user/system/gog/dancer4_dance.gif"
+            },
+            {
+                png: "user/system/gog/dancer5_stop.png",
+                gif: "user/system/gog/dancer5_dance.gif"
+            }
+        ];
+
+        const TrollDancerData = {
+            png: "user/system/gog/troll.png",
+            gif: "user/system/gog/troll.gif"
+        };
+    </script>
+    <!-- ======================================================================= -->
+
+    <!-- Основной контейнер интерфейса -->
+    <div class="flex-grow flex items-center justify-center max-w-7xl mx-auto w-full px-4 pt-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full items-center">
+
+            <!-- ЛЕВАЯ ЧАСТЬ: Денцер, Название песни, Кнопки управления и О нас -->
+            <div class="lg:col-span-7 flex flex-col space-y-6">
+                
+                <!-- Верхняя панель управления плеером (Серое ретро-поле) -->
+                <div class="retro-box p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                    
+                    <!-- Ползунок громкости и иконка -->
+                    <div class="flex items-center space-x-3 w-full sm:w-auto">
+                        <i class="fa-solid fa-volume-high text-yellow-400 text-xl"></i>
+                        <input type="range" id="volume-range" min="0" max="1" step="0.05" value="0.7" 
+                               class="w-32 accent-pink-500 cursor-pointer">
+                    </div>
+
+                    <!-- ПОЛОСКА ВРЕМЕНИ И ТАЙМЕР -->
+                    <div class="flex flex-col w-full px-2 space-y-1">
+                        <div class="flex justify-between text-xs font-bold text-gray-300">
+                            <span id="current-time">00:00</span>
+                            <span id="total-duration">00:00</span>
+                        </div>
+                        <input type="range" id="progress-bar" min="0" max="100" value="0" step="0.1"
+                               class="w-full accent-pink-500 cursor-pointer h-2 bg-gray-900 rounded-lg border border-gray-600">
+                    </div>
+
+                    <!-- Кнопки управления: Назад, Перемотка назад, Пауза, Пуск, Перемотка вперед, Вперед -->
+                    <div class="flex items-center space-x-2 text-white">
+                        <button onclick="prevTrack()" class="w-10 h-10 bg-gray-700 hover:bg-gray-600 rounded-lg font-bold flex items-center justify-center text-lg shadow border border-gray-500 cursor-pointer" title="Прошлая композиция">
+                            &lt;
+                        </button>
+                        <button onmousedown="startRewind()" onmouseup="stopRewind()" class="w-10 h-10 bg-gray-700 hover:bg-gray-600 rounded-lg font-bold flex items-center justify-center text-sm shadow border border-gray-500 cursor-pointer" title="Обратная перемотка">
+                            &lt;&lt;
+                        </button>
+                        <button onclick="pauseMusic()" class="w-10 h-10 bg-gray-700 hover:bg-gray-600 rounded-lg font-bold flex items-center justify-center text-sm shadow border border-gray-500 cursor-pointer" title="Пауза">
+                            ||
+                        </button>
+                        <button onclick="playMusic()" class="w-12 h-12 bg-pink-600 hover:bg-pink-500 rounded-xl font-bold flex items-center justify-center text-lg shadow-lg border border-pink-400 cursor-pointer" title="Пуск">
+                            &#9658;
+                        </button>
+                        <button onmousedown="startForward()" onmouseup="stopForward()" class="w-10 h-10 bg-gray-700 hover:bg-gray-600 rounded-lg font-bold flex items-center justify-center text-sm shadow border border-gray-500 cursor-pointer" title="Перемотка вперед">
+                            &gt;&gt;
+                        </button>
+                        <button onclick="nextTrack()" class="w-10 h-10 bg-gray-700 hover:bg-gray-600 rounded-lg font-bold flex items-center justify-center text-lg shadow border border-gray-500 cursor-pointer" title="Следующая композиция">
+                            &gt;
+                        </button>
+                    </div>
+
+                    <!-- Оранжевый квадрат обложки (Png/Ссылка) -->
+                    <div class="w-20 h-20 bg-orange-500 rounded-lg border-2 border-orange-300 overflow-hidden flex items-center justify-center shadow-inner flex-shrink-0">
+                        <img id="current-cover" src="user/system/gog/default_cover.png" alt="Обложка" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/ea580c/ffffff?text=Cover'">
+                    </div>
+                </div>
+
+                <!-- Блок с Денцером, Названием и Информацией -->
+                <div class="flex flex-col sm:flex-row items-center gap-6">
+                    <!-- Круглый аватар денцера (с прозрачным фоном и рандомом) -->
+                    <div class="relative flex-shrink-0 flex flex-col items-center">
+                        <div class="w-36 h-36 rounded-full border-4 border-yellow-400/80 bg-black/40 overflow-hidden flex items-center justify-center shadow-2xl relative">
+                            <img id="dancer-avatar" src="" alt="Денцер" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Стрелочки для смены денцера рандомно в своем режиме -->
+                        <div class="flex space-x-4 mt-2" id="dancer-controls">
+                            <button onclick="changeDancer(-1)" class="w-8 h-8 bg-purple-700 hover:bg-purple-600 text-white rounded-full font-bold shadow">&lt;</button>
+                            <button onclick="changeDancer(1)" class="w-8 h-8 bg-purple-700 hover:bg-purple-600 text-white rounded-full font-bold shadow">&gt;</button>
+                        </div>
+                    </div>
+
+                    <!-- Название песни и инфо -->
+                    <div class="flex flex-col items-center sm:items-start text-center sm:text-left space-y-3 flex-grow">
+                        <h1 id="song-title" class="text-3xl sm:text-4xl font-extrabold text-white drop-shadow-md tracking-wide">
+                            НАЗВАНИЕ ПЕСНИ
+                        </h1>
+                        
+                        <!-- Окошко: откуда композиция (игра/фильм) -->
+                        <div class="border-2 border-white/80 bg-black/30 backdrop-blur px-4 py-1.5 rounded-lg text-sm font-semibold text-yellow-300">
+                            <span id="song-source">НАЗВАНИЕ ИГРЫ ИЛИ ФИЛЬМА</span>
+                        </div>
+
+                        <!-- Автор композиции -->
+                        <div class="bg-red-600 text-white font-black px-4 py-1 rounded-full text-xs tracking-wider uppercase shadow-md">
+                            <span id="song-author">АВТОР</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Нижние кнопки под названием (Повтор текущей песни, Справка и О нас) -->
+                <div class="flex items-center justify-between pt-2">
+                    <div class="flex items-center space-x-3">
+                        <!-- Кнопка 1: Повтор текущей композиции -->
+                        <button id="btn-loop-one" onclick="toggleLoopOne()" class="w-12 h-12 bg-gray-800 border-2 border-gray-500 rounded-xl flex items-center justify-center text-white hover:bg-gray-700 cursor-pointer shadow transition-all" title="Повтор текущей композиции">
+                            <i class="fa-solid fa-repeat text-lg"></i>
+                        </button>
+                        <!-- Кнопка 2: Кнопка Справки (Инструктаж) -->
+                        <button id="btn-help" onclick="openHelpModal()" class="w-12 h-12 bg-yellow-500 border-2 border-yellow-300 rounded-xl flex items-center justify-center text-gray-900 font-extrabold text-xl hover:bg-yellow-400 cursor-pointer shadow transition-all" title="Справка по интерфейсу">
+                            <i class="fa-solid fa-question"></i>
+                        </button>
+                    </div>
+
+                    <!-- Кнопка О нас -->
+                    <a href="about.html" class="bg-sky-500 hover:bg-sky-400 text-white font-black px-8 py-3 rounded-2xl shadow-lg border-2 border-white/60 tracking-wider uppercase text-lg transition-transform hover:scale-105">
+                        О НАС
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- ПРАВАЯ ЧАСТЬ: Виджет плейлиста с прокруткой внутри и переключением профилей -->
+            <div class="lg:col-span-5 flex flex-col h-[500px] retro-box rounded-2xl p-4">
+                
+                <!-- Шапка профиля в виджете (Аватар + Имя + Стрелочки переключения профиля) -->
+                <div class="flex items-center justify-between bg-black/40 p-3 rounded-xl border border-gray-600 mb-4">
+                    <button id="btn-prev-profile" onclick="prevProfile()" class="w-9 h-9 bg-purple-600 hover:bg-purple-500 text-white rounded-full font-bold flex items-center justify-center shadow cursor-pointer">&lt;</button>
+                    
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-pink-400 bg-gray-800">
+                            <img id="profile-avatar" src="" alt="Ава" class="w-full h-full object-cover">
+                        </div>
+                        <span id="profile-name" class="font-extrabold text-white text-lg tracking-wide uppercase">ИМЯ ПРОФИЛЯ</span>
+                    </div>
+
+                    <button id="btn-next-profile" onclick="nextProfile()" class="w-9 h-9 bg-purple-600 hover:bg-purple-500 text-white rounded-full font-bold flex items-center justify-center shadow cursor-pointer">&gt;</button>
+                </div>
+
+                <!-- Список саундтреков (со своим внутренним ползунком) -->
+                <div id="playlist-container" class="custom-scroll flex-grow overflow-y-auto space-y-2 pr-1">
+                    <!-- Заполняется через JS -->
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- =======================================================================
+    📋 МОДАЛЬНОЕ ОКНО СПРАВКИ (ПОЛНОФУНКЦИОНАЛЬНЫЙ ИНСТРУКТАЖ) 📋
+    ======================================================================== -->
+    <div id="help-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-gray-900 border-4 border-yellow-400 rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl relative overflow-hidden">
+            
+            <!-- Заголовок модального окна -->
+            <div class="bg-gray-800 p-4 px-6 border-b-2 border-yellow-400 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-circle-info text-yellow-400 text-2xl"></i>
+                    <h2 class="text-xl sm:text-2xl font-black text-white tracking-wide uppercase">ТЕХНИЧЕСКИЙ ИНСТРУКТАЖ И РУКОВОДСТВО ПОЛЬЗОВАТЕЛЯ</h2>
+                </div>
+                <button onclick="closeHelpModal()" class="w-10 h-10 bg-red-600 hover:bg-red-500 text-white font-black rounded-xl border border-red-300 flex items-center justify-center text-lg transition-transform hover:scale-110">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Контентная зона со скроллом -->
+            <div class="p-6 overflow-y-auto custom-scroll space-y-8 text-gray-200">
+
+                <!-- Раздел 1: Что из себя представляет данная страница -->
+                <div class="bg-gray-800/80 p-5 rounded-2xl border border-purple-500/50 shadow-md">
+                    <h3 class="text-lg font-extrabold text-pink-400 uppercase mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-compact-disc"></i> Что представляет собой данная страница
+                    </h3>
+                    <p class="text-sm leading-relaxed text-gray-300">
+                        Данный интерактивный модуль является официальным аудио-проигрывателем веб-архива. Страница предназначена для последовательного прослушивания локальных аудиоматериалов, сгруппированных по персональным профилям авторов и кураторов. Поддерживает полноценную визуальную синхронизацию с анимацией денцеров и динамической сменяемостью метаданных композиций.
+                    </p>
+                </div>
+
+                <!-- Раздел 2: Структурная схема (Интерактивная диаграмма) -->
+                <div>
+                    <h3 class="text-lg font-extrabold text-yellow-400 uppercase mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-sitemap"></i> Архитектура элементов интерфейса
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-center text-xs font-bold">
+                        <div class="bg-purple-950/70 border border-purple-400 p-3 rounded-xl flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-user-astronaut text-xl text-purple-300 mb-1"></i>
+                            <span class="text-purple-200">ДЕНЦЕР</span>
+                            <span class="text-[10px] text-gray-400 font-normal mt-1">Визуализация воспроизведения</span>
+                        </div>
+                        <div class="bg-pink-950/70 border border-pink-400 p-3 rounded-xl flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-sliders text-xl text-pink-300 mb-1"></i>
+                            <span class="text-pink-200">ПАНЕЛЬ УПРАВЛЕНИЯ</span>
+                            <span class="text-[10px] text-gray-400 font-normal mt-1">Таймеры, громкость и трек-лист</span>
+                        </div>
+                        <div class="bg-sky-950/70 border border-sky-400 p-3 rounded-xl flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-list-check text-xl text-sky-300 mb-1"></i>
+                            <span class="text-sky-200">ПРОФИЛИ И ПЛЕЙЛИСТ</span>
+                            <span class="text-[10px] text-gray-400 font-normal mt-1">Селектор каталогов и треков</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Раздел 3: Подробная инструкция по элементам -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-extrabold text-yellow-400 uppercase border-b border-gray-700 pb-2">
+                        Подробный регламент органов управления
+                    </h3>
+
+                    <!-- Денцер -->
+                    <div class="flex gap-4 items-start bg-gray-800/40 p-3.5 rounded-xl border border-gray-700">
+                        <div class="w-12 h-12 rounded-full bg-purple-900 border-2 border-yellow-400 flex items-center justify-center flex-shrink-0 text-xl font-bold text-yellow-300">
+                            💃
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-white text-base">Денцер и переключающие стрелочки</h4>
+                            <p class="text-xs text-gray-300 mt-1">
+                                <strong class="text-yellow-300">Денцер</strong> — видовая графическая сущность, отражающая статус активности проигрывателя. При остановленном воспроизведении денцер находится в статичном состоянии (PNG). В момент передачи звукового сигнала активный денцер автоматически запускает анимационный цикл (GIF). Кнопки со стрелочками <strong class="text-purple-400">&lt;</strong> и <strong class="text-purple-400">&gt;</strong> под блоком осуществляют принудительную ротацию активной модели денцера в цикличном порядке.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Профили и Аватарки -->
+                    <div class="flex gap-4 items-start bg-gray-800/40 p-3.5 rounded-xl border border-gray-700">
+                        <div class="w-12 h-12 rounded-full bg-pink-900 border-2 border-pink-400 flex items-center justify-center flex-shrink-0 text-xl font-bold text-pink-300">
+                            👤
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-white text-base">Профили, Авы и навигация каталога</h4>
+                            <p class="text-xs text-gray-300 mt-1">
+                                <strong class="text-pink-300">Профиль</strong> представляет собой независимую фонотеку конкретного участника. Привязанная <strong class="text-pink-300">Ава</strong> визуализирует текущего владельца плейлиста. Стрелочки в шапке правого виджета переключают фонотеку между профилями. В случае смены профиля во время звучания трека новая подборка фиксируется как отложенный следующий альбом.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Кнопка повтора одной композиции -->
+                    <div class="flex gap-4 items-start bg-gray-800/40 p-3.5 rounded-xl border border-gray-700">
+                        <div class="w-12 h-12 rounded-xl bg-pink-600 border-2 border-yellow-300 flex items-center justify-center flex-shrink-0 text-lg text-white">
+                            <i class="fa-solid fa-repeat"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-white text-base">Режим повтора текущей композиции</h4>
+                            <p class="text-xs text-gray-300 mt-1">
+                                Назначение органа управления: циклическое зацикливание одного выбранного аудиофайла. При активации данной функции системный триггер перехватывает событие завершения воспроизведения и немедленно обнуляет текущий временной код трека, возобновляя его проигрывание сначала. Функция приоритетнее общего порядка очереди плейлиста.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Ползунки и кнопки воспроизведения -->
+                    <div class="flex gap-4 items-start bg-gray-800/40 p-3.5 rounded-xl border border-gray-700">
+                        <div class="w-12 h-12 rounded-xl bg-gray-700 border-2 border-gray-500 flex items-center justify-center flex-shrink-0 text-lg text-white">
+                            <i class="fa-solid fa-sliders"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-white text-base">Кнопки переключения и временная шкала</h4>
+                            <p class="text-xs text-gray-300 mt-1">
+                                Кнопки <strong>&lt;&lt;</strong> и <strong>&gt;&gt;</strong> обеспечивают удержание упреждающей перемотки. Интерактивная полоска времени отслеживает текущую позицию файла и допускает точный кликовый переход на нужный таймкод.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Резюмирующая плашка -->
+                <div class="bg-yellow-500/10 border-2 border-yellow-500/50 p-4 rounded-xl text-center">
+                    <p class="text-xs font-bold text-yellow-300 uppercase tracking-wide">
+                        Инструктаж завершен. Эксплуатация системы допускается строго по назначению.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Подвал окна -->
+            <div class="bg-gray-800 p-3 px-6 border-t border-gray-700 text-center">
+                <button onclick="closeHelpModal()" class="bg-yellow-500 hover:bg-yellow-400 text-gray-950 font-black px-6 py-2 rounded-xl uppercase text-xs tracking-wider transition-all">
+                    Ознакомлен / Закрыть
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- СКРИПТЫ УПРАВЛЕНИЯ ПЛЕЕРОМ И ЛОГИКОЙ -->
+    <script>
+        // Флаг активности пасхалки
+        let isRickrollActive = false;
+
+        // ==========================================
+        // 🎄 ПРАЗДНИКИ И ФОНЫ 🎄
+        // ==========================================
+        function checkHolidayAndStyle() {
+            if (isRickrollActive) return; // Пропускаем проверку, если включен Рикролл
+
+            const now = new Date();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+
+            let bgImage = 'user/system/yu.png';
+            let titleDecoration = '';
+
+            // 1. Новый год (21 дек - 1 янв)
+            if ((month === 12 && day >= 21) || (month === 1 && day === 1)) {
+                bgImage = 'user/system/yu_newyear.png';
+                titleDecoration = '❄️ ';
+            }
+            // 2. Хэллоуин (Октябрь)
+            else if (month === 10) {
+                bgImage = 'user/system/yu_halloween.png';
+                titleDecoration = '🦇 ';
+            }
+            // 3. ДР создателя (21 мая)
+            else if (month === 5 && day === 21) {
+                bgImage = 'user/system/yu_creator_bd.png';
+                titleDecoration = '👑 ';
+            }
+            // 4. ДР Хантера (13 июля)
+            else if (month === 7 && day === 13) {
+                bgImage = 'user/system/yu_hunter_bd.png';
+                titleDecoration = '⭐ ';
+            }
+            // 5. 1 апреля
+            else if (month === 4 && day === 1) {
+                bgImage = 'user/system/yu_april1.png';
+                titleDecoration = '🃏 ';
+            }
+            // 6. День космонавтики (12 апреля)
+            else if (month === 4 && day === 12) {
+                bgImage = 'user/system/yu_space.png';
+                titleDecoration = '🚀 ';
+            }
+            // 7. День Победы (9 мая)
+            else if (month === 5 && day === 9) {
+                bgImage = 'user/system/yu_may9.png';
+                titleDecoration = '🎖️ ';
+            }
+            // 8. День лени (20 августа)
+            else if (month === 8 && day === 20) {
+                bgImage = 'user/system/yu_sloth.png';
+                titleDecoration = '🦥 ';
+            }
+            // 9. 1 сентября
+            else if (month === 9 && day === 1) {
+                bgImage = 'user/system/yu_sept1.png';
+                titleDecoration = '🎒 ';
+            }
+            // 10. День учителя (5 октября)
+            else if (month === 10 && day === 5) {
+                bgImage = 'user/system/yu_teacher.png';
+                titleDecoration = '🍎 ';
+            }
+            // 11. 8 Марта
+            else if (month === 3 && day === 8) {
+                bgImage = 'user/system/yu_march8.png';
+                titleDecoration = '🌷 ';
+            }
+
+            // Установка фона
+            document.body.style.backgroundImage = `url('${bgImage}')`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundRepeat = 'no-repeat';
+            document.body.style.backgroundAttachment = 'fixed';
+
+            // Украшение заголовка
+            if (titleDecoration) {
+                const titleEl = document.getElementById('site-title');
+                if (titleEl) {
+                    titleEl.textContent = titleDecoration + "TWX АРХИВ - Музыкальный проигрыватель " + titleDecoration;
+                }
+            }
+        }
+        checkHolidayAndStyle();
+
+        let currentProfileIndex = 0;
+        let currentTrackIndex = 0;
+        let currentDancerIndex = 0;
+        let activePlayingProfileIndex = 0;
+        
+        let isPlaying = false;
+        let loopOneActive = false;
+        
+        let pendingProfileIndex = null; // Для отложенного переключения альбома по окончании трека
+        
+        const audio = document.getElementById('audio-player');
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalDurationEl = document.getElementById('total-duration');
+        
+        // Вспомогательная функция для форматирования времени (секунды -> ММ:СС)
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "00:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Инициализация при загрузке
+        window.onload = () => {
+            loadProfile(0);
+            loadDancer(0);
+            
+            // Настройка громкости
+            const volRange = document.getElementById('volume-range');
+            audio.volume = volRange.value;
+            volRange.addEventListener('input', (e) => {
+                audio.volume = e.target.value;
+            });
+
+            // Обновление полоски времени и таймеров
+            audio.ontimeupdate = () => {
+                if (audio.duration) {
+                    const progress = (audio.currentTime / audio.duration) * 100;
+                    progressBar.value = progress;
+                    currentTimeEl.textContent = formatTime(audio.currentTime);
+                    totalDurationEl.textContent = formatTime(audio.duration);
+                }
+            };
+
+            // Перемотка кликом/перетаскиванием полоски
+            progressBar.addEventListener('input', (e) => {
+                if (audio.duration) {
+                    const seekTime = (e.target.value / 100) * audio.duration;
+                    audio.currentTime = seekTime;
+                }
+            });
+
+            // Событие окончания трека
+            audio.onended = () => {
+                handleTrackEnd();
+            };
+        };
+
+        // ==========================================================
+        // 🤡 ЛОГИКА ТАЙНОЙ ПАСХАЛКИ (РИКРОЛЛ) 🤡
+        // ==========================================================
+        function toggleRickroll() {
+            isRickrollActive = !isRickrollActive;
+
+            const siteTitle = document.getElementById('site-title');
+            const siteFavicon = document.getElementById('site-favicon');
+            const dancerControls = document.getElementById('dancer-controls');
+            const btnPrevProf = document.getElementById('btn-prev-profile');
+            const btnNextProf = document.getElementById('btn-next-profile');
+
+            if (isRickrollActive) {
+                // Включаем секретный режим
+                document.body.classList.add('rickroll-active');
+                siteTitle.textContent = "Вас За Рикролили";
+                siteFavicon.href = "user/system/icon rick.png";
+
+                dancerControls.style.display = "none";
+                btnPrevProf.style.visibility = "hidden";
+                btnNextProf.style.visibility = "hidden";
+
+                loadRickrollProfile();
+            } else {
+                // Выключаем и возвращаем стандартное состояние
+                document.body.classList.remove('rickroll-active');
+                siteTitle.textContent = "TWX АРХИВ - Музыкальный проигрыватель";
+                siteFavicon.href = "user/system/icon music.png";
+
+                dancerControls.style.display = "flex";
+                btnPrevProf.style.visibility = "visible";
+                btnNextProf.style.visibility = "visible";
+
+                checkHolidayAndStyle();
+                loadProfile(0);
+                loadDancer(0);
+            }
+        }
+
+        function loadRickrollProfile() {
+            document.getElementById('profile-name').textContent = RickrollProfileData.name;
+            document.getElementById('profile-avatar').src = RickrollProfileData.avatar;
+
+            renderRickrollPlaylist();
+            selectTrack(0, 0);
+        }
+
+        function renderRickrollPlaylist() {
+            const container = document.getElementById('playlist-container');
+            container.innerHTML = '';
+
+            RickrollProfileData.playlist.forEach((track, idx) => {
+                const item = document.createElement('div');
+                item.className = 'p-3 rounded-xl cursor-pointer font-bold text-sm transition-all border bg-green-600 border-lime-300 text-white shadow-lg scale-[1.02]';
+                item.innerHTML = `<div class="truncate">${track.title}</div><div class="text-xs text-lime-100 font-normal">${track.author}</div>`;
+                item.onclick = () => selectTrack(0, idx);
+                container.appendChild(item);
+            });
+        }
+
+        // Управление модальным окном справки
+        function openHelpModal() {
+            document.getElementById('help-modal').classList.remove('hidden');
+        }
+
+        function closeHelpModal() {
+            document.getElementById('help-modal').classList.add('hidden');
+        }
+
+        // Загрузка профиля
+        function loadProfile(index) {
+            if (isRickrollActive) return;
+            currentProfileIndex = index;
+            const profile = ProfilesData[currentProfileIndex];
+            
+            document.getElementById('profile-name').textContent = profile.name;
+            document.getElementById('profile-avatar').src = profile.avatar;
+            
+            renderPlaylist();
+        }
+
+        // Рендер списка треков в виджете
+        function renderPlaylist() {
+            if (isRickrollActive) {
+                renderRickrollPlaylist();
+                return;
+            }
+
+            const container = document.getElementById('playlist-container');
+            container.innerHTML = '';
+            
+            const profile = ProfilesData[currentProfileIndex];
+            
+            profile.playlist.forEach((track, idx) => {
+                const isCurrent = (idx === currentTrackIndex && currentProfileIndex === activePlayingProfileIndex);
+                
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-xl cursor-pointer font-bold text-sm transition-all border ${
+                    isCurrent 
+                    ? 'bg-orange-600 border-yellow-300 text-white shadow-lg scale-[1.02]' 
+                    : 'bg-black/50 border-gray-700 text-gray-200 hover:bg-gray-800'
+                }`;
+                
+                item.innerHTML = `<div class="truncate">${track.title}</div><div class="text-xs text-gray-400 font-normal">${track.author}</div>`;
+                item.onclick = () => selectTrack(currentProfileIndex, idx);
+                
+                container.appendChild(item);
+            });
+        }
+
+        function selectTrack(profileIdx, trackIdx) {
+            let track;
+            if (isRickrollActive) {
+                activePlayingProfileIndex = 0;
+                currentProfileIndex = 0;
+                currentTrackIndex = 0;
+                track = RickrollProfileData.playlist[0];
+            } else {
+                activePlayingProfileIndex = profileIdx;
+                currentProfileIndex = profileIdx;
+                currentTrackIndex = trackIdx;
+                track = ProfilesData[profileIdx].playlist[trackIdx];
+            }
+            
+            document.getElementById('song-title').textContent = track.title;
+            document.getElementById('song-author').textContent = track.author;
+            document.getElementById('song-source').textContent = track.source;
+            document.getElementById('current-cover').src = track.cover;
+            
+            audio.src = track.file;
+            playMusic();
+            renderPlaylist();
+        }
+
+        // Управление воспроизведением
+        function playMusic() {
+            if (!audio.src || audio.src === window.location.href) {
+                selectTrack(currentProfileIndex, currentTrackIndex);
+                return;
+            }
+            audio.play().then(() => {
+                isPlaying = true;
+                updateDancerVisualState();
+            }).catch(e => console.log("Ожидание взаимодействия пользователя"));
+        }
+
+        function pauseMusic() {
+            audio.pause();
+            isPlaying = false;
+            updateDancerVisualState();
+        }
+
+        function nextTrack() {
+            if (isRickrollActive) {
+                selectTrack(0, 0);
+                return;
+            }
+            const profile = ProfilesData[currentProfileIndex];
+            if (currentTrackIndex < profile.playlist.length - 1) {
+                currentTrackIndex++;
+            } else {
+                currentTrackIndex = 0; // На начало
+            }
+            selectTrack(currentProfileIndex, currentTrackIndex);
+        }
+
+        function prevTrack() {
+            if (isRickrollActive) {
+                selectTrack(0, 0);
+                return;
+            }
+            if (audio.currentTime > 3 || currentTrackIndex === 0) {
+                audio.currentTime = 0;
+            } else {
+                currentTrackIndex--;
+            }
+            selectTrack(currentProfileIndex, currentTrackIndex);
+        }
+
+        // Перемотка назад/вперед с эффектом
+        let rewindInterval = null;
+        function startRewind() {
+            rewindInterval = setInterval(() => {
+                audio.currentTime = Math.max(0, audio.currentTime - 1.5);
+            }, 100);
+        }
+        function stopRewind() { clearInterval(rewindInterval); }
+
+        let forwardInterval = null;
+        function startForward() {
+            forwardInterval = setInterval(() => {
+                audio.currentTime = Math.min(audio.duration, audio.currentTime + 1.5);
+            }, 100);
+        }
+        function stopForward() { clearInterval(forwardInterval); }
+
+        // Переключение профилей стрелочками
+        function nextProfile() {
+            if (isRickrollActive) return;
+            let newIdx = (currentProfileIndex + 1) % ProfilesData.length;
+            queueProfileChange(newIdx);
+        }
+
+        function prevProfile() {
+            if (isRickrollActive) return;
+            let newIdx = (currentProfileIndex - 1 + ProfilesData.length) % ProfilesData.length;
+            queueProfileChange(newIdx);
+        }
+
+        function queueProfileChange(newIdx) {
+            pendingProfileIndex = newIdx;
+ loadProfile(newIdx);
+        }
+
+        // Обработка окончания трека
+        function handleTrackEnd() {
+            if (loopOneActive) {
+                audio.currentTime = 0;
+                playMusic();
+                return;
+            }
+
+            if (isRickrollActive) {
+                selectTrack(0, 0);
+                return;
+            }
+
+            const profile = ProfilesData[activePlayingProfileIndex];
+            if (currentTrackIndex < profile.playlist.length - 1) {
+                selectTrack(activePlayingProfileIndex, currentTrackIndex + 1);
+            } else {
+                // Конец плейлиста -> авторестарт плейлиста
+                if (pendingProfileIndex !== null) {
+                    activePlayingProfileIndex = pendingProfileIndex;
+                    pendingProfileIndex = null;
+                    selectTrack(activePlayingProfileIndex, 0);
+                } else {
+                    selectTrack(activePlayingProfileIndex, 0);
+                }
+            }
+        }
+
+        // Режим повтора текущей композиции
+        function toggleLoopOne() {
+            loopOneActive = !loopOneActive;
+            updateLoopButton();
+        }
+
+        function updateLoopButton() {
+            const btnOne = document.getElementById('btn-loop-one');
+            btnOne.className = `w-12 h-12 rounded-xl flex items-center justify-center text-white cursor-pointer shadow transition-all border-2 ${loopOneActive ? 'bg-pink-600 border-yellow-300' : 'bg-gray-800 border-gray-500'}`;
+        }
+
+        // Логика денцеров и гифок (рандом по стрелочкам в своем режиме)
+        function loadDancer(index) {
+            currentDancerIndex = index;
+            updateDancerVisualState();
+        }
+
+        function changeDancer(direction) {
+            if (isRickrollActive) return;
+            currentDancerIndex = (currentDancerIndex + direction + DancersData.length) % DancersData.length;
+            updateDancerVisualState();
+        }
+
+        function updateDancerVisualState() {
+            const imgEl = document.getElementById('dancer-avatar');
+            if (isRickrollActive) {
+                imgEl.src = isPlaying ? TrollDancerData.gif : TrollDancerData.png;
+                return;
+            }
+
+            const dancer = DancersData[currentDancerIndex];
+            if (isPlaying) {
+                imgEl.src = dancer.gif;
+            } else {
+                imgEl.src = dancer.png;
+            }
+        }
+    </script>
+</body>
+</html>

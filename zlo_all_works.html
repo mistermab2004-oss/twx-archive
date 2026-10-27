@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>НАШИ ШЕДЕВРЫ TWX</title>
+    <link rel="icon" type="image/png" href="user/system/icon ara_ara.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 'fredoka': ['Fredoka', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-image: url('user/system/virus.png');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            background-size: cover;
+            overflow-x: hidden;
+            user-select: none;
+            color: #f3e8ff;
+        }
+        .stripe-banner {
+            position: absolute; top: 0; left: 0; right: 0; height: 160px;
+            background: linear-gradient(90deg, #18051a 0%, #3b073b 50%, #100214 100%);
+            transform: skewY(-4deg); z-index: 10;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            border-bottom: 4px solid #7f1d1d;
+        }
+
+        /* ⚡ КРОВАВО-ФИОЛЕТОВЫЙ ПОЛЗУНОК-МОЛНИЯ (Скроллбар) ⚡ */
+        ::-webkit-scrollbar { width: 20px; }
+        ::-webkit-scrollbar-track {
+            background: #1f0524;
+            border-left: 3px dashed #dc2626;
+            border-right: 3px dashed #dc2626;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #dc2626 0%, #9333ea 50%, #581c87 100%);
+            border-radius: 10px;
+            border: 3px solid #1f0524;
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.6), 0 0 10px rgba(220, 38, 38, 0.6);
+            min-height: 50px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #ef4444 0%, #a855f7 50%, #6b21a8 100%);
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.8), 0 0 15px rgba(220, 38, 38, 0.9);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5) rotate(-15deg); opacity: 0; }
+            70% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .animate-avatar {
+            animation: popIn 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+            color: #ef4444;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative">
+
+<script>
+// =======================================================================
+// 🦹‍♂️ БАЗА ДАННЫХ ЗЛОДЕЕВ И ИХ РАБОТ 🦹‍♂️
+// =======================================================================
+const KatyaGallery = [
+    {
+        accountName: "Уильям Афтон",
+        accDir: "afton",
+        avatar: "afton_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                subName: "Спрингтрап",
+                modes: {
+                    "classic": {
+                        "21/10/26": [ "afton/rabota (1).png", "afton/rabota (2).png", "afton/rabota (3).png", "afton/rabota (4).png", "afton/rabota (5).png" ]
+                    },
+                    "plagiarist": {
+                        "21/10/26": ["afton/oi (1).png"]
+                    },
+                    "history": {
+                        "21/10/26": [
+                            { title: "Я всегда возвращаюсь... И в этот раз заберу твою душу." },
+                            { title: "Запчасти аниматроников пахли кровью и старой ржавчиной." }
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "Бенди",
+        accDir: "bendy",
+        avatar: "bendy_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                subName: "Чернильный Демон",
+                modes: {
+                    "classic": {
+                        "21/10/26": [ "bendy/rabota (1).png", "bendy/rabota (2).png", "bendy/rabota (3).png", "bendy/rabota (4).png", "bendy/rabota (5).png" ],
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "Моника",
+        accDir: "monika",
+        avatar: "monika_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                subName: "Just Monika",
+                modes: {
+                    "classic": {
+                        "21/10/26": [ "monika/rabota (1).png", "monika/rabota (2).png", "monika/rabota (3).png", "monika/rabota (4).png", "monika/rabota (5).png" ]
+                    },
+                    "plagiarist": {
+                        "21/10/26": ["monika/oi (1).png", "monika/oi (2).png", "monika/oi (3).png"]
+                    },
+                    "history": {
+                        "21/10/26": [
+                            { title: "Никого кроме нас. Только ты и я в этом пустом коде." }
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "Мита",
+        accDir: "mita",
+        avatar: "mita_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                subName: "Миточка",
+                modes: {
+                    "classic": {
+                        "21/10/26": [ "mita/rabota (1).png", "mita/rabota (2).png", "mita/rabota (3).png", "mita/rabota (4).png", "mita/rabota (5).png"],
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "Леди Диметреску",
+        accDir: "ledy",
+        avatar: "ledy_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                subName: "ЛЕДИ ДЕМЕТРЕСКУ",
+                modes: {
+                    "classic": {
+                        "21/10/26": [ "ledy/rabota (1).png", "ledy/rabota (2).png", "ledy/rabota (3).png", "ledy/rabota (4).png", "ledy/rabota (5).png"],
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "Флауви",
+        accDir: "flauwy",
+        avatar: "flauwy_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                subName: "Цветочек",
+                modes: {
+                    "classic": {
+                        "21/10/26": [ "flau/rabota (1).png", "flau/rabota (2).png"],
+                    }
+                }
+            }
+        ]
+    }
+];
+// =======================================================================
+</script>
+
+    <header class="sticky top-0 z-30 w-full pt-4 pb-6 px-4 md:px-12 pointer-events-none">
+        <div class="stripe-banner"></div>
+        
+        <!-- Верхняя панель: Музыкальный плеер + Кнопка "Главная" -->
+        <div class="max-w-7xl mx-auto relative z-40 flex flex-wrap justify-between items-center gap-3 mb-2 pointer-events-auto">
+            <!-- Блок Музыки с автозапуском -->
+            <div class="flex items-center space-x-2 bg-black/80 border-2 border-red-600/70 p-1.5 px-3 rounded-xl shadow-lg">
+                <audio id="bgMusic" src="user/music/zlo.mp3" loop autoplay></audio>
+                <button id="musicToggleBtn" onclick="toggleMusic()" class="bg-red-800 hover:bg-red-700 text-white font-bold text-xs px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition-all cursor-pointer">
+                    <i id="musicIcon" class="fas fa-pause"></i> <span id="musicText">Музыка: Вкл</span>
+                </button>
+                <div class="flex items-center space-x-1.5 text-xs text-red-200 ml-1">
+                    <i class="fas fa-volume-high text-red-400"></i>
+                    <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5" oninput="updateVolume(this.value)" class="w-20 accent-red-500 cursor-pointer h-1.5 bg-gray-900 rounded-lg">
+                </div>
+            </div>
+
+            <!-- Поиск злодея -->
+            <div class="relative w-full sm:w-72">
+                <div class="flex items-center bg-black/90 border-2 border-red-600/70 rounded-xl px-3 py-2 shadow-lg backdrop-blur-md">
+                    <i class="fas fa-search text-red-500 mr-2"></i>
+                    <input type="text" id="artistSearchInput" placeholder="Найти злодея..." oninput="handleSearchInput(this.value)" class="bg-transparent text-white text-xs w-full focus:outline-none placeholder-red-400 font-bold">
+                </div>
+                <div id="searchResultsDropdown" class="absolute left-0 right-0 mt-2 bg-gray-950/95 border-2 border-red-600 rounded-xl shadow-2xl max-h-60 overflow-y-auto z-50 hidden backdrop-blur-md divide-y divide-red-950"></div>
+            </div>
+
+            <!-- Кнопка "Главная" ведет на index_zlo.html -->
+            <a href="index_zlo.html" class="bg-red-700 hover:bg-red-600 text-white font-black text-xs px-4 py-2 rounded-xl shadow-lg transform hover:scale-105 transition-all flex items-center space-x-1.5 cursor-pointer no-underline border-2 border-red-500">
+                <i class="fas fa-skull"></i> <span>Главная (Злодеи)</span>
+            </a>
+        </div>
+
+        <div class="max-w-7xl mx-auto relative z-20 flex flex-col md:flex-row items-center justify-between pointer-events-auto gap-4">
+            
+            <button onclick="prevMainAccount()" class="hidden md:flex w-10 h-10 bg-black border-2 border-red-600 rounded-full items-center justify-center text-red-500 hover:bg-red-950 hover:scale-110 active:scale-95 transition-all shadow-lg cursor-pointer">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <!-- Блок с Аватаркой и Саб-аккаунтами -->
+            <div class="flex items-center space-x-2 bg-black/70 p-2.5 rounded-2xl border-2 border-red-600/50 backdrop-blur-md min-w-[280px]">
+                
+                <button onclick="prevSubProfile()" class="w-7 h-7 bg-red-900 rounded-full flex items-center justify-center text-white hover:bg-red-700 transition-colors shadow cursor-pointer">
+                    <i class="fas fa-caret-left"></i>
+                </button>
+
+                <div class="w-16 h-16 md:w-20 md:h-20 bg-black rounded-full border-4 border-red-600 shadow-2xl overflow-hidden flex items-center justify-center shrink-0">
+                    <img id="mainAvatarImg" src="" alt="Avatar" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/511252/ffffff?text=Ava'">
+                </div>
+                
+                <button onclick="nextSubProfile()" class="w-7 h-7 bg-red-900 rounded-full flex items-center justify-center text-white hover:bg-red-700 transition-colors shadow cursor-pointer mr-2">
+                    <i class="fas fa-caret-right"></i>
+                </button>
+
+                <div class="flex flex-col justify-center min-h-[50px] overflow-hidden">
+                    <div id="mainAccountName" class="text-red-400 font-black text-sm md:text-base drop-shadow"></div>
+                    <div id="subAccountName" class="text-red-300 font-bold text-xs mt-0.5 typing-cursor h-4"></div>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="openFilterModal()" class="h-11 px-4 bg-black hover:bg-gray-900 text-white font-bold rounded-xl border-2 border-red-600 shadow flex items-center space-x-2 cursor-pointer transition-all transform hover:scale-105">
+                    <i class="fas fa-filter text-red-500"></i><span class="text-xs">Фильтр</span>
+                </button>
+                <div class="text-center md:text-right">
+                    <h1 id="page-title" class="text-2xl md:text-4xl font-black tracking-wider text-red-500 drop-shadow-[0_4px_4px_rgba(0,0,0,0.9)] uppercase italic">НАШИ ШЕДЕВРЫ TWX</h1>
+                </div>
+            </div>
+
+            <button onclick="nextMainAccount()" class="hidden md:flex w-10 h-10 bg-black border-2 border-red-600 rounded-full items-center justify-center text-red-500 hover:bg-red-950 hover:scale-110 active:scale-95 transition-all shadow-lg cursor-pointer">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Кнопки режимов -->
+        <div class="max-w-6xl mx-auto relative z-20 flex flex-wrap justify-center gap-2 mt-6 pointer-events-auto">
+            <button onclick="switchMode('all')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-red-950 shadow transition-all cursor-pointer bg-red-600 text-white" data-mode="all">ВСЕ РАБОТЫ</button>
+            <button onclick="switchMode('classic')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-red-950 shadow transition-all bg-gray-900 text-red-300 hover:bg-red-950" data-mode="classic">КЛАССИКА</button>
+            <button onclick="switchMode('plagiarist')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-red-950 shadow transition-all bg-gray-900 text-red-300 hover:bg-red-950" data-mode="plagiarist">ПЛАГИАТ</button>
+            <button onclick="switchMode('history')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-red-950 shadow transition-all bg-gray-900 text-red-300 hover:bg-red-950" data-mode="history">ИСТОРИЯ</button>
+        </div>
+        
+        <div class="md:hidden flex justify-center space-x-6 mt-4 pointer-events-auto">
+            <button onclick="prevMainAccount()" class="w-10 h-10 bg-black border-2 border-red-600 rounded-full flex items-center justify-center text-red-500 shadow-lg cursor-pointer">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button onclick="nextMainAccount()" class="w-10 h-10 bg-black border-2 border-red-600 rounded-full flex items-center justify-center text-red-500 shadow-lg cursor-pointer">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-8 z-20 overflow-y-auto mt-6">
+        <div id="artworks-grid" class="flex flex-col space-y-8"></div>
+    </main>
+
+    <!-- Модальное окно просмотра шедевра -->
+    <div id="fullsize-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-gray-950 border-4 border-red-600 rounded-3xl p-6 md:p-8 max-w-4xl w-full shadow-2xl relative flex flex-col items-center">
+            <button onclick="closeFullSizeModal()" class="absolute top-4 right-4 w-10 h-10 bg-red-600 hover:bg-red-500 rounded-full font-bold text-white text-lg flex items-center justify-center cursor-pointer z-20 shadow-lg">✕</button>
+            <h3 id="fullsize-title" class="text-2xl font-black mb-1 text-center text-red-500 drop-shadow">Название</h3>
+            <p id="fullsize-year" class="text-xs font-bold text-red-300 mb-4 bg-black/60 px-3 py-1 rounded-full border border-red-600/50">Дата: </p>
+            <div class="relative w-full flex flex-col items-center bg-black/85 border-[6px] border-red-600 rounded-[3rem] p-6 shadow-2xl">
+                <div id="fullsize-content-container" class="w-full flex items-center justify-center bg-black/50 rounded-2xl border-2 border-red-900 p-3 overflow-auto max-h-[65vh]"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно фильтра дат -->
+    <div id="filter-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-gray-950 border-4 border-red-600 rounded-3xl p-6 max-w-sm w-full shadow-2xl relative text-white">
+            <button onclick="closeFilterModal()" class="absolute top-4 right-4 w-9 h-9 bg-red-600 hover:bg-red-500 rounded-full font-bold text-white flex items-center justify-center cursor-pointer shadow">✕</button>
+            <h3 class="text-xl font-black mb-4 text-center text-red-500">🔍 Фильтр по дате</h3>
+            <div id="filter-years-list" class="space-y-2 max-h-60 overflow-y-auto mb-4 pr-1"></div>
+            <button onclick="applyYearFilter(null)" class="w-full bg-black border-2 border-red-600 text-red-300 font-bold py-2.5 rounded-xl text-xs cursor-pointer hover:bg-red-950">Сбросить фильтр</button>
+        </div>
+    </div>
+
+    <script>
+        const monthNames = {'01':'Января','02':'Февраля','03':'Марта','04':'Апреля','05':'Мая','06':'Июня','07':'Июля','08':'Августа','09':'Сентября','10':'Октября','11':'Ноября','12':'Декабря'};
+        const modeTitles = {'all':'НАШИ ШЕДЕВРЫ TWX','classic':'КЛАССИКА','plagiarist':'ПЛАГИАТ','history':'ИСТОРИЯ'};
+        
+        let dbItems = [];
+        let currentAccountIdx = 0;
+        let currentSubProfileIdx = 0;
+        let currentMode = 'all';
+        let selectedFilterDate = null;
+        let currentDisplayedItems = [];
+        let typingTimer;
+
+        function updateMusicUI(playing) {
+            const btnText = document.getElementById('musicText');
+            const btnIcon = document.getElementById('musicIcon');
+            if (playing) {
+                btnText.textContent = 'Музыка: Вкл';
+                btnIcon.className = 'fas fa-pause';
+            } else {
+                btnText.textContent = 'Музыка: Выкл';
+                btnIcon.className = 'fas fa-play';
+            }
+        }
+
+        function toggleMusic() {
+            const audio = document.getElementById('bgMusic');
+            if (audio.paused) {
+                audio.play().then(() => {
+                    updateMusicUI(true);
+                }).catch(err => {
+                    console.log("Ошибка воспроизведения:", err);
+                });
+            } else {
+                audio.pause();
+                updateMusicUI(false);
+            }
+        }
+
+        function updateVolume(value) {
+            const audio = document.getElementById('bgMusic');
+            if (audio) audio.volume = parseFloat(value);
+        }
+
+        // Поиск злодея
+        function handleSearchInput(query) {
+            const dropdown = document.getElementById('searchResultsDropdown');
+            const q = query.trim().toLowerCase();
+            
+            if (!q) {
+                dropdown.classList.add('hidden');
+                dropdown.innerHTML = '';
+                return;
+            }
+
+            let results = [];
+            KatyaGallery.forEach((acc, aIdx) => {
+                acc.subProfiles.forEach((sub, sIdx) => {
+                    let name = sub.subName ? sub.subName : acc.accountName;
+                    if (name.toLowerCase().includes(q)) {
+                        let avatar = sub.avatar ? sub.avatar : acc.avatar;
+                        results.push({ aIdx, sIdx, name, avatar });
+                    }
+                });
+            });
+
+            if (results.length === 0) {
+                dropdown.innerHTML = '<div class="p-3 text-xs text-red-400 text-center font-bold">Злодей не найден в тенях...</div>';
+                dropdown.classList.remove('hidden');
+                return;
+            }
+
+            let html = '';
+            results.forEach(res => {
+                html += `
+                    <div onclick="selectArtist(${res.aIdx}, ${res.sIdx})" class="flex items-center space-x-3 p-2.5 hover:bg-red-950 cursor-pointer transition-all">
+                        <div class="w-10 h-10 rounded-full border-2 border-red-600 overflow-hidden shrink-0 bg-black flex items-center justify-center">
+                            <img src="user/zlo/${res.avatar}" alt="" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/511252/ffffff?text=Ava'">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-red-400 font-black text-xs">${res.name}</span>
+                            <span class="text-[10px] text-red-300">Злодей / Профиль</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            dropdown.innerHTML = html;
+            dropdown.classList.remove('hidden');
+        }
+
+        function selectArtist(aIdx, sIdx) {
+            currentAccountIdx = aIdx;
+            currentSubProfileIdx = sIdx;
+            document.getElementById('searchResultsDropdown').classList.add('hidden');
+            document.getElementById('artistSearchInput').value = '';
+            triggerAvatarAnimationAndSwitch();
+        }
+
+        document.addEventListener('click', (e) => {
+            const searchContainer = document.getElementById('artistSearchInput').closest('div').parentNode;
+            if (!searchContainer.contains(e.target)) {
+                document.getElementById('searchResultsDropdown').classList.add('hidden');
+            }
+        });
+
+        function buildInternalDatabase() {
+            dbItems = [];
+            KatyaGallery.forEach((acc, aIdx) => {
+                acc.subProfiles.forEach((sub, sIdx) => {
+                    for (let mode in sub.modes) {
+                        for (let dateRaw in sub.modes[mode]) {
+                            let parts = dateRaw.split('/');
+                            let dateObj = { raw: dateRaw, day: parts[0], month: parts[1], year: (parts[2].length===2?"20"+parts[2]:parts[2]) };
+                            
+                            sub.modes[mode][dateRaw].forEach(fileData => {
+                                let item = { aIdx, sIdx, mode, dateObj, type: mode === 'history' ? 'history' : 'image' };
+                                
+                                if (item.type === 'history') {
+                                    item.title = fileData.title;
+                                    item.text = fileData.text;
+                                } else {
+                                    item.title = fileData.split('/').pop().split('.')[0]; 
+                                    item.image = `user/zlo/art/${fileData}`;
+                                }
+                                dbItems.push(item);
+                            });
+                        }
+                    }
+                });
+            });
+        }
+
+        function tryPlayAudio() {
+            const audio = document.getElementById('bgMusic');
+            if (!audio) return;
+            audio.volume = document.getElementById('volumeControl').value;
+            const promise = audio.play();
+
+            if (promise !== undefined) {
+                promise.then(() => {
+                    updateMusicUI(true);
+                    removeInteractionListeners();
+                }).catch(() => {
+                    updateMusicUI(false);
+                    addInteractionListeners();
+                });
+            }
+        }
+
+        function onUserInteraction() {
+            const audio = document.getElementById('bgMusic');
+            audio.play().then(() => {
+                updateMusicUI(true);
+                removeInteractionListeners();
+            }).catch(e => console.log(e));
+        }
+
+        function addInteractionListeners() {
+            document.addEventListener('click', onUserInteraction);
+            document.addEventListener('keydown', onUserInteraction);
+            document.addEventListener('touchstart', onUserInteraction);
+        }
+
+        function removeInteractionListeners() {
+            document.removeEventListener('click', onUserInteraction);
+            document.removeEventListener('keydown', onUserInteraction);
+            document.removeEventListener('touchstart', onUserInteraction);
+        }
+
+        function initPage() {
+            buildInternalDatabase();
+            if(KatyaGallery.length > 0) switchAccount(0);
+            tryPlayAudio();
+        }
+
+        function nextMainAccount() {
+            currentAccountIdx = (currentAccountIdx + 1) % KatyaGallery.length;
+            switchAccount(currentAccountIdx);
+        }
+
+        function prevMainAccount() {
+            currentAccountIdx = (currentAccountIdx - 1 + KatyaGallery.length) % KatyaGallery.length;
+            switchAccount(currentAccountIdx);
+        }
+
+        function nextSubProfile() {
+            const subsLength = KatyaGallery[currentAccountIdx].subProfiles.length;
+            if (subsLength > 1) {
+                currentSubProfileIdx = (currentSubProfileIdx + 1) % subsLength;
+                triggerAvatarAnimationAndSwitch();
+            }
+        }
+
+        function prevSubProfile() {
+            const subsLength = KatyaGallery[currentAccountIdx].subProfiles.length;
+            if (subsLength > 1) {
+                currentSubProfileIdx = (currentSubProfileIdx - 1 + subsLength) % subsLength;
+                triggerAvatarAnimationAndSwitch();
+            }
+        }
+
+        function triggerAvatarAnimationAndSwitch() {
+            const avatarImg = document.getElementById('mainAvatarImg');
+            avatarImg.classList.remove('animate-avatar');
+            void avatarImg.offsetWidth; 
+            avatarImg.classList.add('animate-avatar');
+            switchSubProfile(currentSubProfileIdx);
+        }
+
+        function typeWriterEffect(text) {
+            const el = document.getElementById('subAccountName');
+            el.innerHTML = '';
+            clearTimeout(typingTimer);
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    el.innerHTML += text.charAt(i);
+                    i++;
+                    typingTimer = setTimeout(type, 40);
+                }
+            }
+            type();
+        }
+
+        function switchAccount(idx) {
+            currentAccountIdx = parseInt(idx);
+            currentSubProfileIdx = 0; 
+            triggerAvatarAnimationAndSwitch(); 
+        }
+
+        function switchSubProfile(idx) {
+            currentSubProfileIdx = parseInt(idx);
+            selectedFilterDate = null;
+            
+            const acc = KatyaGallery[currentAccountIdx];
+            const sub = acc.subProfiles[currentSubProfileIdx];
+            
+            const avatarToUse = sub.avatar ? sub.avatar : acc.avatar;
+            document.getElementById('mainAvatarImg').src = `user/zlo/${avatarToUse}`;
+            
+            let mainName = sub.subName ? sub.subName : acc.accountName;
+            document.getElementById('mainAccountName').textContent = mainName;
+            
+            let desc = sub.subDir === "" ? "ГЛАВНЫЙ ЗЛОДЕЙ" : "АЛЬТЕРНАТИВНАЯ ФОРМА";
+            typeWriterEffect(desc);
+
+            renderGrid();
+        }
+
+        function switchMode(mode) {
+            currentMode = mode; selectedFilterDate = null;
+            document.getElementById('page-title').textContent = modeTitles[mode] || 'РАБОТЫ';
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.className = btn.getAttribute('data-mode') === mode 
+                    ? "mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-red-950 shadow transition-all bg-red-600 text-white"
+                    : "mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-red-950 shadow transition-all bg-gray-900 text-red-300 hover:bg-red-950";
+            });
+            renderGrid();
+        }
+
+        function renderGrid() {
+            const container = document.getElementById('artworks-grid');
+            container.innerHTML = '';
+
+            let items = dbItems.filter(i => i.aIdx === currentAccountIdx && i.sIdx === currentSubProfileIdx);
+            if (currentMode !== 'all') items = items.filter(i => i.mode === currentMode);
+            if (selectedFilterDate) items = items.filter(i => i.dateObj.raw === selectedFilterDate);
+
+            currentDisplayedItems = items;
+
+            if (items.length === 0) {
+                container.innerHTML = '<div class="text-center text-red-400 py-10 font-bold">В архивах злодея пока пусто...</div>';
+                return;
+            }
+
+            if (currentMode === 'all') {
+                let groups = {};
+                items.forEach(item => {
+                    let k = item.dateObj.raw;
+                    if(!groups[k]) groups[k] = { d: item.dateObj, arr: [] };
+                    groups[k].arr.push(item);
+                });
+                
+                Object.keys(groups).sort((a,b) => b.localeCompare(a)).forEach(key => {
+                    let g = groups[key];
+                    let dateLabel = `${g.d.day} ${monthNames[g.d.month]} ${g.d.year} г.`;
+                    let blockDiv = document.createElement('div');
+                    blockDiv.className = "mb-6";
+                    blockDiv.innerHTML = `<div class="flex items-center space-x-4 mb-4"><span class="bg-red-950 text-red-400 px-4 py-1.5 rounded-xl font-black text-sm border-2 border-red-700 shadow uppercase">📅 ${dateLabel}</span><div class="flex-grow border-b-2 border-dashed border-red-600/50"></div></div>`;
+                    let grid = document.createElement('div');
+                    grid.className = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6";
+                    g.arr.forEach(it => grid.appendChild(createCardElement(it)));
+                    blockDiv.appendChild(grid); container.appendChild(blockDiv);
+                });
+            } else {
+                let grid = document.createElement('div');
+                grid.className = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6";
+                items.forEach(it => grid.appendChild(createCardElement(it)));
+                container.appendChild(grid);
+            }
+        }
+
+        function createCardElement(item) {
+            const card = document.createElement('div');
+            const dateStr = `${item.dateObj.day} ${monthNames[item.dateObj.month]} ${item.dateObj.year}`;
+            const idx = currentDisplayedItems.indexOf(item);
+
+            if (item.type === 'history') {
+                card.className = "bg-gray-950 rounded-2xl shadow-xl overflow-hidden border-4 border-red-800 flex flex-col justify-between p-4 transform hover:-translate-y-1 transition-all duration-300 relative group cursor-pointer aspect-square text-red-200";
+                card.innerHTML = `<div class="w-full h-full overflow-y-auto font-bold text-sm p-2" onclick="openFullSizeModal(${idx})"><p>${item.title}</p></div><div class="mt-2 text-[10px] text-red-400 flex justify-between items-center"><span class="bg-red-900 text-white px-2 py-0.5 rounded font-bold">${dateStr}</span></div>`;
+            } else {
+                card.className = "bg-black/95 rounded-2xl shadow-xl overflow-hidden border-4 border-red-800 flex flex-col justify-between transform hover:-translate-y-1 transition-all relative group cursor-pointer aspect-square";
+                card.innerHTML = `<div class="flex-grow overflow-hidden bg-gray-900 relative" onclick="openFullSizeModal(${idx})"><img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" onerror="this.src='https://placehold.co/300x200/220000/ff0000?text=Файл+не+найден'"><div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-red-400 font-bold text-sm">Осмотреть 🔍</div></div><div class="p-3 bg-red-950 text-white font-bold text-xs truncate flex items-center justify-between px-4"><span class="truncate">${item.title}</span><span class="text-[10px] bg-red-700 px-2 py-0.5 rounded font-bold">${dateStr}</span></div>`;
+            }
+            return card;
+        }
+
+        function openFullSizeModal(idx) {
+            let item = currentDisplayedItems[idx];
+            document.getElementById('fullsize-title').textContent = item.title;
+            document.getElementById('fullsize-year').textContent = `📅 Дата: ${item.dateObj.day} ${monthNames[item.dateObj.month]} ${item.dateObj.year} г.`;
+            const container = document.getElementById('fullsize-content-container');
+            if (item.type === 'history') {
+                container.innerHTML = `<div class="text-red-200 p-4 font-bold text-base w-full max-h-[50vh] overflow-y-auto whitespace-pre-wrap">${item.text}</div>`;
+            } else {
+                container.innerHTML = `<img src="${item.image}" alt="Полный размер" class="max-w-full max-h-[60vh] w-auto h-auto object-contain rounded-xl shadow-2xl">`;
+            }
+            document.getElementById('fullsize-modal').classList.add('flex');
+            document.getElementById('fullsize-modal').classList.remove('hidden');
+        }
+
+        function closeFullSizeModal() { 
+            document.getElementById('fullsize-modal').classList.add('hidden'); 
+            document.getElementById('fullsize-modal').classList.remove('flex');
+        }
+
+        function openFilterModal() {
+            let datesSet = new Set();
+            let items = dbItems.filter(i => i.aIdx === currentAccountIdx && i.sIdx === currentSubProfileIdx);
+            if (currentMode !== 'all') items = items.filter(i => i.mode === currentMode);
+            items.forEach(it => datesSet.add(it.dateObj.raw));
+
+            const listContainer = document.getElementById('filter-years-list');
+            listContainer.innerHTML = '';
+            if (datesSet.size === 0) {
+                listContainer.innerHTML = '<p class="text-xs text-red-400 text-center py-2">Нет дат в архиве</p>';
+            } else {
+                Array.from(datesSet).sort().reverse().forEach(dateRaw => {
+                    let p = dateRaw.split('/'); let dLbl = `${p[0]} ${monthNames[p[1]]} 20${p[2]} г.`;
+                    const isSel = selectedFilterDate === dateRaw;
+                    const btn = document.createElement('button');
+                    btn.className = `w-full py-2.5 px-4 rounded-xl font-bold text-sm cursor-pointer flex justify-between border-2 ${isSel ? 'bg-red-600 text-white border-red-400' : 'bg-black text-red-300 border-red-800'}`;
+                    btn.innerHTML = `<span>📅 ${dLbl}</span> ${isSel ? '<span class="text-xs">✓</span>' : ''}`;
+                    btn.onclick = () => { selectedFilterDate = dateRaw; renderGrid(); closeFilterModal(); };
+                    listContainer.appendChild(btn);
+                });
+            }
+            document.getElementById('filter-modal').classList.add('flex');
+            document.getElementById('filter-modal').classList.remove('hidden');
+        }
+
+        function closeFilterModal() { 
+            document.getElementById('filter-modal').classList.add('hidden'); 
+            document.getElementById('filter-modal').classList.remove('flex');
+        }
+
+        function applyYearFilter(val) { selectedFilterDate = val; renderGrid(); closeFilterModal(); }
+
+        window.onload = initPage;
+    </script>
+</body>
+</html>

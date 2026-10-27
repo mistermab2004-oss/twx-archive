@@ -1,0 +1,2737 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gartic Phone - Избраные Работы</title>
+    <link rel="icon" type="image/png" href="user/system/icon galery.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Fredoka', 'Inter', sans-serif;
+            background: url('user/system/yu.png') no-repeat center center fixed;
+            background-size: cover;
+            overflow-x: hidden;
+            user-select: none;
+            color: #f3e8ff;
+        }
+        .dot-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px), url('user/system/yu.png');
+            background-position: center center, center center;
+            background-size: 24px 24px, cover;
+            background-repeat: repeat, no-repeat;
+            background-attachment: scroll, fixed;
+        }
+        
+        /* ⚡ ВИДЖЕТ ПОЛОСОЧКА-МОЛНИЯ ⚡ */
+        ::-webkit-scrollbar {
+            width: 22px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a0929;
+            border-left: 2px dashed rgba(216, 180, 226, 0.3);
+            border-right: 2px dashed rgba(216, 180, 226, 0.3);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #c026d3 0%, #9333ea 50%, #6b21a8 100%);
+            border-radius: 12px;
+            border: 4px solid #1a0929;
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.5), 0 0 10px rgba(192, 38, 211, 0.6);
+        }
+        ::-webkit-scrollbar-thumb:active {
+            background: #7e22ce;
+            border-width: 7px;
+            box-shadow: inset 0 6px 12px rgba(0,0,0,0.8);
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        .animate-float {
+            animation: floatSlow 3s ease-in-out infinite;
+        }
+        .gartic-header-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 100px;
+            background: linear-gradient(90deg, #1b0a2b 0%, #35124e 50%, #1b0a2b 100%);
+            transform: skewY(-3deg); z-index: 10;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            border-bottom: 4px solid #0f0518;
+        }
+        .retro-shadow {
+            box-shadow: 4px 4px 0px #0f0518;
+        }
+    </style>
+</head>
+<body class="dot-pattern min-h-screen flex flex-col justify-between relative selection:bg-pink-500 selection:text-white">
+
+    <script>
+        // =======================================================================
+        // 🎀 БАЗА ДАННЫХ АККАУНТОВ В КОДЕ 🎀
+        // =======================================================================
+        const KatyaGallery = [
+            {
+                accountName: "XAHTEP",
+                accDir: "xahtep",
+                avatar: "xahtep_ava.png",
+                hasMentionsButton: true,
+                pleasantMentions: [
+                    "user/art/xahtep/rabota (44).png",
+                    "user/art/xahtep/rabota (12).png",
+                    "user/art/xahtep/oi (10).png",
+                    "user/art/xahtep/rabota (41).png",
+                    "user/art/xahtep/oi (71).png",
+                    "user/art/xahtep/oi (61).png",
+                    "user/art/xahtep/oi (59).png",
+                    "user/art/xahtep/oi (50).png",
+                    "user/art/xahtep/rabota (51).png",
+                    "user/art/xahtep/sos (20).png",
+                    "user/art/xahtep/rabota (61).png",
+                    "user/art/xahtep/oi (73).png",
+                    "user/art/xahtep/rabota (85).png",
+                    "user/art/xahtep/oi (72).png",
+                    "user/art/xahtep/oi (79).png",
+                    "user/art/xahtep/oi (78).png",
+                    "user/art/xahtep/oi (92).png",
+                    "user/art/xahtep/rabota (97).png",
+                    "user/art/xahtep/xx (1).png",
+                    "user/art/xahtep/rabota (25).png",
+                    "user/art/xahtep/pop (8).png",
+                    "user/art/xahtep/pop (7).png",
+                    "user/art/xahtep/pop (11).png",
+                    "user/art/xahtep/pop (14).png",
+                    "user/art/xahtep/oi (108).png",
+                    "user/art/xahtep/pop (20).png",
+                    "user/art/xahtep/pop (15).png",
+                    "user/art/xahtep/rabota (106).png",
+                    "user/art/xahtep/rabota (105).png",
+                    "user/art/xahtep/rabota (110).png"
+                ],
+                artworks: [
+                    "user/art/xahtep/rabota (45).png",
+                    "user/art/xahtep/rabota (48).png",
+                    "user/art/xahtep/rabota (40).png",
+                    "user/art/xahtep/rabota (60).png",
+                    "user/art/xahtep/rabota (7).png",
+                    "user/art/xahtep/rabota (13).png",
+                    "user/art/xahtep/pop (1).png",
+                    "user/art/xahtep/rabota (34).png",
+                    "user/art/xahtep/rabota (14).png",
+                    "user/art/xahtep/oi (86).png"
+                ]
+            },
+            {
+                accountName: "MAFIA MAB",
+                accDir: "mab",
+                avatar: "mab_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/mab/rabota (14).png",
+                    "user/art/mab/rabota (52).png",
+                    "user/art/mab/oi (30).png",
+                    "user/art/mab/rabota (27).png",
+                    "user/art/mab/sos (1).png",
+                    "user/art/mab/oi (2).png",
+                    "user/art/mab/oi (36).png",
+                    "user/art/mab/zuz (1).png",
+                    "user/art/mab/rabota (46).png",
+                    "user/art/mab/rabota (55).png"
+                ]
+            },
+            {
+                accountName: "StivvvvEEN",
+                accDir: "stiven",
+                avatar: "stiven_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/fof/oi (2).png",
+                    "user/art/yut/rabota (4).png",
+                    "user/art/stiven/oi (53).png",
+                    "user/art/yut/rabota (3).png",
+                    "user/art/stiven/oi (7).png",
+                    "user/art/stiven/rabota (6).png",
+                    "user/art/stiven/pop (9).png",
+                    "user/art/yut/oi (5).png",
+                    "user/art/stiven/rabota (44).png",
+                    "user/art/stiven/rabota (50).png"
+                ]
+            },
+            {
+                accountName: "Mr.Жуть",
+                accDir: "spook",
+                avatar: "spook_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/spook/rabota (5).png",
+                    "user/art/spook/rabota (37).png",
+                    "user/art/spook/oi (6).png",
+                    "user/art/spook/rabota (35).png",
+                    "user/art/spook/sos (3).png",
+                    "user/art/spook/sos (2).png",
+                    "user/art/spook/zuz (6).png",
+                    "user/art/spook/rabota (40).png",
+                    "user/art/spook/oi (17).png",
+                    "user/art/spook/oi (19).png"
+                ]
+            },
+            {
+                accountName: "TIFOKKUSU",
+                accDir: "nb",
+                avatar: "nb_ava.png",
+                hasMentionsButton: true,
+                pleasantMentions: [
+                    "user/art/nb/rabota (22).png",
+                    "user/art/nb/oi (11).png",
+                    "user/art/nb/sos (9).png",
+                    "user/art/nb/sos (17).png",
+                    "user/art/nb/sos (22).png",
+                    "user/art/nb/sos (7).png",
+                    "user/art/nb/oi (17).png",
+                    "user/art/nb/rabota (14).png",
+                    "user/art/nb/rabota (28).png",
+                    "user/art/nb/oi (30).png",
+                    "user/art/nb/rabota (21).png",
+                    "user/art/nb/rabota (13).png",
+                    "user/art/nb/rabota (8).png",
+                    "user/art/nb/rabota (3).png",
+                    "user/art/nb/rabota (25).png",
+                    "user/art/nb/rabota (18).png",
+                    "user/art/nb/rabota (31).png",
+                    "user/art/nb/sos (19).png",
+                    "user/art/nb/sos (12).png",
+                    "user/art/nb/oi (6).png",
+                    "user/art/nb/pop (4).png",
+                    "user/art/nb/pop (6).png"
+                ],
+                artworks: [
+                    "user/art/nb/rabota (10).png",
+                    "user/art/nb/oi (9).png",
+                    "user/art/nb/sos (2).png",
+                    "user/art/nb/rabota (30).png",
+                    "user/art/nb/rabota (17).png",
+                    "user/art/nb/rabota (33).png",
+                    "user/art/nb/rabota (24).png",
+                    "user/art/nb/rabota (34).png",
+                    "user/art/nb/rabota (32).png",
+                    "user/art/nb/rabota (38).png"
+                ]
+            },
+            {
+                accountName: "GNOM3000",
+                accDir: "mor",
+                avatar: "mor_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/mor/rabota (25).png",
+                    "user/art/mor/sos (7).png",
+                    "user/art/mor/sos (2).png",
+                    "user/art/mor/zuz (1).png",
+                    "user/art/mor/rabota (23).png",
+                    "user/art/mor/sos (12).png",
+                    "user/art/mor/oi (10).png",
+                    "user/art/mor/rabota (26).png",
+                    "user/art/mor/oi (33).png",
+                    "user/art/mor/rabota (30).png"
+                ]
+            },
+            {
+                accountName: "ДИБИЛ",
+                accDir: "debil",
+                avatar: "debil_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/debil/rabota (1).png",
+                    "user/art/debil/rabota (2).png",
+                    "user/art/debil/rabota (3).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "KROGAR",
+                accDir: "krog",
+                avatar: "krog_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/krog/rabota (11).png",
+                    "user/art/krog/bibi (2).png",
+                    "user/art/krog/oi (6).png",
+                    "user/art/krog/bibi (5).png",
+                    "user/art/krog/oi (24).png",
+                    "user/art/krog/oi (22).png",
+                    "user/art/krog/pop (2).png",
+                    "user/art/krog/pop (9).png",
+                    "user/art/krog/pop (13).png",
+                    "user/art/krog/pop (16).png"
+                ]
+            },
+            {
+                accountName: "BORYAN",
+                accDir: "boryan",
+                avatar: "boryan_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/boryan/rabota (3).png",
+                    "user/art/boryan/rabota (7).png",
+                    "user/art/boryan/rabota (31).png",
+                    "user/art/boryan/rabota (51).png",
+                    "user/art/boryan/rabota (39).png",
+                    "user/art/boryan/rabota (76).png",
+                    "user/art/boryan/sos (4).png",
+                    "user/art/boryan/xx (2).png",
+                    "user/art/boryan/xx (5).png",
+                    "user/art/boryan/s (1).png"
+                ]
+            },
+            {
+                accountName: "GORDON",
+                accDir: "gor",
+                avatar: "gor_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/gor/oi (14).png",
+                    "user/art/gor/oi (39).png",
+                    "user/art/gor/oi (11).png",
+                    "user/art/gor/sos (11).png",
+                    "user/art/gor/oi (9).png",
+                    "user/art/gor/sos (2).png",
+                    "user/art/gor/oi (21).png",
+                    "user/art/gor/sos (22).png",
+                    "user/art/gor/oi (58).png",
+                    "user/art/gor/oi (60).png"
+                ]
+            },
+            {
+                accountName: "ЛИЛЯ",
+                accDir: "lil",
+                avatar: "boryan_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/lil/rabota (4).png",
+                    "user/art/lil/oi (8).png",
+                    "user/art/lil/oi (4).png",
+                    "user/art/lil/oi (6).png",
+                    "user/art/lil/oi (3).png",
+                    "user/art/lil/oi (1).png",
+                    "user/art/lil/rabota (1).png",
+                    "user/art/lil/oi (2).png",
+                    "user/art/lil/oi (7).png",
+                    "user/art/lil/oi (9).png"
+                ]
+            },
+            {
+                accountName: "ПИПУРКА",
+                accDir: "bpip",
+                avatar: "bpip_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/bpip/rabota (10).png",
+                    "user/art/bpip/rabota (7).png",
+                    "user/art/bpip/rabota (6).png",
+                    "user/art/bpip/rabota (9).png",
+                    "user/art/bpip/rabota (4).png",
+                    "user/art/bpip/rabota (13).png",
+                    "user/art/bpip/rabota (5).png",
+                    "user/art/bpip/rabota (1).png",
+                    "user/art/bpip/rabota (3).png",
+                    "user/art/bpip/rabota (2).png"
+                ]
+            },
+            {
+                accountName: "REVENT",
+                accDir: "revent",
+                avatar: "boryan_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/revent/rabota (1).png",
+                    "user/art/revent/rabota (2).png",
+                    "user/art/revent/rabota (3).png",
+                    "user/art/revent/rabota (4).png",
+                    "user/art/revent/rabota (5).png",
+                    "user/art/revent/rabota (6).png",
+                    "user/art/revent/rabota (7).png",
+                    "user/art/revent/rabota (8).png",
+                    "user/art/revent/rabota (9).png",
+                    "user/system/chp.png"
+                ]
+            },
+            {
+                accountName: "РЕПТИЛИЯ",
+                accDir: "rep",
+                avatar: "rep_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/rep/rabota (7).png",
+                    "user/art/rep/rabota (71).png",
+                    "user/art/rep/rabota (39).png",
+                    "user/art/rep/rabota (52).png",
+                    "user/art/rep/rabota (14).png",
+                    "user/art/rep/rabota (64).png",
+                    "user/art/rep/rabota (68).png",
+                    "user/art/rep/rabota (10).png",
+                    "user/art/rep/sos (8).png",
+                    "user/art/rep/oi (57).png"
+                ]
+            },
+            {
+                accountName: "CRASH",
+                accDir: "crash",
+                avatar: "crash_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/crash/pop (9).png",
+                    "user/art/crash/bibi (3).png",
+                    "user/art/crash/oi (3).png",
+                    "user/art/crash/bibi (7).png",
+                    "user/art/crash/oi (30).png",
+                    "user/art/crash/rabota (2).png",
+                    "user/art/crash/pop (11).png",
+                    "user/art/crash/zuz (5).png",
+                    "user/art/crash/rabota (7).png",
+                    "user/art/crash/rabota (14).png"
+                ]
+            },
+            {
+                accountName: "КЛЁВОЕ ИМЯ",
+                accDir: "x",
+                avatar: "x_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/x/1160 (1).png",
+                    "user/art/x/1160 (2).png",
+                    "user/art/x/1160 (3).png",
+                    "user/art/x/6147 (2).png",
+                    "user/art/x/6147 (1).png",
+                    "user/art/x/6147 oi (4).png",
+                    "user/art/x/6147 oi (5).png",
+                    "user/art/x/6147 (3).png",
+                    "user/art/x/6147 (4).png",
+                    "user/art/x/7779 (1).png"
+                ]
+            },
+            {
+                accountName: "ГРАФ МИХАИЛ",
+                accDir: "oio",
+                avatar: "spook_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/oio/sos (1).png",
+                    "user/art/oio/sos (2).png",
+                    "user/art/oio/sos (3).png",
+                    "user/art/oio/sos (4).png",
+                    "user/art/oio/sos (5).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "DEVYATKA",
+                accDir: "as",
+                avatar: "as_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/aso/rabota (1).png",
+                    "user/art/aso/rabota (2).png",
+                    "user/art/aso/rabota (3).png",
+                    "user/art/aso/rabota (4).png",
+                    "user/art/aso/rabota (5).png",
+                    "user/art/aso/rabota (6).png",
+                    "user/art/aso/rabota (7).png",
+                    "user/art/aso/rabota (8).png",
+                    "user/system/chp.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "KOT PRO",
+                accDir: "cot",
+                avatar: "cot_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/cot/rabota (1).png",
+                    "user/art/cot/rabota (2).png",
+                    "user/art/cot/rabota (3).png",
+                    "user/art/cot/rabota (4).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "САНЁКЦИПИН228",
+                accDir: "saneck",
+                avatar: "stiven_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/saneck/rabota (1).png",
+                    "user/art/saneck/rabota (2).png",
+                    "user/art/saneck/rabota (3).png",
+                    "user/art/saneck/rabota (4).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "VALERY",
+                accDir: "valery",
+                avatar: "debil_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/valery/rabota (1).png",
+                    "user/art/valery/rabota (2).png",
+                    "user/art/valery/rabota (3).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "ЯРКА ЗАБИВАКА",
+                accDir: "arr",
+                avatar: "arr_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/arr/rabota (1).png",
+                    "user/art/arr/rabota (2).png",
+                    "user/art/arr/rabota (3).png",
+                    "user/art/arr/rabota (4).png",
+                    "user/art/arr/oi (3).png",
+                    "user/art/arr/oi (4).png",
+                    "user/art/arr/oi (7).png",
+                    "user/art/arr/oi (10).png",
+                    "user/art/arr/oi (13).png",
+                    "user/art/arr/oi (12).png"
+                ]
+            },
+            {
+                accountName: "ОГО",
+                accDir: "ogo",
+                avatar: "ogo_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/ogo/rabota (1).png",
+                    "user/art/ogo/rabota (2).png",
+                    "user/art/ogo/rabota (3).png",
+                    "user/art/ogo/rabota (4).png",
+                    "user/art/ogo/rabota (9).png",
+                    "user/art/ogo/rabota (8).png",
+                    "user/art/ogo/rabota (7).png",
+                    "user/art/ogo/rabota (6).png",
+                    "user/art/ogo/rabota (5).png",
+                    "user/system/chp.png"
+                ]
+            },
+            {
+                accountName: "PAXAXOSHKA",
+                accDir: "pax",
+                avatar: "xahtep_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/pax/rabota (1).png",
+                    "user/art/pax/rabota (2).png",
+                    "user/art/pax/rabota (3).png",
+                    "user/art/pax/rabota (4).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "КТО ТО",
+                accDir: "wot",
+                avatar: "wot_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/wot/rabota (1).png",
+                    "user/art/wot/rabota (2).png",
+                    "user/art/wot/rabota (3).png",
+                    "user/art/wot/rabota (4).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png", 
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "-_- STALKER100 -_-",
+                accDir: "stal",
+                avatar: "stal_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/stal/rabota (1).png",
+                    "user/art/stal/rabota (2).png",
+                    "user/art/stal/rabota (3).png",
+                    "user/art/stal/rabota (4).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            }, 
+            {
+                accountName: "NEON GNOME",
+                accDir: "tutu",
+                avatar: "ogo_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/tutu/rabota (1).png",
+                    "user/art/tutu/rabota (3).png",
+                    "user/art/tutu/rabota (4).png",
+                    "user/art/tutu/rabota (5).png",
+                    "user/art/tutu/rabota (8).png",
+                    "user/art/tutu/rabota (6).png",
+                    "user/art/tutu/rabota (9).png",
+                    "user/art/tutu/rabota (10).png",
+                    "user/art/tutu/rabota (11).png",
+                    "user/art/tutu/rabota (2).png"
+                ]
+            },
+            {
+                accountName: "ЛЖЕ ХАНТЕР",
+                accDir: "fack",
+                avatar: "xahtep_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/fack/rabota (1).png",
+                    "user/art/fack/rabota (2).png",
+                    "user/art/fack/rabota (3).png",
+                    "user/art/fack/rabota (4).png",
+                    "user/art/fack/rabota (5).png",
+                    "user/art/fack/rabota (6).png",
+                    "user/art/fack/rabota (7).png",
+                    "user/art/fack/rabota (8).png",
+                    "user/art/fack/rabota (9).png",
+                    "user/art/fack/s (5).png"
+                ]
+            },
+            {
+                accountName: "ЯРКИЙ FLESHBI",
+                accDir: "opp",
+                avatar: "stiven_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/opp/rabota (1).png",
+                    "user/art/opp/rabota (2).png",
+                    "user/art/opp/rabota (3).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "ЖЕНЯ",
+                accDir: "jeny",
+                avatar: "jeny_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/jeny/oi (1).png",
+                    "user/art/jeny/oi (2).png",
+                    "user/art/jeny/oi (3).png",
+                    "user/art/jeny/oi (4).png",
+                    "user/art/jeny/oi (5).png",
+                    "user/art/jeny/oi (6).png",
+                    "user/art/jeny/oi (7).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "MAKCAT",
+                accDir: "mak",
+                avatar: "mak_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/mak/rabota (1).png",
+                    "user/art/mak/rabota (2).png",
+                    "user/art/mak/rabota (3).png",
+                    "user/system/cu.png",
+                    "user/system/cu.png",
+                    "user/system/cu.png",
+                    "user/system/cu.png",
+                    "user/system/cu.png",
+                    "user/system/cu.png",
+                    "user/system/cu.png"
+                ]
+            },
+            {
+                accountName: "HOLODOK",
+                accDir: "holod",
+                avatar: "holod_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/holod/rabota (1).png",
+                    "user/art/holod/rabota (2).png",
+                    "user/art/holod/rabota (3).png",
+                    "user/art/holod/oi (1).png",
+                    "user/art/holod/oi (2).png",
+                    "user/art/holod/oi (3).png",
+                    "user/art/holod/oi (4).png",
+                    "user/art/holod/oi (5).png",
+                    "user/art/holod/oi (6).png",
+                    "user/system/zo.png"
+                ]
+            },
+            {
+                accountName: "БУЛОЧКА",
+                accDir: "bul",
+                avatar: "bul_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/bul/oi (10).png",
+                    "user/art/bul/oi (5).png",
+                    "user/art/bul/oi (4).png",
+                    "user/art/bul/oi (7).png",
+                    "user/art/bul/oi (1).png",
+                    "user/art/bul/oi (9).png",
+                    "user/art/bul/sos (1).png",
+                    "user/art/bul/sos (3).png",
+                    "user/art/bul/sos (7).png",
+                    "user/art/bul/sos (6).png"
+                ]
+            },
+            {
+                accountName: "ДЕДЛИПАРКУР229",
+                accDir: "ded",
+                avatar: "boryan_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/ded/oi (7).png",
+                    "user/art/ded/oi (3).png",
+                    "user/art/ded/oi (4).png",
+                    "user/art/ded/oi (14).png",
+                    "user/art/ded/oi (2).png",
+                    "user/art/ded/oi (9).png",
+                    "user/art/ded/sos (1).png",
+                    "user/art/ded/sos (3).png",
+                    "user/art/ded/sos (7).png",
+                    "user/art/ded/sos (5).png"
+                ]
+            },
+            {
+                accountName: "TAXEMICCHIP",
+                accDir: "hax",
+                avatar: "hax_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/hax/sos (1).png",
+                    "user/art/hax/sos (2).png",
+                    "user/art/hax/sos (3).png",
+                    "user/art/hax/sos (4).png",
+                    "user/art/hax/sos (5).png",
+                    "user/art/hax/sos (6).png",
+                    "user/art/hax/sos (7).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "ЖОПА 2033",
+                accDir: "but",
+                avatar: "but_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/but/s (3).png",
+                    "user/art/but/s (4).png",
+                    "user/art/but/s (5).png",
+                    "user/art/but/s (2).png",
+                    "user/art/but/s (1).png",
+                    "user/art/but/sos (3).png",
+                    "user/art/but/sos (4).png",
+                    "user/art/but/sos (5).png",
+                    "user/art/but/sos (2).png",
+                    "user/art/but/sos (1).png"
+                ]
+            },
+            {
+                accountName: "ИНОПРИШИЛЕНЕЦ",
+                accDir: "ino",
+                avatar: "mor_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/ino/s (3).png",
+                    "user/art/ino/s (4).png",
+                    "user/art/ino/s (5).png",
+                    "user/art/ino/s (2).png",
+                    "user/art/ino/s (1).png",
+                    "user/art/ino/sos (3).png",
+                    "user/art/ino/sos (4).png",
+                    "user/art/ino/sos (5).png",
+                    "user/art/ino/sos (2).png",
+                    "user/art/ino/sos (1).png"
+                ]
+            },
+            {
+                accountName: "VRODEVYATKA",
+                accDir: "vro",
+                avatar: "ogo_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/vro/s (3).png",
+                    "user/art/vro/s (4).png",
+                    "user/art/vro/s (5).png",
+                    "user/art/vro/s (2).png",
+                    "user/art/vro/s (1).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "STEFANRUDVIG",
+                accDir: "ss",
+                avatar: "ss_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/ss/oi (1).png",
+                    "user/art/ss/oi (2).png",
+                    "user/art/ss/oi (3).png",
+                    "user/art/ss/oi (4).png",
+                    "user/art/ss/oi (5).png",
+                    "user/art/ss/oi (6).png",
+                    "user/art/ss/oi (7).png",
+                    "user/art/ss/oi (8).png",
+                    "user/system/chp.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "NASTYUHA4SV",
+                accDir: "nas",
+                avatar: "wot_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/nas/sos (1).png",
+                    "user/art/nas/sos (2).png",
+                    "user/art/nas/sos (3).png",
+                    "user/art/nas/sos (4).png",
+                    "user/art/nas/sos (5).png",
+                    "user/art/nas/sos (6).png",
+                    "user/art/nas/sos (7).png",
+                    "user/art/nas/sos (8).png",
+                    "user/art/nas/sos (9).png",
+                    "user/art/nas/sos (10).png"
+                ]
+            },
+            {
+                accountName: "4ORTOVSUKKUB",
+                accDir: "4or",
+                avatar: "boryan_ava.png",
+                isFemale: true,
+                hasMentionsButton: true,
+                pleasantMentions: [
+                "user/art/4or/oi (6).png",
+                "user/art/4or/oi (3).png",
+                "user/art/4or/sos (2).png"
+                ],
+                artworks: [
+                    "user/art/4or/rabota (3).png",
+                    "user/art/4or/oi (9).png",
+                    "user/art/4or/sos (1).png",
+                    "user/art/4or/oi (13).png",
+                    "user/art/4or/oi (2).png",
+                    "user/art/4or/oi (15).png",
+                    "user/art/4or/sos (4).png",
+                    "user/art/4or/oi (16).png",
+                    "user/art/4or/sos (3).png",
+                    "user/art/4or/oi (8).png"
+                ]
+            },
+            {
+                accountName: "УМНАЯПЕЧЕНЬ",
+                accDir: "uco",
+                avatar: "boryan_ava.png",
+                hasMentionsButton: true,
+                pleasantMentions: [
+                    "user/art/uco/oi (10).png",
+                    "user/art/uco/oi (6).png",
+                    "user/art/uco/oi (2).png",
+                    "user/art/uco/oi (5).png",
+                    "user/art/uco/sos (1).png",
+                    "user/art/uco/pop (4).png" 
+                ],
+                artworks: [
+                    "user/art/uco/oi (9).png",
+                    "user/art/uco/rabota (1).png",
+                    "user/art/uco/pop (6).png",
+                    "user/art/uco/pop (2).png",
+                    "user/art/uco/pop (7).png",
+                    "user/art/uco/oi (7).png",
+                    "user/art/uco/pop (9).png",
+                    "user/art/uco/rabota (2).png",
+                    "user/art/uco/rabota (6).png",
+                    "user/art/uco/oi (3).png"
+                ]
+            },
+            {
+                accountName: "4IZKEYK",
+                accDir: "chiz",
+                avatar: "vv_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/chiz/sos (1).png",
+                    "user/art/chiz/oi (5).png",
+                    "user/art/chiz/oi (10).png",
+                    "user/art/chiz/oi (9).png",
+                    "user/art/chiz/oi (7).png",
+                    "user/art/chiz/sos (2).png",
+                    "user/art/chiz/sos (3).png",
+                    "user/art/chiz/oi (4).png",
+                    "user/art/chiz/oi (1).png",
+                    "user/art/chiz/oi (11).png"
+                ]
+            },
+            {
+                accountName: "ШНЮК",
+                accDir: "spider",
+                avatar: "vv_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/spider/oi (6).png",
+                    "user/art/spider/oi (2).png",
+                    "user/art/spider/oi (3).png",
+                    "user/art/spider/oi (4).png",
+                    "user/art/spider/oi (1).png",
+                    "user/art/spider/oi (5).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "K",
+                accDir: "k",
+                avatar: "wot_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/k/oi (6).png",
+                    "user/art/k/oi (1).png",
+                    "user/art/k/oi (8).png",
+                    "user/art/k/rabota (2).png",
+                    "user/art/k/rabota (3).png",
+                    "user/art/k/oi (4).png",
+                    "user/art/k/oi (9).png",
+                    "user/art/k/rabota (1).png",
+                    "user/art/k/oi (3).png",
+                    "user/art/k/rabota (4).png"
+                ]
+            },
+            {
+                accountName: "АБОБА",
+                accDir: "boba",
+                avatar: "vv_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/aboba/oi (8).png",
+                    "user/art/aboba/rabota (2).png",
+                    "user/art/aboba/rabota (4).png",
+                    "user/art/aboba/oi (3).png",
+                    "user/art/aboba/oi (7).png",
+                    "user/art/aboba/rabota (1).png",
+                    "user/art/aboba/rabota (3).png",
+                    "user/art/aboba/oi (5).png",
+                    "user/art/aboba/oi (6).png",
+                    "user/art/aboba/oi (1).png"
+                ]
+            },
+            {
+                accountName: "ЖОПНЫЙ МАБ",
+                accDir: "jop",
+                avatar: "jop_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/jop/rabota (3).png",
+                    "user/art/jop/rabota (1).png",
+                    "user/art/jop/rabota (2).png",
+                    "user/art/jop/rabota (4).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "Я ПРОСТО КОСМОС",
+                accDir: "space",
+                avatar: "jeny_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/space/rabota (3).png",
+                    "user/art/space/rabota (1).png",
+                    "user/art/space/rabota (2).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "РЫЦАРЬ 22809",
+                accDir: "knight",
+                avatar: "knight_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/knight/j (1).png",
+                    "user/art/knight/j (2).png",
+                    "user/art/knight/oi (2).png",
+                    "user/art/knight/oi (4).png",
+                    "user/art/knight/oi (3).png",
+                    "user/art/knight/oi (5).png",
+                    "user/art/knight/oi (6).png",
+                    "user/art/knight/oi (1).png",
+                    "user/system/chp.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "АНОНИМУС",
+                accDir: "anono",
+                avatar: "fof_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/anono/rabota (1).png",
+                    "user/art/anono/rabota (2).png",
+                    "user/art/anono/pop (1).png",
+                    "user/art/anono/pop (2).png",
+                    "user/art/anono/pop (3).png",
+                    "user/art/anono/pop (4).png",
+                    "user/art/anono/pop (5).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "НЕ ХАНТЕР",
+                accDir: "not xa",
+                avatar: "crash_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/not xa/rabota (1).png",
+                    "user/art/not xa/rabota (2).png",
+                    "user/art/not xa/pop (1).png",
+                    "user/art/not xa/pop (2).png",
+                    "user/art/not xa/pop (3).png",
+                    "user/art/not xa/pop (4).png",
+                    "user/art/not xa/pop (5).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "MRZOOMX325",
+                accDir: "zoom",
+                avatar: "jeny_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/zoom/xx (1).png",
+                    "user/art/zoom/oi (2).png",
+                    "user/art/zoom/xx (2).png",
+                    "user/art/zoom/oi (1).png",
+                    "user/art/zoom/xx (3).png",
+                    "user/art/zoom/oi (4).png",
+                    "user/art/zoom/xx (4).png",
+                    "user/art/zoom/oi (3).png",
+                    "user/art/zoom/xx (5).png",
+                    "user/art/zoom/oi (5).png"
+                ]
+            },
+            {
+                accountName: "САКУРА",
+                accDir: "sacura",
+                avatar: "mab_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/sacura/pop (1).png",
+                    "user/art/sacura/pop (2).png",
+                    "user/art/sacura/pop (3).png",
+                    "user/art/sacura/pop (4).png",
+                    "user/art/sacura/pop (5).png",
+                    "user/art/sacura/pop (6).png",
+                    "user/art/sacura/pop (7).png",
+                    "user/art/sacura/pop (8).png",
+                    "user/art/sacura/pop (9).png",
+                    "user/system/chp.png"
+                ]
+            },
+            {
+                accountName: "ВАРУ",
+                accDir: "vary",
+                avatar: "mor_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/vary/pop (1).png",
+                    "user/art/vary/pop (6).png",
+                    "user/art/vary/pop (8).png",
+                    "user/art/vary/pop (4).png",
+                    "user/art/vary/pop (9).png",
+                    "user/art/vary/rabota (4).png",
+                    "user/art/vary/rabota (2).png",
+                    "user/art/vary/pop (2).png",
+                    "user/art/vary/pop (5).png",
+                    "user/art/vary/pop (7).png"
+                ]
+            },
+            {
+                accountName: "RiMSTER",
+                accDir: "rimster",
+                avatar: "cot_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/rimster/pop (1).png",
+                    "user/art/rimster/pop (6).png",
+                    "user/art/rimster/pop (8).png",
+                    "user/art/rimster/pop (4).png",
+                    "user/art/rimster/pop (9).png",
+                    "user/art/rimster/rabota (3).png",
+                    "user/art/rimster/rabota (2).png",
+                    "user/art/rimster/pop (2).png",
+                    "user/art/rimster/pop (5).png",
+                    "user/art/rimster/pop (7).png"
+                ]
+            },
+            {
+                accountName: "РОМЕМКА)))",
+                accDir: "rom",
+                avatar: "beb_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/rom/pop (1).png",
+                    "user/art/rom/pop (6).png",
+                    "user/art/rom/pop (8).png",
+                    "user/art/rom/pop (4).png",
+                    "user/art/rom/pop (9).png",
+                    "user/art/rom/rabota (4).png",
+                    "user/art/rom/rabota (2).png",
+                    "user/art/rom/pop (2).png",
+                    "user/art/rom/pop (5).png",
+                    "user/art/rom/pop (7).png"
+                ]
+            },
+            {
+                accountName: "ГОЛУБ",
+                accDir: "golub",
+                avatar: "bpip_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/golub/rabota (1).png",
+                    "user/art/golub/rabota (2).png",
+                    "user/art/golub/rabota (3).png",
+                    "user/art/golub/rabota (4).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "УДАФ",
+                accDir: "udaf",
+                avatar: "cot_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/udaf/pop (1).png",
+                    "user/art/udaf/pop (2).png",
+                    "user/art/udaf/pop (4).png",
+                    "user/art/udaf/pop (5).png",
+                    "user/art/udaf/pop (6).png",
+                    "user/art/udaf/xx (1).png",
+                    "user/art/udaf/xx (2).png",
+                    "user/art/udaf/xx (3).png",
+                    "user/art/udaf/xx (4).png",
+                    "user/art/udaf/xx (5).png"
+                ]
+            },
+            {
+                accountName: "КАТЮША 2.0",
+                accDir: "catusha",
+                avatar: "holod_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/catusha/rabota (1).png",
+                    "user/art/catusha/rabota (2).png",
+                    "user/art/catusha/oi (6).png",
+                    "user/art/catusha/oi (3).png",
+                    "user/art/catusha/oi (7).png",
+                    "user/art/catusha/oi (10).png",
+                    "user/art/catusha/oi (9).png",
+                    "user/art/catusha/oi (5).png",
+                    "user/art/catusha/oi (4).png",
+                    "user/art/catusha/oi (11).png"
+                ]
+            },
+            {
+                accountName: "KRAY283",
+                accDir: "kray",
+                avatar: "boom_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/kray/rabota (1).png",
+                    "user/art/kray/rabota (2).png",
+                    "user/art/kray/oi (6).png",
+                    "user/art/kray/oi (3).png",
+                    "user/art/kray/oi (7).png",
+                    "user/art/kray/oi (10).png",
+                    "user/art/kray/oi (9).png",
+                    "user/art/kray/oi (5).png",
+                    "user/art/kray/oi (4).png",
+                    "user/art/kray/oi (11).png"
+                ]
+            },
+            {
+                accountName: "ДИНА_ЗИНА",
+                accDir: "zina",
+                avatar: "rep_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/zina/oi (1).png",
+                    "user/art/zina/oi (2).png",
+                    "user/art/zina/oi (6).png",
+                    "user/art/zina/oi (3).png",
+                    "user/art/zina/oi (7).png",
+                    "user/art/zina/oi (10).png",
+                    "user/art/zina/oi (9).png",
+                    "user/art/zina/oi (5).png",
+                    "user/art/zina/oi (4).png",
+                    "user/art/zina/oi (11).png"
+                ]
+            },
+            {
+                accountName: "НЕОФУМИ",
+                accDir: "neofumu",
+                avatar: "mor_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/neofumu/rabota (3).png",
+                    "user/art/neofumu/rabota (2).png",
+                    "user/art/neofumu/oi (6).png",
+                    "user/art/neofumu/oi (3).png",
+                    "user/art/neofumu/oi (7).png",
+                    "user/art/neofumu/oi (10).png",
+                    "user/art/neofumu/oi (9).png",
+                    "user/art/neofumu/oi (5).png",
+                    "user/art/neofumu/oi (4).png",
+                    "user/art/neofumu/oi (11).png"
+                ]
+            },
+            {
+                accountName: "CURIOSITY72958",
+                accDir: "curio",
+                avatar: "bul_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/curio/rabota (3).png",
+                    "user/art/curio/rabota (2).png",
+                    "user/art/curio/rabota (1).png",
+                    "user/art/curio/rabota (4).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "ТОТ САМЫЙ ЖЫРНЫЙ ЧЕЛ",
+                accDir: "fat",
+                avatar: "wot_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/fat/sos (3).png",
+                    "user/art/fat/sos (2).png",
+                    "user/art/fat/oi (6).png",
+                    "user/art/fat/sos (4).png",
+                    "user/art/fat/sos (5).png",
+                    "user/art/fat/pop (3).png",
+                    "user/art/fat/pop (2).png",
+                    "user/art/fat/pop (1).png",
+                    "user/art/fat/pop (4).png",
+                    "user/art/fat/pop (5).png"
+                ]
+            },
+            {
+                accountName: "RAIO",
+                accDir: "raio",
+                avatar: "stiven_sub_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/raio/oi (3).png",
+                    "user/art/raio/oi (2).png",
+                    "user/art/raio/oi (1).png",
+                    "user/art/raio/oi (4).png",
+                    "user/art/raio/oi (5).png",
+                    "user/art/raio/oi (6).png",
+                    "user/art/raio/oi (7).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "КОТ",
+                accDir: "catcat",
+                avatar: "mor_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/catcat/sos (3).png",
+                    "user/art/catcat/sos (2).png",
+                    "user/art/catcat/sos (1).png",
+                    "user/art/catcat/sos (4).png",
+                    "user/art/catcat/sos (5).png",
+                    "user/art/catcat/pop (3).png",
+                    "user/art/catcat/pop (2).png",
+                    "user/art/catcat/pop (1).png",
+                    "user/art/catcat/pop (4).png",
+                    "user/art/catcat/pop (5).png"
+                ]
+            },
+            {
+                accountName: "FREDIK",
+                accDir: "fredik",
+                avatar: "bpip_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/fredik/sos (3).png",
+                    "user/art/fredik/sos (2).png",
+                    "user/art/fredik/sos (1).png",
+                    "user/art/fredik/sos (4).png",
+                    "user/art/fredik/sos (5).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "KINGDOMOFMIRACALIS",
+                accDir: "kingmira",
+                avatar: "king_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/kingmira/oi (2).png",
+                    "user/art/kingmira/oi (1).png",
+                    "user/art/kingmira/oi (9).png",
+                    "user/art/kingmira/pop (2).png",
+                    "user/art/kingmira/pop (6).png",
+                    "user/art/kingmira/rabota (1).png",
+                    "user/art/kingmira/rabota (3).png",
+                    "user/art/kingmira/rabota (4).png",
+                    "user/art/kingmira/bibi (2).png",
+                    "user/art/kingmira/bibi (4).png"
+                ]
+            },
+            {
+                accountName: "C R A Z E (ГУЛЬ)",
+                accDir: "crazy",
+                avatar: "bpip_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/crazy/rabota (1).png",
+                    "user/art/crazy/oi (5).png",
+                    "user/art/crazy/oi (9).png",
+                    "user/art/crazy/oi (4).png",
+                    "user/art/crazy/oi (3).png",
+                    "user/art/crazy/rabota (2).png",
+                    "user/art/crazy/rabota (3).png",
+                    "user/art/crazy/rabota (4).png",
+                    "user/art/crazy/rabota (5).png",
+                    "user/art/crazy/oi (8).png"
+                ]
+            },
+            {
+                accountName: "CRAZYM",
+                accDir: "crazym",
+                avatar: "xahtep_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/crazym/bibi (1).png",
+                    "user/art/crazym/bibi (4).png",
+                    "user/art/crazym/oi (5).png",
+                    "user/art/crazym/oi (7).png",
+                    "user/art/crazym/oi (3).png",
+                    "user/art/crazym/pop (5).png",
+                    "user/art/crazym/pop (3).png",
+                    "user/art/crazym/pop (6).png",
+                    "user/art/crazym/rabota (1).png",
+                    "user/art/crazym/rabota (2).png"
+                ]
+            },
+            {
+                accountName: "BENIO2009",
+                accDir: "benio",
+                avatar: "bul_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/benio/rabota (1).png",
+                    "user/art/benio/rabota (4).png",
+                    "user/art/benio/rabota (3).png",
+                    "user/art/benio/rabota (2).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "ГУСЬ",
+                accDir: "gusse",
+                avatar: "mak_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/gusse/rabota (1).png",
+                    "user/art/gusse/rabota (4).png",
+                    "user/art/gusse/oi (5).png",
+                    "user/art/gusse/oi (8).png",
+                    "user/art/gusse/oi (3).png",
+                    "user/art/gusse/pop (1).png",
+                    "user/art/gusse/pop (4).png",
+                    "user/art/gusse/pop (5).png",
+                    "user/art/gusse/rabota (5).png",
+                    "user/art/gusse/rabota (2).png"
+                ]
+            },
+            {
+                accountName: "KAPUSTA",
+                accDir: "kapusta",
+                avatar: "kap_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/kapusta/bibi (1).png",
+                    "user/art/kapusta/rabota (4).png",
+                    "user/art/kapusta/oi (5).png",
+                    "user/art/kapusta/oi (7).png",
+                    "user/art/kapusta/oi (2).png",
+                    "user/art/kapusta/pop (2).png",
+                    "user/art/kapusta/pop (4).png",
+                    "user/art/kapusta/pop (8).png",
+                    "user/art/kapusta/oi (8).png",
+                    "user/art/kapusta/bibi (2).png"
+                ]
+            },
+            {
+                accountName: "KRIPERRRRR",
+                accDir: "kriper",
+                avatar: "mak_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/kriper/oi (1).png",
+                    "user/art/kriper/oi (6).png",
+                    "user/art/kriper/oi (5).png",
+                    "user/art/kriper/oi (7).png",
+                    "user/art/kriper/oi (2).png",
+                    "user/art/kriper/oi (3).png",
+                    "user/art/kriper/oi (4).png",
+                    "user/art/kriper/oi (9).png",
+                    "user/art/kriper/oi (8).png",
+                    "user/system/chp.png"
+                ]
+            },
+            {
+                accountName: "КЕРДЫК РУСЛАНА",
+                accDir: "rusick",
+                avatar: "boryan_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/rusick/oi (2).png",
+                    "user/art/rusick/oi (1).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "АРТЕМИО СМЕРТУШКА",
+                accDir: "artemon",
+                avatar: "xahtep_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/artemon/bibi (1).png",
+                    "user/art/artemon/bibi (4).png",
+                    "user/art/artemon/bibi (5).png",
+                    "user/art/artemon/pop (7).png",
+                    "user/art/artemon/pop (3).png",
+                    "user/art/artemon/pop (2).png",
+                    "user/art/artemon/pop (4).png",
+                    "user/art/artemon/pop (8).png",
+                    "user/art/artemon/bibi (6).png",
+                    "user/art/artemon/bibi (2).png"
+                ]
+            },
+            {
+                accountName: "والدك",
+                accDir: "father",
+                avatar: "debil_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/father/bibi (1).png",
+                    "user/art/father/bibi (2).png",
+                    "user/art/father/bibi (3).png",
+                    "user/art/father/bibi (4).png",
+                    "user/art/father/bibi (5).png",
+                    "user/art/father/bibi (6).png",
+                    "user/art/father/bibi (7).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "СЕЛЕДЬ",
+                accDir: "seled",
+                avatar: "ogo_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/seled/bibi (1).png",
+                    "user/art/seled/bibi (2).png",
+                    "user/art/seled/bibi (3).png",
+                    "user/art/seled/bibi (4).png",
+                    "user/art/seled/bibi (5).png",
+                    "user/art/seled/bibi (6).png",
+                    "user/art/seled/bibi (7).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "ПИДАРАС227",
+                accDir: "pidor",
+                avatar: "pid_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/pidor/bibi (1).png",
+                    "user/art/pidor/bibi (2).png",
+                    "user/art/pidor/bibi (3).png",
+                    "user/art/pidor/bibi (4).png",
+                    "user/art/pidor/bibi (5).png",
+                    "user/art/pidor/bibi (6).png",
+                    "user/art/pidor/bibi (7).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "ЭЛЬ ПРИМО",
+                accDir: "primo",
+                avatar: "arr_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/primo/bibi (1).png",
+                    "user/art/primo/bibi (2).png",
+                    "user/art/primo/bibi (3).png",
+                    "user/art/primo/bibi (4).png",
+                    "user/art/primo/bibi (5).png",
+                    "user/art/primo/bibi (6).png",
+                    "user/art/primo/bibi (7).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "ЧЕБУПЕЛЬ",
+                accDir: "chebupel",
+                avatar: "mak_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/chebupel/bibi (1).png",
+                    "user/art/chebupel/bibi (2).png",
+                    "user/art/chebupel/bibi (3).png",
+                    "user/art/chebupel/bibi (4).png",
+                    "user/art/chebupel/bibi (5).png",
+                    "user/art/chebupel/bibi (6).png",
+                    "user/art/chebupel/bibi (7).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "КУЗЯ",
+                accDir: "kuza",
+                avatar: "ccut_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/kuza/bibi (1).png",
+                    "user/art/kuza/bibi (2).png",
+                    "user/art/kuza/bibi (3).png",
+                    "user/art/kuza/bibi (4).png",
+                    "user/art/kuza/bibi (5).png",
+                    "user/art/kuza/bibi (6).png",
+                    "user/art/kuza/bibi (7).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "КАМАЗИК",
+                accDir: "cumaz",
+                avatar: "crash_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/cumaz/bibi (1).png",
+                    "user/art/cumaz/bibi (2).png",
+                    "user/art/cumaz/bibi (3).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "КРИСЛАЛИКАНОНИМКА",
+                accDir: "kris",
+                avatar: "kris_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/kris/pop (1).png",
+                    "user/art/kris/pop (2).png",
+                    "user/art/kris/pop (3).png",
+                    "user/art/kris/pop (4).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "MINDKITSUNE",
+                accDir: "mindk",
+                avatar: "bul_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/mindk/pop (1).png",
+                    "user/art/mindk/pop (2).png",
+                    "user/art/mindk/pop (3).png",
+                    "user/art/mindk/pop (4).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "ШАМИЛЬ)",
+                accDir: "shamil",
+                avatar: "sham_ava.png",
+                isFemale: true,
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/shamil/oi (2).png",
+                    "user/art/shamil/pop (1).png",
+                    "user/art/shamil/pop (2).png",
+                    "user/art/shamil/pop (3).png",
+                    "user/art/shamil/rabota (1).png",
+                    "user/art/shamil/rabota (2).png",
+                    "user/art/shamil/rabota (4).png",
+                    "user/art/shamil/sos (3).png",
+                    "user/art/shamil/sos (4).png",
+                    "user/art/shamil/sos (5).png"
+                ]
+            },
+            {
+                accountName: "CAMYPAU_TORMOZ",
+                accDir: "camypau",
+                avatar: "xahtep_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/camypau/rabota (1).png",
+                    "user/art/camypau/rabota (2).png",
+                    "user/system/chp.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png",
+                    "user/system/not.png"
+                ]
+            },
+            {
+                accountName: "ХЛОПЧИК",
+                accDir: "xlop",
+                avatar: "fof_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/xlop/rabota (1).png",
+                    "user/art/xlop/rabota (2).png",
+                    "user/art/xlop/oi (1).png",
+                    "user/art/xlop/oi (2).png",
+                    "user/art/xlop/oi (3).png",
+                    "user/art/xlop/oi (4).png",
+                    "user/art/xlop/oi (5).png",
+                    "user/art/xlop/oi (6).png",
+                    "user/art/xlop/oi (7).png",
+                    "user/art/xlop/sos (4).png"
+                ]
+            },
+            {
+                accountName: "ЖИДНАСВЯЗИ",
+                accDir: "zide",
+                avatar: "pid_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/zide/rabota (1).png",
+                    "user/art/zide/rabota (2).png",
+                    "user/art/zide/oi (1).png",
+                    "user/art/zide/oi (2).png",
+                    "user/art/zide/oi (3).png",
+                    "user/art/zide/oi (4).png",
+                    "user/art/zide/oi (5).png",
+                    "user/art/zide/oi (6).png",
+                    "user/art/zide/oi (7).png",
+                    "user/art/zide/sos (5).png"
+                ]
+            },
+            {
+                accountName: "MRПАМПЕРС",
+                accDir: "pamper",
+                avatar: "holod_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/pamper/sos (3).png",
+                    "user/art/pamper/sos (1).png",
+                    "user/art/pamper/oi (1).png",
+                    "user/art/pamper/oi (2).png",
+                    "user/art/pamper/oi (3).png",
+                    "user/art/pamper/oi (4).png",
+                    "user/art/pamper/oi (5).png",
+                    "user/art/pamper/oi (6).png",
+                    "user/art/pamper/oi (7).png",
+                    "user/art/pamper/sos (5).png"
+                ]
+            },
+            {
+                accountName: "ОГУРЕЧЕК",
+                accDir: "pickle",
+                avatar: "hax_ava.png",
+                hasMentionsButton: false,
+                pleasantMentions: [],
+                artworks: [
+                    "user/art/pickle/sos (2).png",
+                    "user/art/pickle/sos (1).png",
+                    "user/art/pickle/oi (1).png",
+                    "user/art/pickle/oi (2).png",
+                    "user/art/pickle/oi (3).png",
+                    "user/art/pickle/oi (4).png",
+                    "user/art/pickle/oi (5).png",
+                    "user/art/pickle/oi (6).png",
+                    "user/art/pickle/oi (7).png",
+                    "user/art/pickle/sos (5).png"
+                ]
+            },
+        ];
+        // =======================================================================
+    </script>
+
+    <!-- Шапка сайта -->
+    <header class="sticky top-0 z-30 w-full pt-4 pb-5 px-4 sm:px-8 pointer-events-none">
+        <div class="gartic-header-bg"></div>
+        <div class="max-w-7xl mx-auto relative z-20 flex items-center justify-between pointer-events-auto">
+            
+            <a href="index.html" class="flex items-center space-x-4 group cursor-pointer no-underline">
+                <div class="w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
+                    <img id="header-logo-img" src="user/ava/logo.png" alt="Лого" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/300x300/ff6600/ffffff?text=X'">
+                </div>
+                <span id="site-title-text" class="font-black text-2xl sm:text-4xl tracking-wider text-yellow-300 drop-shadow-[0_4px_6px_rgba(0,0,0,0.9)] uppercase group-hover:text-yellow-200 transition-colors">
+                    TWX АРХИВ
+                </span>
+            </a>
+
+            <!-- ПОИСК ХУДОЖНИКОВ -->
+            <div class="relative hidden md:block w-72">
+                <input type="text" id="artist-search-input" placeholder="🔍 Найти художника..." oninput="handleArtistSearch(this.value)" autocomplete="off" class="w-full bg-purple-900/90 border-2 border-yellow-400 rounded-xl px-4 py-2 text-white font-bold placeholder-purple-300 focus:outline-none focus:border-pink-500 shadow-lg text-sm">
+                <div id="search-suggestions" class="absolute top-full left-0 right-0 mt-2 bg-purple-950 border-2 border-purple-500 rounded-xl shadow-2xl hidden max-h-60 overflow-y-auto z-50"></div>
+            </div>
+
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <a href="index.html" class="bg-[#a3ff00] hover:bg-[#8ee000] text-purple-950 font-black px-4 sm:px-5 py-2.5 rounded-xl retro-shadow border-2 border-white/60 text-xs sm:text-sm cursor-pointer transition-transform uppercase no-underline">
+                    Главная
+                </a>
+
+                <button id="pleasant-mentions-btn" onclick="toggleMentionsPanel()" class="hidden bg-purple-700 hover:bg-purple-600 text-white font-black px-4 sm:px-5 py-2.5 rounded-xl retro-shadow border-2 border-purple-300 text-xs sm:text-sm cursor-pointer transition-transform uppercase shadow-[0_0_15px_rgba(168,85,247,0.8)]">
+                    Упоминания
+                </button>
+
+                <button onclick="openCardPreviewModal()" class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-black px-4 sm:px-5 py-2.5 rounded-xl retro-shadow border-2 border-white/60 text-xs sm:text-sm cursor-pointer transition-transform uppercase">
+                    Карточка
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-6 flex flex-col items-center z-20 mt-8">
+
+        <!-- Мобильный поиск -->
+        <div class="relative block md:hidden w-full max-w-md mb-6">
+            <input type="text" id="artist-search-input-mob" placeholder="🔍 Найти художника..." oninput="handleArtistSearchMob(this.value)" autocomplete="off" class="w-full bg-purple-900/90 border-2 border-yellow-400 rounded-xl px-4 py-2 text-white font-bold placeholder-purple-300 focus:outline-none focus:border-pink-500 shadow-lg text-sm">
+            <div id="search-suggestions-mob" class="absolute top-full left-0 right-0 mt-2 bg-purple-950 border-2 border-purple-500 rounded-xl shadow-2xl hidden max-h-60 overflow-y-auto z-50"></div>
+        </div>
+
+        <!-- ВЫДВИГАЮЩАЯСЯ ПАНЕЛЬ: ПРИЯТНЫЕ УПОМИНАНИЯ -->
+        <div id="mentions-drawer" class="w-full hidden mb-8 bg-gradient-to-b from-purple-900/90 to-purple-950/90 p-6 rounded-3xl border-4 border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.5)] backdrop-blur-md transition-all duration-500">
+            <div class="flex flex-col md:flex-row items-center justify-between mb-6 px-2 gap-4">
+                <h2 class="text-2xl md:text-3xl font-black tracking-wide drop-shadow-md flex items-center space-x-3 text-purple-200">
+                    <span>💜 ПРИЯТНЫЕ УПОМИНАНИЯ</span>
+                </h2>
+                <div class="flex items-center space-x-3">
+                    <button onclick="prevMentionsPage()" class="w-10 h-10 bg-purple-800 hover:bg-pink-500 border-2 border-yellow-400 rounded-full flex items-center justify-center font-extrabold text-yellow-400 hover:text-white shadow transition-all cursor-pointer">
+                        &lt;
+                    </button>
+                    <span id="mentions-page-counter" class="text-xs sm:text-sm bg-purple-950 text-pink-300 px-4 py-2 rounded-xl border border-pink-500/50 font-bold shadow uppercase">
+                        Страница 1 / 1
+                    </span>
+                    <button onclick="nextMentionsPage()" class="w-10 h-10 bg-purple-800 hover:bg-pink-500 border-2 border-yellow-400 rounded-full flex items-center justify-center font-extrabold text-yellow-400 hover:text-white shadow transition-all cursor-pointer">
+                        &gt;
+                    </button>
+                </div>
+            </div>
+
+            <div id="mentions-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
+            </div>
+        </div>
+
+        <!-- ЦЕНТРАЛЬНЫЙ БЛОК С АВАТАРОМ И СТРЕЛКАМИ ПО БОКАМ -->
+        <div class="w-full flex items-center justify-center space-x-8 md:space-x-16 mb-12 relative">
+            
+            <button onclick="prevProfile()" class="w-14 h-14 bg-purple-800 hover:bg-pink-500 border-4 border-yellow-400 rounded-full flex items-center justify-center text-3xl font-extrabold text-yellow-400 hover:text-white shadow-[0_0_15px_rgba(168,85,247,0.5)] transform hover:scale-110 active:scale-95 transition-all cursor-pointer z-20">
+                &lt;
+            </button>
+
+            <div class="flex flex-col items-center relative z-20">
+                <div class="relative group animate-float">
+                    <div id="profile-birthday-badge" class="absolute -top-6 -right-2 text-4xl z-30 hidden animate-bounce" title="День рождения!">🎉🎂</div>
+                    <div id="profile-rose-badge" class="absolute -top-6 -left-2 text-3xl z-30 hidden animate-pulse" title="С 8 Марта!">🌹</div>
+
+                    <div class="absolute -inset-3 bg-gradient-to-r from-pink-500 via-purple-500 to-yellow-400 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                    
+                    <div class="relative w-40 h-40 md:w-56 md:h-56 bg-white rounded-full border-[8px] border-purple-950 shadow-2xl overflow-hidden flex items-center justify-center">
+                        <img id="artist-avatar-img" src="" alt="Аватарка художника" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/200x200/511252/ffffff?text=Ava'">
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-purple-900/90 border-4 border-yellow-400 px-10 py-3 rounded-2xl shadow-xl backdrop-blur-sm flex items-center justify-center min-w-[250px]">
+                    <h1 id="artist-name-display" class="text-2xl md:text-3xl font-black tracking-wide text-yellow-300 text-center drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">ИМЯ</h1>
+                </div>
+                <div class="mt-2 text-xs font-mono font-bold bg-purple-950/80 text-pink-300 px-4 py-1 rounded-full border border-pink-500/50 shadow">
+                    Кодовое слово (Папка): <span id="artist-id-display" class="text-white">--</span>
+                </div>
+            </div>
+
+            <button onclick="nextProfile()" class="w-14 h-14 bg-purple-800 hover:bg-pink-500 border-4 border-yellow-400 rounded-full flex items-center justify-center text-3xl font-extrabold text-yellow-400 hover:text-white shadow-[0_0_15px_rgba(168,85,247,0.5)] transform hover:scale-110 active:scale-95 transition-all cursor-pointer z-20">
+                &gt;
+            </button>
+        </div>
+
+        <div class="w-full mb-8 bg-purple-900/40 p-6 rounded-3xl border-2 border-purple-500/30 shadow-2xl">
+            <div class="flex flex-col md:flex-row items-center justify-between mb-6 px-2 gap-4">
+                <h2 class="text-2xl md:text-3xl font-black tracking-wide drop-shadow-md flex items-center space-x-3 text-yellow-300">
+                    <span>🌟 ИЗБРАННЫЕ РАБОТЫ</span>
+                </h2>
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm bg-purple-950 text-pink-300 px-5 py-2 rounded-xl border-2 border-pink-500/50 font-bold shadow-md uppercase" id="slot-counter">Заполнено: 0 / 10</span>
+                </div>
+            </div>
+
+            <div id="artworks-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="w-full bg-purple-950/95 backdrop-blur-md border-t-4 border-yellow-400 px-6 py-5 flex flex-col sm:flex-row items-center justify-between z-20 shadow-[0_-10px_20px_rgba(0,0,0,0.5)] text-white gap-4">
+        <div class="flex items-center space-x-4">
+            <div class="bg-purple-900 px-4 py-2 rounded-xl font-extrabold tracking-widest text-sm border-2 border-purple-500 shadow">
+                TWX_ARCHIVE
+            </div>
+            <div id="user-footer-badge" class="bg-purple-900 px-4 py-2 rounded-xl font-extrabold tracking-widest text-sm border-2 border-purple-500 shadow text-yellow-300">
+                PROFILE_01
+            </div>
+        </div>
+        
+        <div class="flex items-center space-x-3 bg-purple-900/90 border-2 border-yellow-400 px-4 py-2 rounded-2xl shadow-md">
+            <audio id="bg-music" src="user/music/lol.mp3" loop autoplay></audio>
+            <button id="music-toggle-btn" onclick="toggleMusic()" class="bg-pink-600 hover:bg-pink-500 text-white font-black px-4 py-2 rounded-xl border-2 border-white/60 text-xs sm:text-sm flex items-center space-x-2 transition-transform active:scale-95 cursor-pointer">
+                <i id="music-icon" class="fa-solid fa-play"></i>
+                <span id="music-status">ВКЛ МУЗЫКУ</span>
+            </button>
+            <div class="flex items-center space-x-2 pl-2 border-l border-purple-500/50">
+                <i class="fa-solid fa-volume-high text-yellow-300 text-xs"></i>
+                <input id="volume-slider" type="range" min="0" max="1" step="0.05" value="0.5" oninput="changeVolume(this.value)" class="w-20 sm:w-24 accent-pink-500 cursor-pointer">
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно просмотра с навигацией и кнопками медаль / череп -->
+    <div id="fullsize-modal" class="fixed inset-0 bg-purple-950/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-gradient-to-br from-purple-900 via-fuchsia-950 to-indigo-950 border-4 border-yellow-400 rounded-3xl p-6 md:p-8 max-w-4xl w-full shadow-2xl relative flex flex-col items-center">
+            <button onclick="closeFullSizeModal()" class="absolute top-4 right-4 w-12 h-12 bg-red-600 hover:bg-red-500 rounded-full font-bold text-white text-xl flex items-center justify-center cursor-pointer z-20 shadow-lg border-2 border-white">✕</button>
+            
+            <h3 id="fullsize-title" class="text-2xl font-black mb-4 text-center text-yellow-300 drop-shadow">Название работы</h3>
+            
+            <div class="relative w-full flex flex-col items-center bg-purple-950/85 border-[6px] border-fuchsia-500 rounded-[3rem] p-6 md:p-8 shadow-2xl">
+                <div class="absolute -top-7 bg-purple-900 border-4 border-yellow-400 px-6 py-1.5 rounded-full shadow-xl flex items-center space-x-3 z-10">
+                    <div class="w-10 h-10 rounded-full border-2 border-fuchsia-300 overflow-hidden shadow">
+                        <img id="fullsize-avatar" src="" alt="Аватарка" class="w-full h-full object-cover">
+                    </div>
+                    <span id="fullsize-artist-name" class="text-sm font-black text-white tracking-wide">ИМЯ ХУДОЖНИКА</span>
+                </div>
+
+                <div class="w-full flex items-center justify-center mt-4 bg-black/60 rounded-2xl border-2 border-fuchsia-500/30 p-3 overflow-auto max-h-[55vh]">
+                    <img id="fullsize-img" src="" alt="Полный размер" class="max-w-full max-h-[50vh] w-auto h-auto object-contain rounded-xl shadow-2xl">
+                </div>
+
+                <!-- БЛОК СТРЕЛОЧЕК И РЕАКЦИЙ ПО СЕРЕДИНЕ -->
+                <div class="w-full flex items-center justify-between mt-6 px-2 md:px-8">
+                    <button id="modal-prev-arrow" onclick="modalPrev()" class="w-12 h-12 bg-purple-800 hover:bg-pink-500 border-3 border-yellow-400 rounded-full flex items-center justify-center text-2xl font-black text-yellow-400 hover:text-white shadow transition-all cursor-pointer">
+                        &lt;
+                    </button>
+
+                    <div class="flex items-center space-x-4">
+                        <!-- Медаль: Согласиться (работа заслужила) -->
+                        <button id="modal-medal-btn" onclick="voteModal('medal')" class="bg-purple-900 hover:bg-purple-800 border-3 border-yellow-400 px-4 py-2 rounded-2xl flex items-center space-x-2 shadow-lg transition-all cursor-pointer">
+                            <span class="text-2xl">🏅</span>
+                            <span id="modal-medal-count" class="font-black text-yellow-300 text-base">0</span>
+                        </button>
+
+                        <!-- Череп: Оспорить мнение (не заслужила) -->
+                        <button id="modal-skull-btn" onclick="voteModal('skull')" class="bg-purple-900 hover:bg-purple-800 border-3 border-red-500 px-4 py-2 rounded-2xl flex items-center space-x-2 shadow-lg transition-all cursor-pointer">
+                            <span class="text-2xl">💀</span>
+                            <span id="modal-skull-count" class="font-black text-red-300 text-base">0</span>
+                        </button>
+                    </div>
+
+                    <button id="modal-next-arrow" onclick="modalNext()" class="w-12 h-12 bg-purple-800 hover:bg-pink-500 border-3 border-yellow-400 rounded-full flex items-center justify-center text-2xl font-black text-yellow-400 hover:text-white shadow transition-all cursor-pointer">
+                        &gt;
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно карточки -->
+    <div id="card-preview-modal" class="fixed inset-0 bg-purple-950/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-purple-950 border-4 border-pink-500 rounded-3xl p-6 md:p-8 max-w-4xl w-full shadow-2xl relative flex flex-col items-center">
+            <button onclick="closeCardPreviewModal()" class="absolute top-4 right-4 w-12 h-12 bg-red-600 hover:bg-red-500 rounded-full font-bold text-white text-xl flex items-center justify-center cursor-pointer z-10 shadow-lg border-2 border-white">✕</button>
+            
+            <h3 class="text-2xl font-black mb-2 text-center text-pink-300">Комфортная карточка профиля</h3>
+            <p class="text-xs text-purple-200 mb-4 text-center">Превью страницы в виде аккуратной карточки!</p>
+            
+            <div id="exportable-card" class="w-full max-w-2xl bg-gradient-to-br from-purple-900 via-fuchsia-950 to-indigo-950 border-8 border-yellow-400 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col items-center relative overflow-hidden">
+                <div class="absolute inset-0 dot-pattern opacity-40 pointer-events-none"></div>
+                
+                <div class="flex flex-col items-center z-10 mb-6">
+                    <div class="w-32 h-32 rounded-full border-6 border-white shadow-2xl overflow-hidden mb-3">
+                        <img id="card-preview-avatar" src="" alt="Аватарка" class="w-full h-full object-cover">
+                    </div>
+                    <h2 id="card-preview-name" class="text-2xl md:text-3xl font-black tracking-wider text-yellow-300 drop-shadow-md">ИМЯ ХУДОЖНИКА</h2>
+                </div>
+
+                <div class="w-full grid grid-cols-5 gap-2.5 z-10 mb-4 max-h-48 overflow-y-auto p-1" id="card-preview-grid"></div>
+
+                <div class="text-xs text-purple-300 z-10 font-semibold tracking-widest mt-2">GARTIC STYLE DIGITAL GALLERY • TERABYTE ARTWORKS</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let urlParams = new URLSearchParams(window.location.search);
+        let artistId = urlParams.get('id');
+        let currentArtistIndex = 0;
+        let currentMentionsPage = 0;
+
+        // Модальное состояние для разделения работ и упоминаний
+        let currentModalType = 'artwork'; // 'artwork' или 'mention'
+        let currentModalIndex = 0;
+        let itemReactions = JSON.parse(localStorage.getItem('twx_item_reactions') || '{}');
+
+        let artists = KatyaGallery.map((item, index) => {
+            let rawArtworks = item.artworks || [];
+            let formattedArtworks = [];
+            for (let i = 0; i < 10; i++) {
+                if (rawArtworks[i]) {
+                    if (typeof rawArtworks[i] === 'string') {
+                        formattedArtworks.push({ title: `Работа #${i + 1}`, image: rawArtworks[i] });
+                    } else {
+                        formattedArtworks.push({
+                            title: rawArtworks[i].title || `Работа #${i + 1}`,
+                            image: rawArtworks[i].text || rawArtworks[i].image
+                        });
+                    }
+                } else {
+                    formattedArtworks.push(null);
+                }
+            }
+
+            let rawMentions = item.pleasantMentions || [];
+            let formattedMentions = rawMentions.map((m, idx) => {
+                if (typeof m === 'string') {
+                    return { title: `Упоминание #${idx + 1}`, image: m };
+                }
+                return { title: m.title || `Упоминание #${idx + 1}`, image: m.image || m.text };
+            });
+
+            return {
+                id: item.accDir || `account_${index + 1}`,
+                name: item.accountName || `ХУДОЖНИК #${index + 1}`,
+                avatar: item.avatar ? (item.avatar.startsWith('http') ? item.avatar : `user/ava/${item.avatar}`) : "https://placehold.co/200x200/511252/ffffff?text=Ava",
+                isFemale: !!item.isFemale,
+                hasMentionsButton: !!item.hasMentionsButton,
+                pleasantMentions: formattedMentions,
+                artworks: formattedArtworks
+            };
+        });
+
+        if (artistId && artists.length > 0) {
+            const foundIndex = artists.findIndex(a => String(a.id).toLowerCase() === String(artistId).toLowerCase());
+            if (foundIndex !== -1) {
+                currentArtistIndex = foundIndex;
+            }
+        }
+
+        const artistNameDisplay = document.getElementById('artist-name-display');
+        const artistIdDisplay = document.getElementById('artist-id-display');
+        const artistAvatarImg = document.getElementById('artist-avatar-img');
+        const artworksGrid = document.getElementById('artworks-grid');
+        const slotCounter = document.getElementById('slot-counter');
+        const userFooterBadge = document.getElementById('user-footer-badge');
+        const mentionsBtn = document.getElementById('pleasant-mentions-btn');
+        const mentionsDrawer = document.getElementById('mentions-drawer');
+        const mentionsGrid = document.getElementById('mentions-grid');
+        const mentionsPageCounter = document.getElementById('mentions-page-counter');
+
+        function updateUrlParam(id) {
+            if (window.history.replaceState && id) {
+                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?id=' + encodeURIComponent(id);
+                window.history.replaceState({path: newUrl}, '', newUrl);
+            }
+        }
+
+        function getValidArtworks(artist) {
+            return artist.artworks.filter(a => a !== null);
+        }
+
+        function renderCurrentArtist() {
+            if (artists.length === 0) return;
+            const artist = artists[currentArtistIndex];
+
+            artistNameDisplay.textContent = artist.name;
+            artistIdDisplay.textContent = artist.id;
+            artistAvatarImg.src = artist.avatar;
+            userFooterBadge.textContent = `PROFILE_0${currentArtistIndex + 1}`;
+
+            const now = new Date();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+
+            const birthdayBadge = document.getElementById('profile-birthday-badge');
+            const roseBadge = document.getElementById('profile-rose-badge');
+
+            const isMabBirthday = (artist.id.toLowerCase() === 'mab' && month === 5 && day === 21);
+            const isHunterBirthday = (artist.id.toLowerCase() === 'xahtep' && month === 7 && day === 13);
+            const isMaccatBirthday = (artist.id.toLowerCase() === 'mak' && month === 11 && day === 28);
+            const isBoryanBirthday = (artist.id.toLowerCase() === 'boryan' && month === 11 && day === 29);
+            const isSpookBirthday = (artist.id.toLowerCase() === 'spook' && month === 7 && day === 20);
+            const isStivenBirthday = (artist.id.toLowerCase() === 'stiven' && month === 2 && day === 27);
+            const isKrogarBirthday = (artist.id.toLowerCase() === 'krog' && month === 7 && day === 29);
+            const isDashaBirthday = (artist.id.toLowerCase() === 'mor' && month === 11 && day === 6);
+
+            if (isMabBirthday || isHunterBirthday || isMaccatBirthday || isBoryanBirthday || isSpookBirthday || isStivenBirthday || isKrogarBirthday || isDashaBirthday) {
+                birthdayBadge.classList.remove('hidden');
+            } else {
+                birthdayBadge.classList.add('hidden');
+            }
+
+            if (month === 3 && day === 8 && artist.isFemale) {
+                roseBadge.classList.remove('hidden');
+            } else {
+                roseBadge.classList.add('hidden');
+            }
+
+            if (artist.hasMentionsButton) {
+                mentionsBtn.classList.remove('hidden');
+            } else {
+                mentionsBtn.classList.add('hidden');
+                mentionsDrawer.classList.add('hidden');
+            }
+
+            currentMentionsPage = 0;
+            renderMentions();
+            updateUrlParam(artist.id);
+
+            artworksGrid.innerHTML = '';
+            let filledCount = 0;
+
+            for (let i = 0; i < 10; i++) {
+                const artwork = artist.artworks[i];
+                const slotCard = document.createElement('div');
+
+                if (artwork) {
+                    filledCount++;
+                    slotCard.className = "bg-purple-950 rounded-2xl shadow-xl overflow-hidden border-4 border-fuchsia-600 flex flex-col justify-between transform hover:-translate-y-1 hover:border-yellow-400 hover:shadow-[0_0_15px_rgba(253,224,71,0.4)] transition-all duration-300 relative group cursor-pointer";
+                    slotCard.innerHTML = `
+                        <div class="h-32 md:h-36 overflow-hidden bg-black/50 relative" onclick="openFullSizeModal(${i})">
+                            <img src="${artwork.image}" alt="${artwork.title}" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" onerror="this.src='https://placehold.co/300x200/4a195c/ffffff?text=Файл+не+найден'">
+                            <div class="absolute inset-0 bg-purple-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-yellow-300 font-black text-sm backdrop-blur-sm">
+                                ПРОСМОТР 🔍
+                            </div>
+                        </div>
+                        <div class="p-2.5 bg-purple-900 border-t-2 border-fuchsia-600 text-white text-center font-bold text-xs truncate px-3">
+                            <span class="truncate" onclick="openFullSizeModal(${i})">${artwork.title}</span>
+                        </div>
+                    `;
+                } else {
+                    slotCard.className = "bg-purple-950/40 rounded-2xl shadow-inner border-3 border-dashed border-purple-500/50 flex flex-col items-center justify-center h-40 md:h-44";
+                    slotCard.innerHTML = `
+                        <div class="w-full h-full flex flex-col items-center justify-center opacity-60">
+                            <div class="w-10 h-10 bg-purple-900/50 text-fuchsia-300 rounded-full flex items-center justify-center text-lg font-bold mb-1 border border-purple-500/30">
+                                —
+                            </div>
+                            <span class="text-xs text-fuchsia-300 font-bold">ПУСТОЙ СЛОТ</span>
+                        </div>
+                    `;
+                }
+                artworksGrid.appendChild(slotCard);
+            }
+
+            slotCounter.textContent = `Заполнено: ${filledCount} / 10`;
+        }
+
+        // =======================================================================
+        // 🔍 ПОИСК ХУДОЖНИКОВ 🔍
+        // =======================================================================
+        function handleArtistSearch(query) {
+            const container = document.getElementById('search-suggestions');
+            const q = query.trim().toLowerCase();
+            if (!q) {
+                container.classList.add('hidden');
+                container.innerHTML = '';
+                return;
+            }
+
+            const matches = artists.filter(a => a.name.toLowerCase().includes(q));
+            if (matches.length === 0) {
+                container.innerHTML = `<div class="p-3 text-xs text-purple-300 font-bold text-center">Ничего не найдено ~</div>`;
+                container.classList.remove('hidden');
+                return;
+            }
+
+            container.innerHTML = '';
+            matches.forEach(artist => {
+                const item = document.createElement('div');
+                item.className = "flex items-center space-x-3 p-2.5 hover:bg-purple-800 cursor-pointer border-b border-purple-900/50 transition-colors";
+                item.onclick = () => {
+                    const idx = artists.findIndex(a => a.id === artist.id);
+                    if (idx !== -1) {
+                        currentArtistIndex = idx;
+                        renderCurrentArtist();
+                    }
+                    container.classList.add('hidden');
+                    document.getElementById('artist-search-input').value = '';
+                };
+                item.innerHTML = `
+                    <div class="w-8 h-8 rounded-full overflow-hidden border border-yellow-400 flex-shrink-0">
+                        <img src="${artist.avatar}" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-xs font-bold text-white">${artist.name}</span>
+                `;
+                container.appendChild(item);
+            });
+            container.classList.remove('hidden');
+        }
+
+        function handleArtistSearchMob(query) {
+            const container = document.getElementById('search-suggestions-mob');
+            const q = query.trim().toLowerCase();
+            if (!q) {
+                container.classList.add('hidden');
+                container.innerHTML = '';
+                return;
+            }
+
+            const matches = artists.filter(a => a.name.toLowerCase().includes(q));
+            if (matches.length === 0) {
+                container.innerHTML = `<div class="p-3 text-xs text-purple-300 font-bold text-center">Ничего не найдено ~</div>`;
+                container.classList.remove('hidden');
+                return;
+            }
+
+            container.innerHTML = '';
+            matches.forEach(artist => {
+                const item = document.createElement('div');
+                item.className = "flex items-center space-x-3 p-2.5 hover:bg-purple-800 cursor-pointer border-b border-purple-900/50 transition-colors";
+                item.onclick = () => {
+                    const idx = artists.findIndex(a => a.id === artist.id);
+                    if (idx !== -1) {
+                        currentArtistIndex = idx;
+                        renderCurrentArtist();
+                    }
+                    container.classList.add('hidden');
+                    document.getElementById('artist-search-input-mob').value = '';
+                };
+                item.innerHTML = `
+                    <div class="w-8 h-8 rounded-full overflow-hidden border border-yellow-400 flex-shrink-0">
+                        <img src="${artist.avatar}" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-xs font-bold text-white">${artist.name}</span>
+                `;
+                container.appendChild(item);
+            });
+            container.classList.remove('hidden');
+        }
+
+        // =======================================================================
+        // 💜 ПРИЯТНЫЕ УПОМИНАНИЯ 💜
+        // =======================================================================
+        function toggleMentionsPanel() {
+            if (mentionsDrawer.classList.contains('hidden')) {
+                mentionsDrawer.classList.remove('hidden');
+            } else {
+                mentionsDrawer.classList.add('hidden');
+            }
+        }
+
+        function renderMentions() {
+            const artist = artists[currentArtistIndex];
+            if (!artist || !artist.hasMentionsButton) return;
+
+            const mentions = artist.pleasantMentions || [];
+            const itemsPerPage = 10;
+            const totalPages = Math.max(1, Math.ceil(mentions.length / itemsPerPage));
+
+            if (currentMentionsPage >= totalPages) currentMentionsPage = totalPages - 1;
+            if (currentMentionsPage < 0) currentMentionsPage = 0;
+
+            mentionsPageCounter.textContent = `Страница ${currentMentionsPage + 1} / ${totalPages}`;
+            mentionsGrid.innerHTML = '';
+
+            const startIndex = currentMentionsPage * itemsPerPage;
+            const pageItems = mentions.slice(startIndex, startIndex + itemsPerPage);
+
+            if (pageItems.length === 0) {
+                mentionsGrid.innerHTML = `
+                    <div class="col-span-full py-8 text-center text-purple-300 font-bold">
+                        В этой панели пока нет упомянутых картинок ~
+                    </div>
+                `;
+                return;
+            }
+
+            pageItems.forEach((mention, index) => {
+                const globalIndex = startIndex + index;
+                const card = document.createElement('div');
+                card.className = "bg-purple-950 rounded-2xl shadow-xl overflow-hidden border-4 border-purple-500 flex flex-col justify-between transform hover:-translate-y-1 hover:border-pink-400 hover:shadow-[0_0_15px_rgba(236,72,153,0.5)] transition-all duration-300 relative group cursor-pointer";
+                card.innerHTML = `
+                    <div class="h-32 md:h-36 overflow-hidden bg-black/50 relative" onclick="openMentionFullSizeModal(${globalIndex})">
+                        <img src="${mention.image}" alt="${mention.title}" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" onerror="this.src='https://placehold.co/300x200/4a195c/ffffff?text=Файл+не+найден'">
+                        <div class="absolute inset-0 bg-purple-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-pink-300 font-black text-sm backdrop-blur-sm">
+                            ПРОСМОТР 🔍
+                        </div>
+                    </div>
+                    <div class="p-2.5 bg-purple-900 border-t-2 border-purple-500 text-white text-center font-bold text-xs truncate px-3">
+                        <span class="truncate" onclick="openMentionFullSizeModal(${globalIndex})">${mention.title}</span>
+                    </div>
+                `;
+                mentionsGrid.appendChild(card);
+            });
+        }
+
+        function nextMentionsPage() {
+            const artist = artists[currentArtistIndex];
+            if (!artist) return;
+            const totalPages = Math.max(1, Math.ceil((artist.pleasantMentions || []).length / 10));
+            currentMentionsPage = (currentMentionsPage + 1) % totalPages;
+            renderMentions();
+        }
+
+        function prevMentionsPage() {
+            const artist = artists[currentArtistIndex];
+            if (!artist) return;
+            const totalPages = Math.max(1, Math.ceil((artist.pleasantMentions || []).length / 10));
+            currentMentionsPage = (currentMentionsPage - 1 + totalPages) % totalPages;
+            renderMentions();
+        }
+
+        // =======================================================================
+        // 🖼️ МОДАЛЬНОЕ ОКНО И НАВИГАЦИЯ С РЕАКЦИЯМИ 🖼️
+        // =======================================================================
+        function getReactionKey() {
+            const artist = artists[currentArtistIndex];
+            return `${artist.id}_${currentModalType}_${currentModalIndex}`;
+        }
+
+        function getReactions() {
+            const key = getReactionKey();
+            if (!itemReactions[key]) {
+                itemReactions[key] = { medals: 0, skulls: 0, userVoted: null };
+            }
+            return itemReactions[key];
+        }
+
+        function voteModal(type) {
+            const r = getReactions();
+            if (r.userVoted === type) {
+                if (type === 'medal') r.medals--;
+                if (type === 'skull') r.skulls--;
+                r.userVoted = null;
+            } else {
+                if (r.userVoted === 'medal') r.medals--;
+                if (r.userVoted === 'skull') r.skulls--;
+                if (type === 'medal') r.medals++;
+                if (type === 'skull') r.skulls++;
+                r.userVoted = type;
+            }
+            localStorage.setItem('twx_item_reactions', JSON.stringify(itemReactions));
+            updateModalReactionsUI();
+        }
+
+        function updateModalReactionsUI() {
+            const r = getReactions();
+            const medalBtn = document.getElementById('modal-medal-btn');
+            const skullBtn = document.getElementById('modal-skull-btn');
+            const medalCount = document.getElementById('modal-medal-count');
+            const skullCount = document.getElementById('modal-skull-count');
+
+            medalCount.textContent = r.medals;
+            skullCount.textContent = r.skulls;
+
+            if (r.userVoted === 'medal') {
+                medalBtn.className = "bg-purple-800 border-3 border-yellow-300 px-4 py-2 rounded-2xl flex items-center space-x-2 shadow-lg ring-4 ring-yellow-300 scale-105 transition-all cursor-pointer";
+                skullBtn.className = "bg-purple-900 hover:bg-purple-800 border-3 border-red-500 px-4 py-2 rounded-2xl flex items-center space-x-2 shadow-lg transition-all cursor-pointer";
+            } else if (r.userVoted === 'skull') {
+                skullBtn.className = "bg-purple-800 border-3 border-red-400 px-4 py-2 rounded-2xl flex items-center space-x-2 shadow-lg ring-4 ring-red-500 scale-105 transition-all cursor-pointer";
+                medalBtn.className = "bg-purple-900 hover:bg-purple-800 border-3 border-yellow-400 px-4 py-2 rounded-2xl flex items-center space-x-2 shadow-lg transition-all cursor-pointer";
+            } else {
+                medalBtn.className = "bg-purple-900 hover:bg-purple-800 border-3 border-yellow-400 px-4 py-2 rounded-2xl flex items-center space-x-2 shadow-lg transition-all cursor-pointer";
+                skullBtn.className = "bg-purple-900 hover:bg-purple-800 border-3 border-red-500 px-4 py-2 rounded-2xl flex items-center space-x-2 shadow-lg transition-all cursor-pointer";
+            }
+        }
+
+        function updateModalNavigationUI() {
+            const artist = artists[currentArtistIndex];
+            let total = 0;
+            if (currentModalType === 'artwork') {
+                total = getValidArtworks(artist).length;
+            } else {
+                total = (artist.pleasantMentions || []).length;
+            }
+
+            const prevBtn = document.getElementById('modal-prev-arrow');
+            const nextBtn = document.getElementById('modal-next-arrow');
+
+            if (currentModalIndex <= 0) {
+                prevBtn.className = "w-12 h-12 bg-purple-950 border-3 border-yellow-400/40 rounded-full flex items-center justify-center text-2xl font-black text-yellow-400/40 opacity-40 cursor-not-allowed shadow";
+            } else {
+                prevBtn.className = "w-12 h-12 bg-purple-800 hover:bg-pink-500 border-3 border-yellow-400 rounded-full flex items-center justify-center text-2xl font-black text-yellow-400 hover:text-white shadow transition-all cursor-pointer";
+            }
+
+            if (currentModalIndex >= total - 1) {
+                nextBtn.className = "w-12 h-12 bg-purple-950 border-3 border-yellow-400/40 rounded-full flex items-center justify-center text-2xl font-black text-yellow-400/40 opacity-40 cursor-not-allowed shadow";
+            } else {
+                nextBtn.className = "w-12 h-12 bg-purple-800 hover:bg-pink-500 border-3 border-yellow-400 rounded-full flex items-center justify-center text-2xl font-black text-yellow-400 hover:text-white shadow transition-all cursor-pointer";
+            }
+        }
+
+        function modalPrev() {
+            if (currentModalIndex > 0) {
+                currentModalIndex--;
+                refreshModalContent();
+            }
+        }
+
+        function modalNext() {
+            const artist = artists[currentArtistIndex];
+            let total = currentModalType === 'artwork' ? getValidArtworks(artist).length : (artist.pleasantMentions || []).length;
+            if (currentModalIndex < total - 1) {
+                currentModalIndex++;
+                refreshModalContent();
+            }
+        }
+
+        function refreshModalContent() {
+            const artist = artists[currentArtistIndex];
+            let item;
+            if (currentModalType === 'artwork') {
+                const validArtworks = getValidArtworks(artist);
+                item = validArtworks[currentModalIndex];
+            } else {
+                item = artist.pleasantMentions[currentModalIndex];
+            }
+            if (!item) return;
+
+            document.getElementById('fullsize-title').textContent = item.title;
+            document.getElementById('fullsize-img').src = item.image;
+            document.getElementById('fullsize-avatar').src = artist.avatar;
+            document.getElementById('fullsize-artist-name').textContent = artist.name;
+
+            updateModalNavigationUI();
+            updateModalReactionsUI();
+        }
+
+        function openFullSizeModal(slotIndex) {
+            const artist = artists[currentArtistIndex];
+            const validArtworks = getValidArtworks(artist);
+            const clickedArt = artist.artworks[slotIndex];
+            if (!clickedArt) return;
+
+            const validIdx = validArtworks.findIndex(a => a.image === clickedArt.image && a.title === clickedArt.title);
+            currentModalType = 'artwork';
+            currentModalIndex = validIdx !== -1 ? validIdx : 0;
+
+            refreshModalContent();
+            document.getElementById('fullsize-modal').classList.remove('hidden');
+        }
+
+        function openMentionFullSizeModal(mentionIndex) {
+            currentModalType = 'mention';
+            currentModalIndex = mentionIndex;
+            refreshModalContent();
+            document.getElementById('fullsize-modal').classList.remove('hidden');
+        }
+
+        function closeFullSizeModal() { document.getElementById('fullsize-modal').classList.add('hidden'); }
+        function closeCardPreviewModal() { document.getElementById('card-preview-modal').classList.add('hidden'); }
+
+        function openCardPreviewModal() {
+            const artist = artists[currentArtistIndex];
+            document.getElementById('card-preview-avatar').src = artist.avatar;
+            document.getElementById('card-preview-name').textContent = artist.name;
+
+            const previewGrid = document.getElementById('card-preview-grid');
+            previewGrid.innerHTML = '';
+
+            for (let i = 0; i < 10; i++) {
+                const art = artist.artworks[i];
+                const thumb = document.createElement('div');
+                thumb.className = "h-16 md:h-20 bg-purple-950/80 rounded-xl overflow-hidden border-2 border-fuchsia-500/60 flex items-center justify-center shadow-inner";
+                if (art) {
+                    thumb.innerHTML = `<img src="${art.image}" class="w-full h-full object-cover">`;
+                } else {
+                    thumb.innerHTML = `<span class="text-xs text-purple-400/50 font-bold">${i+1}</span>`;
+                }
+                previewGrid.appendChild(thumb);
+            }
+
+            document.getElementById('card-preview-modal').classList.remove('hidden');
+        }
+
+        function nextProfile() {
+            currentArtistIndex = (currentArtistIndex + 1) % artists.length;
+            renderCurrentArtist();
+        }
+
+        function prevProfile() {
+            currentArtistIndex = (currentArtistIndex - 1 + artists.length) % artists.length;
+            renderCurrentArtist();
+        }
+
+        // =======================================================================
+        // 🎄 ПРАЗДНИКИ И ФОНЫ 🎄
+        // =======================================================================
+        function checkHolidayAndStyle() {
+            const now = new Date();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+
+            let bgImage = 'user/system/yu.png';
+            let titleDecoration = '';
+
+            if ((month === 12 && day >= 21) || (month === 1 && day === 1)) {
+                bgImage = 'user/system/yu_newyear.png';
+                titleDecoration = '❄️ ';
+            } else if (month === 10) {
+                bgImage = 'user/system/yu_halloween.png';
+                titleDecoration = '🦇 ';
+            } else if (month === 5 && day === 21) {
+                bgImage = 'user/system/yu_creator_bd.png';
+                titleDecoration = '👑 ';
+            } else if (month === 7 && day === 13) {
+                bgImage = 'user/system/yu_hunter_bd.png';
+                titleDecoration = '⭐ ';
+            } else if (month === 4 && day === 1) {
+                bgImage = 'user/system/yu_april1.png';
+                titleDecoration = '🃏 ';
+            } else if (month === 4 && day === 12) {
+                bgImage = 'user/system/yu_space.png';
+                titleDecoration = '🚀 ';
+            } else if (month === 5 && day === 9) {
+                bgImage = 'user/system/yu_may9.png';
+                titleDecoration = '🎖️ ';
+            } else if (month === 8 && day === 20) {
+                bgImage = 'user/system/yu_sloth.png';
+                titleDecoration = '🦥 ';
+            } else if (month === 9 && day === 1) {
+                bgImage = 'user/system/yu_sept1.png';
+                titleDecoration = '🎒 ';
+            } else if (month === 10 && day === 5) {
+                bgImage = 'user/system/yu_teacher.png';
+                titleDecoration = '🍎 ';
+            } else if (month === 3 && day === 8) {
+                bgImage = 'user/system/yu_march8.png';
+                titleDecoration = '🌷 ';
+            }
+
+            document.body.style.backgroundImage = `url('${bgImage}')`;
+            document.body.style.backgroundSize = 'cover';
+            document.body.style.backgroundRepeat = 'no-repeat';
+            document.body.style.backgroundAttachment = 'fixed';
+
+            if (titleDecoration) {
+                const titleSpan = document.getElementById('site-title-text');
+                if (titleSpan) {
+                    titleSpan.textContent = titleDecoration + "TWX АРХИВ " + titleDecoration;
+                }
+            }
+        }
+
+        // =======================================================================
+        // 🎵 АУДИО-ПЛЕЕР 🎵
+        // =======================================================================
+        const bgMusic = document.getElementById('bg-music');
+        const musicIcon = document.getElementById('music-icon');
+        const musicStatus = document.getElementById('music-status');
+        const volumeSlider = document.getElementById('volume-slider');
+
+        function updateMusicUI(playing) {
+            if (playing) {
+                musicIcon.className = "fa-solid fa-pause";
+                musicStatus.textContent = "ВЫКЛ МУЗЫКУ";
+            } else {
+                musicIcon.className = "fa-solid fa-play";
+                musicStatus.textContent = "ВКЛ МУЗЫКУ";
+            }
+        }
+
+        function toggleMusic() {
+            if (!bgMusic) return;
+            if (bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    updateMusicUI(true);
+                }).catch(err => {
+                    console.log("Play failed:", err);
+                });
+            } else {
+                bgMusic.pause();
+                updateMusicUI(false);
+            }
+        }
+
+        function changeVolume(val) {
+            if (bgMusic) {
+                bgMusic.volume = parseFloat(val);
+            }
+        }
+
+        function tryPlayAudio() {
+            if (!bgMusic) return;
+            if (volumeSlider) {
+                bgMusic.volume = parseFloat(volumeSlider.value);
+            }
+            
+            const promise = bgMusic.play();
+            if (promise !== undefined) {
+                promise.then(() => {
+                    updateMusicUI(true);
+                    removeInteractionListeners();
+                }).catch(() => {
+                    updateMusicUI(false);
+                    addInteractionListeners();
+                });
+            }
+        }
+
+        function onUserInteraction() {
+            bgMusic.play().then(() => {
+                updateMusicUI(true);
+                removeInteractionListeners();
+            }).catch(e => console.log(e));
+        }
+
+        function addInteractionListeners() {
+            document.addEventListener('click', onUserInteraction);
+            document.addEventListener('keydown', onUserInteraction);
+            document.addEventListener('touchstart', onUserInteraction);
+        }
+
+        function removeInteractionListeners() {
+            document.removeEventListener('click', onUserInteraction);
+            document.removeEventListener('keydown', onUserInteraction);
+            document.removeEventListener('touchstart', onUserInteraction);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            tryPlayAudio();
+            checkHolidayAndStyle();
+            renderCurrentArtist();
+        });
+    </script>
+</body>
+</html>

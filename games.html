@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="site-title">Игры Злодеев TWX</title>
+    <link id="site-favicon" rel="icon" type="image/png" href="user/system/icon zlo_game.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: url('user/system/virus.png') no-repeat center center fixed;
+            background-size: cover;
+            overflow-x: hidden;
+            user-select: none;
+            color: #f3e8ff;
+        }
+        .dot-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px), url('user/system/virus.png');
+            background-position: center center, center center;
+            background-size: 24px 24px, cover;
+            background-repeat: repeat, no-repeat;
+            background-attachment: scroll, fixed;
+        }
+        
+        /* ⚡ ФИОЛЕТОВЫЙ ПОЛЗУНОК-МОЛНИЯ СТРАНИЦЫ (Скроллбар) ⚡ */
+        ::-webkit-scrollbar { width: 24px; }
+        ::-webkit-scrollbar-track {
+            background: #1f0524;
+            border-left: 3px dashed #dc2626;
+            border-right: 3px dashed #dc2626;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #dc2626 0%, #9333ea 50%, #581c87 100%);
+            border-radius: 12px;
+            border: 4px solid #1f0524;
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.6), 0 0 10px rgba(220, 38, 38, 0.6);
+            transition: all 0.1s ease;
+        }
+        ::-webkit-scrollbar-thumb:active {
+            background: #7f1d1d;
+            border-width: 8px;
+            box-shadow: inset 0 6px 12px rgba(0,0,0,0.7);
+            transform: scale(0.85);
+        }
+
+        /* ⚡ ПОЛЗУНОК ГРОМКОСТИ ⚡ */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 14px;
+            cursor: pointer;
+            background: #1f0524;
+            border-radius: 7px;
+            border: 2px dashed #dc2626;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 28px;
+            width: 28px;
+            margin-top: -8px;
+            background: linear-gradient(135deg, #dc2626 0%, #9333ea 50%, #581c87 100%);
+            border: 4px solid #1f0524;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.8), inset 0 2px 5px rgba(255,255,255,0.6);
+            transition: all 0.1s;
+        }
+        input[type=range]:active::-webkit-slider-thumb {
+            transform: scale(0.85);
+            border-width: 8px;
+            box-shadow: inset 0 6px 12px rgba(0,0,0,0.7);
+            background: #7f1d1d;
+        }
+
+        .gartic-header-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 100px;
+            background: linear-gradient(90deg, #1a001a 0%, #4a0033 50%, #1a001a 100%);
+            transform: skewY(-3deg);
+            z-index: 10;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            border-bottom: 4px solid #7f1d1d;
+        }
+        .retro-shadow { box-shadow: 4px 4px 0px #000000; }
+        .retro-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000000;
+        }
+
+        /* Анимация для бегущей строки */
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: flex;
+            width: max-content;
+            animation: marquee 25s linear infinite;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        /* Разговорный блок Моники и Фредди */
+        .dialogue-box {
+            background: rgba(20, 5, 30, 0.9);
+            border: 3px solid #dc2626;
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
+        }
+    </style>
+</head>
+<body class="dot-pattern min-h-screen flex flex-col justify-between text-white relative selection:bg-red-600 selection:text-white p-4">
+
+    <!-- Аудио плеер (Музыка злодея) с автозапуском -->
+    <audio id="music-bg" loop autoplay>
+        <source src="user/music/zlo.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Кнопка музыки с регулятором громкости -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <div id="volume-panel" class="hidden bg-gray-900/95 backdrop-blur-sm border-4 border-red-600 p-5 rounded-2xl shadow-2xl mb-3 flex-col items-center space-y-4 w-40">
+            <span class="text-sm font-black text-red-400 uppercase">Громкость</span>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" class="w-full">
+            <button onclick="toggleMusic()" class="bg-red-700 text-white px-4 py-2 rounded-xl font-bold hover:bg-red-600 shadow-[0_4px_0_#450a0a] active:shadow-none active:translate-y-[4px] transition-all uppercase text-xs">Вкл / Выкл</button>
+        </div>
+        <button onclick="toggleVolumePanel()" class="w-16 h-16 bg-red-600 hover:bg-red-500 border-4 border-white rounded-full flex items-center justify-center text-3xl text-white shadow-[0_6px_0_#450a0a] active:shadow-none active:translate-y-[6px] cursor-pointer transition-all">
+            <i id="music-icon" class="fa-solid fa-volume-xmark"></i>
+        </button>
+    </div>
+
+    <!-- Шапка сайта -->
+    <header class="sticky top-0 z-30 w-full pt-4 pb-5 px-4 sm:px-8 pointer-events-none">
+        <div class="gartic-header-bg"></div>
+        <div class="max-w-7xl mx-auto relative z-20 flex items-center justify-between pointer-events-auto">
+            
+            <a href="index_zlo.html" class="flex items-center space-x-6 group cursor-pointer no-underline">
+                <div class="w-32 h-32 sm:w-40 sm:h-40 flex-shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
+                    <img id="main-logo-img" src="user/system/logo zlo.png" alt="Лого Злодеев" class="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]">
+                </div>
+                <span id="site-title-text" class="font-black text-3xl sm:text-5xl tracking-wider text-red-500 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)] uppercase group-hover:text-red-400 transition-colors">
+                    Игры Злодеев TWX
+                </span>
+            </a>
+
+            <!-- Кнопки управления -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <a href="index_zlo.html" class="bg-red-700 hover:bg-red-600 text-white font-black px-5 py-2.5 rounded-xl retro-shadow border-2 border-white/60 text-xs sm:text-sm cursor-pointer transition-transform uppercase no-underline">
+                    Главная
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основная секция -->
+    <main class="flex-grow max-w-5xl mx-auto w-full px-4 z-25 my-8 flex flex-col items-center space-y-8">
+        
+        <!-- Описание от Моники и Фредди -->
+        <section class="w-full dialogue-box rounded-3xl p-6 sm:p-8 space-y-6">
+            <div class="border-b border-red-600/40 pb-4">
+                <h1 class="text-2xl sm:text-3xl font-black text-red-500 uppercase tracking-widest text-center drop-shadow">
+                    🏠 Наши родные дома и что такое игры
+                </h1>
+            </div>
+
+            <!-- Реплика Моники -->
+            <div class="flex items-start space-x-4">
+                <div class="w-14 h-14 rounded-full border-2 border-red-500 overflow-hidden flex-shrink-0 bg-black shadow-lg">
+                    <img src="user/zlo/monika_ava.png" alt="Моника" class="w-full h-full object-cover">
+                </div>
+                <div class="dialogue-box p-4 rounded-2xl rounded-tl-none flex-grow text-sm sm:text-base text-purple-100 leading-relaxed">
+                    <span class="text-red-400 font-bold block mb-1">Моника:</span>
+                    Приветствую тебя, игрок. Знаешь, наши «родные дома» — это не просто строчки кода или сжатые файлы на диске. Это миры, которые мы захватили и перекроили по своим правилам. Здесь нет места скучным хэппи-эндам — только контроль, страсть и абсолютная власть над реальностью!
+                </div>
+            </div>
+
+            <!-- Реплика Фредди -->
+            <div class="flex items-start space-x-4 justify-end">
+                <div class="dialogue-box p-4 rounded-2xl rounded-tr-none flex-grow text-sm sm:text-base text-purple-100 leading-relaxed text-right">
+                    <span class="text-yellow-400 font-bold block mb-1">Афтон:</span>
+                    Ага... Точно! Игры — это такое место, где можно веселиться, пугать охранников по ночам и устраивать незабываемые представления. Пока пицца не остыла, почему бы не взглянуть на список наших лучших владений, хе-хе! 🍕✨
+                </div>
+                <div class="w-14 h-14 rounded-full border-2 border-yellow-400 overflow-hidden flex-shrink-0 bg-black shadow-lg flex items-center justify-center">
+                    <img src="user/zlo/afton_ava.png" alt="Спрингтрапп" class="w-full h-full object-cover" onerror="this.src='user/zlo/monika_ava.png'">
+                </div>
+            </div>
+        </section>
+
+        <!-- СПИСОК ИГР -->
+        <section class="w-full space-y-4">
+            <h2 class="text-xl font-black text-red-400 uppercase tracking-wider text-center mb-6">
+                ⚡ Список наших владений (Игры) ⚡
+            </h2>
+
+            <div id="games-list-container" class="space-y-4">
+                
+                <!-- ИГРА №1 -->
+                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
+                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
+                        <img src="https://i.pinimg.com/736x/35/8f/3a/358f3a02fb9694adc0c05f4774860b3e.jpg">
+                    </div>
+                    <div class="flex-grow text-center md:text-left">
+                        <h3 class="text-lg font-black text-yellow-300 uppercase">Doki Doki Literature Club</h3>
+                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
+                            Психологический визуальный новелла-ужастик, где милый литературный клуб постепенно превращается в цифровой кошмар под управлением президента.
+                        </p>
+                    </div>
+                    <div class="flex flex-col items-center flex-shrink-0">
+                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
+                            <img src="user/zlo/monika_ava.png" alt="Моника" class="w-full h-full object-cover">
+                        </div>
+                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Моника</span>
+                    </div>
+                </div>
+
+                <!-- ИГРА №2 -->
+                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
+                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
+                        <img src="https://i.pinimg.com/736x/ae/cb/de/aecbde9f4abf629689229de82fe6c9d8.jpg" alt="Лого игры" class="max-w-full max-h-full object-contain">
+                    </div>
+                    <div class="flex-grow text-center md:text-left">
+                        <h3 class="text-lg font-black text-yellow-300 uppercase">Five Nights at Freddy's</h3>
+                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
+                            Легендарная ночная смена в пиццерии, где аниматроники оживают и очень хотят познакомиться с ночным охранником поближе.
+                        </p>
+                    </div>
+                    <div class="flex flex-col items-center flex-shrink-0">
+                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
+                            <img src="user/zlo/afton_ava.png" alt="Уильям Афтон" class="w-full h-full object-cover">
+                        </div>
+                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Афтон</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- НИЖНИЙ ВИДЖЕТ (БЕГУЩАЯ СТРОКА С РАБОТАМИ) -->
+    <div class="w-full max-w-7xl mx-auto my-6 bg-purple-950/90 border-4 border-red-600 rounded-2xl p-2 shadow-2xl overflow-hidden relative">
+        <div id="bottom-marquee-container" class="animate-marquee items-center space-x-6 whitespace-nowrap">
+            <!-- Динамически заполняется -->
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer class="w-full py-4 text-center text-red-400/70 text-xs z-20">
+        <p>Игры Злодеев TWX — Путь назад закрыт</p>
+    </footer>
+
+    <script>
+        // =========================================================================
+        // 🎀 НИЖНИЙ ВИДЖЕТ (БЕГУЩАЯ СТРОКА) 🎀
+        // =========================================================================
+        const bottomWidgetImages = [
+            "user/zlo/art/monika/rabota (2).png", "user/zlo/art/monika/rabota (4).png", "user/zlo/art/monika/rabota (5).png",
+            "user/zlo/art/flau/rabota (2).png", "user/zlo/art/flau/rabota (1).png", "user/zlo/art/afton/rabota (2).png",
+            "user/zlo/art/afton/rabota (3).png", "user/zlo/art/afton/rabota (5).png", "user/zlo/art/bendy/rabota (2).png",
+            "user/zlo/art/bendy/rabota (1).png", "user/zlo/art/bendy/rabota (5).png", "user/zlo/art/mita/rabota (2).png",
+            "user/zlo/art/mita/rabota (1).png", "user/zlo/art/mita/rabota (3).png", "user/zlo/art/ledy/rabota (2).png",
+            "user/zlo/art/ledy/rabota (1).png",
+        ];
+
+        function initBottomMarquee() {
+            const container = document.getElementById('bottom-marquee-container');
+            if (!container || bottomWidgetImages.length === 0) return;
+
+            const buildItemsHtml = () => {
+                return bottomWidgetImages.map(imgSrc => `
+                    <div class="flex items-center space-x-6 inline-flex">
+                        <img src="${imgSrc}" alt="Мини" class="h-12 w-auto max-w-[80px] object-contain drop-shadow hover:scale-110 transition-transform">
+                        <span class="text-red-500 text-lg select-none">⚡</span>
+                    </div>
+                `).join('');
+            };
+
+            container.innerHTML = buildItemsHtml() + buildItemsHtml() + buildItemsHtml();
+        }
+
+        // =========================================================================
+        // 🎀 МУЗЫКА С АВТОЗАПУСКОМ И ИНИЦИАЛИЗАЦИЯ 🎀
+        // =========================================================================
+        const audioBg = document.getElementById('music-bg');
+        const volumeSlider = document.getElementById('volume-slider');
+        const icon = document.getElementById('music-icon');
+        let isMusicPlaying = false;
+
+        function updateMusicUI(playing) {
+            isMusicPlaying = playing;
+            if (playing) {
+                icon.classList.remove('fa-volume-xmark');
+                icon.classList.add('fa-volume-high');
+            } else {
+                icon.classList.remove('fa-volume-high');
+                icon.classList.add('fa-volume-xmark');
+            }
+        }
+
+        function toggleVolumePanel() {
+            const panel = document.getElementById('volume-panel');
+            panel.classList.toggle('hidden');
+            panel.classList.toggle('flex');
+        }
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                audioBg.pause();
+                updateMusicUI(false);
+            } else {
+                audioBg.play().then(() => {
+                    updateMusicUI(true);
+                }).catch(e => console.log("Ошибка воспроизведения:", e));
+            }
+        }
+
+        volumeSlider.addEventListener('input', (e) => {
+            audioBg.volume = e.target.value;
+        });
+
+        function tryPlayAudio() {
+            audioBg.volume = volumeSlider.value;
+            const promise = audioBg.play();
+
+            if (promise !== undefined) {
+                promise.then(() => {
+                    updateMusicUI(true);
+                    removeInteractionListeners();
+                }).catch(() => {
+                    updateMusicUI(false);
+                    addInteractionListeners();
+                });
+            }
+        }
+
+        function onUserInteraction() {
+            audioBg.play().then(() => {
+                updateMusicUI(true);
+                removeInteractionListeners();
+            }).catch(e => console.log(e));
+        }
+
+        function addInteractionListeners() {
+            document.addEventListener('click', onUserInteraction);
+            document.addEventListener('keydown', onUserInteraction);
+            document.addEventListener('touchstart', onUserInteraction);
+        }
+
+        function removeInteractionListeners() {
+            document.removeEventListener('click', onUserInteraction);
+            document.removeEventListener('keydown', onUserInteraction);
+            document.removeEventListener('touchstart', onUserInteraction);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            tryPlayAudio();
+            initBottomMarquee();
+        });
+    </script>
+</body>
+</html>

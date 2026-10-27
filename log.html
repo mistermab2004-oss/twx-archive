@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="site-title">TWX Костер Лог</title>
+    <link id="site-favicon" rel="icon" type="image/png" href="user/system/icon bon.png">
+    
+    <!-- Tailwind CSS и FontAwesome для иконок -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+            font-family: sans-serif;
+            background-color: black;
+        }
+
+        /* Главный контейнер фонов */
+        #page-bg {
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain; /* Чтобы весь красивый арт влазил целиком без обрезки */
+            position: relative;
+        }
+
+        /* Обертка с фиксированным соотношением сторон 16:9 для точного попадания элементов на арт */
+        .art-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw;
+            height: 56.25vw; /* 16:9 ratio */
+            max-height: 100vh;
+            max-width: 177.78vh; /* 16:9 ratio */
+        }
+
+        /* Стилизация текста внутри рисованного облачка */
+        .thought-text-container {
+            position: absolute;
+            top: 24.5%;   /* Точно по центру облачка */
+            left: 33.5%;  /* Точно по центру облачка */
+            width: 17%;   /* Ширина внутри облачка */
+            height: 15%;  /* Высота внутри облачка */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Стилизация костра на земле */
+        .bonfire-container {
+            position: absolute;
+            top: 61%;     /* Точно на светлую полянку */
+            left: 51.5%;  /* Точно между бревнами */
+            transform: translate(-50%, -50%);
+            width: 15%;   /* Размер костра */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Кастомный ползунок для виджета логов */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 4px;
+        }
+
+        /* Секретная пасхальная кнопка в правом верхнем углу */
+        .easter-egg-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 16px;
+            height: 16px;
+            z-index: 100;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .easter-egg-btn:hover {
+            opacity: 1;
+        }
+        .easter-egg-btn img {
+            width: 8px;
+            height: 8px;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        /* Настройки для красивой печати / сохранения страницы браузером */
+        @media print {
+            body {
+                background-color: black !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- СЕКРЕТНАЯ ПАСХАЛКА В ПРАВОМ ВЕРХНЕМ УГЛУ -->
+    <div class="easter-egg-btn" onclick="toggleTrolololo()" title="???">
+        <img src="user/system/kk.png" alt="kk" onerror="this.src='user/system/trololo.png'">
+    </div>
+
+    <!-- Фоновая музыка -->
+    <audio id="bg-music" loop autoplay>
+        <source id="music-source" src="user/music/wotivse.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Фоновый арт -->
+    <div id="page-bg">
+        
+        <!-- Обертка координат поверх арта -->
+        <div class="art-wrapper">
+
+            <!-- ТЕКСТ ВНУТРИ ГОТОВОГО ОБЛАЧКА МЫСЛЕЙ -->
+            <div class="thought-text-container">
+                <p id="editable-quote" contenteditable="true" title="Нажми, чтобы изменить текст!" class="text-black font-black text-[1vw] sm:text-[1.2vw] leading-tight outline-none cursor-text select-text uppercase">
+                    НАХУЯ Я СОЗДАЛ ЭТОТ САЙТ
+                </p>
+            </div>
+
+            <!-- КОСТЕР НА ПОЛЯНКЕ (БЕЗ ФОНА) -->
+            <div class="bonfire-container">
+                <!-- Панель громкости над костром -->
+                <div id="sound-controls" class="hidden absolute -top-12 bg-black/85 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20 flex items-center space-x-2 shadow-2xl z-20 no-print">
+                    <button onclick="toggleMute()" class="text-white hover:text-yellow-400 text-sm transition-colors">
+                        <i id="mute-icon" class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" class="w-16 accent-yellow-400 cursor-pointer">
+                </div>
+
+                <!-- Картинка костра (GIF / PNG) -->
+                <img id="bonfire-img" src="user/system/bon.gif" alt="Костер" class="w-full h-auto cursor-pointer object-contain transition-transform hover:scale-105 active:scale-95" onclick="onBonfireClick()">
+            </div>
+
+        </div>
+
+        <!-- КНОПКИ В ПРАВОМ НИЖНЕМ УГЛУ (Без слов, только иконки) -->
+        <div class="absolute bottom-6 right-6 flex items-center space-x-3 z-30 no-print">
+            <!-- 1. Камера (Системный скриншот / Сохранение страницы) -->
+            <button onclick="takeScreenshot()" title="Сохранить страницу" class="w-12 h-12 bg-black/60 hover:bg-black/90 border-2 border-white/80 rounded-2xl flex items-center justify-center text-white text-xl shadow-2xl transition-all hover:scale-110 active:scale-95 cursor-pointer">
+                <i class="fa-solid fa-camera"></i>
+            </button>
+
+            <!-- 2. Главная (index.html) -->
+            <a id="home-btn" href="index.html" title="Главная" onclick="handleHomeClick(event)" class="w-12 h-12 bg-black/60 hover:bg-black/90 border-2 border-white/80 rounded-2xl flex items-center justify-center text-white text-xl shadow-2xl transition-all hover:scale-110 active:scale-95">
+                <i class="fa-solid fa-house"></i>
+            </a>
+
+            <!-- 3. Лог (Виджет обновлений) -->
+            <button onclick="toggleLogWidget()" title="История обновлений" class="w-12 h-12 bg-black/60 hover:bg-black/90 border-2 border-white/80 rounded-2xl flex items-center justify-center text-white text-xl shadow-2xl transition-all hover:scale-110 active:scale-95 cursor-pointer">
+                <i class="fa-solid fa-scroll"></i>
+            </button>
+        </div>
+
+        <!-- ВИДЖЕТ ЛОГОВ (Открывается справа с собственным ползунком) -->
+        <div id="log-widget" class="hidden absolute top-6 right-6 w-80 sm:w-96 max-h-[85vh] bg-black/90 backdrop-blur-md border-2 border-white/30 rounded-2xl p-5 shadow-2xl flex flex-col z-40 no-print">
+            <div class="flex items-center justify-between border-b border-white/20 pb-3 mb-3">
+                <h3 id="log-widget-title" class="font-bold text-lg text-yellow-400 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left"></i> История обновлений
+                </h3>
+                <button onclick="toggleLogWidget()" class="text-white/60 hover:text-white text-lg cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- ВНУТРЕННИЙ БЛОК ДЛЯ ИСТОРИИ ОБНОВЛЕНИЙ -->
+            <div id="log-updates-container" class="overflow-y-auto custom-scrollbar flex-grow pr-2 space-y-4 text-sm leading-relaxed">
+                
+                <!-- ======================================================================= -->
+                <!-- 🛠️👇 [БЛОК ДЛЯ ЗАПИСИ ИСТОРИИ ОБНОВЛЕНИЙ ПО ДНЯМ] 👇🛠️ -->
+                <!-- ======================================================================= -->
+                
+                <div class="border-l-2 border-yellow-400 pl-3">
+                    <span class="text-xs text-yellow-400/80 font-mono">22.09.2026</span>
+                    <h4 class="font-bold text-white">Первая версия сайта</h4>
+                    <p class="text-gray-300 text-xs">Создана самая первая версия сайта, которая содержала в себе ряд проблем.</p>
+                </div>
+
+                <div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">23.09.2026</span>
+                    <h4 class="font-bold text-white">Первый стрим и фильтры</h4>
+                    <p class="text-gray-300 text-xs">Нарезан первый стрим, добавлены страницы «Избранные работы», «Все работы» и система фильтров (классика, дополнение, плагиат, ледокол, недостающая часть, история). Появились кнопки карточек и сэндвич-меню. Зарегистрированы аккаунты: Maffia MAB, XaHTep, StivvvvENN, Mr.Жуть, Пипурка, Revent, Рептилия, GORDON, Gnom3000, Tifokkusu, Krogar, Дибил и Клевое Имя.</p>
+                </div>
+
+                <div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">24.09.2026</span>
+                    <h4 class="font-bold text-white">Новые страницы и обнаружение проблем</h4>
+                    <p class="text-gray-300 text-xs">Добавлены Лиля, Crash, Граф Михаил. Обнаружены серьезные технические проблемы. Добавлены новые страницы: «Стримы», «О нас» и «Гартик фон».</p>
+                </div>
+
+                <div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">06.10.2026</span>
+                    <h4 class="font-bold text-white">Обновление стиля и арты</h4>
+                    <p class="text-gray-300 text-xs">Нарезан последний по хронологии 19-й стрим, добавлены арты. Проблемы успешно решены, полностью обновлен стиль сайта.</p>
+                </div>
+
+                <div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">07.10.2026</span>
+                    <h4 class="font-bold text-white">Доработка дизайна</h4>
+                    <p class="text-gray-300 text-xs">Нарезаны 2-й и 3-й стримы. Добавлены пользователи Devyatka, Кот Pro, Санек, Valery. Стиль сайта полностью доработан.</p>
+                </div>
+
+                <div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">08.10.2026</span>
+                    <h4 class="font-bold text-white">Стильное оформление и новые гости</h4>
+                    <p class="text-gray-300 text-xs">Сайт приобрел полностью стильный вид. Добавлены Ярка, Ого, Paxaxoshka, Кто то, Лже хантер, Сталкер и Неон Гном. Нарезаны 3-й и 4-й стримы.</p>
+                </div>
+
+                <div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">09.10.2026</span>
+                    <h4 class="font-bold text-white">Алкостримы</h4>
+                    <p class="text-gray-300 text-xs">Нарезаны алкострим и стрим по ДР. Запущен «Экспрес-режим», добавлены Женя, Маккет и Холодок.</p>
+                </div>
+
+                <div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">10.10.2026</span>
+                    <h4 class="font-bold text-white">5 стрим</h4>
+                    <p class="text-gray-300 text-xs">Нарезан 5-й стрим, добавлены Булочка, ДедлиПаркур, Таксимачу, Жопа, Инопрещленец, Вродевятка а также начата нарезка 6-го стрима.</p>
+                </div>
+
+                <div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">18.10.2026</span>
+                    <h4 class="font-bold text-white">Новая страница «Плейлист»</h4>
+                    <p class="text-gray-300 text-xs">Дорезан 6-й стрим, добавлены Стефан и Настюха. Создана новая страница — «Плейлист».</p>
+                </div>
+
+                <div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">19.10.2026</span>
+                    <h4 class="font-bold text-white">Приятные упоминания</h4>
+                    <p class="text-gray-300 text-xs">Добавлена кнопка «Приятные упоминание». Нарезаны 7-й и 9-й стримы. Добавлены ЧертовСукуб, УмнаяПечень, Чизкейк и Шнюк.</p>
+                </div>
+
+                <div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">20.10.2026</span>
+                    <h4 class="font-bold text-white">Праздничные стили и пасхалки</h4>
+                    <p class="text-gray-300 text-xs">Добавлены праздничные стили меню, кнопки, страница логов, вся логика праздников и страница пасхалок.</p>
+                </div>
+
+                <div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">23.10.2026</span>
+                    <h4 class="font-bold text-white">8 стрим</h4>
+                    <p class="text-gray-300 text-xs">Был вырезан восьмой стрим, добавлены К, Новое клевое имя, Жопный маб и Aboba.</p>
+                </div>
+
+		<div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">24.10.2026</span>
+                    <h4 class="font-bold text-white">Толпа и стримы</h4>
+                    <p class="text-gray-300 text-xs">Были нарезаны двенадцатый и десятый стримы, добавлен режим «Толпа», а также добавлены пользователи Я ПРОСТО КОСМОС, МИСТЕР ЗУМ, АНОНИМУС, НЕ ХАНТЕР и РЫЦАРЬ.</p>
+                </div>
+
+		<div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">25.10.2026</span>
+                    <h4 class="font-bold text-white">Анимации и 11 стрим</h4>
+                    <p class="text-gray-300 text-xs">Добавлена новая категория «Анимация» и вся необходимая логика для нее, а также нарезан 11-й стрим. Список участников пополнили: Вару, Сакура, Ромемка, Голуб и RiMSTER.</p>
+                </div>
+
+		<div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">26.10.2026</span>
+                    <h4 class="font-bold text-white">Логика и Еще Стримы</h4>
+                    <p class="text-gray-300 text-xs">Вырезан 14-й стрим и 15, добавлены Катюша 2.0, Удаф, НЕОФУМИ, Дина Зина, Curiosity72958, Kray283, Жырный, Кот, Fredik и Raio а также обновлена логика музыки и название.</p>
+                </div>
+
+                <div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">27.10.2026</span>
+                    <h4 class="font-bold text-white">Счёт Шестнадцатого стрима</h4>
+                    <p class="text-gray-300 text-xs">Вырезан 16-й стрим, добавлены Кинг, Крази, Кразиум, Бенио, Гусь, Капуста, Крипер, Руслан, Смертушка, Отец, Селедь, Пидорас, Эль Примо, Чебупель, Кузя и Камазик, а также добавлен режим счёта.</p>
+                </div>
+
+		<div class="border-l-2 border-white/30 pl-3">
+                    <span class="text-xs text-gray-400 font-mono">28.10.2026</span>
+                    <h4 class="font-bold text-white">Последний Стрим и Последняя Пасхалка</h4>
+                    <p class="text-gray-300 text-xs">Вырезан последний стрим, добавлены Холоп, Жид, Шамиль), Огурчик, Мистер Подгузник, Миндсуна Крис и Самурай, а также обновлена вся логика, последние подсказки и название.</p>
+                </div>
+
+                <!-- ======================================================================= -->
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ТРОЛЛИНГ ВЫХОДА -->
+    <div id="troll-exit-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-gray-900 border-4 border-yellow-400 rounded-3xl max-w-md w-full p-6 shadow-2xl text-center relative overflow-hidden flex flex-col items-center space-y-6">
+            <h3 id="troll-modal-text" class="text-2xl font-black text-white uppercase">Вы точно хотите выйти?</h3>
+            <div id="troll-buttons-wrapper" class="flex justify-center space-x-6 w-full pt-4 relative h-16">
+                <button onclick="trollNo()" class="bg-gray-700 hover:bg-gray-600 text-white font-bold px-6 py-3 rounded-xl cursor-pointer shadow-lg transition-all">
+                    Нет
+                </button>
+                <button id="btn-runaway" onmouseover="moveRunawayButton()" onclick="trollYes()" class="bg-red-600 hover:bg-red-500 text-white font-bold px-6 py-3 rounded-xl cursor-pointer shadow-lg transition-all absolute right-4">
+                    Да
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isTrolololoActive = false;
+        let originalLogHTML = '';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            originalLogHTML = document.getElementById('log-updates-container').innerHTML;
+            checkHolidayAndStyle();
+
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                bonfireImg.src = 'user/system/bon.gif';
+            }).catch(() => {
+                isPlaying = false;
+                bonfireImg.src = 'user/system/bon.png';
+            });
+        });
+
+        // =======================================================================
+        // 🤡 ЛОГИКА ТРОЛОЛОЛО ПАСХАЛКИ 🤡
+        // =======================================================================
+        function toggleTrolololo() {
+            isTrolololoActive = !isTrolololoActive;
+
+            const siteTitle = document.getElementById('site-title');
+            const siteFavicon = document.getElementById('site-favicon');
+            const pageBg = document.getElementById('page-bg');
+            const musicSource = document.getElementById('music-source');
+            const editableQuote = document.getElementById('editable-quote');
+            const logContainer = document.getElementById('log-updates-container');
+
+            if (isTrolololoActive) {
+                // Включаем троллинг (без плашки сразу)
+                siteTitle.textContent = "ВАС ЗАТРОЛОЛОЛО";
+                siteFavicon.href = "user/system/icon trololo.png";
+                pageBg.style.backgroundImage = "url('user/system/ololo.png')";
+                editableQuote.textContent = "Тролололо Вас Затролили";
+
+                // Включаем песню трололо
+                musicSource.src = "user/music/trololo.mp3";
+                bgMusic.load();
+                bgMusic.play();
+                isPlaying = true;
+                bonfireImg.src = 'user/system/bon.gif';
+
+                // Заменяем логи на текст песни
+                logContainer.innerHTML = `
+                    <div class="border-l-2 border-yellow-400 pl-3">
+                        <span class="text-xs text-yellow-400 font-mono">Эдуард Хиль</span>
+                        <h4 class="font-bold text-white">Вокализ (Трололо)</h4>
+                        <p class="text-gray-200 text-xs whitespace-pre-line leading-relaxed">
+                            Я очень рад, ведь я, наконец, возвращаюсь домой...
+Ааааааааа йаа-йа-йаааааа
+Йаа-йаа-йаааааа йааааа
+йа-йааааа
+о-о-ОО-О-ООООйаа йа-йаааа
+Йаа-йаа-йаааааа йааааа
+йа-йааааа
+Е-е-е-е-е Е-е-е Е-е-еее
+О-о-о-о-оооо (та-та та-та тааа )
+Е-е-е-е-е Е-е-е Е-е-еее
+о-о-о-о-оооооООООоааа аааа аааа аа ооаааа...
+На-на-на-на-на-на-на-на-на-на-наааа
+на-на-на-на-на на-на-наннна на нааа. нана-наа... на-наНА-НА-НА!
+Нана-нана-наааааааааааааааааааааааааа
+ноо-на-наааааааааа
+на-на-нааа-нааа на-наааааа
+лаааааа-ла-ла-лаааа
+ла-ла-лаааа лаааа лаааа лаалааа
+оо-о о ооо ооо оо ооо о о оооо
+ло-ло-ло-лол ло ло лооо ло ло лоооо
+ло-ло-ло-ло лооол
+аааааа-ЫЫЫЫЫЫЫЫЫЫЫыыыы-ыы-ыы-ыыыы
+ла-ла-лааа лаааа лаа-лааа....
+О-о-о-О-ООООО Пап Пара ла ла лааа ла-ла лааа
+ла-ла лаааа лаааа ла-ла
+Ла-ла ла-ла лалла ла лааа ла ла лооо
+Траляляля лёёёёааа
+Траля-ляля лялль ля ля ля ля-ля ляя Уааха-ха-ха-хО !
+Уха-ха-ха-ха-хО
+Оха-ха-ха-ха-хО
+Оха-ха-ха-ха-хО
+Ла-ла-ла-ла-ла-ла Ла-ла-ла-ла-ла-ла Ла-ла-ла-ла-ла-ла Ла-ла-ла-лаа!.
+ААААаааааа лааа-ла-лаааа лалалааа лаааа ла-лааа
+Ооооооооооо лааа-ла-лаааа лалалааа лаааа ла-лааа
+Ла-ла ла-ла лалла ла лалла ла лааа. О-о-о-о-ООу
+Ла-ла ла-ла лалла ла лалла ла лааа. О-о-о-о-о-о-о-о-о-о-о-о-о-о-о-о-о-о-о-о-о-о-о-о-о-о-о-о...
+                        </p>
+                    </div>
+                `;
+
+            } else {
+                // Выключаем троллинг обратно в стандарт
+                siteTitle.textContent = "TWX Костер Лог";
+                siteFavicon.href = "user/system/icon bon.png";
+                checkHolidayAndStyle();
+                editableQuote.textContent = "НАХУЯ Я СОЗДАЛ ЭТОТ САЙТ";
+
+                musicSource.src = "user/music/wotivse.mp3";
+                bgMusic.load();
+                bgMusic.play();
+
+                logContainer.innerHTML = originalLogHTML;
+                document.getElementById('troll-exit-modal').classList.add('hidden');
+            }
+        }
+
+        // Перехват нажатия на главную кнопку (домик) в режиме троллинга
+        function handleHomeClick(event) {
+            if (isTrolololoActive) {
+                event.preventDefault(); // Запрещаем уход на index.html
+                const modal = document.getElementById('troll-exit-modal');
+                modal.classList.remove('hidden');
+                document.getElementById('troll-modal-text').textContent = "Вы точно хотите выйти?";
+                document.getElementById('troll-buttons-wrapper').style.display = "flex";
+            }
+        }
+
+        // Логика побега кнопки "Да"
+        function moveRunawayButton() {
+            const btn = document.getElementById('btn-runaway');
+            const randomX = (Math.random() - 0.5) * 180;
+            const randomY = (Math.random() - 0.5) * 80;
+            btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+
+        function trollNo() {
+            document.getElementById('troll-exit-modal').classList.add('hidden');
+        }
+
+        function trollYes() {
+            const modalText = document.getElementById('troll-modal-text');
+            modalText.textContent = "Тролололо вы затролены!";
+            document.getElementById('troll-buttons-wrapper').style.display = "none";
+            setTimeout(() => {
+                document.getElementById('troll-exit-modal').classList.add('hidden');
+            }, 1800);
+        }
+
+        // =======================================================================
+        // 🎄 ПРАЗДНИКИ И ФОНЫ 🎄
+        // =======================================================================
+        function checkHolidayAndStyle() {
+            if (isTrolololoActive) return;
+
+            const now = new Date();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+
+            let bgImage = 'user/system/hoh.png'; // Фон по умолчанию
+
+            if ((month === 12 && day >= 21) || (month === 1 && day === 1)) {
+                bgImage = 'user/system/hoh_ng.png';
+            } else if (month === 10) {
+                bgImage = 'user/system/hoh_hel.png';
+            } else if (month === 5 && day === 21) {
+                bgImage = 'user/system/hoh_dr.png';
+            } else if (month === 4 && day === 12) {
+                bgImage = 'user/system/hoh_space.png';
+            } else if (month === 3 && day === 8) {
+                bgImage = 'user/system/hoh_8.png';
+            }
+
+            const pageBg = document.getElementById('page-bg');
+            pageBg.style.backgroundImage = `url('${bgImage}')`;
+            pageBg.style.backgroundSize = 'contain';
+            pageBg.style.backgroundRepeat = 'no-repeat';
+            pageBg.style.backgroundPosition = 'center center';
+        }
+
+        // =======================================================================
+        // 🎵 ЛОГИКА МУЗЫКИ И КОСТРА 🎵
+        // =======================================================================
+        const bgMusic = document.getElementById('bg-music');
+        const bonfireImg = document.getElementById('bonfire-img');
+        const soundControls = document.getElementById('sound-controls');
+        const volumeSlider = document.getElementById('volume-slider');
+        const muteIcon = document.getElementById('mute-icon');
+
+        let isPlaying = true;
+
+        function onBonfireClick() {
+            if (isTrolololoActive) {
+                return; // В режиме троллинга на костер нажать нельзя, музыку отключить нельзя!
+            }
+            soundControls.classList.toggle('hidden');
+        }
+
+        function toggleMute() {
+            if (isTrolololoActive) return;
+            if (isPlaying) {
+                bgMusic.pause();
+                isPlaying = false;
+                bonfireImg.src = 'user/system/bon.png';
+                muteIcon.className = 'fa-solid fa-volume-xmark';
+            } else {
+                bgMusic.play();
+                isPlaying = true;
+                bonfireImg.src = 'user/system/bon.gif';
+                muteIcon.className = 'fa-solid fa-volume-high';
+            }
+        }
+
+        volumeSlider.addEventListener('input', (e) => {
+            if (isTrolololoActive) return;
+            bgMusic.volume = e.target.value;
+            if (e.target.value == 0) {
+                muteIcon.className = 'fa-solid fa-volume-xmark';
+            } else if (!isPlaying) {
+                toggleMute();
+            } else {
+                muteIcon.className = 'fa-solid fa-volume-high';
+            }
+        });
+
+        // =======================================================================
+        // 📜 ВИДЖЕТ ЛОГОВ И СОХРАНЕНИЕ СТРАНИЦЫ (КАМЕРА) 📜
+        // =======================================================================
+        function toggleLogWidget() {
+            document.getElementById('log-widget').classList.toggle('hidden');
+        }
+
+        function takeScreenshot() {
+            // Прячем меню и логи, чтобы они не попали на снимок
+            soundControls.classList.add('hidden');
+            document.getElementById('log-widget').classList.add('hidden');
+
+            // Вызываем стандартное окно печати/сохранения браузера с выбором папки/пути
+            setTimeout(() => {
+                window.print();
+            }, 100);
+        }
+    </script>
+</body>
+</html>

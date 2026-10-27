@@ -1,0 +1,3200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gartic Phone - Все Работы</title>
+    <link rel="icon" type="image/png" href="user/system/icon all.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Marck+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        'fredoka': ['Fredoka', 'sans-serif'],
+                        'handwritten': ['Marck Script', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            background-size: cover;
+            overflow-x: hidden;
+            user-select: none;
+            color: #f3e8ff;
+        }
+        .stripe-banner {
+            position: absolute; top: 0; left: 0; right: 0; height: 160px;
+            background: linear-gradient(90deg, #181522 0%, #252033 50%, #15121c 100%);
+            transform: skewY(-4deg); z-index: 10;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border-bottom: 4px solid #0a080f;
+        }
+        ::-webkit-scrollbar { width: 18px; }
+        ::-webkit-scrollbar-track {
+            background: linear-gradient(90deg, #121019 0%, #1c1829 50%, #121019 100%);
+            border-left: 2px solid rgba(168, 85, 247, 0.2);
+            border-right: 2px solid rgba(0, 0, 0, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #a855f7 0%, #7e22ce 50%, #581c87 100%);
+            border-radius: 10px; border: 3px solid #1a1625;
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3), inset 0 -3px 6px rgba(0, 0, 0, 0.6), 0 4px 10px rgba(168, 85, 247, 0.4);
+            min-height: 50px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #c084fc 0%, #9333ea 50%, #6b21a8 100%);
+            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.4), inset 0 -3px 6px rgba(0, 0, 0, 0.6), 0 0 15px rgba(192, 132, 252, 0.7);
+        }
+        ::-webkit-scrollbar-thumb:active {
+            background: linear-gradient(135deg, #6b21a8 0%, #581c87 50%, #3b0764 100%);
+            border-width: 4px;
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.8), 0 0 5px rgba(168, 85, 247, 0.2);
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.5) rotate(-15deg); opacity: 0; }
+            70% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        .animate-avatar {
+            animation: popIn 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+            color: #fde047;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Стили для всплывающих эффектов частиц */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            animation: particleFly 0.8s ease-out forwards;
+        }
+        @keyframes particleFly {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-stripes min-h-screen flex flex-col justify-between relative">
+
+<script>
+// =======================================================================
+// 🎀 ФУНКЦИЯ ОПРЕДЕЛЕНИЯ ПРАЗДНИЧНОГО ФОНА 🎀
+// =======================================================================
+function setHolidayBackground() {
+    const now = new Date();
+    const m = now.getMonth() + 1; // 1-12
+    const d = now.getDate();
+    let bgFile = 'user/system/yu.png'; // По умолчанию
+
+    if (m === 5 && d === 21) bgFile = 'user/system/yu_creator_bd.png';      
+    else if (m === 7 && d === 13) bgFile = 'user/system/yu_hunter_bd.png';   
+    else if (m === 4 && d === 1) bgFile = 'user/system/yu_april1.png';       
+    else if (m === 4 && d === 12) bgFile = 'user/system/yu_space.png';       
+    else if (m === 5 && d === 9) bgFile = 'user/system/yu_may9.png';         
+    else if (m === 8 && d === 20) bgFile = 'user/system/yu_sloth.png';       
+    else if (m === 9 && d === 1) bgFile = 'user/system/yu_sept1.png';        
+    else if (m === 10 && d === 5) bgFile = 'user/system/yu_teacher.png';     
+    else if (m === 3 && d === 8) bgFile = 'user/system/yu_march8.png';       
+    else if ((m === 12 && d >= 21) || (m === 1 && d <= 1)) bgFile = 'user/system/yu_newyear.png'; 
+    else if (m === 10) bgFile = 'user/system/yu_halloween.png';              
+
+    document.body.style.backgroundImage = `url('${bgFile}')`;
+}
+setHolidayBackground();
+
+// =======================================================================
+// 🎀 СПЕЦИАЛЬНЫЙ БЛОК АВТОМАТИЧЕСКОГО ДОБАВЛЕНИЯ АНИМАЦИЙ 🎀
+// =======================================================================
+const autoAnimeMappings = [
+    { 
+        file: "user/anime/animation (1).mp4",        
+        date: "24/07/21",                  
+        authors: ["XAHTEP", "САКУРА", "StivvvvEEN", "CRASH", "УМНАЯПЕЧЕНЬ", "GNOM3000", "TIFOKKUSU", "BORYAN" ]   
+    },
+    { 
+        file: "user/anime/animation (2).mp4",     
+        date: "24/07/21",                  
+        authors: ["XAHTEP", "САКУРА", "StivvvvEEN", "CRASH", "УМНАЯПЕЧЕНЬ", "GNOM3000", "TIFOKKUSU", "BORYAN" ]  
+    },
+    { 
+        file: "user/anime/animation (3).mp4",       
+        date: "24/07/21",                  
+        authors: ["XAHTEP", "САКУРА", "StivvvvEEN", "CRASH", "УМНАЯПЕЧЕНЬ", "GNOM3000", "TIFOKKUSU", "BORYAN" ]                
+    },
+    { 
+        file: "user/anime/animation (4).mp4",     
+        date: "24/07/21",                  
+        authors: ["XAHTEP", "САКУРА", "StivvvvEEN", "CRASH", "УМНАЯПЕЧЕНЬ", "GNOM3000", "TIFOKKUSU", "BORYAN" ]  
+    },
+    { 
+        file: "user/anime/animation (5).mp4",       
+        date: "24/07/21",                  
+        authors: ["XAHTEP", "САКУРА", "StivvvvEEN", "CRASH", "УМНАЯПЕЧЕНЬ", "GNOM3000", "TIFOKKUSU", "BORYAN" ]                
+    },
+    { 
+        file: "user/anime/animation (6).mp4",     
+        date: "24/07/21",                  
+        authors: ["XAHTEP", "САКУРА", "StivvvvEEN", "CRASH", "УМНАЯПЕЧЕНЬ", "GNOM3000", "TIFOKKUSU", "BORYAN" ]  
+    },
+    { 
+        file: "user/anime/animation (7).mp4",       
+        date: "24/07/21",                  
+        authors: ["XAHTEP", "САКУРА", "StivvvvEEN", "CRASH", "УМНАЯПЕЧЕНЬ", "GNOM3000", "TIFOKKUSU", "BORYAN" ]                
+    },
+    { 
+        file: "user/anime/animation (8).mp4",       
+        date: "24/07/21",                  
+        authors: ["XAHTEP", "САКУРА", "StivvvvEEN", "CRASH", "УМНАЯПЕЧЕНЬ", "GNOM3000", "TIFOKKUSU", "BORYAN" ]                
+    },
+    { 
+        file: "user/anime/animation (9).mp4",       
+        date: "10/01/22",                  
+        authors: ["XAHTEP", "KINGDOMOFMIRACALIS", "C R A Z E (ГУЛЬ)", "РЕПТИЛИЯ", "BORYAN" ]                
+    },
+    { 
+        file: "user/anime/animation (10).mp4",       
+        date: "10/01/22",                  
+        authors: ["XAHTEP", "KINGDOMOFMIRACALIS", "C R A Z E (ГУЛЬ)", "РЕПТИЛИЯ", "BORYAN" ]                
+    },
+    { 
+        file: "user/anime/animation (11).mp4",       
+        date: "10/01/22",                  
+        authors: ["XAHTEP", "KINGDOMOFMIRACALIS", "C R A Z E (ГУЛЬ)", "РЕПТИЛИЯ", "BORYAN" ]                
+    },
+    { 
+        file: "user/anime/animation (12).mp4",       
+        date: "10/01/22",                  
+        authors: ["XAHTEP", "KINGDOMOFMIRACALIS", "C R A Z E (ГУЛЬ)", "РЕПТИЛИЯ", "BORYAN" ]                
+    },
+    { 
+        file: "user/anime/animation (13).mp4",       
+        date: "10/01/22",                  
+        authors: ["XAHTEP", "KINGDOMOFMIRACALIS", "C R A Z E (ГУЛЬ)", "РЕПТИЛИЯ", "BORYAN" ]                
+    }
+];
+
+// =======================================================================
+// 🎀 КОМПАКТНАЯ БАЗА ДАННЫХ АККАУНТОВ 🎀
+// =======================================================================
+const KatyaGallery = [
+    {
+        accountName: "XAHTEP",
+        accDir: "xahtep",
+        avatar: "xahtep_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+    			"22/02/21": [ "xahtep/rabota (1).png", "xahtep/rabota (2).png", "xahtep/rabota (3).png", "xahtep/rabota (4).png", "xahtep/rabota (5).png", "xahtep/rabota (6).png", "xahtep/rabota (7).png", "xahtep/rabota (8).png", "xahtep/rabota (9).png", "xahtep/rabota (10).png", "xahtep/rabota (11).png", "xahtep/rabota (12).png", "xahtep/rabota (13).png", "xahtep/rabota (14).png", "xahtep/rabota (15).png", "xahtep/rabota (16).png", "xahtep/rabota (17).png", "xahtep/rabota (18).png", "xahtep/rabota (19).png", "xahtep/rabota (20).png", "xahtep/rabota (21).png"],
+    			"18/06/23": [ "xahtep/rabota (22).png", "xahtep/rabota (23).png", "xahtep/rabota (24).png", "xahtep/rabota (25).png"],
+    			"23/02/21": [ "xahtep/rabota (26).png", "xahtep/rabota (27).png", "xahtep/rabota (28).png", "xahtep/rabota (29).png", "xahtep/rabota (30).png", "xahtep/rabota (31).png", "xahtep/rabota (32).png", "xahtep/rabota (33).png", "xahtep/rabota (34).png", "xahtep/rabota (35).png", "xahtep/rabota (36).png", "xahtep/rabota (37).png", "xahtep/rabota (38).png", "xahtep/rabota (39).png", "xahtep/rabota (40).png", "xahtep/rabota (41).png", "xahtep/rabota (42).png"],
+    			"27/02/21": [ "xahtep/rabota (43).png", "xahtep/rabota (44).png", "xahtep/rabota (45).png", "xahtep/rabota (46).png", "xahtep/rabota (47).png", "xahtep/rabota (48).png", "xahtep/rabota (49).png", "xahtep/rabota (50).png", "xahtep/rabota (51).png", "xahtep/rabota (52).png", "xahtep/rabota (53).png"],
+    			"28/02/21": [ "xahtep/rabota (54).png", "xahtep/rabota (55).png", "xahtep/rabota (56).png", "xahtep/rabota (57).png", "xahtep/rabota (58).png", "xahtep/rabota (59).png", "xahtep/rabota (60).png", "xahtep/rabota (61).png", "xahtep/rabota (62).png", "xahtep/rabota (63).png", "xahtep/rabota (64).png", "xahtep/rabota (65).png", "xahtep/rabota (66).png", "xahtep/rabota (67).png" ],
+    			"13/07/22": [ "xahtep/rabota (68).png", "xahtep/rabota (69).png"],
+    			"03/03/22": [ "xahtep/rabota (70).png", "xahtep/rabota (71).png", "xahtep/rabota (72).png"],
+    			"19/04/21": [ "xahtep/rabota (73).png", "xahtep/rabota (74).png", "xahtep/rabota (75).png", "xahtep/rabota (76).png", "xahtep/rabota (77).png", "xahtep/rabota (78).png"],
+    			"06/05/21": [ "xahtep/rabota (79).png", "xahtep/rabota (80).png", "xahtep/rabota (81).png", "xahtep/rabota (82).png", "xahtep/rabota (83).png", "xahtep/rabota (84).png", "xahtep/rabota (85).png", "xahtep/rabota (86).png", "xahtep/rabota (87).png", "xahtep/rabota (88).png", "xahtep/rabota (89).png", "xahtep/rabota (90).png", "xahtep/rabota (91).png"],
+    			"21/05/21": [ "xahtep/rabota (92).png", "xahtep/rabota (93).png", "xahtep/rabota (94).png", "xahtep/rabota (95).png", "xahtep/rabota (96).png"],
+    			"14/12/21": [ "xahtep/rabota (97).png", "xahtep/rabota (98).png", "xahtep/rabota (105).png", "xahtep/rabota (106).png", "xahtep/rabota (107).png", "xahtep/rabota (108).png" ],
+    			"24/07/21": [ "xahtep/rabota (99).png", "xahtep/rabota (100).png", "xahtep/rabota (101).png", "xahtep/rabota (102).png", "xahtep/rabota (103).png", "xahtep/rabota (104).png" ],
+    			"10/01/22": [ "xahtep/rabota (109).png", "xahtep/rabota (110).png", "xahtep/rabota (111).png", "xahtep/rabota (112).png" ],
+    			"13/01/22": [ "xahtep/rabota (113).png", "xahtep/rabota (114).png", "xahtep/rabota (115).png", "xahtep/rabota (116).png" ]
+		    },
+                    "addendum": {
+                        "14/12/21": [ "xahtep/xx (1).png", "xahtep/xx (2).png", "xahtep/xx (3).png", "xahtep/xx (4).png", "xahtep/xx (5).png", "xahtep/xx (6).png", "xahtep/xx (7).png", "xahtep/xx (8).png", "xahtep/xx (9).png", "xahtep/xx (10).png"]
+                    },
+                    "forsecret": {
+                        "08/05/21": [ "xahtep/d (1).png", "xahtep/d (2).png"]
+                    },
+                    "sandwich": {
+    			"18/06/23": ["xahtep/sos (1).png", "xahtep/sos (2).png", "xahtep/sos (3).png", "xahtep/sos (4).png", "xahtep/sos (5).png"],
+    			"13/07/22": ["xahtep/sos (6).png", "xahtep/sos (7).png", "xahtep/sos (8).png", "xahtep/sos (9).png", "xahtep/sos (10).png"],
+    			"23/03/21": ["xahtep/sos (11).png", "xahtep/sos (12).png", "xahtep/sos (13).png", "xahtep/sos (14).png", "xahtep/sos (15).png", "xahtep/sos (16).png", "xahtep/sos (17).png"],
+    			"25/03/21": ["xahtep/sos (18).png", "xahtep/sos (19).png", "xahtep/sos (20).png", "xahtep/sos (21).png", "xahtep/sos (22).png", "xahtep/sos (23).png", "xahtep/sos (24).png", "xahtep/sos (25).png", "xahtep/sos (26).png", "xahtep/sos (27).png"],
+    			"19/04/21": ["xahtep/sos (28).png", "xahtep/sos (29).png", "xahtep/sos (30).png", "xahtep/sos (31).png", "xahtep/sos (32).png"],
+    			"08/05/21": ["xahtep/sos (33).png", "xahtep/sos (34).png", "xahtep/sos (35).png"],
+    			"20/12/21": ["xahtep/sos (36).png", "xahtep/sos (37).png", "xahtep/sos (38).png", "xahtep/sos (39).png", "xahtep/sos (40).png"],
+    			"13/01/22": ["xahtep/sos (41).png", "xahtep/sos (42).png", "xahtep/sos (43).png", "xahtep/sos (44).png", "xahtep/sos (45).png"]
+		    },
+                    "ochko": {
+                        "10/01/22": [ "xahtep/bibi (1).png", "xahtep/bibi (2).png", "xahtep/bibi (3).png", "xahtep/bibi (4).png", "xahtep/bibi (5).png", "xahtep/bibi (6).png", "xahtep/bibi (7).png"]
+                    },
+                    "express": {
+                        "23/03/21": ["xahtep/s (1).png", "xahtep/s (2).png", "xahtep/s (3).png", "xahtep/s (4).png", "xahtep/s (5).png"]
+                    },
+                    "missing": {
+                        "18/06/23": ["xahtep/zuz (1).png", "xahtep/zuz (2).png", "xahtep/zuz (3).png", "xahtep/zuz (4).png", "xahtep/zuz (5).png", "xahtep/zuz (6).png", "xahtep/zuz (7).png"]
+                    },
+                    "icebreaker": {
+    			"14/12/21": ["xahtep/pop (1).png", "xahtep/pop (2).png", "xahtep/pop (3).png", "xahtep/pop (4).png", "xahtep/pop (5).png", "xahtep/pop (15).png", "xahtep/pop (16).png", "xahtep/pop (17).png", "xahtep/pop (18).png", "xahtep/pop (19).png", "xahtep/pop (20).png"],
+    			"24/07/21": ["xahtep/pop (6).png", "xahtep/pop (7).png", "xahtep/pop (8).png", "xahtep/pop (9).png", "xahtep/pop (10).png", "xahtep/pop (11).png", "xahtep/pop (12).png", "xahtep/pop (13).png", "xahtep/pop (14).png"],
+    			"20/12/21": ["xahtep/pop (21).png", "xahtep/pop (22).png", "xahtep/pop (23).png", "xahtep/pop (24).png", "xahtep/pop (25).png", "xahtep/pop (26).png", "xahtep/pop (27).png", "xahtep/pop (28).png"],
+    			"10/01/22": ["xahtep/pop (29).png", "xahtep/pop (30).png", "xahtep/pop (31).png", "xahtep/pop (32).png", "xahtep/pop (33).png", "xahtep/pop (34).png", "xahtep/pop (35).png", "xahtep/pop (36).png"],
+    			"13/01/22": ["xahtep/pop (37).png", "xahtep/pop (38).png", "xahtep/pop (39).png", "xahtep/pop (40).png", "xahtep/pop (41).png", "xahtep/pop (42).png", "xahtep/pop (43).png"]
+		    },
+                    "plagiarist": {
+    			"18/06/23": ["xahtep/oi (1).png", "xahtep/oi (2).png", "xahtep/oi (3).png", "xahtep/oi (4).png", "xahtep/oi (5).png", "xahtep/oi (6).png", "xahtep/oi (7).png", "xahtep/oi (8).png", "xahtep/oi (9).png"],
+    			"13/07/22": ["xahtep/oi (10).png", "xahtep/oi (11).png", "xahtep/oi (12).png", "xahtep/oi (13).png", "xahtep/oi (14).png", "xahtep/oi (15).png"],
+    			"03/03/22": ["xahtep/oi (16).png", "xahtep/oi (17).png", "xahtep/oi (18).png", "xahtep/oi (19).png", "xahtep/oi (20).png", "xahtep/oi (21).png"],
+    			"23/03/21": ["xahtep/oi (22).png", "xahtep/oi (23).png", "xahtep/oi (24).png", "xahtep/oi (25).png", "xahtep/oi (26).png", "xahtep/oi (27).png", "xahtep/oi (28).png", "xahtep/oi (29).png", "xahtep/oi (30).png", "xahtep/oi (31).png", "xahtep/oi (32).png", "xahtep/oi (33).png", "xahtep/oi (34).png", "xahtep/oi (35).png", "xahtep/oi (36).png"],
+    			"25/03/21": ["xahtep/oi (37).png", "xahtep/oi (38).png", "xahtep/oi (39).png", "xahtep/oi (40).png", "xahtep/oi (41).png", "xahtep/oi (42).png", "xahtep/oi (43).png", "xahtep/oi (44).png", "xahtep/oi (45).png", "xahtep/oi (46).png", "xahtep/oi (47).png", "xahtep/oi (48).png", "xahtep/oi (49).png", "xahtep/oi (50).png"],
+    			"19/04/21": ["xahtep/oi (51).png", "xahtep/oi (52).png", "xahtep/oi (53).png", "xahtep/oi (54).png", "xahtep/oi (55).png", "xahtep/oi (56).png", "xahtep/oi (57).png", "xahtep/oi (58).png", "xahtep/oi (59).png"],
+    			"08/05/21": ["xahtep/oi (60).png", "xahtep/oi (61).png", "xahtep/oi (62).png", "xahtep/oi (63).png", "xahtep/oi (64).png", "xahtep/oi (65).png", "xahtep/oi (66).png", "xahtep/oi (67).png", "xahtep/oi (68).png", "xahtep/oi (69).png", "xahtep/oi (70).png", "xahtep/oi (71).png"],
+    			"06/05/21": ["xahtep/oi (72).png", "xahtep/oi (73).png", "xahtep/oi (74).png", "xahtep/oi (75).png", "xahtep/oi (76).png", "xahtep/oi (77).png", "xahtep/oi (78).png", "xahtep/oi (79).png", "xahtep/oi (80).png", "xahtep/oi (81).png", "xahtep/oi (82).png", "xahtep/oi (83).png", "xahtep/oi (84).png", "xahtep/oi (85).png", "xahtep/oi (86).png"],
+    			"21/05/21": ["xahtep/oi (87).png", "xahtep/oi (88).png", "xahtep/oi (89).png", "xahtep/oi (90).png", "xahtep/oi (91).png", "xahtep/oi (92).png"],
+    			"14/12/21": ["xahtep/oi (93).png", "xahtep/oi (94).png", "xahtep/oi (95).png", "xahtep/oi (96).png", "xahtep/oi (97).png", "xahtep/oi (98).png", "xahtep/oi (99).png", "xahtep/oi (100).png", "xahtep/oi (101).png", "xahtep/oi (102).png", "xahtep/oi (103).png", "xahtep/oi (104).png", "xahtep/oi (105).png", "xahtep/oi (106).png", "xahtep/oi (107).png", "xahtep/oi (108).png"],
+    			"20/12/21": ["xahtep/oi (109).png", "xahtep/oi (110).png", "xahtep/oi (111).png", "xahtep/oi (112).png", "xahtep/oi (113).png", "xahtep/oi (114).png", "xahtep/oi (115).png"],
+    			"10/01/22": ["xahtep/oi (116).png", "xahtep/oi (117).png", "xahtep/oi (118).png", "xahtep/oi (119).png", "xahtep/oi (120).png", "xahtep/oi (121).png", "xahtep/oi (122).png", "xahtep/oi (123).png", "xahtep/oi (124).png"],
+    			"13/01/22": ["xahtep/oi (125).png", "xahtep/oi (126).png", "xahtep/oi (127).png", "xahtep/oi (128).png", "xahtep/oi (129).png", "xahtep/oi (130).png", "xahtep/oi (131).png"]
+		    },
+                    "tolpa": {
+                        "21/05/21": [ "xahtep/j (1).png", "xahtep/j (2).png"]
+                    },
+                    "history": {
+                        "18/06/23": [
+                            { title: "Однажды в студеную зимнею пору лисичка примерзла писькой к" },
+                            { title: "руинит свое очко товарища"},
+                            { title: "не очко, а количество очков в игре ТЕТРИС"},
+                            { title: "и навернул бутер с говном, пока никто не видит"},
+                            { title: "Распоковал я ее на кровать и тут же опробовал"},
+                            { title: "Чтобы снимать гей порно в аэропорту"},
+                            { title: "Они пошли бухать в местный бар КГБ"},
+                            { title: "А дальше он какал своими врагами, но это уже другая история"},
+                            { title: "Триммер застрял в горле при бритье"},
+                            { title: "и пожалел об этом, потому что через минуту"},
+                            { title: "Поэтому мы использовали другие жопы, начали с Краша, однако"},
+                            { title: "которой мы запили медовухой, однако она оказалась"},
+                            { title: "но чистых трусов не оказалось, поэтому он пошел голым по"},
+                            { title: "Я проспал целый день и понял, что мне хреново, но"},
+                            { title: "И будущих, к сожалению, тоже не стало, потому что"}
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "MAFIA MAB",
+        accDir: "mab",
+        avatar: "mab_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                subName: "MAFIA MAB",
+                modes: {
+                    "classic": {
+    			"22/02/21": [ "mab/rabota (1).png", "mab/rabota (2).png", "mab/rabota (3).png", "mab/rabota (4).png", "mab/rabota (5).png", "mab/rabota (6).png", "mab/rabota (7).png", "mab/rabota (8).png", "mab/rabota (9).png", "mab/rabota (10).png", "mab/rabota (11).png", "mab/rabota (12).png", "mab/rabota (13).png", "mab/rabota (14).png", "mab/rabota (15).png", "mab/rabota (16).png", "mab/rabota (17).png", "mab/rabota (18).png", "mab/rabota (19).png", "mab/rabota (20).png", "mab/rabota (21).png"],
+    			"18/06/23": [ "mab/rabota (22).png", "mab/rabota (23).png", "mab/rabota (24).png", "mab/rabota (25).png"],
+    			"23/02/21": [ "mab/rabota (26).png", "mab/rabota (27).png", "mab/rabota (28).png", "mab/rabota (29).png", "mab/rabota (30).png", "mab/rabota (31).png", "mab/rabota (32).png", "mab/rabota (33).png", "mab/rabota (34).png", "mab/rabota (35).png", "mab/rabota (36).png", "mab/rabota (37).png", "mab/rabota (38).png", "mab/rabota (39).png", "mab/rabota (40).png"],
+    			"27/02/21": [ "mab/rabota (41).png", "mab/rabota (42).png", "mab/rabota (43).png", "mab/rabota (44).png", "mab/rabota (45).png", "mab/rabota (46).png", "mab/rabota (47).png", "mab/rabota (48).png", "mab/rabota (49).png", "mab/rabota (50).png", "mab/rabota (51).png"],
+    			"28/02/21": [ "mab/rabota (52).png", "mab/rabota (53).png", "mab/rabota (54).png", "mab/rabota (55).png", "mab/rabota (56).png", "mab/rabota (57).png", "mab/rabota (58).png", "mab/rabota (59).png", "mab/rabota (60).png", "mab/rabota (61).png", "mab/rabota (62).png", "mab/rabota (63).png", "mab/rabota (64).png", "mab/rabota (65).png"],
+    			"03/03/22": [ "mab/rabota (66).png", "mab/rabota (67).png", "mab/rabota (68).png"],
+    			"19/04/21": [ "mab/rabota (69).png", "mab/rabota (70).png", "mab/rabota (71).png", "mab/rabota (72).png", "mab/rabota (73).png", "mab/rabota (74).png"],
+    			"06/05/21": [ "mab/rabota (75).png", "mab/rabota (76).png", "mab/rabota (77).png", "mab/rabota (78).png", "mab/rabota (79).png", "mab/rabota (80).png", "mab/rabota (81).png", "mab/rabota (82).png", "mab/rabota (83).png", "mab/rabota (84).png", "mab/rabota (85).png", "mab/rabota (86).png"],
+    			"21/05/21": [ "mab/rabota (87).png", "mab/rabota (88).png", "mab/rabota (89).png", "mab/rabota (90).png", "mab/rabota (91).png"],
+    			"14/12/21": [ "mab/rabota (92).png", "mab/rabota (93).png", "mab/rabota (94).png", "mab/rabota (95).png" ]
+		    },
+                    "forsecret": {
+                        "08/05/21": [ "mab/d (1).png", "mab/d (2).png"]
+                    },
+                    "tolpa": {
+                        "21/05/21": [ "mab/j (1).png", "mab/j (2).png"]
+                    },
+                    "icebreaker": {
+    			"14/12/21": ["mab/pop (1).png", "mab/pop (2).png", "mab/pop (3).png", "mab/pop (4).png", "mab/pop (5).png", "mab/pop (6).png"],
+    			"20/12/21": ["mab/pop (7).png", "mab/pop (8).png", "mab/pop (9).png"]
+		    },
+                    "history": {
+                        "18/06/23": [
+                            { title: "Мабу Который охренел от такого события он пошел к"},
+                            { title: "Началось все в тот День Когда Хантер стал Аниме-Девочкой"},
+                            { title: "И он продолжал танцевать как отшиблиный"},
+                            { title: "Сказал он Спасибо Батя я Не голодный"},
+                            { title: "Как хорошо трогать чьюто грудь"},
+                            { title: "Увидев сколько грудастых дам он только и хотел их трахать"},
+                            { title: "И этот Бой будет легедарным. И жили они долго и счастливо"},
+                            { title: "Которая я скажу только тогда когда (хррррр) А вы кто такие.."},
+                            { title: "Но крогара не было дома он в этот момент трахл кросовка"},
+                            { title: "Когда то Фьюжен Хантер и Фьюжен Маб Проводили время вместе"},
+                            { title: "Другие были против ведь он нафиг не кому не нужен"},
+                            { title: "За этим всем СМотрел маб и пытался понять как это остановить"},
+                            { title: "Улице Вязов. Конец он умер от Фредди"},
+                            { title: "Да ничего. Сказал Маб мне 19 и меня кличут все Дедом"},
+                            { title: "И сдох маб от того что его глаза залились кровью"}
+                        ]
+                    },
+                    "addendum": {
+                        "14/12/21": [ "mab/xx (1).png", "mab/xx (2).png", "mab/xx (3).png", "mab/xx (4).png", "mab/xx (5).png"]
+                    },
+                    "missing": {
+                        "18/06/23": ["mab/zuz (1).png", "mab/zuz (2).png", "mab/zuz (3).png", "mab/zuz (4).png", "mab/zuz (5).png", "mab/zuz (6).png", "mab/zuz (7).png"]
+                    },
+                    "plagiarist": {
+    			"18/06/23": ["mab/oi (1).png", "mab/oi (2).png", "mab/oi (3).png", "mab/oi (4).png", "mab/oi (5).png", "mab/oi (6).png", "mab/oi (7).png", "mab/oi (8).png", "mab/oi (9).png"],
+    			"03/03/22": ["mab/oi (10).png", "mab/oi (11).png", "mab/oi (12).png", "mab/oi (13).png", "mab/oi (14).png", "mab/oi (15).png"],
+    			"25/03/21": ["mab/oi (16).png", "mab/oi (17).png", "mab/oi (18).png", "mab/oi (19).png", "mab/oi (20).png", "mab/oi (21).png", "mab/oi (22).png", "mab/oi (23).png", "mab/oi (24).png", "mab/oi (25).png", "mab/oi (26).png"],
+    			"19/04/21": ["mab/oi (27).png", "mab/oi (28).png", "mab/oi (29).png", "mab/oi (30).png", "mab/oi (31).png", "mab/oi (32).png", "mab/oi (33).png", "mab/oi (34).png", "mab/oi (35).png"],
+    			"08/05/21": ["mab/oi (36).png", "mab/oi (37).png", "mab/oi (38).png", "mab/oi (39).png", "mab/oi (40).png", "mab/oi (41).png", "mab/oi (42).png"],
+    			"06/05/21": ["mab/oi (43).png", "mab/oi (44).png", "mab/oi (45).png", "mab/oi (46).png", "mab/oi (47).png", "mab/oi (48).png", "mab/oi (49).png", "mab/oi (50).png", "mab/oi (51).png", "mab/oi (52).png", "mab/oi (53).png", "mab/oi (54).png", "mab/oi (55).png", "mab/oi (56).png"],
+    			"21/05/21": ["mab/oi (57).png", "mab/oi (58).png", "mab/oi (59).png", "mab/oi (60).png", "mab/oi (61).png", "mab/oi (62).png"],
+    			"14/12/21": ["mab/oi (63).png", "mab/oi (64).png", "mab/oi (65).png", "mab/oi (66).png", "mab/oi (67).png", "mab/oi (68).png", "mab/oi (69).png", "mab/oi (70).png", "mab/oi (71).png", "mab/oi (72).png", "mab/oi (73).png"],
+    			"20/12/21": ["mab/oi (74).png", "mab/oi (75).png", "mab/oi (76).png", "mab/oi (77).png", "mab/oi (78).png", "mab/oi (79).png", "mab/oi (80).png"]
+		    },
+                    "sandwich": {
+                        "18/06/23": ["mab/sos (1).png", "mab/sos (2).png", "mab/sos (3).png", "mab/sos (4).png", "mab/sos (5).png"],
+                        "25/03/21": ["mab/sos (6).png", "mab/sos (7).png"],
+                        "19/04/21": ["mab/sos (8).png", "mab/sos (9).png", "mab/sos (10).png", "mab/sos (11).png", "mab/sos (12).png"]
+                    }
+                }
+            },
+            {
+                subDir: "eroty", 
+                subName: "МИСТЕР МАБ", 
+                avatar: "mab_sub_ava.png", 
+                modes: {
+                    "classic": {
+                        "13/07/22": [ "zoi/rabota (1).png", "zoi/rabota (2).png"],
+                    },
+                    "plagiarist": {
+                        "13/07/22": ["zoi/oi (1).png", "zoi/oi (2).png", "zoi/oi (3).png", "zoi/oi (4).png", "zoi/oi (5).png", "zoi/oi (6).png", "zoi/oi (7).png"]
+                    },
+                    "sandwich": {
+                        "13/07/22": ["zoi/sos (1).png", "zoi/sos (2).png", "zoi/sos (3).png"]
+                    }
+                }
+            },
+            {
+                subDir: "phone", 
+                subName: "ТЕЛЕФОНЫЙ МАБ", 
+                avatar: "gor_ava.png",
+                modes: {
+                    "sandwich": {
+                        "25/03/21": ["phone/sos (1).png", "phone/sos (2).png", "phone/sos (3).png", "phone/sos (4).png", "phone/sos (5).png", "phone/sos (6).png", "phone/sos (7).png", "phone/sos (8).png", "phone/sos (9).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "StivvvvEEN",
+        accDir: "stiven",
+        avatar: "stiven_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                subName: "STIVVVVENN",
+                modes: {
+                    "classic": {
+		        "22/02/21": [ "stiven/rabota (1).png", "stiven/rabota (2).png", "stiven/rabota (3).png", "stiven/rabota (4).png", "stiven/rabota (5).png", "stiven/rabota (6).png", "stiven/rabota (7).png", "stiven/rabota (8).png", "stiven/rabota (9).png", "stiven/rabota (10).png", "stiven/rabota (11).png", "stiven/rabota (12).png", "stiven/rabota (13).png", "stiven/rabota (14).png", "stiven/rabota (15).png" ],
+		        "23/02/21": [ "stiven/rabota (16).png", "stiven/rabota (17).png", "stiven/rabota (18).png", "stiven/rabota (19).png", "stiven/rabota (20).png", "stiven/rabota (21).png", "stiven/rabota (22).png", "stiven/rabota (23).png", "stiven/rabota (24).png", "stiven/rabota (25).png", "stiven/rabota (26).png", "stiven/rabota (27).png"],
+		        "28/02/21": [ "stiven/rabota (28).png", "stiven/rabota (29).png", "stiven/rabota (30).png", "stiven/rabota (31).png", "stiven/rabota (32).png", "stiven/rabota (33).png", "stiven/rabota (34).png", "stiven/rabota (35).png", "stiven/rabota (36).png", "stiven/rabota (37).png", "stiven/rabota (38).png" ],
+		        "19/04/21": [ "stiven/rabota (39).png", "stiven/rabota (40).png", "stiven/rabota (41).png", "stiven/rabota (42).png", "stiven/rabota (43).png", "stiven/rabota (44).png" ],
+		        "06/05/21": [ "stiven/rabota (45).png", "stiven/rabota (46).png", "stiven/rabota (47).png", "stiven/rabota (48).png", "stiven/rabota (49).png", "stiven/rabota (50).png", "stiven/rabota (51).png", "stiven/rabota (52).png", "stiven/rabota (53).png", "stiven/rabota (54).png" ],
+		        "21/05/21": [ "stiven/rabota (55).png", "stiven/rabota (56).png", "stiven/rabota (57).png", "stiven/rabota (58).png", "stiven/rabota (59).png" ],
+		        "14/12/21": [ "stiven/rabota (60).png", "stiven/rabota (61).png"],
+		        "24/07/21": [ "stiven/rabota (62).png", "stiven/rabota (63).png"]
+		    },
+                    "plagiarist": {
+    			"23/03/21": ["stiven/oi (1).png", "stiven/oi (2).png", "stiven/oi (3).png", "stiven/oi (4).png", "stiven/oi (5).png", "stiven/oi (6).png", "stiven/oi (7).png"],
+    			"19/04/21": ["stiven/oi (8).png", "stiven/oi (9).png", "stiven/oi (10).png", "stiven/oi (11).png", "stiven/oi (12).png", "stiven/oi (13).png", "stiven/oi (14).png", "stiven/oi (15).png", "stiven/oi (16).png"],
+    			"06/05/21": ["stiven/oi (17).png", "stiven/oi (18).png", "stiven/oi (19).png", "stiven/oi (20).png", "stiven/oi (21).png", "stiven/oi (22).png", "stiven/oi (23).png", "stiven/oi (24).png", "stiven/oi (25).png", "stiven/oi (26).png", "stiven/oi (27).png", "stiven/oi (28).png", "stiven/oi (29).png", "stiven/oi (30).png", "stiven/oi (31).png"],
+    			"21/05/21": ["stiven/oi (32).png", "stiven/oi (33).png", "stiven/oi (34).png", "stiven/oi (35).png", "stiven/oi (36).png", "stiven/oi (37).png"],
+    			"14/12/21": ["stiven/oi (38).png", "stiven/oi (39).png", "stiven/oi (40).png", "stiven/oi (41).png", "stiven/oi (42).png", "stiven/oi (43).png", "stiven/oi (44).png", "stiven/oi (45).png", "stiven/oi (46).png", "stiven/oi (47).png", "stiven/oi (48).png", "stiven/oi (49).png", "stiven/oi (50).png", "stiven/oi (51).png", "stiven/oi (52).png", "stiven/oi (53).png"]
+		    },
+                    "icebreaker": {
+    			"14/12/21": ["stiven/pop (1).png", "stiven/pop (2).png", "stiven/pop (3).png", "stiven/pop (4).png", "stiven/pop (5).png"],
+    			"24/07/21": ["stiven/pop (6).png", "stiven/pop (7).png", "stiven/pop (8).png", "stiven/pop (9).png", "stiven/pop (10).png"]
+		    },
+                    "sandwich": {
+                        "23/03/21": ["stiven/sos (1).png", "stiven/sos (2).png", "stiven/sos (3).png", "stiven/sos (4).png", "stiven/sos (5).png", "stiven/sos (6).png", "stiven/sos (7).png"],
+                        "19/04/21": ["stiven/sos (8).png", "stiven/sos (9).png", "stiven/sos (10).png", "stiven/sos (11).png", "stiven/sos (12).png"]
+                    },
+                    "addendum": {
+                        "14/12/21": [ "stiven/xx (1).png", "stiven/xx (2).png", "stiven/xx (3).png", "stiven/xx (4).png", "stiven/xx (5).png"]
+                    },
+                    "tolpa": {
+                        "21/05/21": [ "stiven/j (1).png", "stiven/j (2).png"]
+                    },
+                    "express": {
+                        "23/03/21": ["stiven/s (1).png", "stiven/s (2).png", "stiven/s (3).png", "stiven/s (4).png", "stiven/s (5).png"]
+                    }
+                }
+            },
+            {
+                subDir: "secret", 
+                subName: "ЕЩКЕРЕ", 
+                avatar: "stiven_sub_ava.png",
+                modes: {
+                    "classic": {
+                        "18/06/23": [ "yut/rabota (1).png", "yut/rabota (2).png", "yut/rabota (3).png", "yut/rabota (4).png"],
+                    },
+                    "plagiarist": {
+                        "18/06/23": ["yut/oi (1).png", "yut/oi (2).png", "yut/oi (3).png", "yut/oi (4).png", "yut/oi (5).png", "yut/oi (6).png", "yut/oi (7).png", "yut/oi (8).png", "yut/oi (9).png"]
+                    },
+                    "sandwich": {
+                        "18/06/23": ["yut/sos (1).png", "yut/sos (2).png", "yut/sos (3).png"]
+                    },
+                    "history": {
+                        "18/06/23": [
+                            { title: "в то время как кросовок снимал всё на камру и хайпился"},
+                            { title: "и однажды фьюжен хантер изменил мабу на фьюжен боряна"},
+                            { title: "остальная полата была в похуизме, и они помогли им(ему/ей)"},
+                            { title: "Однажды в городе мунов (корейцев) произошло..."},
+                            { title: "пришёл без трусов, ушёл с женскими трусами"},
+                            { title: "но проспав ещё месяц, понял что... я старею"},
+                            { title: "так и закончился последний стрим хантера в жизни"}
+                        ]
+                    }
+                }
+            },
+            {
+                subDir: "xox", 
+                subName: "HELLO THERE?", 
+                avatar: "fof_ava.png",
+                modes: {
+                    "classic": {
+                        "13/07/22": [ "fof/rabota (1).png", "fof/rabota (2).png"],
+                    },
+                    "plagiarist": {
+                        "13/07/22": ["fof/oi (1).png", "fof/oi (2).png", "fof/oi (3).png", "fof/oi (4).png", "fof/oi (5).png", "fof/oi (6).png", "fof/oi (7).png"]
+                    },
+                    "sandwich": {
+                        "13/07/22": ["fof/sos (1).png", "fof/sos (2).png", "fof/sos (3).png", "fof/sos (4).png"]
+                    }
+                }
+            },
+            {
+                subDir: "dico", 
+                subName: "DISSOLUTION", 
+                avatar: "xahtep_ava.png",
+                modes: {
+                    "plagiarist": {
+                        "25/03/21": ["dico/oi (1).png", "dico/oi (2).png", "dico/oi (3).png", "dico/oi (4).png", "dico/oi (5).png", "dico/oi (6).png", "dico/oi (7).png", "dico/oi (8).png"]
+                    }
+                }
+            },
+            {
+                subDir: "youtube", 
+                subName: "ЮТУБ НЕ РОБИТ", 
+                avatar: "knight_ava.png",
+                modes: {
+                    "icebreaker": {
+                        "20/12/21": ["youtube/pop (1).png", "youtube/pop (2).png", "youtube/pop (3).png", "youtube/pop (4).png", "youtube/pop (5).png", "youtube/pop (6).png", "youtube/pop (7).png", "youtube/pop (8).png"]
+                    },
+                    "plagiarist": {
+                        "20/12/21": [ "youtube/oi (1).png", "youtube/oi (2).png", "youtube/oi (3).png", "youtube/oi (4).png", "youtube/oi (5).png", "youtube/oi (6).png", "youtube/oi (7).png"]
+                    },
+                    "sandwich": {
+                        "20/12/21": ["youtube/sos (1).png", "youtube/sos (2).png", "youtube/sos (3).png", "youtube/sos (4).png", "youtube/sos (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "Mr.Жуть",
+        accDir: "spook",
+        avatar: "spook_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "22/02/21": [ "spook/rabota (1).png", "spook/rabota (2).png", "spook/rabota (3).png", "spook/rabota (4).png", "spook/rabota (5).png", "spook/rabota (6).png", "spook/rabota (7).png", "spook/rabota (8).png", "spook/rabota (9).png", "spook/rabota (10).png", "spook/rabota (11).png", "spook/rabota (12).png", "spook/rabota (13).png", "spook/rabota (14).png", "spook/rabota (15).png", "spook/rabota (16).png", "spook/rabota (17).png", "spook/rabota (18).png", "spook/rabota (19).png", "spook/rabota (20).png", "spook/rabota (21).png" ],
+                        "23/02/21": [ "spook/rabota (22).png", "spook/rabota (23).png", "spook/rabota (24).png", "spook/rabota (25).png", "spook/rabota (26).png", "spook/rabota (27).png", "spook/rabota (28).png", "spook/rabota (29).png", "spook/rabota (30).png", "spook/rabota (31).png", "spook/rabota (32).png", "spook/rabota (33).png"],
+                        "27/02/21": [ "spook/rabota (34).png", "spook/rabota (35).png", "spook/rabota (36).png", "spook/rabota (37).png", "spook/rabota (38).png", "spook/rabota (39).png", "spook/rabota (40).png"],
+                        "13/07/22": [ "spook/rabota (41).png", "spook/rabota (42).png"],
+                        "03/03/22": [ "spook/rabota (43).png", "spook/rabota (44).png", "spook/rabota (45).png"]
+                    },
+                    "sandwich": {
+                        "13/07/22": ["spook/sos (1).png", "spook/sos (2).png", "spook/sos (3).png"],
+                        "25/03/21": ["spook/sos (4).png", "spook/sos (5).png", "spook/sos (6).png", "spook/sos (7).png", "spook/sos (8).png", "spook/sos (9).png", "spook/sos (10).png", "spook/sos (11).png", "spook/sos (12).png", "spook/sos (13).png"]
+                    },
+                    "missing": {
+                        "18/06/23": ["spook/zuz (1).png", "spook/zuz (2).png", "spook/zuz (3).png", "spook/zuz (4).png", "spook/zuz (5).png", "spook/zuz (6).png", "spook/zuz (7).png"]
+                    },
+                    "plagiarist": {
+                        "13/07/22": ["spook/oi (1).png", "spook/oi (2).png", "spook/oi (3).png", "spook/oi (4).png", "spook/oi (5).png", "spook/oi (6).png", "spook/oi (7).png", "spook/oi (8).png"],
+                        "03/03/22": ["spook/oi (10).png", "spook/oi (11).png", "spook/oi (12).png", "spook/oi (13).png", "spook/oi (14).png", "spook/oi (15).png"],
+                        "25/03/21": ["spook/oi (16).png", "spook/oi (17).png", "spook/oi (18).png", "spook/oi (19).png", "spook/oi (20).png", "spook/oi (21).png", "spook/oi (22).png", "spook/oi (23).png"]
+                    },
+                    "history": {
+                        "18/06/23": [
+                            { title: "Осталось только лютое похмелье" },
+                            { title: "Онли фанс"},
+                            { title: "Однажды..."},
+                            { title: "но всё таки лучше были алкостримы"},
+                            { title: "хотел пока не понял что находится в тайланде"},
+                            { title: "Твича"},
+                            { title: "Крабы"}
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "TIFOKKUSU",
+        accDir: "nb",
+        avatar: "nb_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "22/02/21": [ "nb/rabota (1).png", "nb/rabota (2).png", "nb/rabota (3).png", "nb/rabota (4).png", "nb/rabota (5).png", "nb/rabota (6).png", "nb/rabota (7).png", "nb/rabota (8).png", "nb/rabota (9).png", "nb/rabota (10).png", "nb/rabota (11).png", "nb/rabota (12).png", "nb/rabota (13).png", "nb/rabota (14).png", "nb/rabota (15).png", "nb/rabota (16).png", "nb/rabota (17).png", "nb/rabota (18).png", "nb/rabota (19).png"],
+                        "23/02/21": [ "nb/rabota (20).png", "nb/rabota (21).png", "nb/rabota (22).png", "nb/rabota (23).png", "nb/rabota (24).png", "nb/rabota (25).png", "nb/rabota (26).png", "nb/rabota (27).png", "nb/rabota (28).png", "nb/rabota (29).png", "nb/rabota (30).png", "nb/rabota (31).png"],
+                        "27/02/21": [ "nb/rabota (32).png", "nb/rabota (33).png", "nb/rabota (34).png", "nb/rabota (35).png", "nb/rabota (36).png", "nb/rabota (37).png", "nb/rabota (38).png", "nb/rabota (39).png"],
+                        "19/04/21": [ "nb/rabota (40).png", "nb/rabota (41).png", "nb/rabota (42).png"],
+		        "24/07/21": [ "nb/rabota (43).png", "nb/rabota (44).png", "nb/rabota (45).png", "nb/rabota (46).png"]
+                    },
+                    "plagiarist": {
+                        "23/03/21": ["nb/oi (1).png", "nb/oi (2).png", "nb/oi (3).png", "nb/oi (4).png", "nb/oi (5).png", "nb/oi (6).png", "nb/oi (7).png", "nb/oi (8).png"],
+                        "25/03/21": ["nb/oi (9).png", "nb/oi (10).png", "nb/oi (11).png", "nb/oi (12).png", "nb/oi (13).png", "nb/oi (14).png", "nb/oi (15).png", "nb/oi (16).png", "nb/oi (17).png", "nb/oi (18).png", "nb/oi (19).png", "nb/oi (20).png", "nb/oi (21).png", "nb/oi (22).png", "nb/oi (23).png"],
+                        "19/04/21": ["nb/oi (24).png", "nb/oi (25).png", "nb/oi (26).png", "nb/oi (27).png", "nb/oi (28).png", "nb/oi (29).png", "nb/oi (30).png", "nb/oi (31).png", "nb/oi (32).png"]
+                    },
+                    "sandwich": {
+                        "23/03/21": ["nb/sos (1).png", "nb/sos (2).png", "nb/sos (3).png", "nb/sos (4).png", "nb/sos (5).png", "nb/sos (6).png", "nb/sos (7).png"],
+                        "25/03/21": ["nb/sos (8).png", "nb/sos (9).png", "nb/sos (10).png", "nb/sos (11).png", "nb/sos (12).png", "nb/sos (13).png", "nb/sos (14).png", "nb/sos (15).png", "nb/sos (16).png", "nb/sos (17).png"],
+                        "19/04/21": ["nb/sos (18).png", "nb/sos (19).png", "nb/sos (20).png", "nb/sos (21).png", "nb/sos (22).png"]
+                    },
+                    "express": {
+                        "23/03/21": ["nb/s (1).png", "nb/s (2).png", "nb/s (3).png", "nb/s (4).png", "nb/s (5).png"]
+                    },
+		    "icebreaker": {
+                        "24/07/21": [ "nb/pop (1).png", "nb/pop (2).png", "nb/pop (3).png", "nb/pop (4).png", "nb/pop (5).png", "nb/pop (6).png", "nb/pop (7).png", "nb/pop (8).png", "nb/pop (9).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "GNOM3000",
+        accDir: "mor",
+        avatar: "mor_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+    			"22/02/21": [ "mor/rabota (1).png"],
+    			"23/02/21": [ "mor/rabota (2).png", "mor/rabota (3).png", "mor/rabota (4).png", "mor/rabota (5).png", "mor/rabota (6).png", "mor/rabota (7).png", "mor/rabota (8).png", "mor/rabota (9).png", "mor/rabota (10).png", "mor/rabota (11).png", "mor/rabota (12).png", "mor/rabota (13).png", "mor/rabota (14).png", "mor/rabota (15).png", "mor/rabota (16).png", "mor/rabota (17).png"],
+    			"28/02/21": [ "mor/rabota (18).png", "mor/rabota (19).png", "mor/rabota (20).png", "mor/rabota (21).png", "mor/rabota (22).png", "mor/rabota (23).png", "mor/rabota (24).png", "mor/rabota (25).png", "mor/rabota (26).png", "mor/rabota (27).png", "mor/rabota (28).png" ],
+    			"19/04/21": [ "mor/rabota (29).png", "mor/rabota (30).png", "mor/rabota (31).png" ],
+    			"24/07/21": [ "mor/rabota (32).png", "mor/rabota (33).png" ]
+		    },
+                    "missing": {
+                        "18/06/23": ["mor/zuz (1).png", "mor/zuz (2).png", "mor/zuz (3).png", "mor/zuz (4).png", "mor/zuz (5).png", "mor/zuz (6).png", "mor/zuz (7).png"]
+                    },
+                    "forsecret": {
+                        "08/05/21": [ "mor/d (1).png", "mor/d (2).png"]
+                    },
+                    "plagiarist": {
+                        "25/03/21": ["mor/oi (1).png", "mor/oi (2).png", "mor/oi (3).png", "mor/oi (4).png", "mor/oi (5).png", "mor/oi (6).png", "mor/oi (7).png", "mor/oi (8).png", "mor/oi (9).png", "mor/oi (10).png", "mor/oi (11).png", "mor/oi (12).png", "mor/oi (13).png", "mor/oi (14).png", "mor/oi (15).png"],
+                        "19/04/21": ["mor/oi (16).png", "mor/oi (17).png", "mor/oi (18).png", "mor/oi (19).png", "mor/oi (20).png", "mor/oi (21).png", "mor/oi (22).png", "mor/oi (23).png", "mor/oi (24).png"],
+                        "08/05/21": ["mor/oi (25).png", "mor/oi (26).png", "mor/oi (27).png", "mor/oi (28).png", "mor/oi (29).png", "mor/oi (30).png", "mor/oi (31).png", "mor/oi (32).png", "mor/oi (33).png", "mor/oi (34).png", "mor/oi (35).png", "mor/oi (36).png"],
+                        "06/05/21": ["mor/oi (37).png", "mor/oi (38).png", "mor/oi (39).png", "mor/oi (40).png", "mor/oi (41).png", "mor/oi (42).png", "mor/oi (43).png", "mor/oi (44).png", "mor/oi (45).png", "mor/oi (46).png"]
+                    },
+                    "sandwich": {
+                        "25/03/21": ["mor/sos (1).png", "mor/sos (2).png", "mor/sos (3).png", "mor/sos (4).png", "mor/sos (5).png", "mor/sos (6).png", "mor/sos (7).png", "mor/sos (8).png", "mor/sos (9).png", "mor/sos (10).png"],
+                        "19/04/21": ["mor/sos (11).png", "mor/sos (12).png", "mor/sos (13).png", "mor/sos (14).png", "mor/sos (15).png"],
+                        "08/05/21": ["mor/sos (16).png", "mor/sos (17).png", "mor/sos (18).png"]
+                    },
+		    "icebreaker": {
+                        "24/07/21": [ "mor/pop (1).png", "mor/pop (2).png", "mor/pop (3).png", "mor/pop (4).png", "mor/pop (5).png", "mor/pop (6).png", "mor/pop (7).png", "mor/pop (8).png", "mor/pop (9).png"]
+                    },
+                    "history": {
+                        "18/06/23": [
+                            { title: "Только вот не задача, он не как не просыпался" },
+                            { title: "Вот этот сайт надо запомнить, раз и навсегда"},
+                            { title: ", до самого утра, и все было отлично. А утром болела голова"},
+                            { title: "Особенность его была в том, что он родилься с"},
+                            { title: ". И в этот же вечер, решил её распок"},
+                            { title: "Как то раз, пошёл Хантер за пивом, вечерком. Но вот незада"},
+                            { title: "Платформа, которая запрещает все вокруг, кроме боя"},
+                            { title: "Вот что нужно всем, от мало до велика, что бы он всех прещим"},
+                            { title: "С его шнурков, уже во всю брызгала белая жидкость"},
+                            { title: "А понял я это, как только он повернулся задом"},
+                            { title: "Но вот проблема, резиновый хуй не помещался в жопу Хантера."},
+                            { title: "травму детства, о хуе в жопе"},
+                            { title: "Был, дв сплыл, пассив Анатолий, стал актив Толя. И пошёл он"},
+                            { title: "Но старею слишком странно, только на половину"},
+                            { title: "Кровью, месяч всех бывших"}
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ДИБИЛ",
+        accDir: "debil",
+        avatar: "debil_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "22/02/21": [ "debil/rabota (1).png", "debil/rabota (2).png", "debil/rabota (3).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "KROGAR",
+        accDir: "krog",
+        avatar: "krog_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+    			"18/06/23": [ "krog/rabota (1).png", "krog/rabota (2).png", "krog/rabota (3).png", "krog/rabota (4).png"],
+    			"28/02/21": [ "krog/rabota (5).png", "krog/rabota (6).png", "krog/rabota (7).png", "krog/rabota (8).png", "krog/rabota (9).png", "krog/rabota (10).png", "krog/rabota (11).png", "krog/rabota (12).png" ],
+    			"06/05/21": [ "krog/rabota (13).png", "krog/rabota (14).png", "krog/rabota (15).png"],
+    			"21/05/21": [ "krog/rabota (16).png", "krog/rabota (17).png", "krog/rabota (18).png"],
+    			"14/12/21": [ "krog/rabota (19).png", "krog/rabota (20).png", "krog/rabota (21).png", "krog/rabota (22).png" ]
+		    },
+                    "plagiarist": {
+    			"18/06/23": ["krog/oi (1).png", "krog/oi (2).png", "krog/oi (3).png", "krog/oi (4).png", "krog/oi (5).png", "krog/oi (6).png", "krog/oi (7).png", "krog/oi (8).png", "krog/oi (9).png"],
+    			"08/05/21": ["krog/oi (10).png"],
+    			"21/05/21": ["krog/oi (11).png", "krog/oi (12).png", "krog/oi (13).png", "krog/oi (14).png", "krog/oi (15).png"],
+    			"14/12/21": ["krog/oi (16).png", "krog/oi (17).png", "krog/oi (18).png", "krog/oi (19).png", "krog/oi (20).png", "krog/oi (21).png", "krog/oi (22).png", "krog/oi (23).png", "krog/oi (24).png", "krog/oi (25).png", "krog/oi (26).png"]
+		    },
+                    "ochko": {
+                        "10/01/22": [ "krog/bibi (1).png", "krog/bibi (2).png", "krog/bibi (3).png", "krog/bibi (4).png", "krog/bibi (5).png", "krog/bibi (6).png", "krog/bibi (7).png"]
+                    },
+                    "sandwich": {
+                        "18/06/23": ["krog/sos (1).png", "krog/sos (2).png", "krog/sos (3).png", "krog/sos (4).png", "krog/sos (5).png"],
+                        "08/05/21": ["krog/sos (6).png", "krog/sos (7).png", "krog/sos (8).png"]
+                    },
+                    "tolpa": {
+                        "21/05/21": [ "krog/j (1).png", "krog/j (2).png"]
+                    },
+                    "history": {
+                        "18/06/23": [
+                            { title: "ПОСЛЕ ПЬЯНКИ С КИТАЙСКИМИ ДЕВУШКАМИ" },
+                            { title: "JACBOX. ХАНТЕР, запомни его и играй в нем чаще"},
+                            { title: "БЫЛЛЫ? НЕТ, БЛЯТЬ, ТАНЦЫ"},
+                            { title: "ФАЛЛОСОМ ВОРТУ"},
+                            { title: "ЧЕМ ВАШИ HONKAI"},
+                            { title: "СКАЗАЛ ХАНТЕР, КОГДА ПОЕХАЛ В ЯПОНИЮ, ПРОСТО ТРАХАТЬ ТЯ"},
+                            { title: "ПОТОМ ПРИШЕЛ ХАНТЕР И КРОГАР И ОТПИЗДНЛИ ИХ ВМЕСТИ"},
+                            { title: "Однажды меня ждёт армия и я буду жрать своих врагов"}
+                        ]
+                    },
+                    "icebreaker": {
+    			"14/12/21": ["krog/pop (1).png", "krog/pop (2).png", "krog/pop (3).png", "krog/pop (4).png", "krog/pop (5).png", "krog/pop (6).png"],
+   			"10/01/22": ["krog/pop (7).png", "krog/pop (8).png", "krog/pop (9).png", "krog/pop (10).png", "krog/pop (11).png", "krog/pop (12).png", "krog/pop (13).png", "krog/pop (14).png"],
+    			"13/01/22": ["krog/pop (15).png", "krog/pop (16).png", "krog/pop (17).png", "krog/pop (18).png", "krog/pop (19).png"]
+		    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "BORYAN",
+        accDir: "boryan",
+        avatar: "boryan_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+    			"22/02/21": [ "boryan/rabota (1).png", "boryan/rabota (2).png", "boryan/rabota (3).png", "boryan/rabota (4).png", "boryan/rabota (5).png", "boryan/rabota (6).png", "boryan/rabota (7).png", "boryan/rabota (8).png", "boryan/rabota (9).png", "boryan/rabota (10).png", "boryan/rabota (11).png", "boryan/rabota (12).png", "boryan/rabota (13).png", "boryan/rabota (14).png", "boryan/rabota (15).png", "boryan/rabota (16).png", "boryan/rabota (17).png", "boryan/rabota (18).png", "boryan/rabota (19).png", "boryan/rabota (20).png", "boryan/rabota (21).png"],
+    			"23/02/21": [ "boryan/rabota (22).png", "boryan/rabota (23).png", "boryan/rabota (24).png", "boryan/rabota (25).png", "boryan/rabota (26).png", "boryan/rabota (27).png", "boryan/rabota (28).png", "boryan/rabota (29).png", "boryan/rabota (30).png", "boryan/rabota (31).png", "boryan/rabota (32).png", "boryan/rabota (33).png"],
+    			"27/02/21": [ "boryan/rabota (34).png", "boryan/rabota (35).png", "boryan/rabota (36).png", "boryan/rabota (37).png", "boryan/rabota (38).png", "boryan/rabota (39).png", "boryan/rabota (40).png"],
+    			"28/02/21": [ "boryan/rabota (41).png", "boryan/rabota (42).png", "boryan/rabota (43).png", "boryan/rabota (44).png", "boryan/rabota (45).png", "boryan/rabota (46).png", "boryan/rabota (47).png", "boryan/rabota (48).png", "boryan/rabota (49).png", "boryan/rabota (50).png", "boryan/rabota (51).png", "boryan/rabota (52).png", "boryan/rabota (53).png", "boryan/rabota (54).png" ],
+    			"19/04/21": [ "boryan/rabota (55).png", "boryan/rabota (56).png", "boryan/rabota (57).png"],
+    			"06/05/21": [ "boryan/rabota (58).png", "boryan/rabota (59).png", "boryan/rabota (60).png", "boryan/rabota (61).png", "boryan/rabota (62).png", "boryan/rabota (63).png", "boryan/rabota (64).png", "boryan/rabota (65).png", "boryan/rabota (66).png"],
+    			"21/05/21": [ "boryan/rabota (67).png", "boryan/rabota (68).png", "boryan/rabota (69).png", "boryan/rabota (70).png", "boryan/rabota (71).png"],
+    			"10/01/22": [ "boryan/rabota (72).png", "boryan/rabota (73).png", "boryan/rabota (74).png", "boryan/rabota (75).png" ],
+    			"13/01/22": [ "boryan/rabota (76).png", "boryan/rabota (77).png" ]
+		    },
+                    "sandwich": {
+                        "13/07/22": ["boryan/sos (1).png", "boryan/sos (2).png", "boryan/sos (3).png", "boryan/sos (4).png"],
+                        "23/03/21": ["boryan/sos (5).png", "boryan/sos (6).png", "boryan/sos (7).png", "boryan/sos (8).png", "boryan/sos (9).png", "boryan/sos (10).png", "boryan/sos (11).png", "boryan/sos (12).png"]
+                    },
+                    "express": {
+                        "23/03/21": ["boryan/s (1).png", "boryan/s (2).png", "boryan/s (3).png", "boryan/s (4).png", "boryan/s (5).png"]
+                    },
+                    "missing": {
+                        "18/06/23": ["boryan/zuz (1).png", "boryan/zuz (2).png", "boryan/zuz (3).png", "boryan/zuz (4).png", "boryan/zuz (5).png", "boryan/zuz (6).png", "boryan/zuz (7).png"]
+                    },
+                    "addendum": {
+                        "14/12/21": [ "boryan/xx (1).png", "boryan/xx (2).png", "boryan/xx (3).png", "boryan/xx (4).png", "boryan/xx (5).png", "boryan/xx (6).png", "boryan/xx (7).png", "boryan/xx (8).png", "boryan/xx (9).png", "boryan/xx (10).png"]
+                    },
+                    "icebreaker": {
+    			"14/12/21": ["boryan/pop (1).png", "boryan/pop (2).png", "boryan/pop (3).png", "boryan/pop (4).png", "boryan/pop (5).png", "boryan/pop (6).png", "boryan/pop (7).png", "boryan/pop (8).png", "boryan/pop (9).png", "boryan/pop (10).png", "boryan/pop (11).png"],
+    			"13/01/22": ["boryan/pop (12).png", "boryan/pop (13).png", "boryan/pop (14).png", "boryan/pop (15).png", "boryan/pop (16).png", "boryan/pop (17).png"]
+		    },
+                    "plagiarist": {
+    			"13/07/22": ["boryan/oi (1).png", "boryan/oi (2).png", "boryan/oi (3).png", "boryan/oi (4).png", "boryan/oi (5).png", "boryan/oi (6).png", "boryan/oi (7).png"],
+    			"23/03/21": ["boryan/oi (8).png", "boryan/oi (9).png", "boryan/oi (10).png", "boryan/oi (11).png", "boryan/oi (12).png", "boryan/oi (13).png", "boryan/oi (14).png", "boryan/oi (15).png"],
+    			"25/03/21": ["boryan/oi (16).png", "boryan/oi (17).png", "boryan/oi (18).png", "boryan/oi (19).png", "boryan/oi (20).png", "boryan/oi (21).png"],
+    			"19/04/21": ["boryan/oi (22).png", "boryan/oi (23).png", "boryan/oi (24).png", "boryan/oi (25).png", "boryan/oi (26).png", "boryan/oi (27).png", "boryan/oi (28).png", "boryan/oi (29).png", "boryan/oi (30).png"],
+    			"06/05/21": ["boryan/oi (31).png", "boryan/oi (32).png", "boryan/oi (33).png", "boryan/oi (34).png", "boryan/oi (35).png", "boryan/oi (36).png"],
+    			"14/12/21": ["boryan/oi (37).png", "boryan/oi (38).png", "boryan/oi (39).png", "boryan/oi (40).png"],
+    			"20/12/21": ["boryan/oi (41).png", "boryan/oi (42).png", "boryan/oi (43).png"]
+		    },
+                    "history": {
+                        "18/06/23": [
+                            { title: "только не трогай смертелку когда краш руинит" },
+                            { title: "и наконец-то показал всем своё очко"},
+                            { title: "кто был думал что крогар засосёт хантера"},
+                            { title: "у него кончилась виза"},
+                            { title: "маб и борян начали пиздиться"},
+                            { title: "амогусы"},
+                            { title: "поэтому он пошёл к крогару чтобы попробовать его большойчлен"},
+                            { title: "из-за этого хантер вместо доки сыграл во врата штейна"},
+                            { title: "вот что больше любит краш когда видится с хантером"},
+                            { title: "это было та самая шутка в бредовухе 3"},
+                            { title: "на встречу с антоном из зайчика"},
+                            { title: "вроде 17 лет, а уже мозг как у деда"},
+                            { title: "решил как-то раз маб посмотреть жожу"}
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "GORDON",
+        accDir: "gor",
+        avatar: "gor_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "22/02/21": [ "gor/rabota (1).png", "gor/rabota (2).png", "gor/rabota (3).png", "gor/rabota (4).png", "gor/rabota (5).png", "gor/rabota (6).png", "gor/rabota (7).png", "gor/rabota (8).png"],
+                        "18/06/23": [ "gor/rabota (9).png", "gor/rabota (10).png", "gor/rabota (11).png", "gor/rabota (12).png"],
+                        "23/02/21": [ "gor/rabota (13).png", "gor/rabota (14).png", "gor/rabota (15).png", "gor/rabota (16).png", "gor/rabota (17).png", "gor/rabota (18).png", "gor/rabota (19).png", "gor/rabota (20).png"],
+                        "27/02/21": [ "gor/rabota (21).png", "gor/rabota (22).png", "gor/rabota (23).png", "gor/rabota (24).png"],
+                        "28/02/21": [ "gor/rabota (25).png", "gor/rabota (26).png", "gor/rabota (27).png"],
+                        "13/07/22": [ "gor/rabota (28).png", "gor/rabota (29).png"],
+                        "19/04/21": [ "gor/rabota (30).png", "gor/rabota (31).png", "gor/rabota (32).png"],
+                        "06/05/21": [ "gor/rabota (33).png", "gor/rabota (34).png", "gor/rabota (35).png", "gor/rabota (36).png", "gor/rabota (37).png", "gor/rabota (38).png"]
+                    },
+                    "missing": {
+                        "18/06/23": ["gor/zuz (1).png", "gor/zuz (2).png", "gor/zuz (3).png", "gor/zuz (4).png", "gor/zuz (5).png", "gor/zuz (6).png", "gor/zuz (7).png"]
+                    },
+                    "express": {
+                        "23/03/21": ["gor/s (1).png", "gor/s (2).png", "gor/s (3).png", "gor/s (4).png", "gor/s (5).png"]
+                    },
+                    "plagiarist": {
+ 		        "18/06/23": ["gor/oi (1).png", "gor/oi (2).png", "gor/oi (3).png", "gor/oi (4).png", "gor/oi (5).png", "gor/oi (6).png", "gor/oi (7).png", "gor/oi (8).png", "gor/oi (9).png"],
+       		        "13/07/22": ["gor/oi (10).png", "gor/oi (11).png", "gor/oi (12).png", "gor/oi (13).png", "gor/oi (14).png", "gor/oi (15).png"],
+		        "03/03/22": ["gor/oi (16).png", "gor/oi (17).png", "gor/oi (18).png", "gor/oi (19).png", "gor/oi (20).png", "gor/oi (21).png"],
+		        "23/03/21": ["gor/oi (22).png", "gor/oi (23).png", "gor/oi (24).png", "gor/oi (25).png", "gor/oi (26).png", "gor/oi (27).png", "gor/oi (28).png", "gor/oi (29).png", "gor/oi (30).png", "gor/oi (31).png", "gor/oi (32).png", "gor/oi (33).png", "gor/oi (34).png", "gor/oi (35).png", "gor/oi (36).png"],
+		        "25/03/21": ["gor/oi (37).png", "gor/oi (38).png", "gor/oi (39).png", "gor/oi (40).png", "gor/oi (41).png", "gor/oi (42).png", "gor/oi (43).png", "gor/oi (44).png", "gor/oi (45).png", "gor/oi (46).png", "gor/oi (47).png", "gor/oi (48).png", "gor/oi (49).png", "gor/oi (50).png", "gor/oi (51).png"],
+		        "19/04/21": ["gor/oi (52).png", "gor/oi (53).png", "gor/oi (54).png", "gor/oi (55).png", "gor/oi (56).png", "gor/oi (57).png", "gor/oi (58).png", "gor/oi (59).png", "gor/oi (60).png"],
+		        "06/05/21": ["gor/oi (61).png", "gor/oi (62).png", "gor/oi (63).png", "gor/oi (64).png", "gor/oi (65).png", "gor/oi (66).png"]
+		    },
+                    "sandwich": {
+                        "18/06/23": ["gor/sos (1).png", "gor/sos (2).png", "gor/sos (3).png", "gor/sos (4).png", "gor/sos (5).png"],
+                        "13/07/22": ["gor/sos (6).png", "gor/sos (7).png"],
+                        "23/03/21": ["gor/sos (8).png", "gor/sos (9).png", "gor/sos (10).png", "gor/sos (11).png", "gor/sos (12).png", "gor/sos (13).png", "gor/sos (14).png", "gor/sos (15).png"],
+                        "25/03/21": ["gor/sos (16).png", "gor/sos (17).png", "gor/sos (18).png", "gor/sos (19).png", "gor/sos (20).png", "gor/sos (21).png", "gor/sos (22).png", "gor/sos (23).png", "gor/sos (24).png", "gor/sos (25).png"]
+                    },
+                    "history": {
+                        "18/06/23": [
+                            { title: "Хантеру на Алкострим, где он увидел........" },
+                            { title: "И решил Хантер-Аниме-Девочка начать вести стримы на"},
+                            { title: "Это история началась с превозмогания Хантера. И начал он АЛКО"},
+                            { title: "Это было столько же отвратительно, сколько и восхитительно"},
+                            { title: "Было роно длинное и на ощупь упругое......"},
+                            { title: "И понял он, что пути домой не будет"},
+                            { title: "И пили они до ночь пока не увидели они........"},
+                            { title: "И сказали они все разом ХАНТЕР СУС"},
+                            { title: "Но понял, что нужно что-то по длинее"},
+                            { title: "ЭТО БЫЛ ХАНТЕР!!!"},
+                            { title: "Додрахаться в БДСМ"},
+                            { title: "Произошло жесткое геё порно"},
+                            { title: "Пришлось надеть женские трусы, чтобы не опозорится"},
+                            { title: "Это история началась с того как Хантер проснул и понял, что"},
+                            { title: "Данные способ помог и всех бывших не стало"}
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ЛИЛЯ",
+        accDir: "lil",
+        avatar: "boryan_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "18/06/23": [ "lil/rabota (1).png", "lil/rabota (2).png", "lil/rabota (3).png", "lil/rabota (4).png"]
+                    },
+                    "plagiarist": {
+                        "18/06/23": ["lil/oi (1).png", "lil/oi (2).png", "lil/oi (3).png", "lil/oi (4).png", "lil/oi (5).png", "lil/oi (6).png", "lil/oi (7).png", "lil/oi (8).png", "lil/oi (9).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ПИПУРКА",
+        accDir: "bpip",
+        avatar: "bpip_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "22/02/21": [ "bpip/rabota (1).png", "bpip/rabota (2).png", "bpip/rabota (3).png", "bpip/rabota (4).png", "bpip/rabota (5).png", "bpip/rabota (6).png", "bpip/rabota (7).png", "bpip/rabota (8).png", "bpip/rabota (9).png", "bpip/rabota (10).png", "bpip/rabota (11).png", "bpip/rabota (12).png", "bpip/rabota (13).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "REVENT",
+        accDir: "revent",
+        avatar: "boryan_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "22/02/21": [ "revent/rabota (1).png", "revent/rabota (2).png", "revent/rabota (3).png", "revent/rabota (4).png", "revent/rabota (5).png"],
+                        "23/02/21": [ "revent/rabota (6).png", "revent/rabota (7).png", "revent/rabota (8).png", "revent/rabota (9).png"],
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "РЕПТИЛИЯ",
+        accDir: "rep",
+        avatar: "rep_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+    			"22/02/21": [ "rep/rabota (1).png", "rep/rabota (2).png", "rep/rabota (3).png", "rep/rabota (4).png", "rep/rabota (5).png", "rep/rabota (6).png", "rep/rabota (7).png", "rep/rabota (8).png", "rep/rabota (9).png", "rep/rabota (10).png", "rep/rabota (11).png", "rep/rabota (12).png", "rep/rabota (13).png", "rep/rabota (14).png", "rep/rabota (15).png", "rep/rabota (16).png", "rep/rabota (17).png", "rep/rabota (18).png", "rep/rabota (19).png", "rep/rabota (20).png", "rep/rabota (21).png"],
+    			"23/02/21": [ "rep/rabota (22).png", "rep/rabota (23).png", "rep/rabota (24).png", "rep/rabota (25).png", "rep/rabota (26).png", "rep/rabota (27).png", "rep/rabota (28).png", "rep/rabota (29).png", "rep/rabota (30).png", "rep/rabota (31).png", "rep/rabota (32).png", "rep/rabota (33).png", "rep/rabota (34).png", "rep/rabota (35).png", "rep/rabota (36).png"],
+    			"27/02/21": [ "rep/rabota (37).png", "rep/rabota (38).png", "rep/rabota (39).png", "rep/rabota (40).png", "rep/rabota (41).png", "rep/rabota (42).png", "rep/rabota (43).png", "rep/rabota (44).png", "rep/rabota (45).png", "rep/rabota (46).png", "rep/rabota (47).png"],
+    			"28/02/21": [ "rep/rabota (48).png", "rep/rabota (49).png", "rep/rabota (50).png", "rep/rabota (51).png", "rep/rabota (52).png", "rep/rabota (53).png", "rep/rabota (54).png", "rep/rabota (55).png", "rep/rabota (56).png", "rep/rabota (57).png", "rep/НЕНАВИЖУ ЭТУ РАБОТУ.png" ],
+    			"19/04/21": [ "rep/rabota (58).png", "rep/rabota (59).png", "rep/rabota (60).png", "rep/rabota (61).png", "rep/rabota (62).png", "rep/rabota (63).png" ],
+    			"06/05/21": [ "rep/rabota (64).png", "rep/rabota (65).png", "rep/rabota (66).png", "rep/rabota (67).png", "rep/rabota (68).png", "rep/rabota (69).png", "rep/rabota (70).png", "rep/rabota (71).png", "rep/rabota (72).png", "rep/rabota (73).png", "rep/rabota (74).png", "rep/rabota (75).png", "rep/rabota (76).png" ],
+    			"21/05/21": [ "rep/rabota (77).png", "rep/rabota (78).png", "rep/rabota (79).png", "rep/rabota (80).png", "rep/rabota (81).png" ]
+		    },
+                    "plagiarist": {
+    			"18/06/23": ["rep/oi (1).png", "rep/oi (2).png", "rep/oi (3).png", "rep/oi (4).png", "rep/oi (5).png", "rep/oi (6).png", "rep/oi (7).png", "rep/oi (8).png", "rep/oi (9).png"],
+    			"23/03/21": ["rep/oi (10).png", "rep/oi (11).png", "rep/oi (12).png", "rep/oi (13).png", "rep/oi (14).png", "rep/oi (15).png", "rep/oi (16).png", "rep/oi (17).png", "rep/oi (18).png", "rep/oi (19).png", "rep/oi (20).png", "rep/oi (21).png", "rep/oi (22).png", "rep/oi (23).png", "rep/oi (24).png"],
+    			"19/04/21": ["rep/oi (25).png", "rep/oi (26).png", "rep/oi (27).png", "rep/oi (28).png", "rep/oi (29).png", "rep/oi (30).png", "rep/oi (31).png", "rep/oi (32).png", "rep/oi (33).png"],
+    			"06/05/21": ["rep/oi (34).png", "rep/oi (35).png", "rep/oi (36).png", "rep/oi (37).png", "rep/oi (38).png", "rep/oi (39).png", "rep/oi (40).png", "rep/oi (41).png", "rep/oi (42).png", "rep/oi (43).png", "rep/oi (44).png", "rep/oi (45).png", "rep/oi (46).png", "rep/oi (47).png", "rep/oi (48).png"],
+    			"21/05/21": ["rep/oi (49).png", "rep/oi (50).png", "rep/oi (51).png", "rep/oi (52).png", "rep/oi (53).png", "rep/oi (54).png"],
+    			"14/12/21": ["rep/oi (55).png", "rep/oi (56).png", "rep/oi (57).png", "rep/oi (58).png", "rep/oi (59).png", "rep/oi (60).png", "rep/oi (61).png", "rep/oi (62).png", "rep/oi (63).png", "rep/oi (64).png", "rep/oi (65).png", "rep/oi (66).png", "rep/oi (67).png", "rep/oi (68).png", "rep/oi (69).png", "rep/oi (70).png"]
+		    },
+                    "addendum": {
+                        "14/12/21": [ "rep/xx (1).png", "rep/xx (2).png", "rep/xx (3).png", "rep/xx (4).png", "rep/xx (5).png", "rep/xx (6).png", "rep/xx (7).png", "rep/xx (8).png", "rep/xx (9).png", "rep/xx (10).png"]
+                    },
+                    "icebreaker": {
+    			"14/12/21": ["rep/pop (1).png", "rep/pop (2).png", "rep/pop (3).png", "rep/pop (4).png", "rep/pop (5).png", "rep/pop (6).png", "rep/pop (7).png", "rep/pop (8).png", "rep/pop (9).png", "rep/pop (10).png", "rep/pop (11).png"],
+    			"20/12/21": ["rep/pop (12).png", "rep/pop (13).png", "rep/pop (14).png", "rep/pop (15).png", "rep/pop (16).png"]
+		    },
+                    "sandwich": {
+    			"23/03/21": ["rep/sos (1).png", "rep/sos (2).png", "rep/sos (3).png", "rep/sos (4).png", "rep/sos (5).png", "rep/sos (6).png", "rep/sos (7).png"],
+    			"19/04/21": ["rep/sos (8).png", "rep/sos (9).png", "rep/sos (10).png", "rep/sos (11).png", "rep/sos (12).png"],
+    			"20/12/21": ["rep/sos (13).png", "rep/sos (14).png", "rep/sos (15).png", "rep/sos (16).png", "rep/sos (17).png"]
+		    },
+                    "tolpa": {
+                        "21/05/21": [ "rep/j (1).png", "rep/j (2).png"]
+                    },
+                    "express": {
+                        "23/03/21": ["rep/s (1).png", "rep/s (2).png", "rep/s (3).png", "rep/s (4).png", "rep/s (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "CRASH",
+        accDir: "crash",
+        avatar: "crash_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+    			"18/06/23": [ "crash/rabota (1).png", "crash/rabota (2).png", "crash/rabota (3).png", "crash/rabota (4).png"],
+    			"03/03/22": [ "crash/rabota (5).png", "crash/rabota (6).png", "crash/rabota (7).png"],
+    			"24/07/21": [ "crash/rabota (8).png", "crash/rabota (9).png", "crash/rabota (10).png", "crash/rabota (11).png", "crash/rabota (12).png", "crash/rabota (13).png" ],
+    			"14/12/21": [ "crash/rabota (14).png", "crash/rabota (15).png", "crash/rabota (16).png", "crash/rabota (17).png" ],
+    			"10/01/22": [ "crash/rabota (18).png", "crash/rabota (19).png", "crash/rabota (20).png", "crash/rabota (21).png" ]
+		    },
+                    "missing": {
+                        "18/06/23": ["crash/zuz (1).png", "crash/zuz (2).png", "crash/zuz (3).png", "crash/zuz (4).png", "crash/zuz (5).png", "crash/zuz (6).png", "crash/zuz (7).png"]
+                    },
+                    "plagiarist": {
+    			"18/06/23": ["crash/oi (1).png", "crash/oi (2).png", "crash/oi (3).png", "crash/oi (4).png", "crash/oi (5).png", "crash/oi (6).png", "crash/oi (7).png", "crash/oi (8).png", "crash/oi (9).png"],
+    			"03/03/22": ["crash/oi (10).png", "crash/oi (11).png", "crash/oi (12).png", "crash/oi (13).png", "crash/oi (14).png", "crash/oi (15).png"],
+    			"14/12/21": ["crash/oi (16).png", "crash/oi (17).png", "crash/oi (18).png", "crash/oi (19).png", "crash/oi (20).png", "crash/oi (21).png", "crash/oi (22).png", "crash/oi (23).png", "crash/oi (24).png", "crash/oi (25).png", "crash/oi (26).png"],
+    			"20/12/21": ["crash/oi (27).png", "crash/oi (28).png", "crash/oi (29).png", "crash/oi (30).png", "crash/oi (31).png", "crash/oi (32).png", "crash/oi (33).png"],
+    			"10/01/22": ["crash/oi (34).png", "crash/oi (35).png", "crash/oi (36).png", "crash/oi (37).png", "crash/oi (38).png", "crash/oi (39).png", "crash/oi (40).png", "crash/oi (41).png", "crash/oi (42).png"]
+		    },
+                    "ochko": {
+                        "10/01/22": [ "crash/bibi (1).png", "crash/bibi (2).png", "crash/bibi (3).png", "crash/bibi (4).png", "crash/bibi (5).png"]
+                    },
+		    "icebreaker": {
+    			"24/07/21": [ "crash/pop (1).png", "crash/pop (2).png", "crash/pop (3).png", "crash/pop (4).png", "crash/pop (5).png", "crash/pop (6).png", "crash/pop (7).png", "crash/pop (8).png", "crash/pop (9).png"],
+    			"14/12/21": [ "crash/pop (10).png", "crash/pop (11).png", "crash/pop (12).png", "crash/pop (13).png", "crash/pop (14).png", "crash/pop (15).png" ],
+    			"20/12/21": [ "crash/pop (16).png", "crash/pop (17).png", "crash/pop (18).png", "crash/pop (19).png", "crash/pop (20).png", "crash/pop (21).png", "crash/pop (22).png", "crash/pop (23).png" ],
+    			"10/01/22": [ "crash/pop (24).png", "crash/pop (25).png", "crash/pop (26).png", "crash/pop (27).png", "crash/pop (28).png", "crash/pop (29).png", "crash/pop (30).png", "crash/pop (31).png" ]
+		    },
+                    "sandwich": {
+                        "18/06/23": ["crash/sos (1).png", "crash/sos (2).png", "crash/sos (3).png", "crash/sos (4).png", "crash/sos (5).png"],
+                        "20/12/21": ["crash/sos (6).png", "crash/sos (7).png", "crash/sos (8).png", "crash/sos (9).png", "crash/sos (10).png"]
+                    },
+                    "history": {
+                        "18/06/23": [
+                            { title: "Себя со стороны и упал в обоморок. Зрители пытались разбудить" },
+                            { title: "Руинит мощно, вставляя так что протыкает насквозь... все я"},
+                            { title: "Стрим. Внезапно он достал толстый фалоимитатор после доната"},
+                            { title: "На свет появился необычный Хантер"},
+                            { title: "Однажды Борян купил обнаженную статую Хантера в полный рост"},
+                            { title: "Есть только путь на студию порнхаба"},
+                            { title: "Хантера без трусов. Но это был уже экслюзивный контент для"},
+                            { title: "ил своими булками и смачно взял в рот большие"},
+                            { title: "Хантер решил пойти простым путем и достать его через жопу"},
+                            { title: "Понял что это был Хантер"},
+                            { title: "Однажды Хантер и даша решили сняться в гей порно"},
+                            { title: "Но это было не остановить Хантер уже почти кончил ему на"},
+                            { title: "Хантер решил прийти без трусов"},
+                            { title: "- О, значит меня не посадят за педовилию. Снимай штаны"},
+                            { title: "Хантер так сказал и закончил стрим на онлифанс"}
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "КЛЁВОЕ_ИМЯ6147",
+        accDir: "x",
+        avatar: "crash_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "18/06/23": [ "x/6147 (1).png", "x/6147 (2).png", "x/6147 (3).png", "x/6147 (4).png"]
+                    },
+                    "plagiarist": {
+                        "18/06/23": ["x/6147 oi (1).png", "x/6147 oi (2).png", "x/6147 oi (3).png", "x/6147 oi (4).png", "x/6147 oi (5).png", "x/6147 oi (6).png", "x/6147 oi (7).png", "x/6147 oi (8).png", "x/6147 oi (9).png"]
+                    }
+                }
+            },
+            {
+                subDir: "kok", 
+                subName: "КЛЁВОЕ_ИМЯ1160", 
+                avatar: "cot_ava.png", 
+                modes: {
+                    "classic": {
+                        "27/02/21": [ "x/1160 (1).png", "x/1160 (2).png", "x/1160 (3).png"]
+                    }
+                }
+            },
+            {
+                subDir: "foff", 
+                subName: "КЛЁВОЕ_ИМЯ7779", 
+                avatar: "beb_ava.png", 
+                modes: {
+                    "classic": {
+                        "06/05/21": [ "x/7779 (1).png", "x/7779 (2).png", "x/7779 (3).png", "x/7779 (4).png", "x/7779 (5).png", "x/7779 (6).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ГРАФ МИХАИЛ",
+        accDir: "oio",
+        avatar: "spook_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "sandwich": {
+                        "18/06/23": [ "oio/sos (1).png", "oio/sos (2).png", "oio/sos (3).png", "oio/sos (4).png", "oio/sos (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "DEVYATKA",
+        accDir: "as",
+        avatar: "as_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "23/02/21": [ "aso/rabota (1).png", "aso/rabota (2).png", "aso/rabota (3).png", "aso/rabota (4).png", "aso/rabota (5).png", "aso/rabota (6).png", "aso/rabota (7).png", "aso/rabota (8).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "KOT PRO",
+        accDir: "cot",
+        avatar: "cot_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "27/02/21": [ "cot/rabota (1).png", "cot/rabota (2).png", "cot/rabota (3).png", "cot/rabota (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+     {
+        accountName: "САНЁКЦИПИН228",
+        accDir: "saneck",
+        avatar: "stiven_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "27/02/21": [ "saneck/rabota (1).png", "saneck/rabota (2).png", "saneck/rabota (3).png", "saneck/rabota (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "VALERY",
+        accDir: "valery",
+        avatar: "debil_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "27/02/21": [ "valery/rabota (1).png", "valery/rabota (2).png", "valery/rabota (3).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ЯРКА ЗАБИВАКА",
+        accDir: "arr",
+        avatar: "arr_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "27/02/21": [ "arr/rabota (1).png", "arr/rabota (2).png", "arr/rabota (3).png", "arr/rabota (4).png"]
+                    },
+                    "plagiarist": {
+                        "23/03/21": ["arr/oi (1).png", "arr/oi (2).png", "arr/oi (3).png", "arr/oi (4).png", "arr/oi (5).png", "arr/oi (6).png", "arr/oi (7).png", "arr/oi (8).png", "arr/oi (9).png", "arr/oi (10).png", "arr/oi (11).png", "arr/oi (12).png", "arr/oi (13).png", "arr/oi (14).png", "arr/oi (15).png"],
+                        "25/03/21": ["arr/oi (16).png", "arr/oi (17).png", "arr/oi (18).png", "arr/oi (19).png", "arr/oi (20).png", "arr/oi (21).png", "arr/oi (22).png", "arr/oi (23).png"]
+                    },
+                    "sandwich": {
+                        "25/03/21": ["arr/sos (1).png", "arr/sos (2).png", "arr/sos (3).png", "arr/sos (4).png", "arr/sos (5).png", "arr/sos (6).png", "arr/sos (7).png", "arr/sos (8).png", "arr/sos (9).png", "arr/sos (10).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ОГО",
+        accDir: "ogo",
+        avatar: "ogo_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                       "27/02/21": [ "ogo/rabota (1).png", "ogo/rabota (2).png", "ogo/rabota (3).png", "ogo/rabota (4).png"],
+                       "28/02/21": [ "ogo/rabota (5).png", "ogo/rabota (6).png", "ogo/rabota (7).png", "ogo/rabota (8).png", "ogo/rabota (9).png" ]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "PAXAXOSHKA",
+        accDir: "pax",
+        avatar: "xahtep_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "27/02/21": [ "pax/rabota (1).png", "pax/rabota (2).png", "pax/rabota (3).png", "pax/rabota (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "КТО ТО",
+        accDir: "wot",
+        avatar: "wot_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "27/02/21": [ "wot/rabota (1).png", "wot/rabota (2).png", "wot/rabota (3).png", "wot/rabota (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "-_- STALKER100 -_-",
+        accDir: "stal",
+        avatar: "stal_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "27/02/21": [ "stal/rabota (1).png", "stal/rabota (2).png", "stal/rabota (3).png", "stal/rabota (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "NEON GNOME",
+        accDir: "tutu",
+        avatar: "ogo_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "28/02/21": [ "tutu/rabota (1).png", "tutu/rabota (2).png", "tutu/rabota (3).png", "tutu/rabota (4).png", "tutu/rabota (5).png", "tutu/rabota (6).png", "tutu/rabota (7).png", "tutu/rabota (8).png", "tutu/rabota (9).png", "tutu/rabota (10).png", "tutu/rabota (11).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ЛЖЕ ХАНТЕР",
+        accDir: "face",
+        avatar: "xahtep_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "27/02/21": [ "fack/rabota (1).png", "fack/rabota (2).png", "fack/rabota (3).png", "fack/rabota (4).png"],
+                        "28/02/21": [ "fack/rabota (5).png", "fack/rabota (6).png", "fack/rabota (7).png", "fack/rabota (8).png", "fack/rabota (9).png"]
+                    },
+                    "express": {
+                        "23/03/21": ["fack/s (1).png", "fack/s (2).png", "fack/s (3).png", "fack/s (4).png", "fack/s (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ЯРКИЙ FLESHBI",
+        accDir: "opp",
+        avatar: "stiven_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "28/02/21": [ "opp/rabota (1).png", "opp/rabota (2).png", "opp/rabota (3).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ЖЕНЯ",
+        accDir: "jeny",
+        avatar: "jeny_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "13/07/22": ["jeny/oi (1).png", "jeny/oi (2).png", "jeny/oi (3).png", "jeny/oi (4).png", "jeny/oi (5).png", "jeny/oi (6).png", "jeny/oi (7).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "MAKCAT",
+        accDir: "mak",
+        avatar: "mak_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "03/03/22": [ "mak/rabota (1).png", "mak/rabota (2).png", "mak/rabota (3).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "HOLODOK",
+        accDir: "holod",
+        avatar: "holod_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "03/03/22": [ "holod/rabota (1).png", "holod/rabota (2).png", "holod/rabota (3).png"]
+                    },
+                    "plagiarist": {
+                        "03/03/22": ["holod/oi (1).png", "holod/oi (2).png", "holod/oi (3).png", "holod/oi (4).png", "holod/oi (5).png", "holod/oi (6).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "БУЛОЧКА",
+        accDir: "bul",
+        avatar: "bul_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "23/03/21": ["bul/oi (1).png", "bul/oi (2).png", "bul/oi (3).png", "bul/oi (4).png", "bul/oi (5).png", "bul/oi (6).png", "bul/oi (7).png", "bul/oi (8).png", "bul/oi (9).png", "bul/oi (10).png", "bul/oi (11).png"]
+                    },
+                    "sandwich": {
+                        "23/03/21": ["bul/sos (1).png", "bul/sos (2).png", "bul/sos (3).png", "bul/sos (4).png", "bul/sos (5).png", "bul/sos (6).png", "bul/sos (7).png"],
+                        "25/03/21": ["bul/sos (8).png", "bul/sos (9).png", "bul/sos (10).png", "bul/sos (11).png", "bul/sos (12).png", "bul/sos (13).png", "bul/sos (14).png", "bul/sos (15).png", "bul/sos (16).png", "bul/sos (17).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ДЕДЛИПАРКУР229",
+        accDir: "ded",
+        avatar: "boryan_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "23/03/21": ["ded/oi (1).png", "ded/oi (2).png", "ded/oi (3).png", "ded/oi (4).png", "ded/oi (5).png", "ded/oi (6).png", "ded/oi (7).png", "ded/oi (8).png", "ded/oi (9).png", "ded/oi (10).png", "ded/oi (11).png", "ded/oi (12).png", "ded/oi (13).png", "ded/oi (14).png", "ded/oi (15).png"]
+                    },
+                    "sandwich": {
+                        "23/03/21": ["ded/sos (1).png", "ded/sos (2).png", "ded/sos (3).png", "ded/sos (4).png", "ded/sos (5).png", "ded/sos (6).png", "ded/sos (7).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "TAXEMICCHIP",
+        accDir: "hax",
+        avatar: "hax_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "sandwich": {
+                        "23/03/21": ["hax/sos (1).png", "hax/sos (2).png", "hax/sos (3).png", "hax/sos (4).png", "hax/sos (5).png", "hax/sos (6).png", "hax/sos (7).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ЖОПА 2033",
+        accDir: "but",
+        avatar: "but_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "express": {
+                        "23/03/21": ["but/s (1).png", "but/s (2).png", "but/s (3).png", "but/s (4).png", "but/s (5).png"]
+                    },
+                    "sandwich": {
+                        "25/03/21": ["but/sos (1).png", "but/sos (2).png", "but/sos (3).png", "but/sos (4).png", "but/sos (5).png", "but/sos (6).png", "but/sos (7).png", "but/sos (8).png", "but/sos (9).png", "but/sos (10).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ИНОПРИШИЛЕНЕЦ",
+        accDir: "ino",
+        avatar: "mor_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "express": {
+                        "23/03/21": ["ino/s (1).png", "ino/s (2).png", "ino/s (3).png", "ino/s (4).png", "ino/s (5).png"]
+                    },
+                    "sandwich": {
+                        "25/03/21": ["ino/sos (1).png", "ino/sos (2).png", "ino/sos (3).png", "ino/sos (4).png", "ino/sos (5).png", "ino/sos (6).png", "ino/sos (7).png", "ino/sos (8).png", "ino/sos (9).png", "ino/sos (10).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "VRODEVYATKA",
+        accDir: "vro",
+        avatar: "ogo_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "express": {
+                        "23/03/21": ["vro/s (1).png", "vro/s (2).png", "vro/s (3).png", "vro/s (4).png", "vro/s (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "STEFANRUDVIG",
+        accDir: "ss",
+        avatar: "ss_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "25/03/21": [ "ss/oi (1).png", "ss/oi (2).png", "ss/oi (3).png", "ss/oi (4).png", "ss/oi (5).png", "ss/oi (6).png", "ss/oi (7).png", "ss/oi (8).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "NASTYUHA4SV",
+        accDir: "nas",
+        avatar: "wot_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "sandwich": {
+                        "25/03/21": [ "nas/sos (1).png", "nas/sos (2).png", "nas/sos (3).png", "nas/sos (4).png", "nas/sos (5).png", "nas/sos (6).png", "nas/sos (7).png", "nas/sos (8).png", "nas/sos (9).png", "nas/sos (10).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "4ORTOVSUKKUB",
+        accDir: "4or",
+        avatar: "boryan_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "sandwich": {
+                        "19/04/21": [ "4or/sos (1).png", "4or/sos (2).png", "4or/sos (3).png", "4or/sos (4).png", "4or/sos (5).png"]
+                    },
+                    "plagiarist": {
+                        "19/04/21": [ "4or/oi (1).png", "4or/oi (2).png", "4or/oi (3).png", "4or/oi (4).png", "4or/oi (5).png", "4or/oi (6).png", "4or/oi (7).png", "4or/oi (8).png", "4or/oi (9).png"],
+                        "06/05/21": [ "4or/oi (10).png", "4or/oi (11).png", "4or/oi (12).png", "4or/oi (13).png", "4or/oi (14).png", "4or/oi (15).png", "4or/oi (16).png", "4or/oi (17).png", "4or/oi (18).png"]
+                    },
+                    "classic": {
+                        "19/04/21": [ "4or/rabota (1).png", "4or/rabota (2).png", "4or/rabota (3).png"],
+                        "06/05/21": [ "4or/rabota (4).png", "4or/rabota (5).png", "4or/rabota (6).png", "4or/rabota (7).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "УМНАЯПЕЧЕНЬ",
+        accDir: "uco",
+        avatar: "boryan_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "forsecret": {
+                        "08/05/21": [ "uco/d (1).png", "uco/d (2).png"]
+                    },
+                    "sandwich": {
+                        "08/05/21": ["uco/sos (1).png"]
+                    },
+                    "plagiarist": {
+                        "08/05/21": ["uco/oi (1).png", "uco/oi (2).png", "uco/oi (3).png", "uco/oi (4).png", "uco/oi (5).png", "uco/oi (6).png", "uco/oi (7).png", "uco/oi (8).png", "uco/oi (9).png", "uco/oi (10).png", "uco/oi (11).png", "uco/oi (12).png"],
+                        "06/05/21": ["uco/oi (13).png", "uco/oi (14).png", "uco/oi (15).png", "uco/oi (16).png", "uco/oi (17).png", "uco/oi (18).png", "uco/oi (19).png", "uco/oi (20).png", "uco/oi (21).png"]
+                    },
+                    "classic": {
+    			"06/05/21": [ "uco/rabota (1).png", "uco/rabota (2).png", "uco/rabota (3).png", "uco/rabota (4).png"],
+   		        "24/07/21": [ "uco/rabota (5).png", "uco/rabota (6).png", "uco/rabota (7).png", "uco/rabota (8).png", "uco/rabota (9).png", "uco/rabota (10).png" ]
+		    },
+		    "icebreaker": {
+                        "24/07/21": [ "uco/pop (1).png", "uco/pop (2).png", "uco/pop (3).png", "uco/pop (4).png", "uco/pop (5).png", "uco/pop (6).png", "uco/pop (7).png", "uco/pop (8).png", "uco/pop (9).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "4IZKEYK",
+        accDir: "chiz",
+        avatar: "vv_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "forsecret": {
+                        "08/05/21": [ "chiz/d (1).png", "chiz/d (2).png"]
+                    },
+                    "sandwich": {
+                        "08/05/21": ["chiz/sos (1).png", "chiz/sos (2).png", "chiz/sos (3).png"]
+                    },
+                    "plagiarist": {
+                        "08/05/21": ["chiz/oi (1).png", "chiz/oi (2).png", "chiz/oi (3).png", "chiz/oi (4).png", "chiz/oi (5).png", "chiz/oi (6).png", "chiz/oi (7).png", "chiz/oi (8).png", "chiz/oi (9).png", "chiz/oi (10).png", "chiz/oi (11).png", "chiz/oi (12).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ШНЮК",
+        accDir: "spider",
+        avatar: "vv_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "08/05/21": [ "spider/oi (1).png", "spider/oi (2).png", "spider/oi (3).png", "spider/oi (4).png", "spider/oi (5).png", "spider/oi (6).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "K",
+        accDir: "k",
+        avatar: "wot_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "06/05/21": [ "k/rabota (1).png", "k/rabota (2).png", "k/rabota (3).png", "k/rabota (4).png"]
+                    },
+                    "plagiarist": {
+                        "06/05/21": [ "k/oi (1).png", "k/oi (2).png", "k/oi (3).png", "k/oi (4).png", "k/oi (5).png", "k/oi (6).png", "k/oi (7).png", "k/oi (8).png", "k/oi (9).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "АБОБА",
+        accDir: "aboba",
+        avatar: "vv_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "06/05/21": [ "aboba/rabota (1).png", "aboba/rabota (2).png", "aboba/rabota (3).png", "aboba/rabota (4).png"]
+                    },
+                    "plagiarist": {
+                        "06/05/21": ["aboba/oi (1).png", "aboba/oi (2).png", "aboba/oi (3).png", "aboba/oi (4).png", "aboba/oi (5).png", "aboba/oi (6).png", "aboba/oi (7).png", "aboba/oi (8).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ЖОПНЫЙ МАБ",
+        accDir: "jop",
+        avatar: "jop_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "06/05/21": [ "jop/rabota (1).png", "jop/rabota (2).png", "jop/rabota (3).png", "jop/rabota (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "Я ПРОСТО КОСМОС",
+        accDir: "space",
+        avatar: "jeny_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "21/05/21": [ "space/rabota (1).png", "space/rabota (2).png", "space/rabota (3).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "РЫЦАРЬ 22809",
+        accDir: "knight",
+        avatar: "knight_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "tolpa": {
+                        "21/05/21": [ "knight/j (1).png", "knight/j (2).png"]
+                    },
+                    "plagiarist": {
+                        "21/05/21": ["knight/oi (1).png", "knight/oi (2).png", "knight/oi (3).png", "knight/oi (4).png", "knight/oi (5).png", "knight/oi (6).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "АНОНИМУС",
+        accDir: "anono",
+        avatar: "fof_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "14/12/21": [ "anono/rabota (1).png", "anono/rabota (2).png"]
+                    },
+                    "icebreaker": {
+                        "14/12/21": ["anono/pop (1).png", "anono/pop (2).png", "anono/pop (3).png", "anono/pop (4).png", "anono/pop (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "НЕ ХАНТЕР",
+        accDir: "not xa",
+        avatar: "crash_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "14/12/21": [ "not xa/rabota (1).png", "not xa/rabota (2).png"]
+                    },
+                    "icebreaker": {
+                        "14/12/21": ["not xa/pop (1).png", "not xa/pop (2).png", "not xa/pop (3).png", "not xa/pop (4).png", "not xa/pop (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "MRZOOMX325",
+        accDir: "zoom",
+        avatar: "jeny_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "addendum": {
+                        "14/12/21": [ "zoom/xx (1).png", "zoom/xx (2).png", "zoom/xx (3).png", "zoom/xx (4).png", "zoom/xx (5).png"]
+                    },
+                    "plagiarist": {
+                        "14/12/21": ["zoom/oi (1).png", "zoom/oi (2).png", "zoom/oi (3).png", "zoom/oi (4).png", "zoom/oi (5).png", "zoom/oi (6).png", "zoom/oi (7).png", "zoom/oi (8).png", "zoom/oi (9).png", "zoom/oi (10).png", "zoom/oi (11).png", "zoom/oi (12).png", "zoom/oi (13).png", "zoom/oi (14).png", "zoom/oi (15).png", "zoom/oi (16).png"]
+                    },
+                    "classic": {
+                        "14/12/21": [ "zoom/rabota (1).png", "zoom/rabota (2).png", "zoom/rabota (3).png", "zoom/rabota (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "САКУРА",
+        accDir: "sacura",
+        avatar: "mab_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "icebreaker": {
+                        "24/07/21": [ "sacura/pop (1).png", "sacura/pop (2).png", "sacura/pop (3).png", "sacura/pop (4).png", "sacura/pop (5).png", "sacura/pop (6).png", "sacura/pop (7).png", "sacura/pop (8).png", "sacura/pop (9).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ВАРУ",
+        accDir: "vary",
+        avatar: "mor_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "24/07/21": [ "vary/rabota (1).png", "vary/rabota (2).png", "vary/rabota (3).png", "vary/rabota (4).png"]
+                    },
+		    "icebreaker": {
+                        "24/07/21": [ "vary/pop (1).png", "vary/pop (2).png", "vary/pop (3).png", "vary/pop (4).png", "vary/pop (5).png", "vary/pop (6).png", "vary/pop (7).png", "vary/pop (8).png", "vary/pop (9).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "RiMSTER",
+        accDir: "rimster",
+        avatar: "cot_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "24/07/21": [ "rimster/rabota (1).png", "rimster/rabota (2).png", "rimster/rabota (3).png"]
+                    },
+		    "icebreaker": {
+                        "24/07/21": [ "rimster/pop (1).png", "rimster/pop (2).png", "rimster/pop (3).png", "rimster/pop (4).png", "rimster/pop (5).png", "rimster/pop (6).png", "rimster/pop (7).png", "rimster/pop (8).png", "rimster/pop (9).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "РОМЕМКА)))",
+        accDir: "rom",
+        avatar: "beb_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "24/07/21": [ "rom/rabota (1).png", "rom/rabota (2).png", "rom/rabota (3).png", "rom/rabota (4).png"]
+                    },
+		    "icebreaker": {
+                        "24/07/21": [ "rom/pop (1).png", "rom/pop (2).png", "rom/pop (3).png", "rom/pop (4).png", "rom/pop (5).png", "rom/pop (6).png", "rom/pop (7).png", "rom/pop (8).png", "rom/pop (9).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ГОЛУБ",
+        accDir: "golub",
+        avatar: "bpip_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "24/07/21": [ "golub/rabota (1).png", "golub/rabota (2).png", "golub/rabota (3).png", "golub/rabota (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "УДАФ",
+        accDir: "udaf",
+        avatar: "cot_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "addendum": {
+                        "14/12/21": [ "udaf/xx (1).png", "udaf/xx (2).png", "udaf/xx (3).png", "udaf/xx (4).png", "udaf/xx (5).png"]
+                    },
+                    "icebreaker": {
+                        "14/12/21": ["udaf/pop (1).png", "udaf/pop (2).png", "udaf/pop (3).png", "udaf/pop (4).png", "udaf/pop (5).png", "udaf/pop (6).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "КАТЮША 2.0",
+        accDir: "catusha",
+        avatar: "holod_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "14/12/21": [ "catusha/oi (1).png", "catusha/oi (2).png", "catusha/oi (3).png", "catusha/oi (4).png", "catusha/oi (5).png", "catusha/oi (6).png", "catusha/oi (7).png", "catusha/oi (8).png", "catusha/oi (9).png", "catusha/oi (10).png", "catusha/oi (11).png"]
+                    },
+                    "classic": {
+                        "14/12/21": [ "catusha/rabota (1).png", "catusha/rabota (2).png", "catusha/rabota (3).png", "catusha/rabota (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "KRAY283",
+        accDir: "kray",
+        avatar: "boom_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "14/12/21": [ "kray/oi (1).png", "kray/oi (2).png", "kray/oi (3).png", "kray/oi (4).png", "kray/oi (5).png", "kray/oi (6).png", "kray/oi (7).png", "kray/oi (8).png", "kray/oi (9).png", "kray/oi (10).png", "kray/oi (11).png"]
+                    },
+                    "classic": {
+                        "14/12/21": [ "kray/rabota (1).png", "kray/rabota (2).png", "kray/rabota (3).png", "kray/rabota (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ДИНА_ЗИНА",
+        accDir: "zina",
+        avatar: "rep_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "14/12/21": [ "zina/oi (1).png", "zina/oi (2).png", "zina/oi (3).png", "zina/oi (4).png", "zina/oi (5).png", "zina/oi (6).png", "zina/oi (7).png", "zina/oi (8).png", "zina/oi (9).png", "zina/oi (10).png", "zina/oi (11).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "НЕОФУМИ",
+        accDir: "neofumu",
+        avatar: "mor_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "14/12/21": [ "neofumu/oi (1).png", "neofumu/oi (2).png", "neofumu/oi (3).png", "neofumu/oi (4).png", "neofumu/oi (5).png", "neofumu/oi (6).png", "neofumu/oi (7).png", "neofumu/oi (8).png", "neofumu/oi (9).png", "neofumu/oi (10).png", "neofumu/oi (11).png"]
+                    },
+                    "classic": {
+                        "14/12/21": [ "neofumu/rabota (1).png", "neofumu/rabota (2).png", "neofumu/rabota (3).png", "neofumu/rabota (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "CURIOSITY72958",
+        accDir: "curio",
+        avatar: "bul_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "14/12/21": [ "curio/rabota (1).png", "curio/rabota (2).png", "curio/rabota (3).png", "curio/rabota (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ТОТ САМЫЙ ЖЫРНЫЙ ЧЕЛ",
+        accDir: "fat",
+        avatar: "wot_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "icebreaker": {
+                        "20/12/21": [ "fat/pop (1).png", "fat/pop (2).png", "fat/pop (3).png", "fat/pop (4).png", "fat/pop (5).png"]
+                    },
+                    "plagiarist": {
+                        "20/12/21": [ "fat/oi (1).png", "fat/oi (2).png", "fat/oi (3).png", "fat/oi (4).png", "fat/oi (5).png", "fat/oi (6).png", "fat/oi (7).png"]
+                    },
+                    "sandwich": {
+                        "20/12/21": ["fat/sos (1).png", "fat/sos (2).png", "fat/sos (3).png", "fat/sos (4).png", "fat/sos (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "RAIO",
+        accDir: "raio",
+        avatar: "stiven_sub_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "20/12/21": [ "raio/oi (1).png", "raio/oi (2).png", "raio/oi (3).png", "raio/oi (4).png", "raio/oi (5).png", "raio/oi (6).png", "raio/oi (7).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "КОТ",
+        accDir: "catcat",
+        avatar: "mor_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "icebreaker": {
+                        "20/12/21": [ "catcat/pop (1).png", "catcat/pop (2).png", "catcat/pop (3).png", "catcat/pop (4).png", "catcat/pop (5).png"]
+                    },
+                    "sandwich": {
+                        "20/12/21": ["catcat/sos (1).png", "catcat/sos (2).png", "catcat/sos (3).png", "catcat/sos (4).png", "catcat/sos (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "FREDIK",
+        accDir: "fredik",
+        avatar: "bpip_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "sandwich": {
+                        "20/12/21": [ "fredik/sos (1).png", "fredik/sos (2).png", "fredik/sos (3).png", "fredik/sos (4).png", "fredik/sos (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "KINGDOMOFMIRACALIS",
+        accDir: "kingmira",
+        avatar: "king_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "10/01/22": [ "kingmira/rabota (1).png", "kingmira/rabota (2).png", "kingmira/rabota (3).png", "kingmira/rabota (4).png"]
+                    },
+                    "plagiarist": {
+                        "10/01/22": [ "kingmira/oi (1).png", "kingmira/oi (2).png", "kingmira/oi (3).png", "kingmira/oi (4).png", "kingmira/oi (5).png", "kingmira/oi (6).png", "kingmira/oi (7).png", "kingmira/oi (8).png", "kingmira/oi (9).png"]
+                    },
+                    "icebreaker": {
+                        "10/01/22": [ "kingmira/pop (1).png", "kingmira/pop (2).png", "kingmira/pop (3).png", "kingmira/pop (4).png", "kingmira/pop (5).png", "kingmira/pop (6).png", "kingmira/pop (7).png", "kingmira/pop (8).png"]
+                    },
+                    "ochko": {
+                        "10/01/22": [ "kingmira/bibi (1).png", "kingmira/bibi (2).png", "kingmira/bibi (3).png", "kingmira/bibi (4).png", "kingmira/bibi (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "C R A Z E (ГУЛЬ)",
+        accDir: "crazy",
+        avatar: "bpip_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "10/01/22": [ "crazy/rabota (1).png", "crazy/rabota (2).png", "crazy/rabota (3).png", "crazy/rabota (4).png", "crazy/rabota (5).png"]
+                    },
+                    "plagiarist": {
+                        "10/01/22": [ "crazy/oi (1).png", "crazy/oi (2).png", "crazy/oi (3).png", "crazy/oi (4).png", "crazy/oi (5).png", "crazy/oi (6).png", "crazy/oi (7).png", "crazy/oi (8).png", "crazy/oi (9).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "CRAZYM",
+        accDir: "crazym",
+        avatar: "xahtep_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "10/01/22": [ "crazym/rabota (1).png", "crazym/rabota (2).png"]
+                    },
+                    "plagiarist": {
+                        "10/01/22": [ "crazym/oi (1).png", "crazym/oi (2).png", "crazym/oi (3).png", "crazym/oi (4).png", "crazym/oi (5).png", "crazym/oi (6).png", "crazym/oi (7).png", "crazym/oi (8).png", "crazym/oi (9).png"]
+                    },
+                    "icebreaker": {
+                        "10/01/22": [ "crazym/pop (1).png", "crazym/pop (2).png", "crazym/pop (3).png", "crazym/pop (4).png", "crazym/pop (5).png", "crazym/pop (6).png", "crazym/pop (7).png", "crazym/pop (8).png"]
+                    },
+                    "ochko": {
+                        "10/01/22": [ "crazym/bibi (1).png", "crazym/bibi (2).png", "crazym/bibi (3).png", "crazym/bibi (4).png", "crazym/bibi (5).png", "crazym/bibi (6).png", "crazym/bibi (7).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "BENIO2009",
+        accDir: "benio",
+        avatar: "bul_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "10/01/22": [ "benio/rabota (1).png", "benio/rabota (2).png", "benio/rabota (3).png", "benio/rabota (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ГУСЬ",
+        accDir: "gusse",
+        avatar: "mak_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "10/01/22": [ "gusse/rabota (1).png", "gusse/rabota (2).png", "gusse/rabota (3).png", "gusse/rabota (4).png", "gusse/rabota (5).png"]
+                    },
+                    "plagiarist": {
+                        "10/01/22": [ "gusse/oi (1).png", "gusse/oi (2).png", "gusse/oi (3).png", "gusse/oi (4).png", "gusse/oi (5).png", "gusse/oi (6).png", "gusse/oi (7).png", "gusse/oi (8).png", "gusse/oi (9).png"]
+                    },
+                    "icebreaker": {
+                        "10/01/22": [ "gusse/pop (1).png", "gusse/pop (2).png", "gusse/pop (3).png", "gusse/pop (4).png", "gusse/pop (5).png", "gusse/pop (6).png", "gusse/pop (7).png", "gusse/pop (8).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "KAPUSTA",
+        accDir: "kapusta",
+        avatar: "kap_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "10/01/22": [ "kapusta/oi (1).png", "kapusta/oi (2).png", "kapusta/oi (3).png", "kapusta/oi (4).png", "kapusta/oi (5).png", "kapusta/oi (6).png", "kapusta/oi (7).png", "kapusta/oi (8).png", "kapusta/oi (9).png"]
+                    },
+                    "icebreaker": {
+                        "10/01/22": [ "kapusta/pop (1).png", "kapusta/pop (2).png", "kapusta/pop (3).png", "kapusta/pop (4).png", "kapusta/pop (5).png", "kapusta/pop (6).png", "kapusta/pop (7).png", "kapusta/pop (8).png"]
+                    },
+                    "ochko": {
+                        "10/01/22": [ "kapusta/bibi (1).png", "kapusta/bibi (2).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "KRIPERRRRR",
+        accDir: "kriper",
+        avatar: "mak_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "10/01/22": [ "kriper/oi (1).png", "kriper/oi (2).png", "kriper/oi (3).png", "kriper/oi (4).png", "kriper/oi (5).png", "kriper/oi (6).png", "kriper/oi (7).png", "kriper/oi (8).png", "kriper/oi (9).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "КЕРДЫК РУСЛАНА",
+        accDir: "rusick",
+        avatar: "boryan_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "10/01/22": [ "rusick/oi (1).png", "rusick/oi (2).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "АРТЕМИО СМЕРТУШКА",
+        accDir: "artemon",
+        avatar: "xahtep_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "icebreaker": {
+                        "10/01/22": [ "artemon/pop (1).png", "artemon/pop (2).png", "artemon/pop (3).png", "artemon/pop (4).png", "artemon/pop (5).png", "artemon/pop (6).png", "artemon/pop (7).png", "artemon/pop (8).png"]
+                    },
+                    "ochko": {
+                        "10/01/22": [ "artemon/bibi (1).png", "artemon/bibi (2).png", "artemon/bibi (3).png", "artemon/bibi (4).png", "artemon/bibi (5).png", "artemon/bibi (6).png", "artemon/bibi (7).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "والدك",
+        accDir: "father",
+        avatar: "debil_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "ochko": {
+                        "10/01/22": [ "father/bibi (1).png", "father/bibi (2).png", "father/bibi (3).png", "father/bibi (4).png", "father/bibi (5).png", "father/bibi (6).png", "father/bibi (7).png"]
+                    },
+                    "classic": {
+                        "13/01/22": [ "father/rabota (1).png", "father/rabota (2).png", "father/rabota (3).png", "father/rabota (4).png"]
+                    },
+                    "plagiarist": {
+                        "13/01/22": [ "father/oi (1).png", "father/oi (2).png", "father/oi (3).png", "father/oi (4).png", "father/oi (5).png", "father/oi (6).png", "father/oi (7).png"]
+                    },
+                    "sandwich": {
+                        "13/01/22": ["father/sos (1).png", "father/sos (2).png", "father/sos (3).png", "father/sos (4).png", "father/sos (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "СЕЛЕДЬ",
+        accDir: "seled",
+        avatar: "ogo_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "ochko": {
+                        "10/01/22": [ "seled/bibi (1).png", "seled/bibi (2).png", "seled/bibi (3).png", "seled/bibi (4).png", "seled/bibi (5).png", "seled/bibi (6).png", "seled/bibi (7).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ПИДАРАС227",
+        accDir: "pidor",
+        avatar: "pid_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "ochko": {
+                        "10/01/22": [ "pidor/bibi (1).png", "pidor/bibi (2).png", "pidor/bibi (3).png", "pidor/bibi (4).png", "pidor/bibi (5).png", "pidor/bibi (6).png", "pidor/bibi (7).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ЭЛЬ ПРИМО",
+        accDir: "primo",
+        avatar: "arr_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "ochko": {
+                        "10/01/22": [ "primo/bibi (1).png", "primo/bibi (2).png", "primo/bibi (3).png", "primo/bibi (4).png", "primo/bibi (5).png", "primo/bibi (6).png", "primo/bibi (7).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ЧЕБУПЕЛЬ",
+        accDir: "chebupel",
+        avatar: "mak_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "ochko": {
+                        "10/01/22": [ "chebupel/bibi (1).png", "chebupel/bibi (2).png", "chebupel/bibi (3).png", "chebupel/bibi (4).png", "chebupel/bibi (5).png", "chebupel/bibi (6).png", "chebupel/bibi (7).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "КУЗЯ",
+        accDir: "kuza",
+        avatar: "ccut_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "ochko": {
+                        "10/01/22": [ "kuza/bibi (1).png", "kuza/bibi (2).png", "kuza/bibi (3).png", "kuza/bibi (4).png", "kuza/bibi (5).png", "kuza/bibi (6).png", "kuza/bibi (7).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "КАМАЗИК",
+        accDir: "cumaz",
+        avatar: "crash_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "ochko": {
+                        "10/01/22": [ "cumaz/bibi (1).png", "cumaz/bibi (2).png", "cumaz/bibi (3).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "КРИСЛАЛИКАНОНИМКА",
+        accDir: "kris",
+        avatar: "kris_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "icebreaker": {
+                        "13/01/22": [ "kris/pop (1).png", "kris/pop (2).png", "kris/pop (3).png", "kris/pop (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "MINDKITSUNE",
+        accDir: "mindk",
+        avatar: "bul_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "icebreaker": {
+                        "13/01/22": [ "mindk/pop (1).png", "mindk/pop (2).png", "mindk/pop (3).png", "mindk/pop (4).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ШАМИЛЬ)",
+        accDir: "shamil",
+        avatar: "sham_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "icebreaker": {
+                        "13/01/22": [ "shamil/pop (1).png", "shamil/pop (2).png", "shamil/pop (3).png"]
+                    },
+                    "classic": {
+                        "13/01/22": [ "shamil/rabota (1).png", "shamil/rabota (2).png", "shamil/rabota (3).png", "shamil/rabota (4).png"]
+                    },
+                    "plagiarist": {
+                        "13/01/22": [ "shamil/oi (1).png", "shamil/oi (2).png", "shamil/oi (3).png", "shamil/oi (4).png", "shamil/oi (5).png", "shamil/oi (6).png", "shamil/oi (7).png"]
+                    },
+                    "sandwich": {
+                        "13/01/22": ["shamil/sos (1).png", "shamil/sos (2).png", "shamil/sos (3).png", "shamil/sos (4).png", "shamil/sos (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "CAMYPAU_TORMOZ",
+        accDir: "camypau",
+        avatar: "xahtep_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "13/01/22": [ "camypau/rabota (1).png", "camypau/rabota (2).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ХЛОПЧИК",
+        accDir: "xlop",
+        avatar: "fof_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "13/01/22": [ "xlop/rabota (1).png", "xlop/rabota (2).png"]
+                    },
+                    "plagiarist": {
+                        "13/01/22": [ "xlop/oi (1).png", "xlop/oi (2).png", "xlop/oi (3).png", "xlop/oi (4).png", "xlop/oi (5).png", "xlop/oi (6).png", "xlop/oi (7).png"]
+                    },
+                    "sandwich": {
+                        "13/01/22": ["xlop/sos (1).png", "xlop/sos (2).png", "xlop/sos (3).png", "xlop/sos (4).png", "xlop/sos (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ЖИДНАСВЯЗИ",
+        accDir: "zide",
+        avatar: "pid_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "classic": {
+                        "13/01/22": [ "zide/rabota (1).png", "zide/rabota (2).png"]
+                    },
+                    "plagiarist": {
+                        "13/01/22": [ "zide/oi (1).png", "zide/oi (2).png", "zide/oi (3).png", "zide/oi (4).png", "zide/oi (5).png", "zide/oi (6).png", "zide/oi (7).png"]
+                    },
+                    "sandwich": {
+                        "13/01/22": ["zide/sos (1).png", "zide/sos (2).png", "zide/sos (3).png", "zide/sos (4).png", "zide/sos (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "MRПАМПЕРС",
+        accDir: "pamper",
+        avatar: "holod_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "13/01/22": [ "pamper/oi (1).png", "pamper/oi (2).png", "pamper/oi (3).png", "pamper/oi (4).png", "pamper/oi (5).png", "pamper/oi (6).png", "pamper/oi (7).png"]
+                    },
+                    "sandwich": {
+                        "13/01/22": ["pamper/sos (1).png", "pamper/sos (2).png", "pamper/sos (3).png", "pamper/sos (4).png", "pamper/sos (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+    {
+        accountName: "ОГУРЕЧЕК",
+        accDir: "pickle",
+        avatar: "hax_ava.png",
+        subProfiles: [
+            {
+                subDir: "", 
+                modes: {
+                    "plagiarist": {
+                        "13/01/22": [ "pickle/oi (1).png", "pickle/oi (2).png", "pickle/oi (3).png", "pickle/oi (4).png", "pickle/oi (5).png", "pickle/oi (6).png", "pickle/oi (7).png"]
+                    },
+                    "sandwich": {
+                        "13/01/22": ["pickle/sos (1).png", "pickle/sos (2).png", "pickle/sos (3).png", "pickle/sos (4).png", "pickle/sos (5).png"]
+                    }
+                }
+            }
+        ]
+    },
+];
+// =======================================================================
+</script>
+
+    <header class="sticky top-0 z-30 w-full pt-4 pb-6 px-4 md:px-12 pointer-events-none">
+        <div class="stripe-banner"></div>
+        
+        <!-- Верхняя панель: Музыкальный плеер + Квадратик с количеством аккаунтов + Поиск + Зеленая кнопка "Главная" -->
+        <div class="max-w-7xl mx-auto relative z-40 flex flex-wrap justify-between items-center gap-3 mb-2 pointer-events-auto">
+            <!-- Блок Музыки -->
+            <div class="flex items-center space-x-2 bg-purple-950/80 border-2 border-purple-500/50 p-1.5 px-3 rounded-xl shadow">
+                <audio id="bgMusic" src="user/music/all.mp3" loop></audio>
+                <button id="musicToggleBtn" onclick="toggleMusic()" class="bg-purple-800 hover:bg-purple-700 text-yellow-300 font-bold text-xs px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition-all cursor-pointer">
+                    <i id="musicIcon" class="fas fa-play"></i> <span id="musicText">Музыка: Выкл</span>
+                </button>
+                <div class="flex items-center space-x-1.5 text-xs text-purple-200 ml-1">
+                    <i class="fas fa-volume-high text-yellow-400"></i>
+                    <!-- Громкость до 100% (максимум 1) -->
+                    <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5" oninput="updateVolume(this.value)" class="w-20 accent-yellow-400 cursor-pointer h-1.5 bg-purple-900 rounded-lg" title="Громкость до 100%">
+                    <span id="volumePercent" class="text-[10px] text-yellow-300 font-bold w-9 text-right">50%</span>
+                </div>
+            </div>
+
+            <!-- Блок Поиска и фиолетового квадратика со счетом основных аккаунтов -->
+            <div class="flex items-center space-x-2 w-full sm:w-auto">
+                <!-- Фиолетовый квадратик с количеством основных аккаунтов -->
+                <div class="bg-purple-950/90 border-2 border-purple-500/60 rounded-xl px-3.5 py-2 shadow-lg backdrop-blur-md flex items-center justify-center shrink-0" title="Количество основных аккаунтов художников">
+                    <span id="mainArtistsCountBadge" class="text-yellow-300 font-black text-xs sm:text-sm">0</span>
+                </div>
+
+                <!-- Поиск художника в стиле Гугла -->
+                <div class="relative w-full sm:w-72">
+                    <div class="flex items-center bg-purple-950/90 border-2 border-purple-500/60 rounded-xl px-3 py-2 shadow-lg backdrop-blur-md">
+                        <i class="fas fa-search text-yellow-300 mr-2"></i>
+                        <input type="text" id="artistSearchInput" placeholder="Поиск художника (например, m)..." oninput="handleSearchInput(this.value)" class="bg-transparent text-white text-xs w-full focus:outline-none placeholder-purple-300 font-bold">
+                    </div>
+                    <div id="searchResultsDropdown" class="absolute left-0 right-0 mt-2 bg-purple-950/95 border-2 border-yellow-400 rounded-xl shadow-2xl max-h-60 overflow-y-auto z-50 hidden backdrop-blur-md divide-y divide-purple-900/50"></div>
+                </div>
+            </div>
+
+            <!-- Зеленая кнопка "Главная" -->
+            <a href="index.html" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs px-4 py-2 rounded-xl shadow transform hover:scale-105 transition-all flex items-center space-x-1.5 cursor-pointer no-underline">
+                <i class="fas fa-home"></i> <span>Главная</span>
+            </a>
+        </div>
+
+        <div class="max-w-7xl mx-auto relative z-20 flex flex-col md:flex-row items-center justify-between pointer-events-auto gap-4">
+            
+            <button onclick="prevMainAccount()" class="hidden md:flex w-10 h-10 bg-purple-900 border-2 border-yellow-400 rounded-full items-center justify-center text-yellow-400 hover:bg-purple-800 hover:scale-110 active:scale-95 transition-all shadow-lg cursor-pointer">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+
+            <!-- Блок с Аватаркой и Саб-аккаунтами -->
+            <div class="flex items-center space-x-2 bg-purple-950/60 p-2.5 rounded-2xl border border-white/10 backdrop-blur-md min-w-[280px]">
+                
+                <button onclick="prevSubProfile()" class="w-7 h-7 bg-purple-800 rounded-full flex items-center justify-center text-white hover:bg-pink-500 transition-colors shadow cursor-pointer">
+                    <i class="fas fa-caret-left"></i>
+                </button>
+
+                <div class="w-16 h-16 md:w-20 md:h-20 bg-white rounded-full border-4 border-yellow-400 shadow-2xl overflow-hidden flex items-center justify-center shrink-0">
+                    <img id="mainAvatarImg" src="" alt="Avatar" class="w-full h-full object-cover">
+                </div>
+                
+                <button onclick="nextSubProfile()" class="w-7 h-7 bg-purple-800 rounded-full flex items-center justify-center text-white hover:bg-pink-500 transition-colors shadow cursor-pointer mr-2">
+                    <i class="fas fa-caret-right"></i>
+                </button>
+
+                <div class="flex flex-col justify-center min-h-[50px] overflow-hidden">
+                    <div id="mainAccountName" class="text-yellow-300 font-black text-sm md:text-base drop-shadow"></div>
+                    <div id="subAccountName" class="text-purple-200 font-bold text-xs mt-0.5 typing-cursor h-4"></div>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="openFilterModal()" class="h-11 px-4 bg-purple-900 hover:bg-purple-800 text-white font-bold rounded-xl border-2 border-purple-950 shadow flex items-center space-x-2 cursor-pointer transition-all transform hover:scale-105">
+                    <i class="fas fa-filter text-yellow-300"></i><span class="text-xs">Фильтр</span>
+                </button>
+                <div class="text-center md:text-right">
+                    <h1 id="page-title" class="text-3xl md:text-5xl font-black tracking-wider text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.6)] uppercase italic">ВСЕ РАБОТЫ</h1>
+                </div>
+            </div>
+
+            <button onclick="nextMainAccount()" class="hidden md:flex w-10 h-10 bg-purple-900 border-2 border-yellow-400 rounded-full items-center justify-center text-yellow-400 hover:bg-purple-800 hover:scale-110 active:scale-95 transition-all shadow-lg cursor-pointer">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <div class="max-w-6xl mx-auto relative z-20 flex flex-wrap justify-center gap-2 mt-6 pointer-events-auto">
+            <button onclick="switchMode('all')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all cursor-pointer bg-yellow-400 text-purple-950" data-mode="all">ВСЕ РАБОТЫ</button>
+            <button onclick="switchMode('classic')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all bg-purple-800 text-white" data-mode="classic">КЛАССИКА</button>
+            <button onclick="switchMode('anime')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all bg-purple-800 text-white" data-mode="anime">АНИМАЦИЯ</button>
+            <button onclick="switchMode('forsecret')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all bg-purple-800 text-white" data-mode="forsecret">СЕКРЕТ</button>
+            <button onclick="switchMode('plagiarist')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all bg-purple-800 text-white" data-mode="plagiarist">ПЛАГИАТ</button>
+            <button onclick="switchMode('express')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all bg-purple-800 text-white" data-mode="express">ЭКСПРЕСС</button>
+            <button onclick="switchMode('icebreaker')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all bg-purple-800 text-white" data-mode="icebreaker">ЛЕДОКОЛ</button>
+            <button onclick="switchMode('sandwich')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all bg-purple-800 text-white" data-mode="sandwich">СЭНДВИЧ</button>
+            <button onclick="switchMode('addendum')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all bg-purple-800 text-white" data-mode="addendum">ДОПОЛНЕНИЕ</button>
+            <button onclick="switchMode('missing')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all bg-purple-800 text-white" data-mode="missing">НЕДОСТАЮЩАЯ ЧАСТЬ</button>
+            <button onclick="switchMode('ochko')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all bg-purple-800 text-white" data-mode="ochko">СЧЁТ</button>
+            <button onclick="switchMode('tolpa')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all bg-purple-800 text-white" data-mode="tolpa">ТОЛПА</button>
+            <button onclick="switchMode('history')" class="mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all bg-purple-800 text-white" data-mode="history">ИСТОРИЯ</button>
+        </div>
+        
+        <div class="md:hidden flex justify-center space-x-6 mt-4 pointer-events-auto">
+            <button onclick="prevMainAccount()" class="w-10 h-10 bg-purple-900 border-2 border-yellow-400 rounded-full flex items-center justify-center text-yellow-400 shadow-lg cursor-pointer">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button onclick="nextMainAccount()" class="w-10 h-10 bg-purple-900 border-2 border-yellow-400 rounded-full flex items-center justify-center text-yellow-400 shadow-lg cursor-pointer">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-8 z-20 overflow-y-auto mt-6">
+        <div id="artworks-grid" class="flex flex-col space-y-8"></div>
+    </main>
+
+    <!-- МОДАЛЬНОЕ ОКНО ПРОСМОТРА РАБОТЫ С УДОБНОЙ ПАНЕЛЬЮ ЛИСТАНИЯ И РЕАКЦИЯМИ -->
+    <div id="fullsize-modal" class="fixed inset-0 bg-purple-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-gradient-to-br from-purple-900 via-fuchsia-950 to-indigo-950 border-4 border-purple-400 rounded-3xl p-6 md:p-8 max-w-4xl w-full shadow-2xl relative flex flex-col items-center">
+            
+            <!-- Кнопка Закрытия -->
+            <button onclick="closeFullSizeModal()" class="absolute top-4 right-4 w-10 h-10 bg-red-600 hover:bg-red-500 rounded-full font-bold text-white text-lg flex items-center justify-center cursor-pointer z-20 shadow-lg">✕</button>
+            
+            <!-- Заголовок + Кубок автора -->
+            <div class="flex items-center space-x-3 mb-1">
+                <h3 id="fullsize-title" class="text-2xl font-black text-center text-yellow-300 drop-shadow">Название</h3>
+                <!-- Золотой кубок с наведением (tooltip) для просмотра количества кубков автора -->
+                <div id="author-trophy-badge" class="bg-yellow-400/20 border border-yellow-400 px-2.5 py-1 rounded-full text-yellow-300 font-bold text-xs flex items-center space-x-1 cursor-help transition-all hover:scale-110" title="Количество призов зрительских симпатий у этого автора">
+                    <i class="fas fa-trophy text-yellow-400"></i>
+                    <span id="author-trophy-count">0</span>
+                </div>
+            </div>
+
+            <p id="fullsize-year" class="text-xs font-bold text-purple-300 mb-4 bg-purple-950/60 px-3 py-1 rounded-full border border-purple-500/50">Дата: </p>
+            
+            <!-- Контейнер Самой Работы -->
+            <div class="relative w-full flex flex-col items-center bg-purple-950/85 border-[6px] border-purple-400 rounded-[3rem] p-6 shadow-2xl">
+                <div id="fullsize-content-container" class="w-full flex items-center justify-center bg-black/50 rounded-2xl border-2 border-white/20 p-3 overflow-auto max-h-[55vh]"></div>
+
+                <!-- 🎀 УДОБНАЯ ПАНЕЛЬ ЛИСТАНИЯ И РЕАКЦИЙ СНИЗУ РАБОТЫ 🎀 -->
+                <div class="w-full mt-4 pt-3 border-t-2 border-purple-800/60 flex items-center justify-between px-2 sm:px-6">
+                    
+                    <!-- Стрелочка Влево (Предыдущая работа в альбоме) -->
+                    <button id="modal-prev-btn" onclick="prevModalItem()" class="w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg transition-all duration-200">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+
+                    <!-- Панель Реакций Посередине -->
+                    <div class="flex items-center space-x-3 sm:space-x-5 bg-purple-900/80 px-4 py-2 rounded-2xl border border-purple-500/40 shadow-inner">
+                        
+                        <!-- 1. Лайк (Сердечко) -->
+                        <button id="btn-like" onclick="toggleLike(event)" class="text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none" title="Поставить Лайк">
+                            <i id="icon-like" class="far fa-heart text-pink-400"></i>
+                        </button>
+
+                        <!-- 2. Дизлайк (Какашка) -->
+                        <button id="btn-dislike" onclick="toggleDislike(event)" class="text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-50 grayscale hover:grayscale-0 hover:opacity-100" title="Поставить Дизлайк">
+                            💩
+                        </button>
+
+                        <!-- Разделитель -->
+                        <div class="h-6 w-0.5 bg-purple-700/60"></div>
+
+                        <!-- 3. Приз зрительских симпатий (Кубок) -->
+                        <button id="btn-trophy" onclick="rewardTrophy(event)" class="text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none" title="Наградить автора (Приз зрительских симпатий)">
+                            🏆
+                        </button>
+
+                        <!-- Счётчик страниц в альбоме -->
+                        <span id="modal-counter-badge" class="text-xs font-black text-yellow-300 bg-purple-950 px-2.5 py-1 rounded-lg border border-purple-700 ml-2">1 / 1</span>
+                    </div>
+
+                    <!-- Стрелочка Вправо (Следующая работа в альбоме) -->
+                    <button id="modal-next-btn" onclick="nextModalItem()" class="w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg transition-all duration-200">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="filter-modal" class="fixed inset-0 bg-purple-950/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-purple-950 border-4 border-yellow-400 rounded-3xl p-6 max-w-sm w-full shadow-2xl relative text-white">
+            <button onclick="closeFilterModal()" class="absolute top-4 right-4 w-9 h-9 bg-red-600 hover:bg-red-500 rounded-full font-bold text-white flex items-center justify-center cursor-pointer shadow">✕</button>
+            <h3 class="text-xl font-black mb-4 text-center text-yellow-300">🔍 Фильтр по дате</h3>
+            <div id="filter-years-list" class="space-y-2 max-h-60 overflow-y-auto mb-4 pr-1"></div>
+            <button onclick="applyYearFilter(null)" class="w-full bg-purple-950 border-2 border-purple-500 text-purple-200 font-bold py-2.5 rounded-xl text-xs cursor-pointer">Сбросить фильтр</button>
+        </div>
+    </div>
+
+    <script>
+        const monthNames = {'01':'Января','02':'Февраля','03':'Марта','04':'Апреля','05':'Мая','06':'Июня','07':'Июля','08':'Августа','09':'Сентября','10':'Октября','11':'Ноября','12':'Декабря'};
+        const modeTitles = {'all':'ВСЕ РАБОТЫ','classic':'КЛАССИКА','anime':'АНИМАЦИЯ','forsecret':'СЕКРЕТ','plagiarist':'ПЛАГИАТ','express':'ЭКСПРЕСС','icebreaker':'ЛЕДОКОЛ','sandwich':'СЭНДВИЧ','addendum':'ДОПОЛНЕНИЕ','missing':'НЕДОСТАЮЩАЯ ЧАСТЬ','ochko':'СЧЁТ','tolpa':'ТОЛПА','history':'ИСТОРИЯ'};
+        
+        let dbItems = [];
+        let currentAccountIdx = 0;
+        let currentSubProfileIdx = 0;
+        let currentMode = 'all';
+        let selectedFilterDate = null;
+        let currentDisplayedItems = [];
+        let currentModalIdx = 0; // Индекс просматриваемой работы в модальном окне
+        let typingTimer;
+
+        // Переменная для отслеживания состояния музыки перед просмотром видео
+        let wasMusicPlayingBeforeVideo = false;
+
+        // =======================================================================
+        // 🎀 ЛОКАЛЬНОЕ ХРАНИЛИЩЕ РЕАКЦИЙ И КУБКОВ В БРАУЗЕРЕ (LOCALSTORAGE) 🎀
+        // =======================================================================
+        function getSavedReactions() {
+            return JSON.parse(localStorage.getItem('gp_reactions_db') || '{}');
+        }
+        function saveReactions(data) {
+            localStorage.setItem('gp_reactions_db', JSON.stringify(data));
+        }
+
+        function getAuthorTrophies(authorName) {
+            const reactions = getSavedReactions();
+            let count = 0;
+            for (let itemKey in reactions) {
+                if (reactions[itemKey].author === authorName && reactions[itemKey].trophy) {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        // ЭФФЕКТ ВЫЛЕТА АНИМИРОВАННЫХ ЧАСТИЦ (СЕРДЕЧКИ / БЛЁСТКИ)
+        function createParticles(x, y, symbols, count = 12) {
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.className = 'particle';
+                el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 40 + Math.random() * 60;
+                const dx = Math.cos(angle) * distance + 'px';
+                const dy = Math.sin(angle) * distance - 20 + 'px'; // чуть летит вверх
+                
+                el.style.left = x + 'px';
+                el.style.top = y + 'px';
+                el.style.styleFloat = 'left';
+                el.style.setProperty('--dx', dx);
+                el.style.setProperty('--dy', dy);
+                el.style.fontSize = (14 + Math.random() * 12) + 'px';
+
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 800);
+            }
+        }
+
+        // Функции Музыкального Плеера
+        function toggleMusic() {
+            const audio = document.getElementById('bgMusic');
+            const btnText = document.getElementById('musicText');
+            const btnIcon = document.getElementById('musicIcon');
+
+            if (audio.paused) {
+                audio.play().then(() => {
+                    btnText.textContent = 'Музыка: Вкл';
+                    btnIcon.className = 'fas fa-pause';
+                }).catch(err => {
+                    console.log("Ошибка воспроизведения аудио:", err);
+                });
+            } else {
+                audio.pause();
+                btnText.textContent = 'Музыка: Выкл';
+                btnIcon.className = 'fas fa-play';
+            }
+        }
+
+        function updateVolume(value) {
+            const audio = document.getElementById('bgMusic');
+            const percentLabel = document.getElementById('volumePercent');
+            const vol = parseFloat(value);
+            if (audio) {
+                audio.volume = vol; // Громкость до 100% (1.0)
+            }
+            if (percentLabel) {
+                percentLabel.textContent = Math.round(vol * 100) + '%';
+            }
+        }
+
+        // Автоматический запуск музыки при загрузке или обновлении страницы
+        window.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('bgMusic');
+            if (audio) {
+                audio.volume = 0.5;
+                audio.play().then(() => {
+                    document.getElementById('musicText').textContent = 'Музыка: Вкл';
+                    document.getElementById('musicIcon').className = 'fas fa-pause';
+                }).catch(err => {
+                    console.log("Автозапуск заблокирован браузером, ждем клика:", err);
+                    const unlockAudio = () => {
+                        audio.play().then(() => {
+                            document.getElementById('musicText').textContent = 'Музыка: Вкл';
+                            document.getElementById('musicIcon').className = 'fas fa-pause';
+                            document.removeEventListener('click', unlockAudio);
+                        });
+                    };
+                    document.addEventListener('click', unlockAudio);
+                });
+            }
+
+            // Устанавливаем количество именно основных аккаунтов в фиолетовый квадратик
+            const badgeEl = document.getElementById('mainArtistsCountBadge');
+            if (badgeEl) {
+                badgeEl.textContent = KatyaGallery.length;
+            }
+        });
+
+        // Горячие клавиши (← и → для перелистывания, Esc для закрытия)
+        document.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('fullsize-modal');
+            if (!modal.classList.contains('hidden')) {
+                if (e.key === 'ArrowLeft') prevModalItem();
+                if (e.key === 'ArrowRight') nextModalItem();
+                if (e.key === 'Escape') closeFullSizeModal();
+            }
+        });
+
+        // =======================================================================
+        // 🎀 ЛОГИКА ПОИСКА ХУДОЖНИКОВ (КАК GOOGLE) 🎀
+        // =======================================================================
+        function handleSearchInput(query) {
+            const dropdown = document.getElementById('searchResultsDropdown');
+            const q = query.trim().toLowerCase();
+            
+            if (!q) {
+                dropdown.classList.add('hidden');
+                dropdown.innerHTML = '';
+                return;
+            }
+
+            let results = [];
+            KatyaGallery.forEach((acc, aIdx) => {
+                acc.subProfiles.forEach((sub, sIdx) => {
+                    let name = sub.subName ? sub.subName : acc.accountName;
+                    if (name.toLowerCase().includes(q)) {
+                        let avatar = sub.avatar ? sub.avatar : acc.avatar;
+                        results.push({ aIdx, sIdx, name, avatar });
+                    }
+                });
+            });
+
+            if (results.length === 0) {
+                dropdown.innerHTML = '<div class="p-3 text-xs text-purple-300 text-center font-bold">Ничего не найдено, ня~ 😿</div>';
+                dropdown.classList.remove('hidden');
+                return;
+            }
+
+            let html = '';
+            results.forEach(res => {
+                html += `
+                    <div onclick="selectArtist(${res.aIdx}, ${res.sIdx})" class="flex items-center space-x-3 p-2.5 hover:bg-purple-900/80 cursor-pointer transition-all">
+                        <div class="w-10 h-10 rounded-full border-2 border-yellow-400 overflow-hidden shrink-0 bg-white flex items-center justify-center">
+                            <img src="user/ava/${res.avatar}" alt="" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-yellow-300 font-black text-xs">${res.name}</span>
+                            <span class="text-[10px] text-purple-300">Художник / Профиль</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            dropdown.innerHTML = html;
+            dropdown.classList.remove('hidden');
+        }
+
+        function selectArtist(aIdx, sIdx) {
+            currentAccountIdx = aIdx;
+            currentSubProfileIdx = sIdx;
+            document.getElementById('searchResultsDropdown').classList.add('hidden');
+            document.getElementById('artistSearchInput').value = '';
+            triggerAvatarAnimationAndSwitch();
+        }
+
+        document.addEventListener('click', (e) => {
+            const searchContainer = document.getElementById('artistSearchInput').closest('div').parentNode;
+            if (!searchContainer.contains(e.target)) {
+                document.getElementById('searchResultsDropdown').classList.add('hidden');
+            }
+        });
+
+        function buildInternalDatabase() {
+            dbItems = [];
+            KatyaGallery.forEach((acc, aIdx) => {
+                acc.subProfiles.forEach((sub, sIdx) => {
+                    let accName = sub.subName ? sub.subName : acc.accountName;
+                    for (let mode in sub.modes) {
+                        let numCounter = 1; // Нумерация для режима в рамках данного профиля
+                        for (let dateRaw in sub.modes[mode]) {
+                            let parts = dateRaw.split('/');
+                            let dateObj = { raw: dateRaw, day: parts[0], month: parts[1], year: (parts[2].length===2?"20"+parts[2]:parts[2]) };
+                            
+                            sub.modes[mode][dateRaw].forEach(fileData => {
+                                let isAnime = (mode === 'anime' || (typeof fileData === 'string' && (fileData.endsWith('.mp4') || fileData.includes('anime/'))));
+                                let item = { aIdx, sIdx, authorName: accName, mode: isAnime ? 'anime' : mode, dateObj, type: mode === 'history' ? 'history' : (isAnime ? 'anime' : 'image') };
+                                
+                                let modeLabel = modeTitles[mode] || mode;
+
+                                if (item.type === 'history') {
+                                    item.title = `Запись Истории`;
+                                    item.text = fileData.title;
+                                    item.id = `hist_${accName}_${dateRaw}_${item.text}`;
+                                } else if (item.type === 'anime') {
+                                    item.title = `АНИМАЦИЯ ${accName} №${numCounter}`;
+                                    item.image = fileData.startsWith('anime/') ? `user/art/${fileData}` : `user/art/anime/${fileData}`;
+                                    item.id = `anim_${accName}_${numCounter}_${dateRaw}`;
+                                    numCounter++;
+                                } else {
+                                    item.title = `РАБОТА ${modeLabel} ${accName} №${numCounter}`; 
+                                    item.image = `user/art/${fileData}`;
+                                    item.id = `img_${accName}_${mode}_${numCounter}`;
+                                    numCounter++;
+                                }
+                                dbItems.push(item);
+                            });
+                        }
+                    }
+                });
+            });
+
+            if (typeof autoAnimeMappings !== 'undefined' && autoAnimeMappings.length > 0) {
+                autoAnimeMappings.forEach((map, mIdx) => {
+                    let parts = map.date.split('/');
+                    let dateObj = { raw: map.date, day: parts[0], month: parts[1], year: (parts[2].length===2?"20"+parts[2]:parts[2]) };
+                    map.authors.forEach(authorName => {
+                        KatyaGallery.forEach((acc, aIdx) => {
+                            if (acc.accountName.toLowerCase() === authorName.toLowerCase()) {
+                                acc.subProfiles.forEach((sub, sIdx) => {
+                                    if (sub.subDir === "") {
+                                        let accName = sub.subName ? sub.subName : acc.accountName;
+                                        let item = {
+                                            aIdx, sIdx,
+                                            authorName: accName,
+                                            mode: 'anime',
+                                            dateObj,
+                                            type: 'anime',
+                                            title: `АНИМАЦИЯ ${accName} №${mIdx + 1}`,
+                                            image: map.file,
+                                            id: `autoanim_${accName}_${mIdx+1}_${map.date}`
+                                        };
+                                        dbItems.push(item);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                });
+            }
+        }
+
+        function initPage() {
+            buildInternalDatabase();
+            if(KatyaGallery.length > 0) switchAccount(0);
+        }
+
+        function nextMainAccount() {
+            currentAccountIdx = (currentAccountIdx + 1) % KatyaGallery.length;
+            switchAccount(currentAccountIdx);
+        }
+
+        function prevMainAccount() {
+            currentAccountIdx = (currentAccountIdx - 1 + KatyaGallery.length) % KatyaGallery.length;
+            switchAccount(currentAccountIdx);
+        }
+
+        function nextSubProfile() {
+            const subsLength = KatyaGallery[currentAccountIdx].subProfiles.length;
+            if (subsLength > 1) {
+                currentSubProfileIdx = (currentSubProfileIdx + 1) % subsLength;
+                triggerAvatarAnimationAndSwitch();
+            }
+        }
+
+        function prevSubProfile() {
+            const subsLength = KatyaGallery[currentAccountIdx].subProfiles.length;
+            if (subsLength > 1) {
+                currentSubProfileIdx = (currentSubProfileIdx - 1 + subsLength) % subsLength;
+                triggerAvatarAnimationAndSwitch();
+            }
+        }
+
+        function triggerAvatarAnimationAndSwitch() {
+            const avatarImg = document.getElementById('mainAvatarImg');
+            avatarImg.classList.remove('animate-avatar');
+            void avatarImg.offsetWidth; 
+            avatarImg.classList.add('animate-avatar');
+            switchSubProfile(currentSubProfileIdx);
+        }
+
+        function typeWriterEffect(text) {
+            const el = document.getElementById('subAccountName');
+            el.innerHTML = '';
+            clearTimeout(typingTimer);
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    el.innerHTML += text.charAt(i);
+                    i++;
+                    typingTimer = setTimeout(type, 40);
+                }
+            }
+            type();
+        }
+
+        function switchAccount(idx) {
+            currentAccountIdx = parseInt(idx);
+            currentSubProfileIdx = 0; 
+            triggerAvatarAnimationAndSwitch(); 
+        }
+
+        function switchSubProfile(idx) {
+            currentSubProfileIdx = parseInt(idx);
+            selectedFilterDate = null;
+            
+            const acc = KatyaGallery[currentAccountIdx];
+            const sub = acc.subProfiles[currentSubProfileIdx];
+            
+            const avatarToUse = sub.avatar ? sub.avatar : acc.avatar;
+            document.getElementById('mainAvatarImg').src = `user/ava/${avatarToUse}`;
+            
+            let mainName = sub.subName ? sub.subName : acc.accountName;
+            document.getElementById('mainAccountName').textContent = mainName;
+            
+            let desc = sub.subDir === "" ? "ОСНОВНОЙ ПРОФИЛЬ" : "СУБ.ПРОФИЛЬ";
+            typeWriterEffect(desc);
+
+            renderGrid();
+        }
+
+        function switchMode(mode) {
+            currentMode = mode; selectedFilterDate = null;
+            document.getElementById('page-title').textContent = modeTitles[mode] || 'РАБОТЫ';
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.className = btn.getAttribute('data-mode') === mode 
+                    ? "mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all bg-yellow-400 text-purple-950"
+                    : "mode-btn px-4 py-1.5 rounded-xl text-xs font-black border-2 border-purple-950 shadow transition-all bg-purple-800 text-white hover:bg-purple-700";
+            });
+            renderGrid();
+        }
+
+        function renderGrid() {
+            const container = document.getElementById('artworks-grid');
+            container.innerHTML = '';
+
+            let items = dbItems.filter(i => i.aIdx === currentAccountIdx && i.sIdx === currentSubProfileIdx);
+            if (currentMode !== 'all') items = items.filter(i => i.mode === currentMode);
+            if (selectedFilterDate) items = items.filter(i => i.dateObj.raw === selectedFilterDate);
+
+            currentDisplayedItems = items;
+
+            if (items.length === 0) {
+                container.innerHTML = '<div class="text-center text-purple-300 py-10 font-bold">В этой папке пока пусто. Ня~ ✨</div>';
+                return;
+            }
+
+            if (currentMode === 'all') {
+                let groups = {};
+                items.forEach(item => {
+                    let k = item.dateObj.raw;
+                    if(!groups[k]) groups[k] = { d: item.dateObj, arr: [] };
+                    groups[k].arr.push(item);
+                });
+                
+                Object.keys(groups).sort((a,b) => b.localeCompare(a)).forEach(key => {
+                    let g = groups[key];
+                    let dateLabel = `${g.d.day} ${monthNames[g.d.month]} ${g.d.year} г.`;
+                    let blockDiv = document.createElement('div');
+                    blockDiv.className = "mb-6";
+                    blockDiv.innerHTML = `<div class="flex items-center space-x-4 mb-4"><span class="bg-purple-900 text-yellow-300 px-4 py-1.5 rounded-xl font-black text-sm border-2 border-purple-700 shadow uppercase">📅 ${dateLabel}</span><div class="flex-grow border-b-2 border-dashed border-purple-500/50"></div></div>`;
+                    let grid = document.createElement('div');
+                    grid.className = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6";
+                    g.arr.forEach(it => grid.appendChild(createCardElement(it)));
+                    blockDiv.appendChild(grid); container.appendChild(blockDiv);
+                });
+            } else {
+                let grid = document.createElement('div');
+                grid.className = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6";
+                items.forEach(it => grid.appendChild(createCardElement(it)));
+                container.appendChild(grid);
+            }
+        }
+
+        function createCardElement(item) {
+            const card = document.createElement('div');
+            const dateStr = `${item.dateObj.day} ${monthNames[item.dateObj.month]} ${item.dateObj.year}`;
+            const idx = currentDisplayedItems.indexOf(item);
+
+            if (item.type === 'history') {
+                card.className = "bg-white rounded-2xl shadow-xl overflow-hidden border-4 border-purple-950 flex flex-col justify-between p-4 transform hover:-translate-y-1 transition-all duration-300 relative group cursor-pointer aspect-square";
+                card.innerHTML = `<div class="w-full h-full overflow-y-auto text-purple-950 font-bold text-sm p-2" onclick="openFullSizeModal(${idx})"><p>${item.text}</p></div><div class="mt-2 text-[10px] text-gray-500 flex justify-between items-center"><span class="bg-purple-200 text-purple-950 px-2 py-0.5 rounded font-bold">${dateStr}</span></div>`;
+            } else if (item.type === 'anime') {
+                card.className = "bg-white/95 rounded-2xl shadow-xl overflow-hidden border-4 border-purple-950 flex flex-col justify-between transform hover:-translate-y-1 transition-all relative group cursor-pointer aspect-square";
+                card.innerHTML = `
+                    <div class="flex-grow overflow-hidden bg-black relative pointer-events-none" onclick="openFullSizeModal(${idx})">
+                        <video src="${item.image}" autoplay loop muted playsinline class="w-full h-full object-cover group-hover:scale-105 transition-transform"></video>
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-bold text-sm pointer-events-auto">Просмотр 🔍</div>
+                    </div>
+                    <div class="p-3 bg-purple-900 text-white font-bold text-xs truncate flex items-center justify-between px-4">
+                        <span class="truncate" title="${item.title}">${item.title}</span>
+                        <span class="text-[10px] bg-pink-600 px-2 py-0.5 rounded font-bold shrink-0 ml-2">${dateStr}</span>
+                    </div>`;
+            } else {
+                card.className = "bg-white/95 rounded-2xl shadow-xl overflow-hidden border-4 border-purple-950 flex flex-col justify-between transform hover:-translate-y-1 transition-all relative group cursor-pointer aspect-square";
+                card.innerHTML = `<div class="flex-grow overflow-hidden bg-gray-200 relative" onclick="openFullSizeModal(${idx})"><img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" onerror="this.src='https://placehold.co/300x200/cccccc/333333?text=Картинка+не+найдена'"><div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-bold text-sm">Просмотр 🔍</div></div><div class="p-3 bg-purple-900 text-white font-bold text-xs truncate flex items-center justify-between px-4"><span class="truncate" title="${item.title}">${item.title}</span><span class="text-[10px] bg-pink-600 px-2 py-0.5 rounded font-bold shrink-0 ml-2">${dateStr}</span></div>`;
+            }
+            return card;
+        }
+
+        // =======================================================================
+        // 🎀 ЛОГИКА ПРОСМОТРА И ЛИСТАНИЯ В МОДАЛЬНОМ ОКНЕ 🎀
+        // =======================================================================
+        function openFullSizeModal(idx) {
+            currentModalIdx = idx;
+            renderModalContent();
+            document.getElementById('fullsize-modal').classList.remove('hidden');
+        }
+
+        function renderModalContent() {
+            let item = currentDisplayedItems[currentModalIdx];
+            if (!item) return;
+
+            document.getElementById('fullsize-title').textContent = item.title;
+            document.getElementById('fullsize-year').textContent = `📅 Дата: ${item.dateObj.day} ${monthNames[item.dateObj.month]} ${item.dateObj.year} г.`;
+            
+            // Обновляем количество кубков автора
+            const authorTrophies = getAuthorTrophies(item.authorName);
+            document.getElementById('author-trophy-count').textContent = authorTrophies;
+
+            const container = document.getElementById('fullsize-content-container');
+            const bgAudio = document.getElementById('bgMusic');
+            
+            // Музыка останавливается ТОЛЬКО если открывается видео (anime)
+            if (item.type === 'anime') {
+                if (bgAudio && !bgAudio.paused) {
+                    wasMusicPlayingBeforeVideo = true;
+                    bgAudio.pause();
+                    document.getElementById('musicText').textContent = 'Музыка: Выкл';
+                    document.getElementById('musicIcon').className = 'fas fa-play';
+                }
+            } else {
+                // Если сменили видео на обычную картинку, возвращаем музыку
+                if (bgAudio && wasMusicPlayingBeforeVideo && bgAudio.paused) {
+                    bgAudio.play().then(() => {
+                        document.getElementById('musicText').textContent = 'Музыка: Вкл';
+                        document.getElementById('musicIcon').className = 'fas fa-pause';
+                    }).catch(e => console.log(e));
+                }
+            }
+
+            if (item.type === 'history') {
+                container.innerHTML = `
+                    <div class="bg-amber-50 text-purple-950 p-6 md:p-8 rounded-2xl w-full max-h-[50vh] overflow-y-auto shadow-2xl relative border-4 border-amber-200" style="background-image: repeating-linear-gradient(transparent, transparent 35px, #e5e7eb 35px, #e5e7eb 36px); line-height: 36px;">
+                        <div class="flex items-start space-x-4 pt-1">
+                            <div class="text-3xl mt-1">✒️</div>
+                            <div class="flex-grow">
+                                <p class="text-2xl md:text-3xl font-bold text-purple-950 font-handwritten tracking-wide">
+                                    ${item.text}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (item.type === 'anime') {
+                container.innerHTML = `<video id="modalVideo" src="${item.image}" controls autoplay class="max-w-full max-h-[50vh] w-auto h-auto object-contain rounded-xl shadow-2xl"></video>`;
+                setTimeout(() => {
+                    const mVideo = document.getElementById('modalVideo');
+                    if(mVideo) {
+                        mVideo.volume = parseFloat(document.getElementById('volumeControl').value);
+                    }
+                }, 50);
+            } else {
+                container.innerHTML = `<img src="${item.image}" alt="Полный размер" class="max-w-full max-h-[50vh] w-auto h-auto object-contain rounded-xl shadow-2xl">`;
+            }
+
+            // Обновляем состояние Стрелочек листания и Реакций
+            updateModalNavigationState();
+            updateReactionButtonsState();
+        }
+
+        // Обновление состояния стрелочек (первая/последняя серые и не кликаются)
+        function updateModalNavigationState() {
+            const prevBtn = document.getElementById('modal-prev-btn');
+            const nextBtn = document.getElementById('modal-next-btn');
+            const counter = document.getElementById('modal-counter-badge');
+
+            counter.textContent = `${currentModalIdx + 1} / ${currentDisplayedItems.length}`;
+
+            // Первая работа: левая стрелка серая и отключена
+            if (currentModalIdx === 0) {
+                prevBtn.disabled = true;
+                prevBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow bg-gray-600 text-gray-400 cursor-not-allowed opacity-50 border-2 border-gray-700";
+            } else {
+                prevBtn.disabled = false;
+                prevBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg bg-purple-800 hover:bg-purple-700 text-yellow-300 border-2 border-yellow-400 hover:scale-110 active:scale-95 cursor-pointer transition-all";
+            }
+
+            // Последняя работа: правая стрелка серая и отключена
+            if (currentModalIdx === currentDisplayedItems.length - 1) {
+                nextBtn.disabled = true;
+                nextBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow bg-gray-600 text-gray-400 cursor-not-allowed opacity-50 border-2 border-gray-700";
+            } else {
+                nextBtn.disabled = false;
+                nextBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg bg-purple-800 hover:bg-purple-700 text-yellow-300 border-2 border-yellow-400 hover:scale-110 active:scale-95 cursor-pointer transition-all";
+            }
+        }
+
+        function prevModalItem() {
+            if (currentModalIdx > 0) {
+                currentModalIdx--;
+                renderModalContent();
+            }
+        }
+
+        function nextModalItem() {
+            if (currentModalIdx < currentDisplayedItems.length - 1) {
+                currentModalIdx++;
+                renderModalContent();
+            }
+        }
+
+        // =======================================================================
+        // 🎀 КНОПКИ РЕАКЦИЙ (ЛАЙК, ДИЗЛАЙК, КУБОК) 🎀
+        // =======================================================================
+        function updateReactionButtonsState() {
+            let item = currentDisplayedItems[currentModalIdx];
+            if (!item) return;
+
+            const db = getSavedReactions();
+            const rec = db[item.id] || { like: false, dislike: false, trophy: false };
+
+            const iconLike = document.getElementById('icon-like');
+            const btnDislike = document.getElementById('btn-dislike');
+            const btnTrophy = document.getElementById('btn-trophy');
+
+           // 1. Лайк
+            if (rec.like) {
+                iconLike.className = "fas fa-heart text-pink-500 scale-110";
+            } else {
+                iconLike.className = "far fa-heart text-pink-400";
+            }
+
+            // 2. Дизлайк
+            if (rec.dislike) {
+                btnDislike.className = "text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-100 scale-110";
+            } else {
+                btnDislike.className = "text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100";
+            }
+
+            // 3. Кубок
+            if (rec.trophy) {
+                btnTrophy.className = "text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none scale-125 drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]";
+            } else {
+                btnTrophy.className = "text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-60 hover:opacity-100";
+            }
+        }
+
+        function toggleLike(e) {
+            let item = currentDisplayedItems[currentModalIdx];
+            if (!item) return;
+
+            const db = getSavedReactions();
+            if (!db[item.id]) db[item.id] = { author: item.authorName };
+
+            db[item.id].like = !db[item.id].like;
+            if (db[item.id].like) {
+                db[item.id].dislike = false; // снимаем дизлайк при лайке
+                createParticles(e.clientX, e.clientY, ['💖', '❤️', '💕', '✨', '🌸']);
+            }
+            saveReactions(db);
+            updateReactionButtonsState();
+        }
+
+        function toggleDislike(e) {
+            let item = currentDisplayedItems[currentModalIdx];
+            if (!item) return;
+
+            const db = getSavedReactions();
+            if (!db[item.id]) db[item.id] = { author: item.authorName };
+
+            db[item.id].dislike = !db[item.id].dislike;
+            if (db[item.id].dislike) {
+                db[item.id].like = false; // снимаем лайк при дизлайке
+            }
+            saveReactions(db);
+            updateReactionButtonsState();
+        }
+
+        function rewardTrophy(e) {
+            let item = currentDisplayedItems[currentModalIdx];
+            if (!item) return;
+
+            const db = getSavedReactions();
+            if (!db[item.id]) db[item.id] = { author: item.authorName };
+
+            db[item.id].trophy = !db[item.id].trophy;
+            db[item.id].author = item.authorName; // сохраняем имя автора
+
+            if (db[item.id].trophy) {
+                createParticles(e.clientX, e.clientY, ['🏆', '✨', '⭐', '🎉', '🌟']);
+            }
+
+            saveReactions(db);
+            updateReactionButtonsState();
+            
+            // Обновляем плашку кубков автора
+            const count = getAuthorTrophies(item.authorName);
+            document.getElementById('author-trophy-count').textContent = count;
+        }
+
+        function closeFullSizeModal() { 
+            const container = document.getElementById('fullsize-content-container');
+            const video = container.querySelector('video');
+            if (video) {
+                video.pause();
+                video.currentTime = 0;
+            }
+            container.innerHTML = '';
+            document.getElementById('fullsize-modal').classList.add('hidden'); 
+
+            // Возобновляем музыку только если она была остановлена перед просмотром видео
+            const bgAudio = document.getElementById('bgMusic');
+            if (bgAudio && wasMusicPlayingBeforeVideo) {
+                bgAudio.play().then(() => {
+                    document.getElementById('musicText').textContent = 'Музыка: Вкл';
+                    document.getElementById('musicIcon').className = 'fas fa-pause';
+                }).catch(e => console.log("Не удалось возобновить музыку:", e));
+            }
+        }
+
+        function openFilterModal() {
+            let datesSet = new Set();
+            let items = dbItems.filter(i => i.aIdx === currentAccountIdx && i.sIdx === currentSubProfileIdx);
+            if (currentMode !== 'all') items = items.filter(i => i.mode === currentMode);
+            items.forEach(it => datesSet.add(it.dateObj.raw));
+
+            const listContainer = document.getElementById('filter-years-list');
+            listContainer.innerHTML = '';
+            if (datesSet.size === 0) {
+                listContainer.innerHTML = '<p class="text-xs text-purple-300 text-center py-2">Нет дат</p>';
+            } else {
+                Array.from(datesSet).sort().reverse().forEach(dateRaw => {
+                    let p = dateRaw.split('/'); let dLbl = `${p[0]} ${monthNames[p[1]]} 20${p[2]} г.`;
+                    const isSel = selectedFilterDate === dateRaw;
+                    const btn = document.createElement('button');
+                    btn.className = `w-full py-2.5 px-4 rounded-xl font-bold text-sm cursor-pointer flex justify-between border-2 ${isSel ? 'bg-yellow-400 text-purple-950 border-white' : 'bg-purple-900 text-white border-purple-700'}`;
+                    btn.innerHTML = `<span>📅 ${dLbl}</span> ${isSel ? '<span class="text-xs">✓</span>' : ''}`;
+                    btn.onclick = () => { selectedFilterDate = dateRaw; renderGrid(); closeFilterModal(); };
+                    listContainer.appendChild(btn);
+                });
+            }
+            document.getElementById('filter-modal').classList.remove('hidden');
+        }
+        function closeFilterModal() { document.getElementById('filter-modal').classList.add('hidden'); }
+        function applyYearFilter(val) { selectedFilterDate = val; renderGrid(); closeFilterModal(); }
+
+        window.onload = initPage;
+    </script>
+</body>
+</html>

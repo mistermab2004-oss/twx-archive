@@ -26,22 +26,22 @@
         
         /* ⚡ ФИОЛЕТОВЫЙ ПОЛЗУНОК-МОЛНИЯ ⚡ */
         ::-webkit-scrollbar {
-            width: 24px;
+            width: 16px;
         }
         ::-webkit-scrollbar-track {
             background: #f3e8ff;
-            border-left: 3px dashed #c084fc;
-            border-right: 3px dashed #c084fc;
+            border-left: 2px dashed #c084fc;
+            border-right: 2px dashed #c084fc;
         }
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(135deg, #d946ef 0%, #a855f7 50%, #7e22ce 100%);
-            border-radius: 12px;
-            border: 4px solid #f3e8ff;
+            border-radius: 8px;
+            border: 3px solid #f3e8ff;
             box-shadow: inset 0 2px 5px rgba(255,255,255,0.6), 0 0 10px rgba(168, 85, 247, 0.6);
         }
         ::-webkit-scrollbar-thumb:active {
             background: #6b21a8;
-            border-width: 8px;
+            border-width: 5px;
             box-shadow: inset 0 6px 12px rgba(0,0,0,0.7);
         }
 
@@ -99,7 +99,6 @@
             border-bottom: 2px solid #ffffff;
             background: #dfdfdf;
         }
-        /* Стиль для прожатой/отключенной ретро-кнопки */
         .retro-btn.retro-disabled {
             border-top: 2px solid #808080;
             border-left: 2px solid #808080;
@@ -120,7 +119,6 @@
             overflow-y: auto;
         }
 
-        /* Тонкий ретро-скроллбар внутри описания */
         .retro-content-box::-webkit-scrollbar {
             width: 12px;
         }
@@ -135,12 +133,41 @@
             border-right: 2px solid #808080;
             border-bottom: 2px solid #808080;
         }
-        .retro-content-box::-webkit-scrollbar-thumb:active {
-            background: #a0a0a0;
-            border-top: 2px solid #808080;
-            border-left: 2px solid #808080;
-            border-right: 2px solid #ffffff;
-            border-bottom: 2px solid #ffffff;
+
+        /* 📱 МОБИЛЬНАЯ АДАПТАЦИЯ (Медиазапросы) 📱 */
+        @media (max-width: 768px) {
+            .gartic-header-bg {
+                height: 140px;
+            }
+            /* Уменьшаем шапку на смартфонах */
+            header .max-w-7xl {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+            #header-nav-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+            }
+            #header-nav-buttons a img {
+                width: 75px !important;
+            }
+            /* Модальное окно на весь экран на телефонах */
+            #retro-modal > div {
+                height: 92vh !important;
+                flex-direction: column !important;
+                gap: 12px !important;
+                padding: 4px;
+            }
+            .retro-window {
+                width: 100% !important;
+                height: 60vh !important;
+            }
+            #modal-character-img {
+                max-height: 35vh !important;
+            }
         }
     </style>
 </head>
@@ -239,7 +266,7 @@
                 name: "GNOM3000",
                 avatar: "user/ava/mor_ava.png",
                 debut: "XaHTeP Play Stream",
-                desc: "Даша Мороз (яп. ダシャ・モロз) — грозный админ (от слова 'ад' в ВК) и модератор канала 'XaHTep Play Stream'. Весёлая и отзывчивая девушка, которая всегда готова высказать мнение и что-то оценить; может поконфликтовать, но правда всегда на её стороне. Раньше стримила на Twitch-канале Gnom3000, хотя сейчас забросила это дело.\nВнешний вид и аватары: 2D-аватар — яркая девушка с рыжими волосами в хвостиках с жёлтыми бантиками, зелёными глазами и в полосатом купальнике на платформе (при этом постоянно возмущается, что ей рисуют слишком большую грудь!). Реальный прототип — красивая девушка с рыжеватыми волосами, выразительным макияжем и в тёмном платье с принтом.",
+                desc: "Даша Мороз (яп. ダシャ・モロз) — грозный админ (от слова 'ад' в ВК) и модератор канала 'XaHTep Play Stream'. Весёлая и отзывчивая девушка, которая всегда готова высказать мнение и что-то оценить; может поконфликтовать, но правда всегда на её стороне. Раньше стримила на Twitch-канале Gnom3000, хотя сейчас забросила это дело.\nВнешний вид и аватары: 2D-аватар — яркая девушка с рыжими волосами в хвостиках с жёлтыми бантиками, зелёными глазами и в полосатом купальнике на платформе (при этом постоянно возмущается, что ей рисуют слишком большую грудь!). Реальный прототип — красивая девушка с рыжеватым оттенком волос, выразительным макияжем и в тёмном платье с принтом.",
                 notes: "Интересные факты и наблюдения: поскольку её точные личные предпочтения не афишируются, ходят легенды о её тайных хобби. Известна как главный критик пропорций в артах автора, владелица железного характера в чате и человек, чьё появление на стриме всегда гарантирует оживление атмосферы и шквал эмоций. Ценит справедливость, открыта к общению и обладает уникальным шармом.",
                 fullImage: "user/tool/mor.png"
             },
@@ -320,7 +347,7 @@
                 name: "Mr.Жуть",
                 avatar: "user/ava/spook_ava.png",
                 debut: "Time With XaHTeP",
-                desc: "Мистер Жуть (яп. ミスター・スプーク) — модератор канала'XaHTep Play Stream'. Забавная личность, которая старается сохранять нейтралитет и обладает вечным пофигизмом. Лицо и имя тщательно скрывает, с ним абсолютно неохота спорить.\nВнешний вид и аватары: 2D-аватар — стильный персонаж в деловом коричневом костюме, белой рубашке и галстуке с изображением молний, вместо головы у него массивный серый каменный блок с ухмылкой и молнией вместо глаза. Лицо в реальности скрыто.",
+                desc: "Мистер Жуть (яп. ミスター・スプーク) — модератор канала 'XaHTep Play Stream'. Забавная личность, которая старается сохранять нейтралитет и обладает вечным пофигизмом. Лицо и имя тщательно скрывает, с ним абсолютно неохота спорить.\nВнешний вид и аватары: 2D-аватар — стильный персонаж в деловом коричневом костюме, белой рубашке и галстуке с изображением молний, вместо головы у него массивный серый каменный блок с ухмылкой и молнией вместо глаза. Лицо в реальности скрыто.",
                 notes: "Интересы и предпочтения: страстный любитель живой музыки и чтения именно бумажных книг. Увлекается просмотром аниме и философией, является фанатом практически всего на свете... кроме кроликов, которых люто ненавидит.",
                 fullImage: "user/tool/spook.png"
             },
@@ -1171,52 +1198,51 @@
                 notes: "Я буду приходить тебе в кошмарах.",
                 fullImage: "user/zlo/zlu/bab.png"
             },
-    {
-        id: "v14",
-        name: "Спуки",
-        avatar: "user/zlo/spook_ava.png",
-        debut: "Игра: Spooky's Jump Scare Mansion",
-        desc: "Призрачная девочка из викторианской эпохи, которая создала огромный особняк с тысячей комнат, наполненный жуткими созданиями и скримерами ради собственного развлечения.",
-        notes: "Хотя сначала она кажется безобидной милашкой, за её милым фасадом скрывается истинный ужас тысяч смертельных комнат.",
-        fullImage: "user/zlo/zlu/spook.png"
-    },
-    {
-        id: "v15",
-        name: "Ремор",
-        avatar: "user/zlo/remor_ava.png",
-        debut: "Игра: Fran Bow",
-        desc: "Зловещее тёмное существо, великий дух из Пятой Реальности, питающийся страданиями, страхом и болью детей, преследующий маленькую Фран Боу.",
-        notes: "Появляется в виде зловещей тени в кошачьей маске и рогатом силуэте, превращая реальность в кошмар.",
-        fullImage: "user/zlo/zlu/remor.png"
-    },
-    {
-        id: "v16",
-        name: "Кеннет Фелпс",
-        avatar: "user/zlo/face_ava.png",
-        debut: "Игра: Sally Face",
-        desc: "Член культа и один из ключевых антагонистов, одержимый культом Тьмы и причастный к страшным ритуалам в апартаментах Эддисона.",
-        notes: "Его поступки привели к ужасным трагедиям, изменившим жизнь Сала Фишера и его друзей навсегда.",
-        fullImage: "user/zlo/zlu/face.png"
-    },
-    {
-        id: "v17",
-        name: "Король могеко",
-        avatar: "user/zlo/mogeko_ava.png",
-        debut: "Игра: Mogeko Castle",
-        desc: "Безумный лидер жёлтых существ могеко из параллельного замка, одержимый жестокими извращёнными наклонностями, ЛЮБОВЬЮ К СТАРШЕКЛАСТНИЦАМ и бесконечным хаосом.",
-        notes: "Скрывает за комичной и мягкой внешностью садистскую натуру, держащую в страхе весь замок.",
-        fullImage: "user/zlo/zlu/mogeko.png"
-    },
-    {
-        id: "v18",
-        name: "Предатель",
-        avatar: "user/zlo/among_ava.png",
-        debut: "Игра: Among Us",
-        desc: "Паразит инопланетного происхождения, способный идеально маскироваться под членов экипажа, саботировать системы корабля и уничтожать команду изнутри.",
-        notes: "Действует скрытно, мастерски лжёт на собраниях и наносит удар в самый неожиданный момент.",
-        fullImage: "user/zlo/zlu/among.png"
-    }
-
+            {
+                id: "v14",
+                name: "Спуки",
+                avatar: "user/zlo/spook_ava.png",
+                debut: "Игра: Spooky's Jump Scare Mansion",
+                desc: "Призрачная девочка из викторианской эпохи, которая создала огромный особняк с тысячей комнат, наполненный жуткими созданиями и скримерами ради собственного развлечения.",
+                notes: "Хотя сначала она кажется безобидной милашкой, за её милым фасадом скрывается истинный ужас тысяч смертельных комнат.",
+                fullImage: "user/zlo/zlu/spook.png"
+            },
+            {
+                id: "v15",
+                name: "Ремор",
+                avatar: "user/zlo/remor_ava.png",
+                debut: "Игра: Fran Bow",
+                desc: "Зловещее тёмное существо, великий дух из Пятой Реальности, питающийся страданиями, страхом и болью детей, преследующий маленькую Фран Боу.",
+                notes: "Появляется в виде зловещей тени в кошачьей маске и рогатом силуэте, превращая реальность в кошмар.",
+                fullImage: "user/zlo/zlu/remor.png"
+            },
+            {
+                id: "v16",
+                name: "Кеннет Фелпс",
+                avatar: "user/zlo/face_ava.png",
+                debut: "Игра: Sally Face",
+                desc: "Член культа и один из ключевых антагонистов, одержимый культом Тьмы и причастный к страшным ритуалам в апартаментах Эддисона.",
+                notes: "Его поступки привели к ужасным трагедиям, изменившим жизнь Сала Фишера и его друзей навсегда.",
+                fullImage: "user/zlo/zlu/face.png"
+            },
+            {
+                id: "v17",
+                name: "Король могеко",
+                avatar: "user/zlo/mogeko_ava.png",
+                debut: "Игра: Mogeko Castle",
+                desc: "Безумный лидер жёлтых существ могеко из параллельного замка, одержимый жестокими извращёнными наклонностями, ЛЮБОВЬЮ К СТАРШЕКЛАСТНИЦАМ и бесконечным хаосом.",
+                notes: "Скрывает за комичной и мягкой внешностью садистскую натуру, держащую в страхе весь замок.",
+                fullImage: "user/zlo/zlu/mogeko.png"
+            },
+            {
+                id: "v18",
+                name: "Предатель",
+                avatar: "user/zlo/among_ava.png",
+                debut: "Игра: Among Us",
+                desc: "Паразит инопланетного происхождения, способный идеально маскироваться под членов экипажа, саботировать системы корабля и уничтожать команду изнутри.",
+                notes: "Действует скрытно, мастерски лжёт на собраниях и наносит удар в самый неожиданный момент.",
+                fullImage: "user/zlo/zlu/among.png"
+            }
         ];
 
         const VillainQuotes = [
@@ -1266,23 +1292,23 @@
     <header class="sticky top-0 z-30 w-full pt-4 pb-5 px-4 sm:px-8 pointer-events-none text-white">
         <div class="gartic-header-bg"></div>
         <div class="max-w-7xl mx-auto relative z-20 flex items-center justify-between pointer-events-auto">
-            <a href="index.html" class="flex items-center space-x-6 group cursor-pointer no-underline">
-                <div class="w-32 h-32 sm:w-40 sm:h-40 flex-shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
+            <a href="index.html" class="flex items-center space-x-4 sm:space-x-6 group cursor-pointer no-underline">
+                <div class="w-20 h-20 sm:w-32 sm:h-32 md:w-40 md:h-40 flex-shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
                     <img id="main-logo-img" src="user/ava/logo.png" alt="Лого" class="w-full h-full object-contain">
                 </div>
-                <span id="site-header-title" class="font-black text-3xl sm:text-5xl tracking-wider text-yellow-300 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)] uppercase group-hover:text-yellow-200 transition-colors">
+                <span id="site-header-title" class="font-black text-xl sm:text-3xl md:text-5xl tracking-wider text-yellow-300 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)] uppercase group-hover:text-yellow-200 transition-colors">
                     TWX АРХИВ
                 </span>
             </a>
             <div id="header-nav-buttons" class="flex items-center space-x-2 sm:space-x-3">
                 <a href="artick.html" class="inline-block cursor-pointer hover:scale-105 transition-transform">
-                   <img id="btn-artick" src="user/system/arca 9.png" onmouseover="this.src='user/system/arca 10.png'" onmouseout="this.src='user/system/arca 9.png'" alt="ГАРТИК" class="w-28 h-auto rounded-xl shadow-md border-2 border-white/50">
+                   <img id="btn-artick" src="user/system/arca 9.png" onmouseover="this.src='user/system/arca 10.png'" onmouseout="this.src='user/system/arca 9.png'" alt="ГАРТИК" class="w-20 sm:w-28 h-auto rounded-xl shadow-md border-2 border-white/50">
                 </a>
                 <a href="about.html" class="inline-block cursor-pointer hover:scale-105 transition-transform">
-                   <img id="btn-about" src="user/system/arca 5.png" onmouseover="this.src='user/system/arca 6.png'" onmouseout="this.src='user/system/arca 5.png'" alt="О НАС" class="w-28 h-auto rounded-xl shadow-md border-2 border-white/50">
+                   <img id="btn-about" src="user/system/arca 5.png" onmouseover="this.src='user/system/arca 6.png'" onmouseout="this.src='user/system/arca 5.png'" alt="О НАС" class="w-20 sm:w-28 h-auto rounded-xl shadow-md border-2 border-white/50">
                 </a>
                 <a href="streams.html" class="inline-block cursor-pointer hover:scale-105 transition-transform">
-                   <img id="btn-streams" src="user/system/arca 7.png" onmouseover="this.src='user/system/arca 8.png'" onmouseout="this.src='user/system/arca 7.png'" alt="СТРИМЫ" class="w-28 h-auto rounded-xl shadow-md border-2 border-white/50">
+                   <img id="btn-streams" src="user/system/arca 7.png" onmouseover="this.src='user/system/arca 8.png'" onmouseout="this.src='user/system/arca 7.png'" alt="СТРИМЫ" class="w-20 sm:w-28 h-auto rounded-xl shadow-md border-2 border-white/50">
                 </a>
             </div>
         </div>
@@ -1302,20 +1328,20 @@
     <main class="flex-grow max-w-7xl mx-auto w-full px-4 py-8 z-20 flex flex-col">
         
         <div class="w-full flex justify-center mb-8">
-            <img id="main-center-logo" src="user/ava/logo.png" alt="Центральное Лого" class="w-64 h-auto drop-shadow-2xl">
+            <img id="main-center-logo" src="user/ava/logo.png" alt="Центральное Лого" class="w-48 sm:w-64 h-auto drop-shadow-2xl">
         </div>
 
         <div class="flex flex-col lg:flex-row gap-8 items-start w-full">
             
             <div class="w-full lg:w-1/3 flex flex-col space-y-8">
-                <div class="bg-purple-900/10 p-4 rounded-3xl border-2 border-purple-300/50">
+                <div class="bg-purple-900/10 p-4 rounded-3xl border-2 border-purple-300/50 flex flex-col items-center sm:items-start">
                     <h3 class="text-lg font-black text-white uppercase mb-4 ml-2">Основные ссылки</h3>
-                    <div class="flex flex-col items-start space-y-4">
+                    <div class="flex flex-col items-center sm:items-start space-y-4 w-full">
                         <a id="link-fav" href="gartic_phone_artistuno_gallery.html" onclick="handleFavWorksClick(event)" class="inline-block cursor-pointer hover:scale-105 transition-transform">
-                            <img id="img-fav" src="user/system/arca 1.png" onmouseover="this.src='user/system/arca 2.png'" onmouseout="this.src='user/system/arca 1.png'" alt="Избранные Работы" class="w-64 h-auto rounded-xl shadow-lg border-2 border-white/50">
+                            <img id="img-fav" src="user/system/arca 1.png" onmouseover="this.src='user/system/arca 2.png'" onmouseout="this.src='user/system/arca 1.png'" alt="Избранные Работы" class="w-56 sm:w-64 h-auto rounded-xl shadow-lg border-2 border-white/50">
                         </a>
                         <a id="link-all" href="gartic_phone_all_works.html" class="inline-block cursor-pointer hover:scale-105 transition-transform">
-                            <img id="img-all" src="user/system/arca 3.png" onmouseover="this.src='user/system/arca 4.png'" onmouseout="this.src='user/system/arca 3.png'" alt="Все Работы" class="w-64 h-auto rounded-xl shadow-lg border-2 border-white/50">
+                            <img id="img-all" src="user/system/arca 3.png" onmouseover="this.src='user/system/arca 4.png'" onmouseout="this.src='user/system/arca 3.png'" alt="Все Работы" class="w-56 sm:w-64 h-auto rounded-xl shadow-lg border-2 border-white/50">
                         </a>
                     </div>
                 </div>
@@ -1334,7 +1360,7 @@
                         <button onclick="nextPage()" class="w-10 h-10 bg-purple-600 text-white rounded-full font-black text-xl hover:bg-purple-500 flex items-center justify-center shadow cursor-pointer">&gt;</button>
                     </div>
                     
-                    <div id="widget-grid" class="grid grid-cols-3 gap-3">
+                    <div id="widget-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     </div>
                 </div>
             </div>
@@ -1351,18 +1377,16 @@
     </main>
 
     <!-- Модальное окно (Плашка Ретро) -->
-    <div id="retro-modal" class="fixed inset-0 bg-purple-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0">
+    <div id="retro-modal" class="fixed inset-0 bg-purple-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-2 sm:p-4 transition-opacity duration-300 opacity-0">
         <div class="max-w-5xl w-full flex flex-col md:flex-row items-end justify-between gap-8 h-[80vh]">
             
-            <!-- Левая часть: Ретро-окно с фиксированной высотой h-[500px] как у злодеев -->
             <div class="retro-window w-full md:w-1/2 h-[500px] flex flex-col shadow-[10px_10px_0px_rgba(0,0,0,0.5)] transform scale-95 transition-transform duration-300" id="retro-window-anim">
                 
                 <div class="retro-title-bar justify-between">
                     <div class="flex items-center space-x-2">
                         <button onclick="closeModal()" class="retro-btn w-6 h-6 flex items-center justify-center text-black text-sm">X</button>
-                        <span id="modal-title-name" class="tracking-wide">Имя персонажа</span>
+                        <span id="modal-title-name" class="tracking-wide text-xs sm:text-sm">Имя персонажа</span>
                     </div>
-                    <!-- Стрелочки управления доп меню скинов -->
                     <div id="retro-arrows-container" class="flex space-x-1 hidden">
                         <button onclick="expandSkinMenu()" class="retro-btn w-6 h-6 flex items-center justify-center text-black text-xs cursor-pointer" title="Развернуть меню скинов">▲</button>
                         <button onclick="collapseSkinMenu()" class="retro-btn w-6 h-6 flex items-center justify-center text-black text-xs cursor-pointer" title="Свернуть меню скинов">▼</button>
@@ -1370,38 +1394,31 @@
                 </div>
 
                 <div class="p-3 flex-grow flex flex-col overflow-hidden">
-                    <div class="font-bold text-sm mb-2 flex-shrink-0" id="modal-debut">DEBUT: Текст</div>
+                    <div class="font-bold text-xs sm:text-sm mb-2 flex-shrink-0" id="modal-debut">DEBUT: Текст</div>
                     
-                    <!-- ПОЛЗУНОК/СКРОЛЛ ВНУТРИ ОПИСАНИЯ И ЗАМЕТОК (РАСТЯГИВАЕТСЯ НА ВСЮ ВЫСОТУ) -->
-                    <div class="retro-content-box flex-grow p-3 text-sm leading-relaxed overflow-y-auto" id="modal-text-content">
-                        <!-- Текст описания или заметок -->
+                    <div class="retro-content-box flex-grow p-3 text-xs sm:text-sm leading-relaxed overflow-y-auto" id="modal-text-content">
                     </div>
                 </div>
 
-                <!-- Нижняя панель: Вкладки (Описание / Заметки) и кнопки быстрого переключения в правом углу с отступом -->
                 <div id="modal-bottom-bar" class="flex items-center justify-between p-1 bg-[#c0c0c0] border-t-2 border-[#808080]">
                     <div class="flex items-center space-x-1">
-                        <button id="tab-desc" onclick="switchTab('desc')" class="retro-btn active-tab px-3 py-1 text-sm">Описание</button>
-                        <button id="tab-notes" onclick="switchTab('notes')" class="retro-btn px-3 py-1 text-sm">Заметки разраб.</button>
+                        <button id="tab-desc" onclick="switchTab('desc')" class="retro-btn active-tab px-2 sm:px-3 py-1 text-xs sm:text-sm">Описание</button>
+                        <button id="tab-notes" onclick="switchTab('notes')" class="retro-btn px-2 sm:px-3 py-1 text-xs sm:text-sm">Заметки разраб.</button>
                     </div>
-                    <!-- Две серенькие ретро-кнопки для пролистывания художников в правом углу с отступом -->
-                    <div class="flex items-center space-x-1 ml-4 pr-1">
-                        <button id="modal-prev-artist" onclick="modalPrevArtist()" class="retro-btn px-2.5 py-1 text-xs" title="Предыдущий художник">&lt;</button>
-                        <button id="modal-next-artist" onclick="modalNextArtist()" class="retro-btn px-2.5 py-1 text-xs" title="Следующий художник">&gt;</button>
+                    <div class="flex items-center space-x-1 ml-2 pr-1">
+                        <button id="modal-prev-artist" onclick="modalPrevArtist()" class="retro-btn px-2 py-1 text-xs" title="Предыдущий художник">&lt;</button>
+                        <button id="modal-next-artist" onclick="modalNextArtist()" class="retro-btn px-2 py-1 text-xs" title="Следующий художник">&gt;</button>
                     </div>
                 </div>
 
-                <!-- ОТДЕЛЬНЫЙ БЛОК ДЛЯ КНОПОК СКИНОВ СНИЗУ -->
                 <div id="skin-buttons-container" class="hidden">
                     <div id="skin-buttons-block" class="p-2 bg-[#dfdfdf] border-t-2 border-[#808080] flex items-center space-x-2 overflow-x-auto">
-                        <!-- Иконки скинов под кнопками описания и заметок -->
                     </div>
                 </div>
             </div>
 
-            <!-- Правая часть: Картинка персонажа с покачиванием -->
             <div class="w-full md:w-1/2 h-full flex items-end justify-center pointer-events-none">
-                <img id="modal-character-img" src="" alt="Персонаж" class="max-h-[90%] w-auto object-contain animate-float drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">
+                <img id="modal-character-img" src="" alt="Персонаж" class="max-h-[70%] md:max-h-[90%] w-auto object-contain animate-float drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">
             </div>
 
         </div>
@@ -1433,9 +1450,9 @@
         const ITEMS_PER_PAGE = 18;
         let currentPage = 0;
         let searchQuery = '';
-        let currentSkinIndex = -1; // -1 = оригинал, 0+ = индекс скина
-        let isSkinMenuExpanded = false; // Состояние доп меню скинов (свернуто/развернуто)
-        let currentEntityIndex = 0; // Индекс текущего персонажа в текущем массиве (для кнопок пролистывания)
+        let currentSkinIndex = -1;
+        let isSkinMenuExpanded = false;
+        let currentEntityIndex = 0;
 
         function checkZloEasterEgg(entityName) {
             if (entityName.toLowerCase().includes("лучший злодей")) {
@@ -1608,7 +1625,7 @@
 
             if (pageItems.length === 0) {
                 const emptyText = isZloMode ? "Злодеи не найдены!" : "Художники не найдены, милый!";
-                grid.innerHTML = `<div class="col-span-3 text-center text-purple-900 font-bold py-8">${emptyText}</div>`;
+                grid.innerHTML = `<div class="col-span-2 sm:col-span-3 text-center text-purple-900 font-bold py-8">${emptyText}</div>`;
                 return;
             }
 
@@ -1665,8 +1682,8 @@
             currentEntityIndex = index;
             currentEntityData = filtered[currentEntityIndex];
 
-            currentSkinIndex = -1; // Сброс на оригинал при открытии
-            isSkinMenuExpanded = false; // По умолчанию свернуто в аккуратную полоску
+            currentSkinIndex = -1;
+            isSkinMenuExpanded = false;
             
             document.getElementById('modal-debut').textContent = (isZloMode ? "ИСТОЧНИК: " : "DEBUT: ") + currentEntityData.debut;
             
@@ -1685,7 +1702,6 @@
             if (!isZloMode) switchMusicTo('pro');
         }
 
-        // Пролистывание кнопками внутри модального окна
         function modalPrevArtist() {
             if (currentEntityIndex > 0) {
                 openModalByIndex(currentEntityIndex - 1);
@@ -1714,7 +1730,6 @@
             if (!isZloMode) switchMusicTo('main');
         }
 
-        // Выбор конкретного скина или оригинала
         function selectSkin(index) {
             currentSkinIndex = index;
             updateModalView();
@@ -1736,7 +1751,6 @@
             renderModalText();
         }
 
-        // Функции управления доп меню скинов через стрелочки сверху
         function expandSkinMenu() {
             if (!currentEntityData || !currentEntityData.originalscin) return;
             isSkinMenuExpanded = true;
@@ -1749,7 +1763,6 @@
             renderSkinButtons();
         }
 
-        // Обновление заголовка, картинки, иконок скинов и состояния кнопок пролистывания
         function updateModalView() {
             if (!currentEntityData) return;
 
@@ -1769,7 +1782,6 @@
             updatePaginationButtonsState();
         }
 
-        // Проверка и установка стилей (серые/прожатые) для кнопок пролистывания в модалке
         function updatePaginationButtonsState() {
             const filtered = getFilteredEntities();
             const prevBtn = document.getElementById('modal-prev-artist');
@@ -1777,14 +1789,12 @@
 
             if (!prevBtn || !nextBtn) return;
 
-            // Левая кнопка (предыдущий)
             if (currentEntityIndex <= 0) {
                 prevBtn.classList.add('retro-disabled');
             } else {
                 prevBtn.classList.remove('retro-disabled');
             }
 
-            // Правая кнопка (следующий)
             if (currentEntityIndex >= filtered.length - 1) {
                 nextBtn.classList.add('retro-disabled');
             } else {
@@ -1792,7 +1802,6 @@
             }
         }
 
-        // Отрисовка текста описания/заметок
         function renderModalText() {
             const contentBox = document.getElementById('modal-text-content');
             if (!contentBox || !currentEntityData) return;
@@ -1812,7 +1821,6 @@
             }
         }
 
-        // Отрисовка кнопок скинов в отдельном нижнем блоке с учетом разворота/сворачивания
         function renderSkinButtons() {
             const container = document.getElementById('skin-buttons-container');
             const block = document.getElementById('skin-buttons-block');
@@ -1820,18 +1828,15 @@
             
             if (!container || !block || !arrowsContainer) return;
 
-            // Кнопка оригинал берётся строго из originalscin и доступна только избранным
             if (!isZloMode && currentEntityData && currentEntityData.originalscin) {
                 container.classList.remove('hidden');
                 arrowsContainer.classList.remove('hidden');
                 
                 block.innerHTML = '';
 
-                // Настройка размера иконок: нормальные большие (w-12 h-12) или еще более крупные при разворачивании (w-20 h-20)
-                const imgSizeClass = isSkinMenuExpanded ? "w-20 h-20" : "w-12 h-12";
-                const paddingClass = isSkinMenuExpanded ? "p-3" : "p-1.5";
+                const imgSizeClass = isSkinMenuExpanded ? "w-16 h-16 sm:w-20 sm:h-20" : "w-10 h-10 sm:w-12 sm:h-12";
+                const paddingClass = isSkinMenuExpanded ? "p-2 sm:p-3" : "p-1";
 
-                // Оригинал
                 const origIcon = currentEntityData.originalscin;
                 const isOrigActive = (currentSkinIndex === -1);
                 
@@ -1841,11 +1846,10 @@
                 origBtn.onclick = () => selectSkin(-1);
                 origBtn.innerHTML = `
                     <img src="${origIcon}" class="${imgSizeClass} object-cover rounded shadow">
-                    ${isSkinMenuExpanded ? '<span class="text-[10px] font-bold text-black mt-1">Оригинал</span>' : ''}
+                    ${isSkinMenuExpanded ? '<span class="text-[9px] sm:text-[10px] font-bold text-black mt-1">Оригинал</span>' : ''}
                 `;
                 block.appendChild(origBtn);
 
-                // Альтернативные скины
                 if (currentEntityData.skins && currentEntityData.skins.length > 0) {
                     currentEntityData.skins.forEach((skin, idx) => {
                         const isSkinActive = (currentSkinIndex === idx);
@@ -1855,13 +1859,12 @@
                         skinBtn.onclick = () => selectSkin(idx);
                         skinBtn.innerHTML = `
                             <img src="${skin.avatar}" class="${imgSizeClass} object-cover rounded shadow">
-                            ${isSkinMenuExpanded ? `<span class="text-[10px] font-bold text-black mt-1 truncate max-w-[80px]">${skin.name}</span>` : ''}
+                            ${isSkinMenuExpanded ? `<span class="text-[9px] sm:text-[10px] font-bold text-black mt-1 truncate max-w-[80px]">${skin.name}</span>` : ''}
                         `;
                         block.appendChild(skinBtn);
                     });
                 }
             } else {
-                // Если у персонажа нет скинов (нет originalscin), то доп меню и стрелочки скрыты, всё обычное
                 container.classList.add('hidden');
                 arrowsContainer.classList.add('hidden');
             }

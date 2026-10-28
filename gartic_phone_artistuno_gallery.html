@@ -2613,7 +2613,7 @@
         }
 
         // =======================================================================
-        // 💾 СКАЧИВАНИЕ КАРТОЧКИ АККАУНТА (ТОЧНО КАК ВАША РУЧНАЯ ВЕРСИЯ) 💾
+        // 💾 СКАЧИВАНИЕ КАРТОЧКИ АККАУНТА (НАСЫЩЕННАЯ ВЕРСИЯ) 💾
         // =======================================================================
         function downloadAccountCard() {
             const artist = artists[currentArtistIndex];
@@ -2626,13 +2626,27 @@
             downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
             downloadBtn.disabled = true;
 
+            // Временно убираем полупрозрачности для чистоты и сочности цветов при рендере
+            const prevBg = cardElement.style.background;
+            cardElement.style.background = "linear-gradient(135deg, #4c1d95 0%, #701a75 50%, #311045 100%)";
+
             html2canvas(cardElement, {
                 useCORS: true,
                 allowTaint: true,
-                scale: 3, // Максимальное качество без потери цвета
-                backgroundColor: "#70125c"
+                scale: 3, // Повышаем четкость и сочность пикселей (HD)
+                backgroundColor: null,
+                onclone: (clonedDoc) => {
+                    // Убеждаемся, что в клоне для скачивания убран полупрозрачный узор, съедающий цвет
+                    const clonedPattern = clonedDoc.querySelector('#exportable-card .dot-pattern');
+                    if (clonedPattern) {
+                        clonedPattern.style.opacity = '0.15';
+                    }
+                }
             }).then(canvas => {
-                const imageURI = canvas.toDataURL("image/png");
+                // Возвращаем стили обратно
+                cardElement.style.background = prevBg;
+
+                const imageURI = canvas.toDataURL("image/png", 1.0);
                 
                 const cleanName = (artist.name || "Account").replace(/[^a-zA-Z0-9а-яА-ЯёЁ_-]/g, "");
                 const fileName = `Карточка_${cleanName}.png`;
@@ -2648,6 +2662,7 @@
                 downloadBtn.disabled = false;
             }).catch(err => {
                 console.error("Ошибка при генерации карточки:", err);
+                cardElement.style.background = prevBg;
                 downloadBtn.innerHTML = originalBtnContent;
                 downloadBtn.disabled = false;
             });

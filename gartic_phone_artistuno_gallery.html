@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gartic Phone - Избраные Работы</title>
+    <title>Gartic Phone - Избранные Работы</title>
     <link rel="icon" type="image/png" href="user/system/icon galery.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -64,6 +64,15 @@
         }
         .retro-shadow {
             box-shadow: 4px 4px 0px #0f0518;
+        }
+
+        /* Скрытие полосы прокрутки внутри карточки при скачивании */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
@@ -2079,25 +2088,33 @@
 
     <!-- Модальное окно карточки -->
     <div id="card-preview-modal" class="fixed inset-0 bg-purple-950/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-purple-950 border-4 border-pink-500 rounded-3xl p-6 md:p-8 max-w-4xl w-full shadow-2xl relative flex flex-col items-center">
-            <button onclick="closeCardPreviewModal()" class="absolute top-4 right-4 w-12 h-12 bg-red-600 hover:bg-red-500 rounded-full font-bold text-white text-xl flex items-center justify-center cursor-pointer z-10 shadow-lg border-2 border-white">✕</button>
+        <div class="bg-purple-950 border-4 border-pink-500 rounded-3xl p-4 sm:p-6 md:p-8 max-w-4xl w-full shadow-2xl relative flex flex-col items-center max-h-[90vh] overflow-y-auto">
             
-            <h3 class="text-2xl font-black mb-2 text-center text-pink-300">Комфортная карточка профиля</h3>
+            <!-- КНОПКИ ВЕРХНЕЙ ПАНЕЛИ: СКАЧАТЬ И ЗАКРЫТЬ -->
+            <div class="absolute top-4 right-4 flex items-center space-x-2 z-20">
+                <button id="download-card-btn" onclick="downloadCardImage()" title="Скачать карточку PNG" class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 rounded-full font-bold text-white text-lg sm:text-xl flex items-center justify-center cursor-pointer shadow-lg border-2 border-yellow-300 transition-transform active:scale-95">
+                    <i class="fa-solid fa-download"></i>
+                </button>
+                <button onclick="closeCardPreviewModal()" class="w-10 h-10 sm:w-12 sm:h-12 bg-red-600 hover:bg-red-500 rounded-full font-bold text-white text-lg sm:text-xl flex items-center justify-center cursor-pointer shadow-lg border-2 border-white transition-transform active:scale-95">✕</button>
+            </div>
+            
+            <h3 class="text-xl sm:text-2xl font-black mb-1 text-center text-pink-300 pr-24 sm:pr-28 w-full text-left sm:text-center">Комфортная карточка профиля</h3>
             <p class="text-xs text-purple-200 mb-4 text-center">Превью страницы в виде аккуратной карточки!</p>
             
-            <div id="exportable-card" class="w-full max-w-2xl bg-gradient-to-br from-purple-900 via-fuchsia-950 to-indigo-950 border-8 border-yellow-400 rounded-3xl p-6 md:p-8 shadow-2xl flex flex-col items-center relative overflow-hidden">
+            <!-- СКАТЫВАЕМАЯ В ИЗОБРАЖЕНИЕ КАРТОЧКА -->
+            <div id="exportable-card" class="w-full max-w-2xl bg-gradient-to-br from-purple-900 via-fuchsia-950 to-indigo-950 border-4 sm:border-8 border-yellow-400 rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl flex flex-col items-center relative overflow-hidden">
                 <div class="absolute inset-0 dot-pattern opacity-40 pointer-events-none"></div>
                 
-                <div class="flex flex-col items-center z-10 mb-6">
-                    <div class="w-32 h-32 rounded-full border-6 border-white shadow-2xl overflow-hidden mb-3">
-                        <img id="card-preview-avatar" src="" alt="Аватарка" class="w-full h-full object-cover">
+                <div class="flex flex-col items-center z-10 mb-4 sm:mb-6">
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 sm:border-6 border-white shadow-2xl overflow-hidden mb-2 sm:mb-3">
+                        <img id="card-preview-avatar" src="" alt="Аватарка" class="w-full h-full object-cover" crossorigin="anonymous">
                     </div>
-                    <h2 id="card-preview-name" class="text-2xl md:text-3xl font-black tracking-wider text-yellow-300 drop-shadow-md">ИМЯ ХУДОЖНИКА</h2>
+                    <h2 id="card-preview-name" class="text-xl sm:text-2xl md:text-3xl font-black tracking-wider text-yellow-300 drop-shadow-md text-center">ИМЯ ХУДОЖНИКА</h2>
                 </div>
 
-                <div class="w-full grid grid-cols-5 gap-2.5 z-10 mb-4 max-h-48 overflow-y-auto p-1" id="card-preview-grid"></div>
+                <div class="w-full grid grid-cols-5 gap-1.5 sm:gap-2.5 z-10 mb-4 p-1 hide-scrollbar" id="card-preview-grid"></div>
 
-                <div class="text-xs text-purple-300 z-10 font-semibold tracking-widest mt-2">GARTIC STYLE DIGITAL GALLERY • TERABYTE ARTWORKS</div>
+                <div class="text-[10px] sm:text-xs text-purple-300 z-10 font-semibold tracking-widest mt-2 text-center uppercase">GARTIC STYLE DIGITAL GALLERY • TERABYTE ARTWORKS</div>
             </div>
         </div>
     </div>
@@ -2571,9 +2588,9 @@
             for (let i = 0; i < 10; i++) {
                 const art = artist.artworks[i];
                 const thumb = document.createElement('div');
-                thumb.className = "h-16 md:h-20 bg-purple-950/80 rounded-xl overflow-hidden border-2 border-fuchsia-500/60 flex items-center justify-center shadow-inner";
+                thumb.className = "h-14 sm:h-16 md:h-20 bg-purple-950/80 rounded-xl overflow-hidden border-2 border-fuchsia-500/60 flex items-center justify-center shadow-inner";
                 if (art) {
-                    thumb.innerHTML = `<img src="${art.image}" class="w-full h-full object-cover">`;
+                    thumb.innerHTML = `<img src="${art.image}" class="w-full h-full object-cover" crossorigin="anonymous">`;
                 } else {
                     thumb.innerHTML = `<span class="text-xs text-purple-400/50 font-bold">${i+1}</span>`;
                 }
@@ -2581,6 +2598,44 @@
             }
 
             document.getElementById('card-preview-modal').classList.remove('hidden');
+        }
+
+        // =======================================================================
+        // 💾 СКАЧИВАНИЕ ИДЕАЛЬНОЙ КАРТОЧКИ С ИМЕНЕМ ФАЙЛА 💾
+        // =======================================================================
+        function downloadCardImage() {
+            const artist = artists[currentArtistIndex];
+            const cardElem = document.getElementById('exportable-card');
+            const downloadBtn = document.getElementById('download-card-btn');
+
+            if (!cardElem) return;
+
+            // Анимация загрузки на кнопке
+            const origIcon = downloadBtn.innerHTML;
+            downloadBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>`;
+            downloadBtn.disabled = true;
+
+            // Генерируем чистое изображение через html2canvas
+            html2canvas(cardElem, {
+                useCORS: true,
+                scale: 2, // Высокое качество
+                backgroundColor: null, // Прозрачный фон вокруг закруглений
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                // Имя файла ровно по твоей задумке!
+                const sanitizedName = (artist.name || "Пользователь").replace(/[\\/:*?"<>|]/g, "");
+                link.download = `Карточка_${sanitizedName}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                downloadBtn.innerHTML = origIcon;
+                downloadBtn.disabled = false;
+            }).catch(err => {
+                console.error("Ошибка скачивания карточки:", err);
+                downloadBtn.innerHTML = origIcon;
+                downloadBtn.disabled = false;
+            });
         }
 
         function nextProfile() {

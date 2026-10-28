@@ -2577,11 +2577,14 @@
 
             const previewGrid = document.getElementById('card-preview-grid');
             previewGrid.innerHTML = '';
+            // Убираем ограничения скролла, делаем фиксированную сетку из 2 рядов по 5 штук без всяких ползунков
+            previewGrid.className = "w-full grid grid-cols-5 gap-2 z-10 mb-3";
 
             for (let i = 0; i < 10; i++) {
                 const art = artist.artworks[i];
                 const thumb = document.createElement('div');
-                thumb.className = "h-16 md:h-20 bg-purple-950/80 rounded-xl overflow-hidden border-2 border-fuchsia-500/60 flex items-center justify-center shadow-inner";
+                // Компактный размер блоков, чтобы идеально влезли 2 ряда без скролла
+                thumb.className = "h-14 sm:h-16 md:h-20 bg-purple-950/80 rounded-xl overflow-hidden border-2 border-fuchsia-500/60 flex items-center justify-center shadow-inner";
                 if (art) {
                     thumb.innerHTML = `<img src="${art.image}" class="w-full h-full object-cover">`;
                 } else {

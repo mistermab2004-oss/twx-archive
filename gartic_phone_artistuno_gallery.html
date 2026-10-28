@@ -2596,7 +2596,7 @@
         }
 
         // =======================================================================
-        // 💾 СКАЧИВАНИЕ КАРТОЧКИ (НА СЕЙ РАЗ НАСЫЩЕННАЯ И СОЧНАЯ НАВСЕГДА!) 💾
+        // 💾 ИДЕАЛЬНОЕ СКАЧИВАНИЕ КАРТОЧКИ (БЕЗ ВЫТЯГИВАНИЯ И БЛЕКЛОСТИ) 💾
         // =======================================================================
         function downloadAccountCard() {
             const artist = artists[currentArtistIndex];
@@ -2609,33 +2609,20 @@
             downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
             downloadBtn.disabled = true;
 
-            // Жёстко задаем плотный сочный фон и фиксированную ширину для идеального HD-рендерера
-            const prevBg = cardElement.style.background;
-            const prevWidth = cardElement.style.width;
-            const prevMaxWidth = cardElement.style.maxWidth;
-
-            cardElement.style.background = "linear-gradient(135deg, #4c1d95 0%, #701a75 50%, #311045 100%)";
-            cardElement.style.width = "800px";
-            cardElement.style.maxWidth = "none";
-
+            // Без изменения размеров и костылей — берем карточку как есть, но с высоким качеством scale
             html2canvas(cardElement, {
                 useCORS: true,
                 allowTaint: true,
-                scale: 3, // Максимальная сочность и чёткость пикселей
+                scale: 3, // Четкость в высоком разрешении без изменения пропорций
                 backgroundColor: null,
                 onclone: (clonedDoc) => {
-                    // Убираем полупрозрачность узора в клоне, чтобы цвета горели ярко
+                    // Делаем узор чуть мягче, чтобы сочный цвет градиента сиял
                     const clonedPattern = clonedDoc.querySelector('#exportable-card .dot-pattern');
                     if (clonedPattern) {
                         clonedPattern.style.opacity = '0.12';
                     }
                 }
             }).then(canvas => {
-                // Возвращаем стили на место на сайте
-                cardElement.style.background = prevBg;
-                cardElement.style.width = prevWidth;
-                cardElement.style.maxWidth = prevMaxWidth;
-
                 const imageURI = canvas.toDataURL("image/png", 1.0);
                 
                 const cleanName = (artist.name || "Account").replace(/[^a-zA-Z0-9а-яА-ЯёЁ_-]/g, "");
@@ -2652,9 +2639,6 @@
                 downloadBtn.disabled = false;
             }).catch(err => {
                 console.error("Ошибка при генерации карточки:", err);
-                cardElement.style.background = prevBg;
-                cardElement.style.width = prevWidth;
-                cardElement.style.maxWidth = prevMaxWidth;
                 downloadBtn.innerHTML = originalBtnContent;
                 downloadBtn.disabled = false;
             });

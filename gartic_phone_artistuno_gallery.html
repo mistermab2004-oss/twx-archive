@@ -2594,7 +2594,7 @@
         }
 
         // =======================================================================
-        // 💾 СКАЧИВАНИЕ КАРТОЧКИ АККАУНТА (НАСЫЩЕННАЯ ВЕРСИЯ) 💾
+        // 💾 СКАЧИВАНИЕ ТОЛЬКО САМОЙ КАРТОЧКИ (БЕЗ ЛИШНЕГО МУСОРА) 💾
         // =======================================================================
         function downloadAccountCard() {
             const artist = artists[currentArtistIndex];
@@ -2607,25 +2607,22 @@
             downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
             downloadBtn.disabled = true;
 
-            // Временно убираем полупрозрачности для чистоты и сочности цветов при рендере
-            const prevBg = cardElement.style.background;
-            cardElement.style.background = "linear-gradient(135deg, #4c1d95 0%, #701a75 50%, #311045 100%)";
+            // Задаем точные фиксированные размеры в пикселях на время рендеринга,
+            // чтобы картинка скачивалась четкой и пропорциональной в HD-качестве
+            const originalWidth = cardElement.style.width;
+            const originalMaxWidth = cardElement.style.maxWidth;
+            cardElement.style.width = "800px";
+            cardElement.style.maxWidth = "none";
 
             html2canvas(cardElement, {
                 useCORS: true,
                 allowTaint: true,
-                scale: 3, // Повышаем четкость и сочность пикселей (HD)
-                backgroundColor: null,
-                onclone: (clonedDoc) => {
-                    // Убеждаемся, что в клоне для скачивания убран полупрозрачный узор, съедающий цвет
-                    const clonedPattern = clonedDoc.querySelector('#exportable-card .dot-pattern');
-                    if (clonedPattern) {
-                        clonedPattern.style.opacity = '0.15';
-                    }
-                }
+                scale: 2, // Отличная четкость
+                backgroundColor: null // Прозрачный фон за пределами скруглений карточки
             }).then(canvas => {
-                // Возвращаем стили обратно
-                cardElement.style.background = prevBg;
+                // Возвращаем стили на место
+                cardElement.style.width = originalWidth;
+                cardElement.style.maxWidth = originalMaxWidth;
 
                 const imageURI = canvas.toDataURL("image/png", 1.0);
                 
@@ -2643,7 +2640,8 @@
                 downloadBtn.disabled = false;
             }).catch(err => {
                 console.error("Ошибка при генерации карточки:", err);
-                cardElement.style.background = prevBg;
+                cardElement.style.width = originalWidth;
+                cardElement.style.maxWidth = originalMaxWidth;
                 downloadBtn.innerHTML = originalBtnContent;
                 downloadBtn.disabled = false;
             });

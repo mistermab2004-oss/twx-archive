@@ -6,8 +6,9 @@
     <title id="site-title">Just Monika TWX</title>
     <link id="site-favicon" rel="icon" type="image/png" href="user/system/icon mon.png">
     
-    <!-- Tailwind CSS и FontAwesome -->
+    <!-- Tailwind CSS, FontAwesome и html2canvas для скриншотов -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -148,7 +149,7 @@
 
         <!-- КНОПКИ В ПРАВОМ НИЖНЕМ УГЛУ -->
         <div class="absolute bottom-6 right-6 flex items-center space-x-3 z-30">
-            <button onclick="takeScreenshot()" title="Сохранить страницу" class="w-12 h-12 bg-black/60 hover:bg-black/90 border-2 border-red-600 rounded-2xl flex items-center justify-center text-white text-xl shadow-2xl transition-all hover:scale-110 active:scale-95 cursor-pointer">
+            <button onclick="takeScreenshot()" title="Сохранить открытку" class="w-12 h-12 bg-black/60 hover:bg-black/90 border-2 border-red-600 rounded-2xl flex items-center justify-center text-white text-xl shadow-2xl transition-all hover:scale-110 active:scale-95 cursor-pointer">
                 <i class="fa-solid fa-camera"></i>
             </button>
 
@@ -264,7 +265,7 @@
             }
         }
 
-        // Активация режима удаления (смена фона на not_zlo.png, выключение музыки и костра, текст песни в логах)
+        // Активация режима удаления
         function triggerDeletedState() {
             isDeletedMode = true;
             document.getElementById('page-bg').style.backgroundImage = "url('user/system/not_zlo.png')";
@@ -306,7 +307,6 @@
             `;
         }
 
-        // Обработка клика по кнопке Главная в режиме удаления
         function handleHomeClick(event) {
             if (isDeletedMode) {
                 event.preventDefault();
@@ -321,7 +321,6 @@
             }
         }
 
-        // Логика воскрешения Моники
         function nextResStep() {
             const textEl = document.getElementById('res-modal-text');
             const btnEl = document.getElementById('res-btn');
@@ -336,7 +335,6 @@
             }
         }
 
-        // Возврат в обычный режим злодейского лога
         function restoreNormalState() {
             isDeletedMode = false;
             document.getElementById('page-bg').style.backgroundImage = "url('user/system/virus_mon.png')";
@@ -392,10 +390,33 @@
             document.getElementById('log-widget').classList.toggle('hidden');
         }
 
+        // Скачивание открытки в виде PNG с помощью html2canvas без кнопок и меню
         function takeScreenshot() {
             soundControls.classList.add('hidden');
             document.getElementById('log-widget').classList.add('hidden');
-            setTimeout(() => { window.print(); }, 100);
+            
+            const targetElement = document.getElementById('page-bg');
+
+            html2canvas(targetElement, {
+                useCORS: true,
+                allowTaint: true,
+                scale: 2,
+                backgroundColor: "#000000"
+            }).then(canvas => {
+                const imageURI = canvas.toDataURL("image/png", 1.0);
+                
+                const quoteText = document.getElementById('editable-quote').textContent.trim().replace(/[^a-zA-Z0-9а-яА-ЯёЁ_-]/g, "_");
+                const fileName = `Открытка_ZloLog_${quoteText || "Monika"}.png`;
+
+                const link = document.createElement('a');
+                link.download = fileName;
+                link.href = imageURI;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }).catch(err => {
+                console.error("Ошибка при создании открытки:", err);
+            });
         }
     </script>
 </body>

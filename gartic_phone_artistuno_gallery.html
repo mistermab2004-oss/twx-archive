@@ -2596,7 +2596,7 @@
         }
 
         // =======================================================================
-        // 💾 СКАЧИВАНИЕ ТОЛЬКО САМОЙ КАРТОЧКИ (БЕЗ ЛИШНЕГО МУСОРА) 💾
+        // 💾 СКАЧИВАНИЕ КАРТОЧКИ (НА СЕЙ РАЗ НАСЫЩЕННАЯ И СОЧНАЯ НАВСЕГДА!) 💾
         // =======================================================================
         function downloadAccountCard() {
             const artist = artists[currentArtistIndex];
@@ -2609,22 +2609,32 @@
             downloadBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
             downloadBtn.disabled = true;
 
-            // Задаем точные фиксированные размеры в пикселях на время рендеринга,
-            // чтобы картинка скачивалась четкой и пропорциональной в HD-качестве
-            const originalWidth = cardElement.style.width;
-            const originalMaxWidth = cardElement.style.maxWidth;
+            // Жёстко задаем плотный сочный фон и фиксированную ширину для идеального HD-рендерера
+            const prevBg = cardElement.style.background;
+            const prevWidth = cardElement.style.width;
+            const prevMaxWidth = cardElement.style.maxWidth;
+
+            cardElement.style.background = "linear-gradient(135deg, #4c1d95 0%, #701a75 50%, #311045 100%)";
             cardElement.style.width = "800px";
             cardElement.style.maxWidth = "none";
 
             html2canvas(cardElement, {
                 useCORS: true,
                 allowTaint: true,
-                scale: 2, // Отличная четкость
-                backgroundColor: null // Прозрачный фон за пределами скруглений карточки
+                scale: 3, // Максимальная сочность и чёткость пикселей
+                backgroundColor: null,
+                onclone: (clonedDoc) => {
+                    // Убираем полупрозрачность узора в клоне, чтобы цвета горели ярко
+                    const clonedPattern = clonedDoc.querySelector('#exportable-card .dot-pattern');
+                    if (clonedPattern) {
+                        clonedPattern.style.opacity = '0.12';
+                    }
+                }
             }).then(canvas => {
-                // Возвращаем стили на место
-                cardElement.style.width = originalWidth;
-                cardElement.style.maxWidth = originalMaxWidth;
+                // Возвращаем стили на место на сайте
+                cardElement.style.background = prevBg;
+                cardElement.style.width = prevWidth;
+                cardElement.style.maxWidth = prevMaxWidth;
 
                 const imageURI = canvas.toDataURL("image/png", 1.0);
                 
@@ -2642,8 +2652,9 @@
                 downloadBtn.disabled = false;
             }).catch(err => {
                 console.error("Ошибка при генерации карточки:", err);
-                cardElement.style.width = originalWidth;
-                cardElement.style.maxWidth = originalMaxWidth;
+                cardElement.style.background = prevBg;
+                cardElement.style.width = prevWidth;
+                cardElement.style.maxWidth = prevMaxWidth;
                 downloadBtn.innerHTML = originalBtnContent;
                 downloadBtn.disabled = false;
             });

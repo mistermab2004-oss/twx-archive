@@ -1868,7 +1868,7 @@
                     "user/art/pamper/oi (7).png",
                     "user/art/pamper/sos (5).png"
                 ]
-            }, 
+            },
             {
                 accountName: "ОГУРЕЧЕК",
                 accDir: "pickle",
@@ -2049,7 +2049,7 @@
                     <img id="fullsize-img" src="" alt="Полный размер" class="max-w-full max-h-[50vh] w-auto h-auto object-contain rounded-xl shadow-2xl">
                 </div>
 
-                <!-- БЛОК СТРЕЛОЧЕК И РЕАКЦИЙ ПО СРЕДИНЕ -->
+                <!-- БЛОК СТРЕЛОЧЕК И РЕАКЦИЙ ПО СЕРЕДИНЕ -->
                 <div class="w-full flex items-center justify-between mt-6 px-2 md:px-8">
                     <button id="modal-prev-arrow" onclick="modalPrev()" class="w-12 h-12 bg-purple-800 hover:bg-pink-500 border-3 border-yellow-400 rounded-full flex items-center justify-center text-2xl font-black text-yellow-400 hover:text-white shadow transition-all cursor-pointer">
                         &lt;
@@ -2094,20 +2094,40 @@
             <h3 class="text-xl sm:text-2xl font-black mb-1 sm:mb-2 text-center text-pink-300 pr-24 sm:pr-28">Комфортная карточка профиля</h3>
             <p class="text-xs text-purple-200 mb-4 text-center">Превью страницы в виде аккуратной карточки!</p>
             
-            <!-- СКАТЫВАЕМЫЙ ЭЛЕМЕНТ (ИМЕННО ОН СКАТИВАЕТСЯ В ИЗОБРАЖЕНИЕ) -->
-            <div id="exportable-card" class="w-full max-w-2xl bg-gradient-to-br from-purple-900 via-fuchsia-950 to-indigo-950 border-4 sm:border-8 border-yellow-400 rounded-3xl p-4 sm:p-6 md:p-8 shadow-2xl flex flex-col items-center relative overflow-hidden">
-                <div class="absolute inset-0 dot-pattern opacity-40 pointer-events-none"></div>
-                
-                <div class="flex flex-col items-center z-10 mb-4 sm:mb-6">
-                    <div class="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 sm:border-6 border-white shadow-2xl overflow-hidden mb-3">
-                        <img id="card-preview-avatar" src="" alt="Аватарка" class="w-full h-full object-cover">
-                    </div>
-                    <h2 id="card-preview-name" class="text-xl sm:text-2xl md:text-3xl font-black tracking-wider text-yellow-300 drop-shadow-md text-center">ИМЯ ХУДОЖНИКА</h2>
+            <!-- ИМЕННО ЭТА КАРТОЧКА СКАЧИВАЕТСЯ В ТОЧНОСТИ КАК ТЫ СДЕЛАЛ РУЧКАМИ -->
+            <div id="exportable-card" class="w-full max-w-2xl bg-[#70125c] border-[8px] border-[#facc15] rounded-[2.5rem] p-6 shadow-2xl flex flex-col items-center relative overflow-hidden">
+                <!-- Верхняя фирменная полоска Gartic Phone -->
+                <div class="absolute top-0 left-0 right-0 h-10 bg-[#440536] border-b-4 border-[#facc15] flex items-center justify-around px-4 opacity-95 overflow-hidden z-0">
+                    <span class="text-white/40 text-xs font-black tracking-widest uppercase">Gartic</span>
+                    <span class="text-yellow-400 text-sm">✦</span>
+                    <span class="text-white/40 text-xs font-black tracking-widest uppercase">Gartic Phone</span>
+                    <span class="text-yellow-400 text-sm">✦</span>
+                    <span class="text-white/40 text-xs font-black tracking-widest uppercase">Gartic</span>
+                    <span class="text-yellow-400 text-sm">✦</span>
+                    <span class="text-white/40 text-xs font-black tracking-widest uppercase">Gartic Phone</span>
                 </div>
 
-                <div class="w-full grid grid-cols-5 gap-1.5 sm:gap-2.5 z-10 mb-4 max-h-48 overflow-y-auto p-1" id="card-preview-grid"></div>
+                <!-- Аватар и имя -->
+                <div class="flex flex-col items-center z-10 mt-6 mb-5">
+                    <div class="w-28 h-28 rounded-full border-4 border-white shadow-xl overflow-hidden mb-3 bg-white">
+                        <img id="card-preview-avatar" src="" alt="Аватарка" class="w-full h-full object-cover">
+                    </div>
+                    <h2 id="card-preview-name" class="text-2xl md:text-3xl font-black tracking-wider text-yellow-300 drop-shadow uppercase text-center">ИМЯ ХУДОЖНИКА</h2>
+                </div>
 
-                <div class="text-[10px] sm:text-xs text-purple-300 z-10 font-semibold tracking-widest mt-1 sm:mt-2 text-center">GARTIC STYLE DIGITAL GALLERY • TERABYTE ARTWORKS</div>
+                <!-- Сетка ровно на 20 работ (2 ряда по 10 или как в оригинале) -->
+                <div class="w-full grid grid-cols-5 gap-2.5 z-10 mb-4" id="card-preview-grid"></div>
+
+                <!-- Нижняя фирменная полоска Gartic Phone -->
+                <div class="absolute bottom-0 left-0 right-0 h-10 bg-[#440536] border-t-4 border-[#facc15] flex items-center justify-around px-4 opacity-95 overflow-hidden z-0">
+                    <span class="text-white/40 text-xs font-black tracking-widest uppercase">Gartic Phone</span>
+                    <span class="text-yellow-400 text-sm">✦</span>
+                    <span class="text-white/40 text-xs font-black tracking-widest uppercase">Gartic</span>
+                    <span class="text-yellow-400 text-sm">✦</span>
+                    <span class="text-white/40 text-xs font-black tracking-widest uppercase">Gartic Phone</span>
+                    <span class="text-yellow-400 text-sm">✦</span>
+                    <span class="text-white/40 text-xs font-black tracking-widest uppercase">Gartic</span>
+                </div>
             </div>
         </div>
     </div>
@@ -2118,15 +2138,14 @@
         let currentArtistIndex = 0;
         let currentMentionsPage = 0;
 
-        // Модальное состояние для разделения работ и упоминаний
-        let currentModalType = 'artwork'; // 'artwork' или 'mention'
+        let currentModalType = 'artwork';
         let currentModalIndex = 0;
         let itemReactions = JSON.parse(localStorage.getItem('twx_item_reactions') || '{}');
 
         let artists = KatyaGallery.map((item, index) => {
             let rawArtworks = item.artworks || [];
             let formattedArtworks = [];
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 20; i++) {
                 if (rawArtworks[i]) {
                     if (typeof rawArtworks[i] === 'string') {
                         formattedArtworks.push({ title: `Работа #${i + 1}`, image: rawArtworks[i] });
@@ -2215,15 +2234,15 @@
             const isDashaBirthday = (artist.id.toLowerCase() === 'mor' && month === 11 && day === 6);
 
             if (isMabBirthday || isHunterBirthday || isMaccatBirthday || isBoryanBirthday || isSpookBirthday || isStivenBirthday || isKrogarBirthday || isDashaBirthday) {
-                birthdayBadge.classList.remove('hidden');
+                if(birthdayBadge) birthdayBadge.classList.remove('hidden');
             } else {
-                birthdayBadge.classList.add('hidden');
+                if(birthdayBadge) birthdayBadge.classList.add('hidden');
             }
 
             if (month === 3 && day === 8 && artist.isFemale) {
-                roseBadge.classList.remove('hidden');
+                if(roseBadge) roseBadge.classList.remove('hidden');
             } else {
-                roseBadge.classList.add('hidden');
+                if(roseBadge) roseBadge.classList.add('hidden');
             }
 
             if (artist.hasMentionsButton) {
@@ -2240,7 +2259,7 @@
             artworksGrid.innerHTML = '';
             let filledCount = 0;
 
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 20; i++) {
                 const artwork = artist.artworks[i];
                 const slotCard = document.createElement('div');
 
@@ -2259,20 +2278,20 @@
                         </div>
                     `;
                 } else {
-                    slotCard.className = "bg-purple-950/40 rounded-2xl shadow-inner border-3 border-dashed border-purple-500/50 flex flex-col items-center justify-center h-40 md:h-44";
+                    slotCard.className = "bg-purple-950/40 rounded-2xl shadow-inner border-3 border-dashed border-purple-500/50 flex flex-col items-center justify-center h-32 md:h-36";
                     slotCard.innerHTML = `
                         <div class="w-full h-full flex flex-col items-center justify-center opacity-60">
-                            <div class="w-10 h-10 bg-purple-900/50 text-fuchsia-300 rounded-full flex items-center justify-center text-lg font-bold mb-1 border border-purple-500/30">
+                            <div class="w-8 h-8 bg-purple-900/50 text-fuchsia-300 rounded-full flex items-center justify-center text-sm font-bold mb-1 border border-purple-500/30">
                                 —
                             </div>
-                            <span class="text-xs text-fuchsia-300 font-bold">ПУСТОЙ СЛОТ</span>
+                            <span class="text-[10px] text-fuchsia-300 font-bold">ПУСТОЙ</span>
                         </div>
                     `;
                 }
                 artworksGrid.appendChild(slotCard);
             }
 
-            slotCounter.textContent = `Заполнено: ${filledCount} / 10`;
+            slotCounter.textContent = `Заполнено: ${filledCount} / 20`;
         }
 
         // =======================================================================
@@ -2578,14 +2597,14 @@
             const previewGrid = document.getElementById('card-preview-grid');
             previewGrid.innerHTML = '';
 
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 20; i++) {
                 const art = artist.artworks[i];
                 const thumb = document.createElement('div');
-                thumb.className = "h-16 md:h-20 bg-purple-950/80 rounded-xl overflow-hidden border-2 border-fuchsia-500/60 flex items-center justify-center shadow-inner";
+                thumb.className = "h-16 sm:h-20 bg-white rounded-xl overflow-hidden border-2 border-purple-950 flex items-center justify-center shadow";
                 if (art) {
                     thumb.innerHTML = `<img src="${art.image}" class="w-full h-full object-cover">`;
                 } else {
-                    thumb.innerHTML = `<span class="text-xs text-purple-400/50 font-bold">${i+1}</span>`;
+                    thumb.innerHTML = `<span class="text-[10px] text-purple-900/40 font-bold">${i+1}</span>`;
                 }
                 previewGrid.appendChild(thumb);
             }
@@ -2594,7 +2613,7 @@
         }
 
         // =======================================================================
-        // 💾 СКАЧИВАНИЕ КАРТОЧКИ АККАУНТА (ИСПРАВЛЕНО ДЛЯ СОЧНОСТИ И КАЧЕСТВА) 💾
+        // 💾 СКАЧИВАНИЕ КАРТОЧКИ АККАУНТА (ТОЧНО КАК ВАША РУЧНАЯ ВЕРСИЯ) 💾
         // =======================================================================
         function downloadAccountCard() {
             const artist = artists[currentArtistIndex];
@@ -2610,11 +2629,10 @@
             html2canvas(cardElement, {
                 useCORS: true,
                 allowTaint: true,
-                scale: 3, // Повышаем плотность пикселей для идеальной резкости
-                backgroundColor: '#1b0a2b', // Плотный насыщенный фон карточки без блеклости
-                logging: false
+                scale: 3, // Максимальное качество без потери цвета
+                backgroundColor: "#70125c"
             }).then(canvas => {
-                const imageURI = canvas.toDataURL("image/png", 1.0);
+                const imageURI = canvas.toDataURL("image/png");
                 
                 const cleanName = (artist.name || "Account").replace(/[^a-zA-Z0-9а-яА-ЯёЁ_-]/g, "");
                 const fileName = `Карточка_${cleanName}.png`;

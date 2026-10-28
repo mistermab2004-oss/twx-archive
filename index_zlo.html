@@ -170,7 +170,6 @@
             color: #fef3c7 !important;
         }
 
-        /* Белая вспышка при авариной ошибке сайта */
         #flashbang {
             pointer-events: none;
             opacity: 0;
@@ -183,7 +182,6 @@
 </head>
 <body class="dot-pattern min-h-screen flex flex-col justify-between relative">
 
-    <!-- Вспышка экрана -->
     <div id="flashbang" class="fixed inset-0 bg-white z-[100]"></div>
 
     <audio id="music-main" loop>
@@ -200,7 +198,6 @@
     </audio>
 
     <script>
-        // Данные художников
         const ArtistsData = [
             {
                 id: "artist1",
@@ -222,7 +219,7 @@
             }
         ];
 
-        // 🦹‍♂️ ДАННЫЕ ЗЛОДЕЕВ ИГР (ОСНОВНЫЕ) 🦹‍♂️
+        // 🦹‍♂️ ОСНОВНЫЕ ЗЛОДЕИ ИГР 🦹‍♂️
         const VillainsData = [
             {
                 id: "v1",
@@ -388,7 +385,7 @@
             }
         ];
 
-        // 🐱 АЛЬТЕРНАТИВНЫЕ МОГЕКО-ВЕРСИИ ВСЕХ АККАУНТОВ 🐱
+        // 🐱 АЛЬТЕРНАТИВНЫЕ МОГЕКО-ВЕРСИИ 🐱
         const MogekoVillainsData = [
             { id: "v1", name: "Фиолетовый Могеко", avatar: "user/mogeko/afton_moge.png", debut: "Mogeko Castle: FNAF", desc: "Убийственный Могеко в фиолетовом костюме, прячущийся в аниматрониках.", notes: "Моге! Я всегда возвращаюсь, моге!", fullImage: "user/mogeko/moge/afton.png" },
             { id: "v2", name: "Чернильный Могеко", avatar: "user/mogeko/bendy_moge.png", debut: "Mogeko Castle: Ink", desc: "Весь измазанный в чернилах и Прошутто Могеко с ослепительной улыбкой.", notes: "Чернила помнят вкус Прошутто!", fullImage: "user/mogeko/moge/bendy.png" },
@@ -410,7 +407,7 @@
             { id: "v18", name: "Могеко Предатель", avatar: "user/mogeko/among_moge.png", debut: "Mogeko Us", desc: "Жёлтый скафандр с ушками Могеко. Он украл всё Прошутто в космосе!", notes: "Это не я, я был в вентиляции, моге!", fullImage: "user/mogeko/moge/among.png" }
         ];
 
-        // 🗝️ СЕКРЕТНЫЙ АККАУНТ ЙОНАКИ (ДЛЯ СНЯТИЯ ПРОКЛЯТИЯ) 🗝️
+        // 🗝️ СЕКРЕТНЫЙ АККАУНТ ЙОНАКИ 🗝️
         const YonakaSecretAccount = {
             id: "yonaka_secret",
             name: "Йонака Кураи",
@@ -440,7 +437,6 @@
             "Вкусный ветчинный десерт ждёт короля!"
         ];
 
-        // Переменные состояния пасхалки
         let isMogekoActive = false;
         let isMogekoLockout = false;
         let mogekoExitAttempts = 0;
@@ -581,7 +577,7 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА ОШИБКИ ПОТОКА САЙТА (ПАСХАЛКА МОГЕКО) -->
+    <!-- МОДАЛКА ОШИБКИ ПОТОКА САЙТА -->
     <div id="mogeko-error-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[80] hidden flex items-center justify-center p-4">
         <div class="bg-amber-950 border-4 border-yellow-500 rounded-3xl max-w-md w-full p-6 shadow-[0_0_30px_rgba(245,158,11,0.6)] text-center relative overflow-hidden flex flex-col items-center space-y-4 text-amber-100">
             <div class="w-16 h-16 bg-yellow-500 text-black rounded-full flex items-center justify-center font-black text-3xl shadow-lg animate-bounce">
@@ -643,7 +639,6 @@
             
             let dataset = getCurrentData();
 
-            // Если ищем Йонаку во время Могеко-режима
             if (isMogekoActive && searchQuery === "йонака") {
                 dataset = [YonakaSecretAccount];
             }
@@ -663,19 +658,20 @@
                 return;
             }
 
-            pageItems.forEach(item => {
+            pageItems.forEach((item, index) => {
                 const elem = document.createElement('div');
-                elem.className = "flex flex-col items-center cursor-pointer group";
+                elem.className = "flex flex-col items-center cursor-pointer group villain-grid-item";
+                elem.dataset.id = item.id;
                 elem.onclick = () => openModal(item.id);
                 
                 const borderColor = isMogekoActive ? "border-amber-400 group-hover:border-yellow-200" : "border-red-600 group-hover:border-red-400";
                 const textColor = isMogekoActive ? "text-amber-200" : "text-red-200";
 
                 elem.innerHTML = `
-                    <div class="w-16 h-16 rounded-xl overflow-hidden border-2 ${borderColor} shadow-md group-hover:scale-110 transition-all bg-black">
-                        <img src="${item.avatar}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/511252/ffffff?text=Mogeko'">
+                    <div class="w-16 h-16 rounded-xl overflow-hidden border-2 ${borderColor} shadow-md group-hover:scale-110 transition-all bg-black item-avatar-box">
+                        <img src="${item.avatar}" class="w-full h-full object-cover item-img" onerror="this.src='https://placehold.co/100x100/511252/ffffff?text=Ava'">
                     </div>
-                    <span class="text-xs font-bold ${textColor} mt-1 text-center leading-tight line-clamp-2">${item.name}</span>
+                    <span class="text-xs font-bold ${textColor} mt-1 text-center leading-tight line-clamp-2 item-name">${item.name}</span>
                 `;
                 grid.appendChild(elem);
             });
@@ -737,7 +733,7 @@
         }
 
         function switchVillainRelative(direction) {
-            if (isMogekoLockout) return; // Блокировка переключения во время лок-аута Могеко
+            if (isMogekoLockout) return;
             if (!currentEntityData) return;
             
             const dataset = getCurrentData();
@@ -762,7 +758,7 @@
                 if (mogekoExitAttempts >= 4) {
                     document.getElementById('mogeko-error-modal').classList.remove('hidden');
                 }
-                return; // Не закрываем модалку Короля Могеко!
+                return;
             }
 
             const modal = document.getElementById('retro-modal');
@@ -794,7 +790,6 @@
             }
         }
 
-        /* 👑 АКТИВАЦИЯ ПАСХАЛКИ МОГЕКО 👑 */
         function triggerMogekoEasterEgg() {
             playAudio('user/zlo/pop/moge.mp3');
             isMogekoLockout = true;
@@ -803,7 +798,7 @@
 
         function executeMogekoTransformation() {
             document.getElementById('mogeko-error-modal').classList.add('hidden');
-            playAudio('user/zlo/pop/f.mp3'); // Звук взрыва
+            playAudio('user/zlo/pop/f.mp3');
 
             const flash = document.getElementById('flashbang');
             flash.classList.add('active');
@@ -812,41 +807,33 @@
                 isMogekoLockout = false;
                 isMogekoActive = true;
 
-                // Закрываем модалку
                 const modal = document.getElementById('retro-modal');
                 modal.classList.add('hidden', 'opacity-0');
 
-                // Переключаем тему
                 document.body.classList.add('mogeko-mode');
                 
-                // Переключаем музыку
                 audioZlo.pause();
                 audioMogeko.volume = volumeSlider.value;
                 audioMogeko.play().catch(e => console.log(e));
 
-                // Шапка и иконки сайта
                 document.getElementById('site-title').textContent = "Могеко";
                 document.getElementById('site-header-title').textContent = "Могеко TWX";
                 document.getElementById('site-header-title').className = "font-black text-3xl sm:text-5xl tracking-wider text-yellow-400 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)] uppercase";
                 document.getElementById('site-favicon').href = "user/system/icon mogeko.png";
 
-                // Логотипы
                 document.getElementById('main-logo-img').src = "user/mogeko/mogeno.png";
                 document.getElementById('main-center-logo').src = "user/mogeko/mogeno.png";
 
-                // Кнопки левой панели и навигация
-                document.getElementById('img-fav').src = "user/system/mogege 3.png"; // Лузеры
-                document.getElementById('img-all').src = "user/system/mogege 4.png"; // Бесполезная кнопка
+                document.getElementById('img-fav').src = "user/system/mogege 3.png";
+                document.getElementById('img-all').src = "user/system/mogege 4.png";
                 
-                document.getElementById('nav-img-1').src = "user/system/mogege 2.png"; // Игры
-                document.getElementById('nav-img-2').src = "user/system/mogege 5.png"; // Хочешь посмотреть
-                document.getElementById('nav-img-3').src = "user/system/mogege 1.png"; // Стримы
+                document.getElementById('nav-img-1').src = "user/system/mogege 2.png";
+                document.getElementById('nav-img-2').src = "user/system/mogege 5.png";
+                document.getElementById('nav-img-3').src = "user/system/mogege 1.png";
 
-                // Поиск
                 document.getElementById('artist-search').placeholder = "🔍 Найти Могеко (или написать имя)...";
                 document.getElementById('artist-search').className = "w-full bg-amber-950 border-2 border-yellow-500 rounded-xl px-4 py-2 text-yellow-200 font-bold placeholder-yellow-600 focus:outline-none shadow-inner";
 
-                // Виджет и стили
                 document.getElementById('widget-title').textContent = "Замок Могеко";
                 document.getElementById('widget-title').className = "text-xl font-black text-yellow-400 uppercase";
                 document.getElementById('widget-main-container').className = "bg-amber-950/90 backdrop-blur-md border-4 border-yellow-500 rounded-3xl p-4 shadow-2xl flex flex-col";
@@ -893,9 +880,8 @@
             document.getElementById('daily-quote-text').className = "text-yellow-200 font-bold italic text-xl";
         }
 
-        /* ✨ СНЯТИЕ ПРОКЛЯТИЯ ЙОНАКОЙ ✨ */
+        /* ✨ ФИНАЛЬНЫЙ АККОРД: СНЯТИЕ ПРОКЛЯТИЯ И ТРАНСФОРМАЦИЯ ЧЕРЕЗ ЙОНАКУ ✨ */
         function dispelMogekoCurse() {
-            // Закрываем модалку Йонаки
             const modal = document.getElementById('retro-modal');
             const windowAnim = document.getElementById('retro-window-anim');
             modal.classList.add('opacity-0');
@@ -904,55 +890,92 @@
 
             setTimeout(() => {
                 modal.classList.add('hidden');
-                
-                // Плавно возвращаем аватарки и сайт по очереди
-                isMogekoActive = false;
-                document.body.classList.remove('mogeko-mode');
-
-                // Восстанавливаем музыкальное сопровождение
-                audioMogeko.pause();
-                audioZlo.play().catch(e => console.log(e));
-
-                // Восстанавливаем тексты и шапку
-                document.getElementById('site-title').textContent = "Злодей TWX";
-                document.getElementById('site-header-title').textContent = "Злодей TWX";
-                document.getElementById('site-header-title').className = "font-black text-3xl sm:text-5xl tracking-wider text-red-500 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)] uppercase";
-                document.getElementById('site-favicon').href = "user/system/icon zlo.png";
-
-                document.getElementById('main-logo-img').src = "user/system/logo zlo.png";
-                document.getElementById('main-center-logo').src = "user/system/logo zlo.png";
-
-                document.getElementById('img-fav').src = "user/system/arca 11.png";
-                document.getElementById('img-all').src = "user/system/arca 13.png";
-                document.getElementById('nav-img-1').src = "user/system/arca 15.png";
-                document.getElementById('nav-img-2').src = "user/system/arca 17.png";
-                document.getElementById('nav-img-3').src = "user/system/arca 19.png";
-
-                document.getElementById('artist-search').placeholder = "🔍 Найти злодея...";
-                document.getElementById('artist-search').className = "w-full bg-black border-2 border-red-600 rounded-xl px-4 py-2 text-white font-bold placeholder-red-400 focus:outline-none focus:border-red-500 shadow-inner";
-                document.getElementById('artist-search').value = "";
                 searchQuery = "";
+                document.getElementById('artist-search').value = "";
+                currentPage = 0;
+                renderWidget(); // Показываем весь список Могеко на экране
 
-                document.getElementById('widget-title').textContent = "Злодеи игр";
-                document.getElementById('widget-title').className = "text-xl font-black text-red-500 uppercase";
-                document.getElementById('widget-main-container').className = "bg-gray-900/90 backdrop-blur-md border-4 border-red-600 rounded-3xl p-4 shadow-xl flex flex-col";
+                const gridItems = document.querySelectorAll('.villain-grid-item');
+                let index = 0;
 
-                document.getElementById('left-panel-box').className = "bg-red-950/20 p-4 rounded-3xl border-2 border-red-600/50";
-                document.getElementById('left-panel-title').textContent = "Владения Злодеев";
-                document.getElementById('left-panel-title').className = "text-lg font-black text-red-400 uppercase mb-4 ml-2";
+                // Поочередная трансформация каждого Могеко обратно в злодея
+                const interval = setInterval(() => {
+                    if (index < gridItems.length) {
+                        const itemEl = gridItems[index];
+                        const villainId = itemEl.dataset.id;
+                        const originalVillain = VillainsData.find(v => v.id === villainId);
 
-                document.getElementById('widget-prev-btn').className = "w-10 h-10 bg-red-700 text-white rounded-full font-black text-xl hover:bg-red-600 flex items-center justify-center shadow cursor-pointer";
-                document.getElementById('widget-next-btn').className = "w-10 h-10 bg-red-700 text-white rounded-full font-black text-xl hover:bg-red-600 flex items-center justify-center shadow cursor-pointer";
+                        if (originalVillain) {
+                            playAudio('user/zlo/pop/moge.mp3');
+                            const imgEl = itemEl.querySelector('.item-img');
+                            const nameEl = itemEl.querySelector('.item-name');
 
-                document.getElementById('quote-section').className = "w-full bg-gray-900/90 border-4 border-red-600 rounded-3xl p-6 shadow-2xl";
-                document.getElementById('quote-header').className = "text-2xl font-black text-red-500 uppercase mb-2";
-                document.getElementById('quote-header').textContent = "💬 Фразы злодеев";
+                            // Спец-логика для Короля Могеко (id: v17): сначала превращаем в Йонаку с гифкой под moge.mp3!
+                            if (villainId === "v17") {
+                                imgEl.src = "user/mogeko/mofe_ionaka.gif";
+                                nameEl.textContent = "Йонака Кураи";
 
-                const randomVillainQuote = VillainQuotes[Math.floor(Math.random() * VillainQuotes.length)];
-                document.getElementById('daily-quote-text').textContent = `«${randomVillainQuote}»`;
-                document.getElementById('daily-quote-text').className = "text-red-200 font-bold italic text-xl";
+                                setTimeout(() => {
+                                    imgEl.src = originalVillain.avatar;
+                                    nameEl.textContent = originalVillain.name;
+                                }, 3000); // Время проигрывания гифки
+                            } else {
+                                imgEl.src = originalVillain.avatar;
+                                nameEl.textContent = originalVillain.name;
+                            }
+                        }
+                        index++;
+                    } else {
+                        clearInterval(interval);
 
-                renderWidget();
+                        // Финальный сброс состояния сайта после завершения цепочки
+                        setTimeout(() => {
+                            isMogekoActive = false;
+                            document.body.classList.remove('mogeko-mode');
+
+                            audioMogeko.pause();
+                            audioZlo.play().catch(e => console.log(e));
+
+                            document.getElementById('site-title').textContent = "Злодей TWX";
+                            document.getElementById('site-header-title').textContent = "Злодей TWX";
+                            document.getElementById('site-header-title').className = "font-black text-3xl sm:text-5xl tracking-wider text-red-500 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)] uppercase";
+                            document.getElementById('site-favicon').href = "user/system/icon zlo.png";
+
+                            document.getElementById('main-logo-img').src = "user/system/logo zlo.png";
+                            document.getElementById('main-center-logo').src = "user/system/logo zlo.png";
+
+                            document.getElementById('img-fav').src = "user/system/arca 11.png";
+                            document.getElementById('img-all').src = "user/system/arca 13.png";
+                            document.getElementById('nav-img-1').src = "user/system/arca 15.png";
+                            document.getElementById('nav-img-2').src = "user/system/arca 17.png";
+                            document.getElementById('nav-img-3').src = "user/system/arca 19.png";
+
+                            document.getElementById('artist-search').placeholder = "🔍 Найти злодея...";
+                            document.getElementById('artist-search').className = "w-full bg-black border-2 border-red-600 rounded-xl px-4 py-2 text-white font-bold placeholder-red-400 focus:outline-none focus:border-red-500 shadow-inner";
+
+                            document.getElementById('widget-title').textContent = "Злодеи игр";
+                            document.getElementById('widget-title').className = "text-xl font-black text-red-500 uppercase";
+                            document.getElementById('widget-main-container').className = "bg-gray-900/90 backdrop-blur-md border-4 border-red-600 rounded-3xl p-4 shadow-xl flex flex-col";
+
+                            document.getElementById('left-panel-box').className = "bg-red-950/20 p-4 rounded-3xl border-2 border-red-600/50";
+                            document.getElementById('left-panel-title').textContent = "Владения Злодеев";
+                            document.getElementById('left-panel-title').className = "text-lg font-black text-red-400 uppercase mb-4 ml-2";
+
+                            document.getElementById('widget-prev-btn').className = "w-10 h-10 bg-red-700 text-white rounded-full font-black text-xl hover:bg-red-600 flex items-center justify-center shadow cursor-pointer";
+                            document.getElementById('widget-next-btn').className = "w-10 h-10 bg-red-700 text-white rounded-full font-black text-xl hover:bg-red-600 flex items-center justify-center shadow cursor-pointer";
+
+                            document.getElementById('quote-section').className = "w-full bg-gray-900/90 border-4 border-red-600 rounded-3xl p-6 shadow-2xl";
+                            document.getElementById('quote-header').className = "text-2xl font-black text-red-500 uppercase mb-2";
+                            document.getElementById('quote-header').textContent = "💬 Фразы злодеев";
+
+                            const randomVillainQuote = VillainQuotes[Math.floor(Math.random() * VillainQuotes.length)];
+                            document.getElementById('daily-quote-text').textContent = `«${randomVillainQuote}»`;
+                            document.getElementById('daily-quote-text').className = "text-red-200 font-bold italic text-xl";
+
+                            renderWidget();
+                        }, 1000);
+                    }
+                }, 400); // Задержка между трансформацией каждого персонажа в списке
             }, 300);
         }
 
@@ -986,7 +1009,6 @@
             }
         }
 
-        // Музыкальное управление
         const audioZlo = document.getElementById('music-zlo');
         const audioMogeko = document.getElementById('music-mogeko');
         const volumeSlider = document.getElementById('volume-slider');

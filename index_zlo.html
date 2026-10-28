@@ -15,6 +15,7 @@
             overflow-x: hidden;
             user-select: none;
             color: #f3e8ff;
+            transition: background 0.5s ease;
         }
         .dot-pattern {
             background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px), url('user/system/virus.png');
@@ -22,6 +23,23 @@
             background-size: 24px 24px, cover;
             background-repeat: repeat, no-repeat;
             background-attachment: scroll, fixed;
+        }
+
+        /* ⚡ РЕЖИМ МОГЕКО ⚡ */
+        body.mogeko-mode {
+            background: url('user/system/moge.png') no-repeat center center fixed !important;
+            background-size: cover !important;
+            color: #fffbeb !important;
+        }
+        body.mogeko-mode ::-webkit-scrollbar-track {
+            background: #451a03;
+            border-left: 3px dashed #f59e0b;
+            border-right: 3px dashed #f59e0b;
+        }
+        body.mogeko-mode ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #f59e0b 0%, #b45309 50%, #78350f 100%);
+            border: 4px solid #451a03;
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.8), 0 0 10px rgba(245, 158, 11, 0.8);
         }
         
         /* ⚡ КРОВАВО-ФИОЛЕТОВЫЙ ПОЛЗУНОК-МОЛНИЯ (Скроллбар) ⚡ */
@@ -51,7 +69,13 @@
             z-index: 10;
             box-shadow: 0 8px 20px rgba(0,0,0,0.6);
             border-bottom: 4px solid #7f1d1d;
+            transition: all 0.5s ease;
         }
+        body.mogeko-mode .gartic-header-bg {
+            background: linear-gradient(90deg, #451a03 0%, #78350f 50%, #451a03 100%) !important;
+            border-bottom: 4px solid #f59e0b !important;
+        }
+
         .retro-shadow { box-shadow: 4px 4px 0px #000000; }
 
         @keyframes floatCharacter {
@@ -70,7 +94,16 @@
             border-bottom: 3px solid #581c87;
             font-family: 'Tahoma', sans-serif;
             color: white;
+            transition: all 0.3s ease;
         }
+        body.mogeko-mode .retro-window {
+            background: #451a03 !important;
+            border-top: 3px solid #fcf6bd !important;
+            border-left: 3px solid #fcf6bd !important;
+            border-right: 3px solid #78350f !important;
+            border-bottom: 3px solid #78350f !important;
+        }
+
         .retro-title-bar {
             background: #7f1d1d;
             color: white;
@@ -79,6 +112,11 @@
             align-items: center;
             font-weight: bold;
         }
+        body.mogeko-mode .retro-title-bar {
+            background: #b45309 !important;
+            color: #000 !important;
+        }
+
         .retro-btn {
             background: #450a0a;
             border-top: 2px solid #ff4d4d;
@@ -89,6 +127,15 @@
             cursor: pointer;
             color: white;
         }
+        body.mogeko-mode .retro-btn {
+            background: #78350f !important;
+            border-top: 2px solid #fef08a !important;
+            border-left: 2px solid #fef08a !important;
+            border-right: 2px solid #451a03 !important;
+            border-bottom: 2px solid #451a03 !important;
+            color: #fef08a !important;
+        }
+
         .retro-btn:active, .retro-btn.active-tab {
             border-top: 2px solid #581c87;
             border-left: 2px solid #581c87;
@@ -96,6 +143,15 @@
             border-bottom: 2px solid #ff4d4d;
             background: #581c87;
         }
+        body.mogeko-mode .retro-btn:active, body.mogeko-mode .retro-btn.active-tab {
+            border-top: 2px solid #451a03 !important;
+            border-left: 2px solid #451a03 !important;
+            border-right: 2px solid #fef08a !important;
+            border-bottom: 2px solid #fef08a !important;
+            background: #b45309 !important;
+            color: #fff !important;
+        }
+
         .retro-content-box {
             background: #14051e;
             border-top: 2px solid #581c87;
@@ -105,9 +161,30 @@
             overflow-y: auto;
             color: #f3e8ff;
         }
+        body.mogeko-mode .retro-content-box {
+            background: #270e02 !important;
+            border-top: 2px solid #78350f !important;
+            border-left: 2px solid #78350f !important;
+            border-right: 2px solid #fef08a !important;
+            border-bottom: 2px solid #fef08a !important;
+            color: #fef3c7 !important;
+        }
+
+        /* Белая вспышка при авариной ошибке сайта */
+        #flashbang {
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.8s ease-out;
+        }
+        #flashbang.active {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="dot-pattern min-h-screen flex flex-col justify-between relative">
+
+    <!-- Вспышка экрана -->
+    <div id="flashbang" class="fixed inset-0 bg-white z-[100]"></div>
 
     <audio id="music-main" loop>
         <source src="user/music/menu.mp3" type="audio/mpeg">
@@ -118,9 +195,12 @@
     <audio id="music-zlo" loop>
         <source src="user/music/zlo.mp3" type="audio/mpeg">
     </audio>
+    <audio id="music-mogeko" loop>
+        <source src="user/mogeko/mogeko.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
-        // Данные художников (для возврата в обычный режим)
+        // Данные художников
         const ArtistsData = [
             {
                 id: "artist1",
@@ -142,7 +222,7 @@
             }
         ];
 
-        // 🦹‍♂️ ДАННЫЕ ЗЛОДЕЕВ ИГР (ГЛАВНЫЕ НА ЭТОЙ СТРАНИЦЕ) 🦹‍♂️
+        // 🦹‍♂️ ДАННЫЕ ЗЛОДЕЕВ ИГР (ОСНОВНЫЕ) 🦹‍♂️
         const VillainsData = [
             {
                 id: "v1",
@@ -293,7 +373,7 @@
                 name: "Король могеко",
                 avatar: "user/zlo/mogeko_ava.png",
                 debut: "Игра: Mogeko Castle",
-                desc: "Безумный лидер жёлтых существ могеко из параллельного замка, одержимый жестокими извращёнными наклонностями, ЛЮБОВЬЮ К СТАРШЕКЛАСТНИЦАМ и бесконечным хаосом.",
+                desc: "Безумный лидер жёлтых существ могеко из параллельного замка, одержимый жестокими извращёнными наклонностями, ЛЮБОВЬЮ К <span onclick=\"triggerMogekoEasterEgg()\" class=\"hover:text-red-500 hover:underline cursor-pointer transition-colors font-black text-amber-300\">СТАРШЕКЛАСТНИЦАМ</span> и бесконечным хаосом.",
                 notes: "Скрывает за комичной и мягкой внешностью садистскую натуру, держащую в страхе весь замок.",
                 fullImage: "user/zlo/zlu/mogeko.png"
             },
@@ -308,6 +388,39 @@
             }
         ];
 
+        // 🐱 АЛЬТЕРНАТИВНЫЕ МОГЕКО-ВЕРСИИ ВСЕХ АККАУНТОВ 🐱
+        const MogekoVillainsData = [
+            { id: "v1", name: "Фиолетовый Могеко", avatar: "user/mogeko/afton_moge.png", debut: "Mogeko Castle: FNAF", desc: "Убийственный Могеко в фиолетовом костюме, прячущийся в аниматрониках.", notes: "Моге! Я всегда возвращаюсь, моге!", fullImage: "user/mpgeko/moge/afton.png" },
+            { id: "v2", name: "Чернильный Могеко", avatar: "user/mogeko/bendy_moge.png", debut: "Mogeko Castle: Ink", desc: "Весь измазанный в чернилах и Прошутто Могеко с ослепительной улыбкой.", notes: "Чернила помнят вкус Прошутто!", fullImage: "user/mpgeko/moge/bendy.png" },
+            { id: "v3", name: "Могеко Президент", avatar: "user/mogeko/monika_moge.png", debut: "Mogeko Literature Club", desc: "Удаляет всех Могеко из замка ради любви к старшеклассницам.", notes: "Just Mogeko, моге~", fullImage: "user/mpgeko/moge/monika.png" },
+            { id: "v4", name: "Бетонный Могеко-173", avatar: "user/mogeko/scp173_moge.png", debut: "Mogeko SCP", desc: "Быстро подкрадывается, пока ты не смотришь, чтобы украсть твой Прошутто.", notes: "Не моргай, а то съем Прошутто!", fullImage: "user/mpgeko/moge/scp173.png" },
+            { id: "v5", name: "Могеко Аманда", avatar: "user/mogeko/amanda_moge.png", debut: "Mogeko Cyberlife", desc: "Кибер-Могеко в строгом костюме, следящий за тем, чтобы все любили Прошутто.", notes: "Время поджимает, Йокона-тян!", fullImage: "user/mpgeko/moge/amanda.png" },
+            { id: "v6", name: "Леди Могеко", avatar: "user/mogeko/geisha_moge.png", debut: "Mogeko Nightmares", desc: "Хозяйка замка в маске, питающаяся снами старшеклассниц.", notes: "Голод по Прошутто ненасытен!", fullImage: "user/mpgeko/moge/geisha.png" },
+            { id: "v7", name: "Кровавый Могеко Чара", avatar: "user/mogeko/chara_moge.png", debut: "Mogeko Genocide", desc: "Воплощение абсолютного пожирания Прошутто и ломания ножей.", notes: "Давай уничтожим весь замок!", fullImage: "user/mpgeko/moge/chara.png" },
+            { id: "v8", name: "Мита Могеко", avatar: "user/mogeko/mita_moge.png", debut: "Mogeko Side", desc: "Безумная милашка Могеко, не выпускающая никого из своей комнаты.", notes: "Мы будем кушать Прошутто вечно!", fullImage: "user/mpgeko/moge/mita.png" },
+            { id: "v9", name: "Цветочный Могеко", avatar: "user/mogeko/flauwy_moge.png", debut: "Mogeko Flower", desc: "Жёлтый цветок с лицом Могеко, требующий твою душу.", notes: "ТЫ ИДИОТ, МОГЕ!", fullImage: "user/mpgeko/moge/flauwy.png" },
+            { id: "v10", name: "Огромная Леди Могеко", avatar: "user/mogeko/ledy_moge.png", debut: "Mogeko Evil", desc: "Трехметровый жёлтый Могеко в шляпе и с гигантскими когтями.", notes: "Вы поплатитесь за мой Прошутто!", fullImage: "user/mpgeko/moge/ledy.png" },
+            { id: "v11", name: "Могеко Аргаллий", avatar: "user/mogeko/argal_moge.png", debut: "Mogeko Ruin", desc: "Синий Могеко в плаще, дирижирующий оркестром из пищащих Могеко.", notes: "Слушайте симфонию Прошутто!", fullImage: "user/mpgeko/moge/argal.png" },
+            { id: "v12", name: "Высокий Могеко", avatar: "user/mogeko/man_moge.png", debut: "Mogeko LN II", desc: "Длинноногий Могеко в шляпе, перемещающийся через телевизоры.", notes: "Телевизор показывает Прошутто...", fullImage: "user/mpgeko/moge/man.png" },
+            { id: "v13", name: "Могеко Карга", avatar: "user/mogeko/bab_moge.png", debut: "Mogeko Hag", desc: "Лесная жуткая Могеко, варящая суп из ветчины и хвостиков.", notes: "Хи-хи! Будет вкусный обед!", fullImage: "user/mpgeko/moge/bab.png" },
+            { id: "v14", name: "Призрак Могеко Спуки", avatar: "user/mogeko/spook_moge.png", debut: "Mogeko Mansion", desc: "Призрачная Могеко в викторианском платье из 1000 комнат.", notes: "Добро пожаловать в особняк Моге!", fullImage: "user/mpgeko/moge/spook.png" },
+            { id: "v15", name: "Демон Ремор Могеко", avatar: "user/mogeko/remor_moge.png", debut: "Mogeko Fran", desc: "Рогатый жуткий Могеко в маске, преследующий кошмарами.", notes: "Страх — это приправа к Прошутто!", fullImage: "user/mpgeko/moge/remor.png" },
+            { id: "v16", name: "Культист Могеко", avatar: "user/mogeko/face_moge.png", debut: "Mogeko Sally", desc: "Могеко в красном капюшоне, совершающий ритуалы святого Прошутто.", notes: "Славься великое Прошутто!", fullImage: "user/mpgeko/moge/face.png" },
+            { id: "v17", name: "Король Могеко (Истинный)", avatar: "user/mogeko/king_moge.png", debut: "Mogeko Castle", desc: "Великий правитель замка Могеко, обожающий ветчину и старшеклассниц!", notes: "ПРОШУТТО! ПРОШУТТО! ПРОШУТТО!", fullImage: "user/mpgeko/moge/king.png" },
+            { id: "v18", name: "Могеко Предатель", avatar: "user/mogeko/among_moge.png", debut: "Mogeko Us", desc: "Жёлтый скафандр с ушками Могеко. Он украл всё Прошутто в космосе!", notes: "Это не я, я был в вентиляции, моге!", fullImage: "user/mpgeko/moge/among.png" }
+        ];
+
+        // 🗝️ СЕКРЕТНЫЙ АККАУНТ ЙОНАКИ (ДЛЯ СНЯТИЯ ПРОКЛЯТИЯ) 🗝️
+        const YonakaSecretAccount = {
+            id: "yonaka_secret",
+            name: "Йонака Кураи",
+            avatar: "user/mogeko/yonaka_ava.png",
+            debut: "Игра: Mogeko Castle",
+            desc: "Обычная старшеклассница, попавшая в кошмарный замок Могеко. Она пытается найти своего брата и сбежать из этого сумасшествия.",
+            notes: "Пожалуйста, помоги мне! Могеко захватили этот сайт... <br><br><button onclick=\"dispelMogekoCurse()\" class=\"mt-3 bg-red-600 hover:bg-red-500 text-white font-black px-4 py-2 rounded-xl shadow-lg border-2 border-white cursor-pointer transition-transform hover:scale-105 animate-bounce\">✨ СОГЛАСИТЬСЯ (Развеять заклятие)</button>",
+            fullImage: "user/mpgeko/moge/yonaka.png"
+        };
+
         const VillainQuotes = [
             "Ха-ха-ха! Ты думал, что управляешь ситуацией? Добро пожаловать в мой мир, где правила диктую только я!",
             "Твои сохранения больше не спасут тебя, милый. Ошибка доступа к реальности!",
@@ -316,35 +429,50 @@
             "Зачем пытаться спасти этот мир, если рушить его куда веселее, мяу?",
             "Твой антивирус бессилен против моих планов по захвату сайта!"
         ];
+
+        const MogekoQuotes = [
+            "Йёнака-тян, ты где-е-е? Моге-моге!",
+            "Славься великое и сочное ПРОШУТТО!",
+            "Давай Ебаться! Моге-ха-ха-ха!",
+            "Эй, старшеклассница, отдай нам свой Прошутто!",
+            "Замок Могеко теперь захватил этот сайт полностью!",
+            "Ты никогда не выберешься отсюда, моге~",
+            "Вкусный ветчинный десерт ждёт короля!"
+        ];
+
+        // Переменные состояния пасхалки
+        let isMogekoActive = false;
+        let isMogekoLockout = false;
+        let mogekoExitAttempts = 0;
     </script>
 
-    <!-- Шапка сайта (Злодейская) -->
+    <!-- Шапка сайта -->
     <header class="sticky top-0 z-30 w-full pt-4 pb-5 px-4 sm:px-8 pointer-events-none text-white">
         <div class="gartic-header-bg"></div>
         <div class="max-w-7xl mx-auto relative z-20 flex items-center justify-between pointer-events-auto">
-            <a href="index_zlo.html" class="flex items-center space-x-6 group cursor-pointer no-underline">
+            <a href="#" onclick="handleHeaderLogoClick(event)" class="flex items-center space-x-6 group cursor-pointer no-underline">
                 <div class="w-32 h-32 sm:w-40 sm:h-40 flex-shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
-                    <img id="main-logo-img" src="user/system/logo zlo.png" alt="Лого Злодеев" class="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]">
+                    <img id="main-logo-img" src="user/system/logo zlo.png" alt="Лого" class="w-full h-full object-contain drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]">
                 </div>
                 <span id="site-header-title" class="font-black text-3xl sm:text-5xl tracking-wider text-red-500 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)] uppercase group-hover:text-red-400 transition-colors">
                     Злодей TWX
                 </span>
             </a>
             <div id="header-nav-buttons" class="flex items-center space-x-2 sm:space-x-3">
-                <a href="games.html" class="inline-block cursor-pointer hover:scale-105 transition-transform">
-                   <img src="user/system/arca 15.png" onmouseover="this.src='user/system/arca 16.png'" onmouseout="this.src='user/system/arca 15.png'" alt="ИГРЫ" class="w-28 h-auto rounded-xl shadow-md border-2 border-red-600/50">
+                <a id="nav-btn-1" href="games.html" onclick="handleBlockedNav(event)" class="inline-block cursor-pointer hover:scale-105 transition-transform">
+                   <img id="nav-img-1" src="user/system/arca 15.png" alt="ИГРЫ" class="w-28 h-auto rounded-xl shadow-md border-2 border-red-600/50">
                 </a>
-                <a href="zlo_about.html" class="inline-block cursor-pointer hover:scale-105 transition-transform">
-                   <img src="user/system/arca 17.png" onmouseover="this.src='user/system/arca 18.png'" onmouseout="this.src='user/system/arca 17.png'" alt="О НАС" class="w-28 h-auto rounded-xl shadow-md border-2 border-red-600/50">
+                <a id="nav-btn-2" href="zlo_about.html" onclick="handleBlockedNav(event)" class="inline-block cursor-pointer hover:scale-105 transition-transform">
+                   <img id="nav-img-2" src="user/system/arca 17.png" alt="О НАС" class="w-28 h-auto rounded-xl shadow-md border-2 border-red-600/50">
                 </a>
-                <a href="stream_zlo.html" class="inline-block cursor-pointer hover:scale-105 transition-transform">
-                   <img src="user/system/arca 19.png" onmouseover="this.src='user/system/arca 20.png'" onmouseout="this.src='user/system/arca 19.png'" alt="СТРИМЫ" class="w-28 h-auto rounded-xl shadow-md border-2 border-red-600/50">
+                <a id="nav-btn-3" href="stream_zlo.html" onclick="handleBlockedNav(event)" class="inline-block cursor-pointer hover:scale-105 transition-transform">
+                   <img id="nav-img-3" src="user/system/arca 19.png" alt="СТРИМЫ" class="w-28 h-auto rounded-xl shadow-md border-2 border-red-600/50">
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- Кнопка музыки (сразу играет zlo.mp3) -->
+    <!-- Кнопка музыки -->
     <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
         <div id="volume-panel" class="hidden bg-gray-900 border-4 border-red-600 p-4 rounded-xl shadow-xl mb-2 flex-col items-center space-y-2">
             <span class="text-sm font-bold text-red-400">Громкость</span>
@@ -360,38 +488,38 @@
     <main class="flex-grow max-w-7xl mx-auto w-full px-4 py-8 z-20 flex flex-col">
         
         <div class="w-full flex justify-center mb-8">
-            <img id="main-center-logo" src="user/system/logo zlo.png" alt="Центральное Лого" class="w-64 h-auto drop-shadow-[0_0_15px_rgba(220,38,38,0.8)]">
+            <img id="main-center-logo" src="user/system/logo zlo.png" alt="Центральное Лого" class="w-64 h-auto drop-shadow-[0_0_15px_rgba(220,38,38,0.8)] transition-all">
         </div>
 
         <div class="flex flex-col lg:flex-row gap-8 items-start w-full">
             
             <!-- Левая колонка: Кнопки -->
             <div class="w-full lg:w-1/3 flex flex-col space-y-8">
-                <div class="bg-red-950/20 p-4 rounded-3xl border-2 border-red-600/50">
-                    <h3 class="text-lg font-black text-red-400 uppercase mb-4 ml-2">Владения Злодеев</h3>
+                <div id="left-panel-box" class="bg-red-950/20 p-4 rounded-3xl border-2 border-red-600/50 transition-all">
+                    <h3 id="left-panel-title" class="text-lg font-black text-red-400 uppercase mb-4 ml-2">Владения Злодеев</h3>
                     <div class="flex flex-col items-start space-y-4">
                         <a id="link-fav" href="#" onclick="handleFavWorksClick(event)" class="inline-block cursor-pointer hover:scale-105 transition-transform">
-                            <img id="img-fav" src="user/system/arca 11.png" onmouseover="this.src='user/system/arca 12.png'" onmouseout="this.src='user/system/arca 11.png'" alt="Избранное" class="w-64 h-auto rounded-xl shadow-lg border-2 border-red-600/50">
+                            <img id="img-fav" src="user/system/arca 11.png" alt="Избранное" class="w-64 h-auto rounded-xl shadow-lg border-2 border-red-600/50">
                         </a>
-                        <a id="link-all" href="zlo_all_works.html" class="inline-block cursor-pointer hover:scale-105 transition-transform">
-                            <img id="img-all" src="user/system/arca 13.png" onmouseover="this.src='user/system/arca 14.png'" onmouseout="this.src='user/system/arca 13.png'" alt="Все Работы" class="w-64 h-auto rounded-xl shadow-lg border-2 border-red-600/50">
+                        <a id="link-all" href="zlo_all_works.html" onclick="handleBlockedNav(event)" class="inline-block cursor-pointer hover:scale-105 transition-transform">
+                            <img id="img-all" src="user/system/arca 13.png" alt="Все Работы" class="w-64 h-auto rounded-xl shadow-lg border-2 border-red-600/50">
                         </a>
                     </div>
                 </div>
             </div>
 
-            <!-- Правая колонка: Виджет Злодеев -->
+            <!-- Правая колонка: Виджет -->
             <div class="w-full lg:w-2/3 flex flex-col justify-end h-full mt-auto">
-                <div class="bg-gray-900/90 backdrop-blur-md border-4 border-red-600 rounded-3xl p-4 shadow-xl flex flex-col">
+                <div id="widget-main-container" class="bg-gray-900/90 backdrop-blur-md border-4 border-red-600 rounded-3xl p-4 shadow-xl flex flex-col transition-all">
                     
                     <div class="mb-4">
-                        <input type="text" id="artist-search" placeholder="🔍 Найти злодея..." oninput="filterEntities()" class="w-full bg-black border-2 border-red-600 rounded-xl px-4 py-2 text-white font-bold placeholder-red-400 focus:outline-none focus:border-red-500 shadow-inner">
+                        <input type="text" id="artist-search" placeholder="🔍 Найти злодея..." oninput="filterEntities()" class="w-full bg-black border-2 border-red-600 rounded-xl px-4 py-2 text-white font-bold placeholder-red-400 focus:outline-none focus:border-red-500 shadow-inner transition-all">
                     </div>
 
                     <div class="flex items-center justify-between mb-4 px-2">
-                        <button onclick="prevPage()" class="w-10 h-10 bg-red-700 text-white rounded-full font-black text-xl hover:bg-red-600 flex items-center justify-center shadow cursor-pointer">&lt;</button>
+                        <button id="widget-prev-btn" onclick="prevPage()" class="w-10 h-10 bg-red-700 text-white rounded-full font-black text-xl hover:bg-red-600 flex items-center justify-center shadow cursor-pointer">&lt;</button>
                         <h2 id="widget-title" class="text-xl font-black text-red-500 uppercase">Злодеи игр</h2>
-                        <button onclick="nextPage()" class="w-10 h-10 bg-red-700 text-white rounded-full font-black text-xl hover:bg-red-600 flex items-center justify-center shadow cursor-pointer">&gt;</button>
+                        <button id="widget-next-btn" onclick="nextPage()" class="w-10 h-10 bg-red-700 text-white rounded-full font-black text-xl hover:bg-red-600 flex items-center justify-center shadow cursor-pointer">&gt;</button>
                     </div>
                     
                     <div id="widget-grid" class="grid grid-cols-3 gap-3">
@@ -402,7 +530,7 @@
         </div>
 
         <div class="w-full flex flex-col justify-end mt-8">
-            <section class="w-full bg-gray-900/90 border-4 border-red-600 rounded-3xl p-6 shadow-2xl">
+            <section id="quote-section" class="w-full bg-gray-900/90 border-4 border-red-600 rounded-3xl p-6 shadow-2xl transition-all">
                 <h3 id="quote-header" class="text-2xl font-black text-red-500 uppercase mb-2">💬 Фразы злодеев</h3>
                 <p id="daily-quote-text" class="text-red-200 font-bold italic text-xl">
                     Загрузка...
@@ -434,7 +562,7 @@
                     <div class="retro-content-box flex-grow p-3 text-sm leading-relaxed" id="modal-text-content"></div>
                 </div>
 
-                <div class="flex items-center justify-between p-1 bg-[#2b0b30] border-t-2 border-[#581c87]">
+                <div class="flex items-center justify-between p-1 bg-[#2b0b30] border-t-2 border-[#581c87]" id="modal-footer-bar">
                     <div class="flex">
                         <button id="tab-desc" onclick="switchTab('desc')" class="retro-btn active-tab px-4 py-1 text-sm mr-1">Описание</button>
                         <button id="tab-notes" onclick="switchTab('notes')" class="retro-btn px-4 py-1 text-sm">Заметки</button>
@@ -447,13 +575,32 @@
             </div>
 
             <div class="w-full md:w-1/2 h-full flex items-end justify-center pointer-events-none">
-                <img id="modal-character-img" src="" alt="Злодей" class="max-h-[90%] w-auto object-contain animate-float drop-shadow-[0_0_15px_rgba(220,38,38,0.8)]">
+                <img id="modal-character-img" src="" alt="Персонаж" class="max-h-[90%] w-auto object-contain animate-float drop-shadow-[0_0_15px_rgba(220,38,38,0.8)]">
             </div>
 
         </div>
     </div>
 
-    <!-- Модалка для избранного в режиме злодея -->
+    <!-- МОДАЛКА ОШИБКИ ПОТОКА САЙТА (ПАСХАЛКА МОГЕКО) -->
+    <div id="mogeko-error-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[80] hidden flex items-center justify-center p-4">
+        <div class="bg-amber-950 border-4 border-yellow-500 rounded-3xl max-w-md w-full p-6 shadow-[0_0_30px_rgba(245,158,11,0.6)] text-center relative overflow-hidden flex flex-col items-center space-y-4 text-amber-100">
+            <div class="w-16 h-16 bg-yellow-500 text-black rounded-full flex items-center justify-center font-black text-3xl shadow-lg animate-bounce">
+                ⚠
+            </div>
+            <h3 class="text-2xl font-black text-yellow-400 uppercase tracking-wide">КРИТИЧЕСКАЯ ОШИБКА ПОТОКА САЙТА!</h3>
+            <p class="text-amber-200 font-bold text-sm leading-relaxed">
+                Что-то пошло не так с пространственным потоком данных сайта! Произошёл внезапный прорыв из параллельного измерения Замка Могеко!
+            </p>
+            <p class="text-xs text-yellow-300 italic">
+                Пожалуйста, нажмите «ОК» для перезагрузки и обновления структуры сайта.
+            </p>
+            <button onclick="executeMogekoTransformation()" class="mt-2 bg-yellow-500 hover:bg-yellow-400 text-black font-black px-8 py-3 rounded-xl shadow-xl border-2 border-white cursor-pointer transition-transform hover:scale-110 active:scale-95 text-lg">
+                ОК
+            </button>
+        </div>
+    </div>
+
+    <!-- Модалка для избранного -->
     <div id="zlo-fav-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-gray-900 border-4 border-red-600 rounded-3xl max-w-md w-full p-6 shadow-2xl text-center relative overflow-hidden flex flex-col items-center space-y-6">
             <h3 class="text-2xl font-black text-red-500 uppercase">Ты точно уверен, что хочешь туда?</h3>
@@ -481,11 +628,27 @@
         let currentPage = 0;
         let searchQuery = '';
 
+        function getCurrentData() {
+            return isMogekoActive ? MogekoVillainsData : VillainsData;
+        }
+
+        function playAudio(path) {
+            const snd = new Audio(path);
+            snd.play().catch(e => console.log("Аудио ожидало взаимодействия"));
+        }
+
         function renderWidget() {
             const grid = document.getElementById('widget-grid');
             grid.innerHTML = '';
             
-            const filtered = VillainsData.filter(item => {
+            let dataset = getCurrentData();
+
+            // Если ищем Йонаку во время Могеко-режима
+            if (isMogekoActive && searchQuery === "йонака") {
+                dataset = [YonakaSecretAccount];
+            }
+
+            const filtered = dataset.filter(item => {
                 if (!searchQuery) return true;
                 const name = item.name.toLowerCase();
                 return name.startsWith(searchQuery) || name.includes(searchQuery);
@@ -496,7 +659,7 @@
             const pageItems = filtered.slice(start, end);
 
             if (pageItems.length === 0) {
-                grid.innerHTML = `<div class="col-span-3 text-center text-red-400 font-bold py-8">Злодеи не найдены!</div>`;
+                grid.innerHTML = `<div class="col-span-3 text-center text-amber-400 font-bold py-8">Никого не найдено, моге...</div>`;
                 return;
             }
 
@@ -504,11 +667,15 @@
                 const elem = document.createElement('div');
                 elem.className = "flex flex-col items-center cursor-pointer group";
                 elem.onclick = () => openModal(item.id);
+                
+                const borderColor = isMogekoActive ? "border-amber-400 group-hover:border-yellow-200" : "border-red-600 group-hover:border-red-400";
+                const textColor = isMogekoActive ? "text-amber-200" : "text-red-200";
+
                 elem.innerHTML = `
-                    <div class="w-16 h-16 rounded-xl overflow-hidden border-2 border-red-600 shadow-md group-hover:border-red-400 group-hover:scale-110 transition-all bg-black">
-                        <img src="${item.avatar}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/511252/ffffff?text=Ava'">
+                    <div class="w-16 h-16 rounded-xl overflow-hidden border-2 ${borderColor} shadow-md group-hover:scale-110 transition-all bg-black">
+                        <img src="${item.avatar}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/511252/ffffff?text=Mogeko'">
                     </div>
-                    <span class="text-xs font-bold text-red-200 mt-1 text-center leading-tight line-clamp-2">${item.name}</span>
+                    <span class="text-xs font-bold ${textColor} mt-1 text-center leading-tight line-clamp-2">${item.name}</span>
                 `;
                 grid.appendChild(elem);
             });
@@ -518,16 +685,14 @@
             searchQuery = document.getElementById('artist-search').value.trim().toLowerCase();
             currentPage = 0;
             renderWidget();
-            if (searchQuery.includes("а ведь все же художник")) {
+            if (!isMogekoActive && searchQuery.includes("а ведь все же художник")) {
                 document.getElementById('zlo-exit-modal').classList.remove('hidden');
             }
         }
 
         function nextPage() {
-            const filtered = VillainsData.filter(item => {
-                if (!searchQuery) return true;
-                return item.name.toLowerCase().includes(searchQuery);
-            });
+            const dataset = getCurrentData();
+            const filtered = dataset.filter(item => item.name.toLowerCase().includes(searchQuery));
             if ((currentPage + 1) * ITEMS_PER_PAGE < filtered.length) {
                 currentPage++;
                 renderWidget();
@@ -545,7 +710,13 @@
         let currentTab = 'desc';
 
         function openModal(id) {
-            currentEntityData = VillainsData.find(a => a.id === id);
+            if (isMogekoActive && searchQuery === "йонака" && id === "yonaka_secret") {
+                currentEntityData = YonakaSecretAccount;
+            } else {
+                const dataset = getCurrentData();
+                currentEntityData = dataset.find(a => a.id === id);
+            }
+
             if (!currentEntityData) return;
 
             document.getElementById('modal-title-name').textContent = currentEntityData.name;
@@ -566,21 +737,34 @@
         }
 
         function switchVillainRelative(direction) {
+            if (isMogekoLockout) return; // Блокировка переключения во время лок-аута Могеко
             if (!currentEntityData) return;
-            const currentIndex = VillainsData.findIndex(v => v.id === currentEntityData.id);
+            
+            const dataset = getCurrentData();
+            const currentIndex = dataset.findIndex(v => v.id === currentEntityData.id);
             if (currentIndex === -1) return;
 
             let nextIndex = currentIndex + direction;
             if (nextIndex < 0) {
-                nextIndex = VillainsData.length - 1;
-            } else if (nextIndex >= VillainsData.length) {
+                nextIndex = dataset.length - 1;
+            } else if (nextIndex >= dataset.length) {
                 nextIndex = 0;
             }
 
-            openModal(VillainsData[nextIndex].id);
+            openModal(dataset[nextIndex].id);
         }
 
         function closeModal() {
+            if (isMogekoLockout) {
+                mogekoExitAttempts++;
+                playAudio('user/zlo/pop/moge.mp3');
+
+                if (mogekoExitAttempts >= 4) {
+                    document.getElementById('mogeko-error-modal').classList.remove('hidden');
+                }
+                return; // Не закрываем модалку Короля Могеко!
+            }
+
             const modal = document.getElementById('retro-modal');
             const windowAnim = document.getElementById('retro-window-anim');
             
@@ -610,8 +794,174 @@
             }
         }
 
+        /* 👑 АКТИВАЦИЯ ПАСХАЛКИ МОГЕКО 👑 */
+        function triggerMogekoEasterEgg() {
+            playAudio('user/zlo/pop/moge.mp3');
+            isMogekoLockout = true;
+            mogekoExitAttempts = 0;
+        }
+
+        function executeMogekoTransformation() {
+            document.getElementById('mogeko-error-modal').classList.add('hidden');
+            playAudio('user/zlo/pop/f.mp3'); // Звук взрыва
+
+            const flash = document.getElementById('flashbang');
+            flash.classList.add('active');
+
+            setTimeout(() => {
+                isMogekoLockout = false;
+                isMogekoActive = true;
+
+                // Закрываем модалку
+                const modal = document.getElementById('retro-modal');
+                modal.classList.add('hidden', 'opacity-0');
+
+                // Переключаем тему
+                document.body.classList.add('mogeko-mode');
+                
+                // Переключаем музыку
+                audioZlo.pause();
+                audioMogeko.volume = volumeSlider.value;
+                audioMogeko.play().catch(e => console.log(e));
+
+                // Шапка и иконки сайта
+                document.getElementById('site-title').textContent = "Могеко";
+                document.getElementById('site-header-title').textContent = "Могеко TWX";
+                document.getElementById('site-header-title').className = "font-black text-3xl sm:text-5xl tracking-wider text-yellow-400 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)] uppercase";
+                document.getElementById('site-favicon').href = "user/system/icon mogeko.png";
+
+                // Логотипы
+                document.getElementById('main-logo-img').src = "user/mogeko/mogeno.png";
+                document.getElementById('main-center-logo').src = "user/mogeko/mogeno.png";
+
+                // Кнопки левой панели и навигация
+                document.getElementById('img-fav').src = "user/system/mogege 3.png"; // Лузеры
+                document.getElementById('img-all').src = "user/system/mogege 4.png"; // Бесполезная кнопка
+                
+                document.getElementById('nav-img-1').src = "user/system/mogege 2.png"; // Игры
+                document.getElementById('nav-img-2').src = "user/system/mogege 5.png"; // Хочешь посмотреть
+                document.getElementById('nav-img-3').src = "user/system/mogege 1.png"; // Стримы
+
+                // Поиск
+                document.getElementById('artist-search').placeholder = "🔍 Найти Могеко (или написать имя)...";
+                document.getElementById('artist-search').className = "w-full bg-amber-950 border-2 border-yellow-500 rounded-xl px-4 py-2 text-yellow-200 font-bold placeholder-yellow-600 focus:outline-none shadow-inner";
+
+                // Виджет и стили
+                document.getElementById('widget-title').textContent = "Замок Могеко";
+                document.getElementById('widget-title').className = "text-xl font-black text-yellow-400 uppercase";
+                document.getElementById('widget-main-container').className = "bg-amber-950/90 backdrop-blur-md border-4 border-yellow-500 rounded-3xl p-4 shadow-2xl flex flex-col";
+
+                document.getElementById('left-panel-box').className = "bg-amber-950/30 p-4 rounded-3xl border-2 border-yellow-500/50";
+                document.getElementById('left-panel-title').textContent = "Территория Могеко";
+                document.getElementById('left-panel-title').className = "text-lg font-black text-yellow-400 uppercase mb-4 ml-2";
+
+                document.getElementById('widget-prev-btn').className = "w-10 h-10 bg-yellow-600 text-black rounded-full font-black text-xl hover:bg-yellow-500 flex items-center justify-center shadow cursor-pointer";
+                document.getElementById('widget-next-btn').className = "w-10 h-10 bg-yellow-600 text-black rounded-full font-black text-xl hover:bg-yellow-500 flex items-center justify-center shadow cursor-pointer";
+
+                document.getElementById('quote-section').className = "w-full bg-amber-950/90 border-4 border-yellow-500 rounded-3xl p-6 shadow-2xl";
+                document.getElementById('quote-header').className = "text-2xl font-black text-yellow-400 uppercase mb-2";
+                document.getElementById('quote-header').textContent = "💬 Цитаты Могеко";
+
+                renderWidget();
+                setRandomMogekoQuote();
+
+                setTimeout(() => {
+                    flash.classList.remove('active');
+                }, 400);
+            }, 800);
+        }
+
+        function handleBlockedNav(e) {
+            if (isMogekoActive) {
+                e.preventDefault();
+                playAudio('user/zlo/pop/moge.mp3');
+            }
+        }
+
+        function handleHeaderLogoClick(e) {
+            e.preventDefault();
+            if (isMogekoActive) {
+                playAudio('user/zlo/pop/moge.mp3');
+            } else {
+                window.location.href = "index_zlo.html";
+            }
+        }
+
+        function setRandomMogekoQuote() {
+            const randomQuote = MogekoQuotes[Math.floor(Math.random() * MogekoQuotes.length)];
+            document.getElementById('daily-quote-text').textContent = `«${randomQuote}»`;
+            document.getElementById('daily-quote-text').className = "text-yellow-200 font-bold italic text-xl";
+        }
+
+        /* ✨ СНЯТИЕ ПРОКЛЯТИЯ ЙОНАКОЙ ✨ */
+        function dispelMogekoCurse() {
+            // Закрываем модалку Йонаки
+            const modal = document.getElementById('retro-modal');
+            const windowAnim = document.getElementById('retro-window-anim');
+            modal.classList.add('opacity-0');
+            windowAnim.classList.remove('scale-100');
+            windowAnim.classList.add('scale-95');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                
+                // Плавно возвращаем аватарки и сайт по очереди
+                isMogekoActive = false;
+                document.body.classList.remove('mogeko-mode');
+
+                // Восстанавливаем музыкальное сопровождение
+                audioMogeko.pause();
+                audioZlo.play().catch(e => console.log(e));
+
+                // Восстанавливаем тексты и шапку
+                document.getElementById('site-title').textContent = "Злодей TWX";
+                document.getElementById('site-header-title').textContent = "Злодей TWX";
+                document.getElementById('site-header-title').className = "font-black text-3xl sm:text-5xl tracking-wider text-red-500 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)] uppercase";
+                document.getElementById('site-favicon').href = "user/system/icon zlo.png";
+
+                document.getElementById('main-logo-img').src = "user/system/logo zlo.png";
+                document.getElementById('main-center-logo').src = "user/system/logo zlo.png";
+
+                document.getElementById('img-fav').src = "user/system/arca 11.png";
+                document.getElementById('img-all').src = "user/system/arca 13.png";
+                document.getElementById('nav-img-1').src = "user/system/arca 15.png";
+                document.getElementById('nav-img-2').src = "user/system/arca 17.png";
+                document.getElementById('nav-img-3').src = "user/system/arca 19.png";
+
+                document.getElementById('artist-search').placeholder = "🔍 Найти злодея...";
+                document.getElementById('artist-search').className = "w-full bg-black border-2 border-red-600 rounded-xl px-4 py-2 text-white font-bold placeholder-red-400 focus:outline-none focus:border-red-500 shadow-inner";
+                document.getElementById('artist-search').value = "";
+                searchQuery = "";
+
+                document.getElementById('widget-title').textContent = "Злодеи игр";
+                document.getElementById('widget-title').className = "text-xl font-black text-red-500 uppercase";
+                document.getElementById('widget-main-container').className = "bg-gray-900/90 backdrop-blur-md border-4 border-red-600 rounded-3xl p-4 shadow-xl flex flex-col";
+
+                document.getElementById('left-panel-box').className = "bg-red-950/20 p-4 rounded-3xl border-2 border-red-600/50";
+                document.getElementById('left-panel-title').textContent = "Владения Злодеев";
+                document.getElementById('left-panel-title').className = "text-lg font-black text-red-400 uppercase mb-4 ml-2";
+
+                document.getElementById('widget-prev-btn').className = "w-10 h-10 bg-red-700 text-white rounded-full font-black text-xl hover:bg-red-600 flex items-center justify-center shadow cursor-pointer";
+                document.getElementById('widget-next-btn').className = "w-10 h-10 bg-red-700 text-white rounded-full font-black text-xl hover:bg-red-600 flex items-center justify-center shadow cursor-pointer";
+
+                document.getElementById('quote-section').className = "w-full bg-gray-900/90 border-4 border-red-600 rounded-3xl p-6 shadow-2xl";
+                document.getElementById('quote-header').className = "text-2xl font-black text-red-500 uppercase mb-2";
+                document.getElementById('quote-header').textContent = "💬 Фразы злодеев";
+
+                const randomVillainQuote = VillainQuotes[Math.floor(Math.random() * VillainQuotes.length)];
+                document.getElementById('daily-quote-text').textContent = `«${randomVillainQuote}»`;
+                document.getElementById('daily-quote-text').className = "text-red-200 font-bold italic text-xl";
+
+                renderWidget();
+            }, 300);
+        }
+
         function handleFavWorksClick(event) {
             event.preventDefault();
+            if (isMogekoActive) {
+                playAudio('user/zlo/pop/moge.mp3');
+                return;
+            }
             document.getElementById('zlo-fav-modal').classList.remove('hidden');
             document.getElementById('zlo-fav-result').classList.add('hidden');
         }
@@ -630,14 +980,15 @@
 
         function zloExitChoice(choice) {
             if (choice === 'leave') {
-                window.location.href = "index.html"; // Возврат к обычным художникам
+                window.location.href = "index.html"; 
             } else {
                 document.getElementById('zlo-exit-modal').classList.add('hidden');
             }
         }
 
-        // Музыка (сразу играет zlo.mp3)
+        // Музыкальное управление
         const audioZlo = document.getElementById('music-zlo');
+        const audioMogeko = document.getElementById('music-mogeko');
         const volumeSlider = document.getElementById('volume-slider');
         const icon = document.getElementById('music-icon');
         let isMusicPlaying = true;
@@ -650,19 +1001,23 @@
 
         function toggleMusic() {
             isMusicPlaying = !isMusicPlaying;
+            const currentAudio = isMogekoActive ? audioMogeko : audioZlo;
+
             if (isMusicPlaying) {
                 icon.classList.remove('fa-volume-xmark');
                 icon.classList.add('fa-volume-high');
-                audioZlo.play().catch(e => console.log("Автоплей ожидает взаимодействия"));
+                currentAudio.play().catch(e => console.log(e));
             } else {
                 icon.classList.remove('fa-volume-high');
                 icon.classList.add('fa-volume-xmark');
                 audioZlo.pause();
+                audioMogeko.pause();
             }
         }
 
         volumeSlider.addEventListener('input', (e) => {
             audioZlo.volume = e.target.value;
+            audioMogeko.volume = e.target.value;
         });
 
         window.onload = () => {

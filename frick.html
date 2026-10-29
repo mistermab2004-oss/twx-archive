@@ -301,15 +301,41 @@
                     </div>
                 </div>
 
-                <!-- Мольбы и Реклама -->
-                <div class="bg-gradient-to-r from-red-900/40 to-purple-900/40 p-4 rounded border border-red-500/50 text-center space-y-2">
-                    <h3 class="text-lg font-black text-yellow-400 uppercase">⚠️ МОЛЬБА ГОДА! ⚠️</h3>
-                    <p class="text-sm text-white font-semibold">
-                        "БРАТАН, Я ТЕБЯ УМОЛЯЮ, СКАЧАЙ ЭТУ ИГРУ! Я НЕ СПАЛ 5 НОЧЕЙ, ЭТО ЛУЧШИЙ ХОРРОР В МОЕЙ ЖИЗНИ! ЕСЛИ НЕ СКАЧАЕШЬ, Я ПРИДУ К ТЕБЕ ВО СНЕ И ВКЛЮЧУ СКРИМЕР ФРИКБЕРА!"
-                    </p>
+                <!-- Недавняя активность и Мольба года в стиле Steam -->
+                <div class="space-y-4">
+                    <span class="text-xs text-[#8f98a0] uppercase font-bold tracking-wider">Недавняя активность</span>
+                    
+                    <!-- Игра 1: Am I Nima -->
+                    <div class="bg-[#1b2838] border border-[#2a475e] p-3 rounded flex flex-col sm:flex-row gap-4 items-center">
+                        <a href="https://store.steampowered.com/app/3224600/Am_I_Nima/" target="_blank" class="w-full sm:w-72 h-36 flex-shrink-0 overflow-hidden rounded border border-[#2a475e] cursor-pointer block">
+                            <img src="https://mediaproxy.tvtropes.org/width/1200/https://static.tvtropes.org/pmwiki/pub/images/header_2x_6.jpg" class="w-full h-full object-cover hover:scale-105 transition-transform duration-200" alt="Am I Nima">
+                        </a>
+                        <div class="flex-grow w-full space-y-2">
+                            <div class="flex justify-between items-start">
+                                <h4 class="text-white font-bold text-sm">Am I Nima</h4>
+                                <span class="text-xs text-[#8f98a0]">27 ноя. 2026 г.</span>
+                            </div>
+                            <div class="bg-[#101822] p-2.5 rounded border border-[#2a475e] text-xs font-bold text-yellow-400 tracking-wide uppercase flex items-center gap-2">
+                                <i class="fa-solid fa-gift text-pink-500"></i> ИМЕНО ЕЕ ТЫ ОБЯЗАН МНЕ ПОДАРИТЬ ТАКОВ БЫЛ УГОВОР.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Игра 2: Мольба года (Фрикберс) -->
+                    <div class="bg-[#1b2838] border border-[#2a475e] p-3 rounded flex flex-col sm:flex-row gap-4 items-center">
+                        <div onclick="switchTab('store')" class="w-full sm:w-72 h-36 flex-shrink-0 overflow-hidden rounded border border-[#2a475e] cursor-pointer block">
+    			    <img src="user/frick/capsul.png" class="w-full h-full object-cover hover:scale-105 transition-transform duration-200" alt="Five Nights at Frickbear's 3">
+		      	</div>
+                        <div class="flex-grow w-full space-y-2">
+                            <div class="flex justify-between items-start">
+                                <h4 class="text-white font-bold text-sm">Five Nights at Frickbear's 3 + Four Layers Down</h4>
+                            </div>
+                            <div class="bg-gradient-to-r from-red-900/40 to-purple-900/40 p-3 rounded border border-red-500/50 text-xs text-white font-semibold leading-relaxed">
+                                ⚠️ <strong>МОЛЬБА ГОДА:</strong> "ДРУЖИЩЕ, Я ТЕБЯ УМОЛЯЮ, СКАЧАЙ ЭТУ ИГРУ! Я НЕ СПАЛ 5 НОЧЕЙ, ЭТО ЛУЧШИЙ ХОРРОР В МОЕЙ ЖИЗНИ! ЕСЛИ НЕ СКАЧАЕШЬ, Я ПРИДУ К ТЕБЕ ВО СНЕ И ВКЛЮЧУ СКРИМЕР ФРИКБЕРА!"
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
     </main>
 

@@ -738,6 +738,10 @@
                         <button id="btn-help" onclick="openHelpModal()" class="w-12 h-12 bg-yellow-500 border-2 border-yellow-300 rounded-xl flex items-center justify-center text-gray-900 font-extrabold text-xl hover:bg-yellow-400 cursor-pointer shadow transition-all" title="Справка по интерфейсу">
                             <i class="fa-solid fa-question"></i>
                         </button>
+                        <!-- Кнопка 3: Скачать текущую композицию -->
+			<button id="btn-download" onclick="downloadCurrentTrack()" class="w-12 h-12 bg-gray-800 border-2 border-gray-500 rounded-xl flex items-center justify-center text-white hover:bg-green-600 hover:border-green-400 active:bg-green-700 cursor-pointer shadow transition-all" title="Скачать текущую композицию">
+    			    <i class="fa-solid fa-download text-lg"></i>
+			</button>
                     </div>
 
                     <!-- Кнопка О нас -->
@@ -1357,6 +1361,36 @@
                 }
             }
         }
+
+	// Функция скачивания текущей композиции с именем в честь названия трека
+	function downloadCurrentTrack() {
+    	let track;
+    	if (isRickrollActive) {
+	        track = RickrollProfileData.playlist[0];
+    	} else {
+        track = ProfilesData[currentProfileIndex].playlist[currentTrackIndex];
+    	}
+
+    		if (!track || !track.file) {
+        	return;
+    	}
+
+    	// Определяем расширение файла (например, .mp3) из оригинального пути
+    	let extension = '.mp3';
+    	const lastDot = track.file.lastIndexOf('.');
+    	if (lastDot !== -1) {
+        	extension = track.file.substring(lastDot);
+    	}
+
+    	// Создаем временный элемент ссылки для скачивания
+    	const a = document.createElement('a');
+    	a.href = track.file;
+    	// Название файла берется из поля title композиции
+    	a.download = track.title + extension;
+    	document.body.appendChild(a);
+    	a.click();
+    	document.body.removeChild(a);
+	}
 
         // Режим повтора текущей композиции
         function toggleLoopOne() {

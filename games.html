@@ -24,7 +24,7 @@
             background-attachment: scroll, fixed;
         }
         
-        /* ⚡ ФИОЛЕТОВЫЙ ПОЛЗУНОК-МОЛНИЯ СТРАНИЦЫ (Скроллбар) ⚡ */
+        /* ⚡ ФИОЛЕТОВЫЙ ПОЛЗУНОК-МОЛНИЯ СТРАНИЦЫ ⚡ */
         ::-webkit-scrollbar { width: 24px; }
         ::-webkit-scrollbar-track {
             background: #1f0524;
@@ -88,10 +88,6 @@
             border-bottom: 4px solid #7f1d1d;
         }
         .retro-shadow { box-shadow: 4px 4px 0px #000000; }
-        .retro-button:active {
-            transform: translate(2px, 2px);
-            box-shadow: 1px 1px 0px #000000;
-        }
 
         /* Анимация для бегущей строки */
         @keyframes marquee {
@@ -107,11 +103,21 @@
             animation-play-state: paused;
         }
 
-        /* Разговорный блок Моники и Фредди */
+        /* Разговорный блок Моники и Афтона */
         .dialogue-box {
             background: rgba(20, 5, 30, 0.9);
             border: 3px solid #dc2626;
             box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Карточка постера (сетка библиотеки) */
+        .poster-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .poster-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.5);
+            border-color: #ef4444;
         }
     </style>
 </head>
@@ -158,9 +164,9 @@
     </header>
 
     <!-- Основная секция -->
-    <main class="flex-grow max-w-5xl mx-auto w-full px-4 z-25 my-8 flex flex-col items-center space-y-8">
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 z-25 my-8 flex flex-col items-center space-y-8">
         
-        <!-- Описание от Моники и Фредди -->
+        <!-- Описание от Моники и Афтона -->
         <section class="w-full dialogue-box rounded-3xl p-6 sm:p-8 space-y-6">
             <div class="border-b border-red-600/40 pb-4">
                 <h1 class="text-2xl sm:text-3xl font-black text-red-500 uppercase tracking-widest text-center drop-shadow">
@@ -179,11 +185,11 @@
                 </div>
             </div>
 
-            <!-- Реплика Фредди -->
+            <!-- Реплика Афтона -->
             <div class="flex items-start space-x-4 justify-end">
                 <div class="dialogue-box p-4 rounded-2xl rounded-tr-none flex-grow text-sm sm:text-base text-purple-100 leading-relaxed text-right">
                     <span class="text-yellow-400 font-bold block mb-1">Афтон:</span>
-                    Ага... Точно! Игры — это такое место, где можно веселиться, пугать охранников по ночам и устраивать незабываемые представления. Пока пицца не остыла, почему бы не взглянуть на список наших лучших владений, хе-хе! 🍕✨
+                    Ага... Точно! Игры — это такое место, где можно веселиться, пугать охранников по ночам и устраивать незабываемые представления. Пока пицца не остыла, почему бы не взглянуть на галерею наших лучших владений, хе-хе! 🍕✨
                 </div>
                 <div class="w-14 h-14 rounded-full border-2 border-yellow-400 overflow-hidden flex-shrink-0 bg-black shadow-lg flex items-center justify-center">
                     <img src="user/zlo/afton_ava.png" alt="Спрингтрапп" class="w-full h-full object-cover" onerror="this.src='user/zlo/monika_ava.png'">
@@ -191,428 +197,20 @@
             </div>
         </section>
 
-        <!-- СПИСОК ИГР -->
+        <!-- БИБЛИОТЕКА ИГР ЗЛОДЕЕВ (Сетка 5 в ряд) -->
         <section class="w-full space-y-4">
-            <h2 class="text-xl font-black text-red-400 uppercase tracking-wider text-center mb-6">
-                ⚡ Список наших владений (Игры) ⚡
-            </h2>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl sm:text-2xl font-black text-red-400 uppercase tracking-wider">
+                    ⚡ Галерея наших владений ⚡
+                </h2>
+                <span class="text-xs font-bold text-purple-300 bg-purple-950/80 px-3 py-1 rounded-full border border-red-600/50" id="library-count-text">
+                    Всего игр: 17
+                </span>
+            </div>
 
-            <div id="games-list-container" class="space-y-4">
-                
-                <!-- 1. Doki Doki Literature Club -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://i.pinimg.com/736x/35/8f/3a/358f3a02fb9694adc0c05f4774860b3e.jpg" alt="DDLC" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/1388880/Doki_Doki_Literature_Club_Plus/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/1388880/Doki_Doki_Literature_Club_Plus/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Doki Doki Literature Club <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Психологический визуальный новелла-ужастик, где милый литературный клуб постепенно превращается в цифровой кошмар под управлением президента.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/monika_ava.png" alt="Моника" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Моника</span>
-                    </div>
-                </div>
-
-                <!-- 2. Five Nights at Freddy's -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://i.pinimg.com/736x/ae/cb/de/aecbde9f4abf629689229de82fe6c9d8.jpg" alt="FNAF" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/319510/Five_Nights_at_Freddys/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/319510/Five_Nights_at_Freddys/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Five Nights at Freddy's <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Легендарная ночная смена в пиццерии, где аниматроники оживают и очень хотят познакомиться с ночным охранником поближе.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/afton_ava.png" alt="Уильям Афтон" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Афтон</span>
-                    </div>
-                </div>
-
-                <!-- 3. Detroit: Become Human (Детройт) -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c78bc3fc-9f08-47ca-81ae-d89055c7ec49/ddzve6e-77014cf9-e411-4d72-adf2-7656b80e2026.png/v1/fill/w_512,h_512/detroit___become_human_icon_by_andonovmarko_ddzve6e-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NTEyIiwicGF0aCI6Ii9mL2M3OGJjM2ZjLTlmMDgtNDdjYS04MWFlLWQ4OTA1NWM3ZWM0OS9kZHp2ZTZlLTc3MDE0Y2Y5LWU0MTEtNGQ3Mi1hZGYyLTc2NTZiODBlMjAyNi5wbmciLCJ3aWR0aCI6Ijw9NTEyIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.5TeyqU3LHw4CPcEUTiALMni6vN7oOMiFtD-iJgxip6E" alt="Detroit" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/1222140/Detroit_Become_Human/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/1222140/Detroit_Become_Human/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Detroit: Become Human <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Мир будущего, где андроиды обретают сознание и чувства, а холодная система и виртуальный контроль стремятся подавить любое инакомыслие.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/amanda_ava.png" alt="Аманда" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Аманда</span>
-                    </div>
-                </div>
-
-                <!-- 4. MiSide -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://images.steamusercontent.com/ugc/26556371904242853/917FBA93F985A4145ECD5611BB7F92E17C306DED/?imw=512&amp;imh=288&amp;ima=fit&amp;impolicy=Letterbox&amp;imcolor=%23000000&amp;letterbox=true" alt="MiSide" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/2527500/MiSide/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/2527500/MiSide/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                MiSide <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Уютный симулятор с виртуальной подругой, который постепенно срывает маски и превращается в сюрреалистический параноидальный кошмар.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/mita_ava.png" alt="Мита" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Мита</span>
-                    </div>
-                </div>
-
-                <!-- 5. Gnarled Hag -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://i.ytimg.com/vi/aHLvyZQiDys/maxresdefault.jpg" alt="Gnarled Hag" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Вставь ссылку если игра есть в Steam, например: href="#" -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://pompasaur.itch.io/gnarled-hag" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Gnarled Hag <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Мрачное мистическое подземелье и леденящие душу легенды о древней ведьме, наводящей ужас на всех незваных гостей.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/bab_ava.png" alt="Старая Карга" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Старая Карга</span>
-                    </div>
-                </div>
-
-                <!-- 6. Library of Ruina -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://clan.fastly.steamstatic.com/images/36935696/2e8d9bb041488a7790c15e08af646ef19eb62cbc.png" alt="Library of Ruina" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/1256670/Library_Of_Ruina/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/1256670/Library_Of_Ruina/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Library of Ruina <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Библиотечная драма и кровавые книжные истории, где каждый посетитель становится страницей в великой и безжалостной симфонии.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/argal_ava.png" alt="Аргалиё" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Аргалий</span>
-                    </div>
-                </div>
-
-                <!-- 7. Spooky's Jumpscare Mansion (Спуки джапскер меншен) -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://cdn2.steamgriddb.com/logo_thumb/ade68c2263e048f66ace5b50d6c9fbd5.png" alt="Spooky's Mansion" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/357190/Spookys_Jumpscare_Mansion/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/356670/Spookys_Jump_Scare_Mansion/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Spooky's Jumpscare Mansion <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Бесконечные коридоры жуткого особняка с безобидными картонными монстрами, за которыми скрываются настоящие мрачные тайны.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/spook_ava.png" alt="Спуки" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Спуки</span>
-                    </div>
-                </div>
-
-                <!-- 8. Bendy and the Ink Machine (Бенди) -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://i.pinimg.com/736x/32/99/54/3299547c8cc0e5be343ce8305230765d.jpg" alt="Bendy" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/622650/Bendy_and_the_Ink_Machine/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/622650/Bendy_and_the_Ink_Machine/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Bendy and the Ink Machine <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Заброшенная студия мультипликации, где чернила оживают, а зловещий демон улыбается с каждого плаката и из каждой тени.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/bendy_ava.png" alt="Бенди" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Бенди</span>
-                    </div>
-                </div>
-
-                <!-- 9. SCP Foundation (сцп) -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://ih1.redbubble.net/image.2350929028.1413/flat,750x,075,f-pad,750x1000,f8f8f8.jpg" alt="SCP" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/700330/SCP_Secret_Laboratory/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/700330/SCP_Secret_Laboratory/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                SCP Foundation <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Секретный комплекс аномальных объектов и существ, где нарушение условий содержания — лишь вопрос времени. Не моргай!
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/scp173_ava.png" alt="SCP-173" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">SCP-173</span>
-                    </div>
-                </div>
-
-                <!-- 10. Little Nightmares I (литл найтмерс 1) -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://i.pinimg.com/originals/da/11/69/da1169846eeb6912cb11259166676f00.jpg" alt="Little Nightmares 1" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/424840/Little_Nightmares/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/424840/Little_Nightmares/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Little Nightmares I <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Мрачное чрево корабля, где алчность и голод правят бал, а таинственная хозяйка в маске наблюдает за каждым шагом.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/geisha_ava.png" alt="Гейша" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Гейша</span>
-                    </div>
-                </div>
-
-                <!-- 11. Little Nightmares II (литл найтмерс 2) -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://cdn2.steamgriddb.com/icon_thumb/e45dd49c6ac439403afd4ff043af2870.png" alt="Little Nightmares 2" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/1097200/Little_Nightmares_II/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/860510/Little_Nightmares_II/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Little Nightmares II <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Искаженный радиосигналами мир, заполненный зомбированными жителями и зловещим Тощим Человеком из телевизора.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/man_ava.png" alt="Тощий Человек" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Тощий Человек</span>
-                    </div>
-                </div>
-
-                <!-- 12. Undertale (андертейл) -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://i.pinimg.com/originals/be/da/79/beda790b6ee947684f28ca4bbb6fdf42.png" alt="Undertale" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/391540/Undertale/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/391540/Undertale/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Undertale <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Подземный мир монстров, где каждый выбор имеет цену, а безобидный с виду цветок жаждет абсолютной власти над таймлайнами.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/flauwy_ava.png" alt="Флауви" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Флауви</span>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/chara_ava.png" alt="ЧАРА" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">ЧАРА</span>
-                    </div>
-                </div> 
-
-                <!-- 13. Resident Evil Village (резидент ивел вилдж) -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://cdn2.steamgriddb.com/icon_thumb/9d0737b612698e2451865b0a0af180af.png" alt="Resident Evil Village" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/1196590/Resident_Evil_Village/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/1196590/Resident_Evil_Village/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Resident Evil Village <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Заснеженная европейская глушь под властью древних лордов и высокой графини-аристократки, жаждущей крови.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/ledy_ava.png" alt="Леди Димитреску" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Леди Димитреска</span>
-                    </div>
-                </div>
-
-                <!-- 14. Mogeko Castle (могеко касл) -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://i.pinimg.com/originals/08/d2/af/08d2af98c384cff70946e7455fda9493.jpg?nii=t" alt="Mogeko Castle" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка (при необходимости можно заменить на свою): href="#" -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://indie-torrent.ru/load/khorrory/mogeko_castle/4-1-0-1397" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Mogeko Castle <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Безумный желтый замок, полный странных кровожадных существ и абсурдных смертельных ловушек на каждом шагу.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/mogeko_ava.png" alt="Король могеко" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Король могеко</span>
-                    </div>
-                </div>
-
-                <!-- 15. Fran Bow (френ боу) -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://i.pinimg.com/736x/9a/00/ec/9a00ec8ba6ad1cce36922c80b956681a.jpg" alt="Fran Bow" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/362680/Fran_Bow/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/362680/Fran_Bow/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Fran Bow <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Психиатрическая клиника и сюрреалистические миры крови, где за маленькой девочкой неотступно следует зловещая тень.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/remor_ava.png" alt="Ремор" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Ремор</span>
-                    </div>
-                </div>
-
-                <!-- 16. Sally Face (салли фейс) -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://i.pinimg.com/736x/2d/ff/59/2dff592ce06252619ce3a93ab1dabd27.jpg" alt="Sally Face" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/541570/Sally_Face__Episode_One/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/541570/Sally_Face__Episode_One/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Sally Face <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Мрачные тайны апартаментов Эддисона, древние культы, призраки и трагические загадки за протезом главного героя.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/face_ava.png" alt="Кеннет Фелпс" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Кеннет Фелпс</span>
-                    </div>
-                </div>
-
-                <!-- 17. Among Us (амонг асс) -->
-                <div class="bg-purple-950/80 border-2 border-red-600/70 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-red-500 transition-all">
-                    <div class="w-32 h-20 bg-black/50 rounded-xl overflow-hidden border border-red-500/40 flex-shrink-0 flex items-center justify-center p-1">
-                        <img src="https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/9f/29/74/9f2974e9-4e70-fc97-4e8f-14186f129e42/artwork.jpg/800x800cc.jpg" alt="Among Us" class="max-w-full max-h-full object-cover rounded-lg">
-                    </div>
-                    <div class="flex-grow text-center md:text-left">
-                        <!-- Ссылка в Steam: https://store.steampowered.com/app/945360/Among_Us/ -->
-                        <h3 class="text-lg font-black uppercase">
-                            <a href="https://store.steampowered.com/app/945360/Among_Us/" target="_blank" class="text-yellow-300 hover:text-red-400 hover:underline transition-colors">
-                                Among Us <i class="fa-brands fa-steam text-sm ml-1"></i>
-                            </a>
-                        </h3>
-                        <p class="text-xs text-purple-200 mt-1 leading-relaxed">
-                            Космический корабль на орбите, где среди мирных членов экипажа затаился коварный самозванец, сеющий хаос и панику.
-                        </p>
-                    </div>
-                    <div class="flex flex-col items-center flex-shrink-0">
-                        <div class="w-14 h-14 rounded-xl border-2 border-red-500 overflow-hidden bg-black shadow-md">
-                            <img src="user/zlo/among_ava.png" alt="Предатель" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-red-300 mt-1 uppercase">Предатель</span>
-                    </div>
-                </div>
-
+            <!-- Сетка игр (5 Столбцов) -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="library-grid">
+                <!-- Динамически рендерится из массива LibraryGames в JS -->
             </div>
         </section>
 
@@ -630,7 +228,134 @@
         <p>Игры Злодеев TWX — Путь назад закрыт</p>
     </footer>
 
+    <!-- СКТИПТЫИ ЛОГИКА -->
     <script>
+        // =========================================================================
+        // 🎮 МАССИВ ИГР ЗЛОДЕЕВ С ВЕРТИКАЛЬНЫМИ ПОСТЕРАМИ
+        // =========================================================================
+        const LibraryGames = [
+            {
+                title: "Doki Doki Literature Club Plus!",
+                poster: "https://img.byrutgame.org/uploads/posts/2026-09/6292d96839_doki-doki-literature-club-plus.webp",
+                link: "https://store.steampowered.com/app/1388880/Doki_Doki_Literature_Club_Plus/"
+            },
+            {
+                title: "Five Nights at Freddy's",
+                poster: "https://img.byrutgame.org/uploads/posts/2026-09/five-nights-at-freddys-poster.webp",
+                link: "https://store.steampowered.com/app/319510/Five_Nights_at_Freddys/"
+            },
+            {
+                title: "Detroit: Become Human",
+                poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1222140/library_600x900.jpg",
+                link: "https://store.steampowered.com/app/1222140/Detroit_Become_Human/"
+            },
+            {
+                title: "MiSide",
+                poster: "https://img.byrutgame.org/uploads/posts/2026-09/ae5e27b4b1_miside.webp",
+                link: "https://store.steampowered.com/app/2527500/MiSide/"
+            },
+            {
+                title: "Gnarled Hag",
+                poster: "https://img.gamebrain.co/games/381/gnarled_hag_pompasaur_2020_2_xl.jpg",
+                link: "https://pompasaur.itch.io/gnarled-hag"
+            },
+            {
+                title: "Library of Ruina",
+                poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1256670/library_600x900.jpg",
+                link: "https://store.steampowered.com/app/1256670/Library_Of_Ruina/"
+            },
+            {
+                title: "Spooky's Jump Scare Mansion",
+                poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/356670/library_600x900.jpg",
+                link: "https://store.steampowered.com/app/356670/Spookys_Jump_Scare_Mansion/"
+            },
+            {
+                title: "Bendy and the Ink Machine",
+                poster: "https://avatars.mds.yandex.net/get-mpic/20891650/pica33f1381b7c83c7198d61c0299ff44ca/orig",
+                link: "https://store.steampowered.com/app/622650/Bendy_and_the_Ink_Machine/"
+            },
+            {
+                title: "SCP Containment Breach",
+                poster: "https://s3.gamescribe.io/high/9a16571c-65a5-51a9-91ec-1b4e39e32cf5.jpg",
+                link: "https://store.steampowered.com/app/2178380/SCP_Containment_Breach/"
+            },
+            {
+                title: "Little Nightmares I",
+                poster: "https://store-images.s-microsoft.com/image/apps.21849.14040297946202100.6fa86a09-9303-48d5-9ee2-31fcb012aba5.8af927a3-bb64-4e18-b8d3-f12f179edacc",
+                link: "https://store.steampowered.com/app/424840/Little_Nightmares/"
+            },
+            {
+                title: "Little Nightmares II",
+                poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/860510/library_600x900.jpg",
+                link: "https://store.steampowered.com/app/860510/Little_Nightmares_II/"
+            },
+            {
+                title: "Undertale",
+                poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/391540/library_600x900.jpg",
+                link: "https://store.steampowered.com/app/391540/Undertale/"
+            },
+            {
+                title: "Resident Evil Village",
+                poster: "https://upload.wikimedia.org/wikipedia/ru/2/24/%D0%9E%D0%B1%D0%BB%D0%BE%D0%B6%D0%BA%D0%B0_Resident_Evil_Village.jpg",
+                link: "https://store.steampowered.com/app/1196590/Resident_Evil_Village/"
+            },
+            {
+                title: "Mogeko Castle",
+                poster: "https://indie-torrent.ru/_ld/13/71027870.jpg",
+                link: "https://indie-torrent.ru/load/khorrory/mogeko_castle/4-1-0-1397"
+            },
+            {
+                title: "Fran Bow",
+                poster: "https://i.pinimg.com/736x/40/81/2e/40812ec291a438ff46c8825606500dd9.jpg",
+                link: "https://store.steampowered.com/app/362680/Fran_Bow/"
+            },
+            {
+                title: "Sally Face",
+                poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/541570/library_600x900.jpg",
+                link: "https://store.steampowered.com/app/541570/Sally_Face/"
+            },
+            {
+                title: "Among Us",
+                poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/945360/library_600x900.jpg",
+                link: "https://store.steampowered.com/app/945360/Among_Us/"
+            }
+        ];
+
+        // Функция рендера карточек игр
+        function renderLibrary() {
+            const grid = document.getElementById('library-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            LibraryGames.forEach(game => {
+                const card = document.createElement('div');
+                card.className = "poster-card relative bg-purple-950/80 rounded-2xl border-2 border-red-600/70 overflow-hidden flex flex-col justify-between cursor-pointer shadow-xl";
+                
+                card.onclick = () => {
+                    if (game.link && game.link !== '#') {
+                        window.open(game.link, '_blank');
+                    }
+                };
+
+                card.innerHTML = `
+                    <div class="relative w-full h-72 bg-black/60 overflow-hidden">
+                        <img src="${game.poster}" class="w-full h-full object-cover" alt="${game.title}">
+                    </div>
+                    <div class="p-3 text-center bg-purple-950/95 border-t border-red-600/40 flex items-center justify-center min-h-[50px]">
+                        <span class="text-xs font-black text-yellow-300 uppercase tracking-wide truncate block hover:text-red-400 transition-colors">
+                            ${game.title} <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1 text-red-400"></i>
+                        </span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            const countElem = document.getElementById('library-count-text');
+            if (countElem) {
+                countElem.textContent = `Всего игр: ${LibraryGames.length}`;
+            }
+        }
+
         // =========================================================================
         // 🎀 НИЖНИЙ ВИДЖЕТ (БЕГУЩАЯ СТРОКА) 🎀
         // =========================================================================
@@ -734,6 +459,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            renderLibrary();
             tryPlayAudio();
             initBottomMarquee();
         }); 

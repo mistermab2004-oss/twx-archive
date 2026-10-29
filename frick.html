@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Five Nights at Frickbear's 3 + Four Layers Down в Steam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #1b2838 url('user/system/steamy.png') no-repeat center top fixed;
+            background-size: cover;
+            color: #c6d4df;
+            font-family: "Motiva Sans", Arial, Helvetica, sans-serif;
+            user-select: none;
+        }
+
+        /* Ползунок в стиле Steam */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #101822; }
+        ::-webkit-scrollbar-thumb { background: #3d4450; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #545d6a; }
+
+        .steam-nav-btn {
+            color: #b8b6b4;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .steam-nav-btn:hover, .steam-nav-btn.active {
+            color: #ffffff;
+            border-bottom: 3px solid #1a9fff;
+        }
+
+        .steam-btn-green {
+            background: linear-gradient( to right, #75b022 0%, #588a1b 100%);
+            border-radius: 2px;
+            color: #bfe641;
+            font-weight: bold;
+            padding: 8px 16px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .steam-btn-green:hover {
+            background: linear-gradient( to right, #8ed328 0%, #6ba622 100%);
+            color: #ffffff;
+        }
+
+        .badge-rating {
+            background-color: #000000;
+            border: 1px solid #363a43;
+            padding: 4px 8px;
+            font-size: 11px;
+        }
+
+        /* Эффект свечения постеров */
+        .poster-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .poster-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- 🔝 ВЕРХНЯЯ ШАПКА STEAM -->
+    <header class="bg-[#171a21] border-b border-[#2a475e] sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-2">
+            <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-2 cursor-pointer" onclick="switchTab('store')">
+                    <img src="user/system/steam.png" class="w-8 h-8 object-contain" alt="Steam Icon">
+                    <span class="font-black text-xl tracking-wider text-white">STEAM</span>
+                </div>
+                <nav class="flex space-x-2">
+                    <button id="nav-store" onclick="switchTab('store')" class="steam-nav-btn active">Магазин</button>
+                    <button id="nav-library" onclick="switchTab('library')" class="steam-nav-btn">Библиотека</button>
+                    <a href="index.html" class="steam-nav-btn">Сообщество</a>
+                    <button id="nav-profile" onclick="switchTab('profile')" class="steam-nav-btn">Хантер</button>
+                </nav>
+            </div>
+            
+            <div class="flex items-center space-x-4 text-xs text-[#c6d4df]">
+                <div class="flex items-center space-x-1 bg-[#212c3d] px-3 py-1 rounded">
+                    <img src="https://yt3.googleusercontent.com/ytc/AIdro_lnTZmQ4ylIFIGTCYknEtBHW0dlGRpRNmWSWdKvXQ6E2Q=s160-c-k-c0x00ffffff-no-rj" class="w-5 h-5 rounded-full object-cover" id="header-user-avatar">
+                    <span class="font-bold text-white">Хантер</span>
+                    <span class="text-[#66c0f4] ml-2">0,0 RUB</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 🎯 ОСНОВНОЙ КОНТЕНТ (ЗДЕСЬ МЕНЯЮТСЯ СТРАНИЦЫ) -->
+    <main class="max-w-6xl mx-auto w-full px-4 py-6 flex-grow">
+
+        <!-- ==================== 1. СТРАНИЦА МАГАЗИНА (STORE) ==================== -->
+        <div id="page-store" class="block">
+<!-- Заголовок игры -->
+            <div class="flex justify-between items-end mb-4">
+                <h1 class="text-3xl font-normal text-white tracking-wide">Five Nights at Frickbear's 3 + Four Layers Down</h1>
+            </div>
+
+            <!-- Главный медиа-блок -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 bg-[#000000]/40 p-4 rounded border border-[#2a475e]/50 mb-8">
+                <!-- Плеер Трейлеров и Скриншотов -->
+                <div class="lg:col-span-2 flex flex-col">
+                    <div class="relative w-full h-80 sm:h-96 bg-black flex items-center justify-center overflow-hidden rounded border border-[#2a475e]">
+                        <video id="main-video" class="w-full h-full object-contain" controls autoplay onended="playNextMedia()"></video>
+                        <img id="main-image" class="w-full h-full object-contain hidden" src="" alt="Screenshot">
+                    </div>
+                    
+                    <!-- Лента миниатюр (Слайдер) -->
+                    <div class="flex items-center space-x-2 mt-2 overflow-x-auto pb-2" id="media-thumbnails">
+                        <!-- Динамически заполняется через JS -->
+                    </div>
+                </div>
+
+                <!-- Правая карточка игры -->
+                <div class="flex flex-col justify-between space-y-4">
+                    <img src="user/frick/capsul.png" class="w-full h-40 object-cover rounded shadow border border-[#2a475e]" alt="Capsule">
+                    
+                    <p class="text-xs leading-relaxed text-[#acb2b8] line-clamp-4">
+                        Добро пожаловать в Five Nights at Frickbear's 3, фанатскую игру по FNaF, в которой большое внимание уделяется выбору игрока и возможности повторного прохождения, с уникальным забавным художественным стилем, более чем 40 уникальными врагами-аниматрониками, 3D-мини-играми в свободном режиме и четырьмя разными концовками!
+                    </p>
+
+                    <div class="text-xs space-y-1">
+                        <div class="flex justify-between"><span class="text-[#556772]">НЕДАВНИЕ ОБЗОРЫ:</span><span class="text-[#66c0f4] font-bold">Очень положительные (33,000)</span></div>
+                        <div class="flex justify-between"><span class="text-[#556772]">ДАТА ВЫХОДА:</span><span class="text-[#8f98a0]">13 мар. 2026 г.</span></div>
+                        <div class="flex justify-between"><span class="text-[#556772]">РАЗРАБОТЧИК:</span><span class="text-[#66c0f4]">SpookyRick @SpookyRick</span></div>
+                        <div class="flex justify-between"><span class="text-[#556772]">ИЗДАТЕЛЬ:</span><span class="text-[#66c0f4]">SpookyRick @SpookyRick</span></div>
+                    </div>
+
+                    <!-- Метки -->
+                    <div class="flex flex-wrap gap-1 text-[10px]">
+                        <span class="bg-[#223343] text-[#66c0f4] px-2 py-0.5 rounded">Психологический хоррор</span>
+                        <span class="bg-[#223343] text-[#66c0f4] px-2 py-0.5 rounded">Инди</span>
+                        <span class="bg-[#223343] text-[#66c0f4] px-2 py-0.5 rounded">FNaF</span>
+                        <span class="bg-[#223343] text-[#66c0f4] px-2 py-0.5 rounded">Хороший сюжет</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок Скачивания в стиле Steam -->
+            <div class="bg-[#202d3d] p-4 rounded border border-[#2a475e] flex items-center justify-between mb-8 shadow-xl max-w-3xl">
+                <div>
+                    <div class="text-xs text-[#66c0f4] font-bold uppercase tracking-wider mb-1">Купить игру / Скачать бесплатно</div>
+                    <h2 class="text-lg font-normal text-white">Скачать Five Nights at Frickbear's 3</h2>
+                </div>
+                <div class="flex items-center space-x-3 bg-[#101822] p-2 rounded border border-[#2a475e]">
+                    <span class="text-xs font-bold text-withe-400 uppercase px-2">Бесплатно</span>
+                    <button onclick="downloadGame()" class="steam-btn-green cursor-pointer text-xs uppercase tracking-wider flex items-center space-x-1.5 px-4 py-2">
+                        <i class="fa-solid fa-download"></i>
+                        <span>СКАЧАТЬ</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Описание & Характеристики -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Левая колонка: Детальное описание -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="border-b border-[#2a475e] pb-2">
+                        <h3 class="text-lg text-white uppercase tracking-wider font-semibold">Об этой игре</h3>
+                    </div>
+                    <div class="text-sm space-y-4 leading-relaxed text-[#acb2b8]">
+                        <p>
+                            Добро пожаловать в <strong>Five Nights at Frickbear's 3 + Four Layers Down</strong> — кульминацию фанатского хоррор-мастерства! Вам предстоит погрузиться в глубокие и темные тайны, где каждый ваш выбор имеет реальный вес, а ошибки стоят жизни.
+                        </p>
+                        <p>
+                            Особенность третьей части — это абсолютная автономность сюжета! Вам **НЕ нужно** играть в первые две части, чтобы понять суть происходящего. Погрузитесь с головой в безумные 3D мини-игры, исследуйте уровни в свободном режиме и разгадайте все 4 уникальные концовки!
+                        </p>
+                        <ul class="list-disc list-inside space-y-1 text-[#66c0f4]">
+                            <li>Более 40 уникальных аниматроников-врагов с разным ИИ.</li>
+                            <li>Режим свободного перемещения в 3D пространстве.</li>
+                            <li>Разветвленные диалоги и 4 альтернативные концовки.</li>
+                            <li>Уникальный авторский стиль, совмещающий юмор и леденящий ужас.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Системные требования -->
+                    <div class="border-b border-[#2a475e] pb-2 pt-4">
+                        <h3 class="text-lg text-white uppercase tracking-wider font-semibold">Системные требования</h3>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <span class="text-[#556772] font-bold">МИНИМАЛЬНЫЕ:</span>
+                            <p class="mt-1">ОС: Windows 7 / 10 / 11</p>
+                            <p>Процессор: Утюг с поддержкой GameMaker</p>
+                            <p>Оперативная память: 4 GB ОЗУ</p>
+                            <p>Видеокарта: Любая, умеющая выводить пиксели</p>
+                        </div>
+                        <div>
+                            <span class="text-[#556772] font-bold">РЕКОМЕНДОВАННЫЕ:</span>
+                            <p class="mt-1">ОС: Windows 11 (64-bit)</p>
+                            <p>Процессор: Intel Core i9 / Святая вода</p>
+                            <p>Оперативная память: 16 GB ОЗУ</p>
+                            <p>Место на диске: 2 GB</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Правая колонка: Друзья, языки, достижения и возраст -->
+                <div class="space-y-6 text-xs">
+                    <!-- Друзья -->
+                    <div class="bg-[#121e2d] p-3 rounded border border-[#2a475e]">
+                        <span class="text-[#8f98a0] font-bold block mb-2">Эта игра уже есть у 3 друзей:</span>
+                        <div id="friends-list" class="flex space-x-2">
+                            <!-- Заполняется из JS -->
+                        </div>
+                    </div>
+
+                    <!-- Поддерживаемые языки в стиле Steam -->
+                    <div class="bg-[#121e2d] p-3 rounded border border-[#2a475e] space-y-2">
+                        <span class="text-[#8f98a0] font-bold block">Языки:</span>
+                        <table class="w-full text-left text-xs">
+                            <tr class="text-[#556772] border-b border-[#2a475e]">
+                                <th class="py-1">Язык</th>
+                                <th class="text-center py-1">Интерфейс</th>
+                                <th class="text-center py-1">Озвучка</th>
+                                <th class="text-center py-1">Субтитры</th>
+                            </tr>
+                            <tr class="border-b border-[#2a475e]/30">
+                                <td class="py-1.5 text-[#c6d4df]">английский</td>
+                                <td class="text-center text-green-400">✔</td>
+                                <td class="text-center text-green-400">✔</td>
+                                <td class="text-center text-green-400">✔</td>
+                            </tr>
+                            <tr>
+                                <td class="py-1.5 text-[#556772]">русский</td>
+                                <td colspan="3" class="text-center text-[#556772] italic">Не поддерживается</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Достижения в Steam в стиле Steam -->
+                    <div class="bg-[#121e2d] p-3 rounded border border-[#2a475e]">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[#8f98a0] font-bold text-xs">Достижения в Steam:</span>
+                            <span class="text-[10px] text-[#66c0f4] cursor-pointer hover:underline">Показать все (38)</span>
+                        </div>
+                        <div class="grid grid-cols-4 gap-0 bg-[#0e141d] p-1 rounded border border-[#2a475e]">
+                            <div class="aspect-square overflow-hidden border border-[#2a475e]/40"><img src="user/frick/f 1.png" class="w-full h-full object-cover"></div>
+                            <div class="aspect-square overflow-hidden border border-[#2a475e]/40"><img src="user/frick/f 2.png" class="w-full h-full object-cover"></div>
+                            <div class="aspect-square overflow-hidden border border-[#2a475e]/40"><img src="user/frick/f 3.png" class="w-full h-full object-cover"></div>
+                            <div class="aspect-square overflow-hidden border border-[#2a475e]/40"><img src="user/frick/f 4.png" class="w-full h-full object-cover"></div>
+                        </div>
+                    </div>
+
+                    <!-- Рейтинг Контента (Возрастной меткой) -->
+                    <div class="bg-[#121e2d] p-3 rounded border border-[#2a475e] space-y-1">
+                        <span class="text-[#8f98a0] font-bold block">Справочник по рейтингу:</span>
+                        <div class="text-[11px] text-yellow-500 space-y-0.5">
+                            <p>• Мультяшное насилие</p>
+                            <p>• Анимированное кровопролитие</p>
+                            <p>• Употребление алкоголя и табака</p>
+                            <p>• Намекающие темы и язык</p>
+                            <p>• Забавные выходки</p>
+                            <p>• Имитация азартных игр</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 2. СТРАНИЦА БИБЛИОТЕКИ (LIBRARY) ==================== -->
+        <div id="page-library" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl text-white font-light uppercase tracking-wider">Ваша библиотека игр</h2>
+                <span class="text-xs text-[#66c0f4]" id="library-count-text">Всего игр: 33</span>
+            </div>
+
+            <!-- Сетка игр (5 Столбцов) -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="library-grid">
+                <!-- Динамически рендерится из массива LibraryGames -->
+            </div>
+        </div>
+
+        <!-- ==================== 3. СТРАНИЦА ПРОФИЛЯ ХАНТЕРА (PROFILE) ==================== -->
+        <div id="page-profile" class="hidden">
+            <div class="bg-[#101822]/90 border border-[#2a475e] p-6 rounded shadow-2xl space-y-6">
+                <!-- Аватарка и шапка -->
+                <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 border-b border-[#2a475e] pb-6">
+                    <img src="https://yt3.googleusercontent.com/ytc/AIdro_lnTZmQ4ylIFIGTCYknEtBHW0dlGRpRNmWSWdKvXQ6E2Q=s160-c-k-c0x00ffffff-no-rj" class="w-32 h-32 rounded border-2 border-[#66c0f4] object-cover shadow-lg" alt="Hunter Avatar">
+                    <div class="space-y-2 text-center sm:text-left">
+                        <div class="flex items-center justify-center sm:justify-start space-x-3">
+                            <h2 class="text-3xl font-bold text-white">Хантер</h2>
+                            <span class="border border-[#66c0f4] text-[#66c0f4] px-2 py-0.5 rounded-full text-xs font-bold">Уровень 8</span>
+                        </div>
+                        <p class="text-xs text-[#8f98a0]">Berdsk, Novosibirsk, Russian Federation</p>
+                        <p class="text-sm text-[#c6d4df] italic">Автор каналов "Time with XaHTep" и "XaHTep play stream"</p>
+                    </div>
+                </div>
+
+                <!-- Мольбы и Реклама -->
+                <div class="bg-gradient-to-r from-red-900/40 to-purple-900/40 p-4 rounded border border-red-500/50 text-center space-y-2">
+                    <h3 class="text-lg font-black text-yellow-400 uppercase">⚠️ МОЛЬБА ГОДА! ⚠️</h3>
+                    <p class="text-sm text-white font-semibold">
+                        "БРАТАН, Я ТЕБЯ УМОЛЯЮ, СКАЧАЙ ЭТУ ИГРУ! Я НЕ СПАЛ 5 НОЧЕЙ, ЭТО ЛУЧШИЙ ХОРРОР В МОЕЙ ЖИЗНИ! ЕСЛИ НЕ СКАЧАЕШЬ, Я ПРИДУ К ТЕБЕ ВО СНЕ И ВКЛЮЧУ СКРИМЕР ФРИКБЕРА!"
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 🦶 ПОДВАЛ STEAM -->
+    <footer class="bg-[#171a21] border-t border-[#2a475e] py-6 text-center text-xs text-[#8f98a0]">
+        <div class="max-w-6xl mx-auto px-4 space-y-2">
+            <p>© 2026 Valve Corporation. Все права защищены (или нет, это же фейк для пранка!).</p>
+            <p class="text-[10px] text-[#556772]">Все торговые марки являются собственностью их соответствующих владельцев в США и других странах.</p>
+        </div>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT ДАННЫЕ И ЛОГИКА ==================== -->
+    <script>
+        /* ========================================================================
+           1. ДАННЫЕ И МАССИВЫДЛЯ РЕДАКТИРОВАНИЯ (Ссылки, Авы, Медиа, Библиотека)
+           ======================================================================== */
+
+        // 🎬 МЕДИАПЛЕЕР ИГРЫ (Трейлеры и Скриншоты)
+        const GameMedia = [
+            { type: 'video', src: 'user/frick/tr 1.mp4', thumb: 'user/frick/screenshot0.png' },
+            { type: 'video', src: 'user/frick/tr 2.mp4', thumb: 'user/frick/screenshot1.png' },
+            { type: 'image', src: 'user/frick/screenshot0.png', thumb: 'user/frick/screenshot0.png' },
+            { type: 'image', src: 'user/frick/screenshot1.png', thumb: 'user/frick/screenshot1.png' },
+            { type: 'image', src: 'user/frick/screenshot2.png', thumb: 'user/frick/screenshot2.png' },
+            { type: 'image', src: 'user/frick/screenshot3.png', thumb: 'user/frick/screenshot3.png' },
+            { type: 'image', src: 'user/frick/screenshot4.png', thumb: 'user/frick/screenshot4.png' },
+            { type: 'image', src: 'user/frick/screenshot5.png', thumb: 'user/frick/screenshot5.png' },
+            { type: 'image', src: 'user/frick/screenshot6.png', thumb: 'user/frick/screenshot6.png' },
+            { type: 'image', src: 'user/frick/screenshot7.png', thumb: 'user/frick/screenshot7.png' },
+            { type: 'image', src: 'user/frick/screenshot8.png', thumb: 'user/frick/screenshot8.png' }
+        ];
+
+        // 👥 ДРУЗЬЯ
+        const FriendsData = [
+            { name: "MR.MAB", ava: "https://yt3.ggpht.com/s5kyRytvPT2rUdY9Ukq95SwJmAHRAZORw-cZamDE4LQva104TrZKwGb1Dn5OjjcacrVcYCfZkJQ=s600-c-k-c0x00ffffff-no-rj-rp-mo" },
+            { name: "Boryan", ava: "https://img.magnific.com/premium-psd/simple-minimalist-off-white-background-texture-image-design-web-pale-tone-soft-pure-plain-clean_1173776-13204.jpg?semt=ais_hybrid" },
+            { name: "Mr.Fobia", ava: "https://i.pinimg.com/originals/f3/7a/52/f37a5281f2eed586520830628e4d4760.jpg" }
+        ];
+
+        // 🏆 ДОСТИЖЕНИЯ ИГРЫ
+        const AchievementsData = [
+            { title: "Первая ночь", icon: "user/ava/f 1.png" },
+            { title: "Встреча с Фрикбером", icon: "user/ava/f 2.png" },
+            { title: "4 Layers Down", icon: "user/ava/f 3.png" },
+            { title: "Выживший", icon: "user/ava/f 4.png" }
+        ];
+
+       let LibraryGames = [,
+            { title: "Doki Doki Literature Club!", poster: "https://i.pinimg.com/736x/bc/bc/9c/bcbc9c8fb10757f7dc9377948554e8c1.jpg", isNew: false, link: "https://store.steampowered.com/app/698780/Doki_Doki_Literature_Club/" },
+            { title: "Bendy and the Ink Machine", poster: "https://avatars.mds.yandex.net/get-mpic/20891650/pica33f1381b7c83c7198d61c0299ff44ca/orig", isNew: false, link: "https://store.steampowered.com/app/622650/Bendy_and_the_Ink_Machine/" },
+            { title: "MiSide", poster: "https://img.byrutgame.org/uploads/posts/2026-09/ae5e27b4b1_miside.webp", isNew: false, link: "https://store.steampowered.com/app/2527500/MiSide/" },
+            { title: "Little Nightmares", poster: "https://store-images.s-microsoft.com/image/apps.21849.14040297946202100.6fa86a09-9303-48d5-9ee2-31fcb012aba5.8af927a3-bb64-4e18-b8d3-f12f179edacc", isNew: false, link: "https://store.steampowered.com/app/424840/Little_Nightmares/" },
+            { title: "Five Nights at Freddy's: Security Breach", poster: "https://cdn1.epicgames.com/spt-assets/5339564279024f0a97654210da2e26d7/download-five-nights-at-freddys-security-breach-offer-xshms.png", isNew: false, link: "https://store.steampowered.com/app/747660/Five_Nights_at_Freddys_Security_Breach/" },
+            { title: "Undertale", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/391540/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/391540/Undertale/" },
+            { title: "Fran Bow", poster: "https://static.wikia.nocookie.net/igromania/images/3/34/664-1488044683.jpg/revision/latest/scale-to-width-down/536?cb=20180203082533&path-prefix=ru", isNew: false, link: "https://store.steampowered.com/app/362680/Fran_Bow/" },
+            { title: "Sally Face", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/541570/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/541570/Sally_Face/" },
+            { title: "Spooky's Jump Scare Mansion", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/356670/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/356670/Spookys_Jump_Scare_Mansion/" },
+            { title: "Resident Evil Village", poster: "https://upload.wikimedia.org/wikipedia/ru/2/24/%D0%9E%D0%B1%D0%BB%D0%BE%D0%B6%D0%BA%D0%B0_Resident_Evil_Village.jpg", isNew: false, link: "https://store.steampowered.com/app/1196590/Resident_Evil_Village/" },
+            { title: "SCP: Containment Breach", poster: "https://s3.gamescribe.io/high/9a16571c-65a5-51a9-91ec-1b4e39e32cf5.jpg", isNew: false, link: "https://store.steampowered.com/app/2178380/SCP_Containment_Breach/" },
+            { title: "Detroit: Become Human", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1222140/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/1222140/Detroit_Become_Human/" },
+            { title: "Library of Ruina", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1256670/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/1256670/Library_of_Ruina/" },
+            { title: "Garten of BanBan", poster: "https://img.byrutgame.org/uploads/posts/2026-09/cc22a90d5e_garten-of-banban.webp", isNew: false, link: "https://store.steampowered.com/app/2232840/Garten_of_Banban/" },
+            { title: "Among Us", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/945360/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/945360/Among_Us/" },
+            { title: "Little Nightmares II", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/860510/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/860510/Little_Nightmares_II/" },
+            { title: "DELTARUNE", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1671210/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/1671210/DELTARUNE/" },
+            { title: "Outlast", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/238320/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/238320/Outlast/" },
+            { title: "Amnesia: The Dark Descent", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/57300/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/57300/Amnesia_The_Dark_Descent/" },
+            { title: "Phasmophobia", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/739630/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/739630/Phasmophobia/" },
+            { title: "Dead by Daylight", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/381210/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/381210/Dead_by_Daylight/" },
+            { title: "Poppy Playtime", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1721470/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/1721470/Poppy_Playtime/" },
+            { title: "Slender: The Arrival", poster: "https://img.byrutgame.org/uploads/posts/2026-09/cada254b1e_slender-the-arrival.webp", isNew: false, link: "https://store.steampowered.com/app/252330/Slender_The_Arrival/" },
+            { title: "Resident Evil 7", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/418370/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/418370/Resident_Evil_7_Biohazard/" },
+            { title: "Silent Hill 2", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2124490/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/2124490/SILENT_HILL_2/" },
+            { title: "The Evil Within", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/268050/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/268050/The_Evil_Within/" },
+            { title: "Lethal Company", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1966720/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/1966720/Lethal_Company/" },
+            { title: "Buckshot Roulette", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2835570/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/2835570/Buckshot_Roulette/" },
+            { title: "Alien: Isolation", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/214490/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/214490/Alien_Isolation/" },
+            { title: "Layers of Fear", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/391720/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/391720/Layers_Of_Fear/" },
+            { title: "VISAGE", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/594330/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/594330/Visage/" },
+            { title: "Dark Deception", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/332950/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/332950/Dark_Deception/" }
+        ];
+
+        /* ========================================================================
+           2. ЛОГИКА ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК (SPA)
+           ======================================================================== */
+        function switchTab(tab) {
+            document.getElementById('page-store').classList.add('hidden');
+            document.getElementById('page-library').classList.add('hidden');
+            document.getElementById('page-profile').classList.add('hidden');
+
+            document.getElementById('nav-store').classList.remove('active');
+            document.getElementById('nav-library').classList.remove('active');
+            document.getElementById('nav-profile').classList.remove('active');
+
+            if (tab === 'store') {
+                document.getElementById('page-store').classList.remove('hidden');
+                document.getElementById('nav-store').classList.add('active');
+            } else if (tab === 'library') {
+                document.getElementById('page-library').classList.remove('hidden');
+                document.getElementById('nav-library').classList.add('active');
+                renderLibrary();
+            } else if (tab === 'profile') {
+                document.getElementById('page-profile').classList.remove('hidden');
+                document.getElementById('nav-profile').classList.add('active');
+            }
+        }
+
+        /* ========================================================================
+           3. ЛОГИКА МЕДИАПЛЕЕРА (Зацикливание, Скриншоты по 15 сек и Трейлеры)
+           ======================================================================== */
+        let currentMediaIndex = 0;
+        let mediaTimer = null;
+
+        function loadMedia(index) {
+            currentMediaIndex = index;
+            const media = GameMedia[currentMediaIndex];
+            const videoElem = document.getElementById('main-video');
+            const imgElem = document.getElementById('main-image');
+
+            // Очищаем предыдущий таймер смены картинок, если он был
+            if (mediaTimer) {
+                clearTimeout(mediaTimer);
+                mediaTimer = null;
+            }
+
+            if (media.type === 'video') {
+                imgElem.classList.add('hidden');
+                videoElem.classList.remove('hidden');
+                videoElem.src = media.src;
+                videoElem.play().catch(e => console.log("Ждем клика пользователя"));
+            } else {
+                videoElem.pause();
+                videoElem.classList.add('hidden');
+                imgElem.classList.remove('hidden');
+                imgElem.src = media.src;
+
+                // Если это картинка, включаем таймер ровно на 15 секунд для перехода к следующей
+                mediaTimer = setTimeout(() => {
+                    playNextMedia();
+                }, 15000);
+            }
+            renderThumbnails();
+        }
+
+        function playNextMedia() {
+            currentMediaIndex = (currentMediaIndex + 1) % GameMedia.length;
+            loadMedia(currentMediaIndex);
+        }
+
+        function renderThumbnails() {
+            const container = document.getElementById('media-thumbnails');
+            container.innerHTML = '';
+            GameMedia.forEach((media, idx) => {
+                const borderClass = (idx === currentMediaIndex) ? 'border-2 border-[#66c0f4]' : 'border border-[#2a475e] opacity-60';
+                const thumb = document.createElement('div');
+                thumb.className = `w-20 h-12 flex-shrink-0 cursor-pointer overflow-hidden rounded ${borderClass}`;
+                thumb.onclick = () => loadMedia(idx);
+                thumb.innerHTML = `<img src="${media.thumb}" class="w-full h-full object-cover">`;
+                container.appendChild(thumb);
+            });
+        }
+
+        function downloadGame() {
+    // Открываем ссылку на Google Диск в новой вкладке
+    window.open('https://drive.google.com/file/d/1H5uHCjuwJXMlC1grgfltJqfmdQVHYWLS/view?usp=drive_link', '_blank');
+
+    // Добавляем игру в начало библиотеки с плашкой «НОВОЕ» и ссылкой на магазин
+    const exists = LibraryGames.some(g => g.title.includes("Frickbear's 3"));
+    if (!exists) {
+        LibraryGames.unshift({
+            title: "Five Nights at Frickbear's 3",
+            poster: "user/frick/poster.png",
+            isNew: true,
+            link: "#store"
+        });
+    }
+
+    // Переключаем вкладку в библиотеку
+    switchTab('library');
+}
+
+        function renderLibrary() {
+            const grid = document.getElementById('library-grid');
+            grid.innerHTML = '';
+            LibraryGames.forEach(game => {
+                const card = document.createElement('div');
+                card.className = "poster-card relative bg-[#121e2d] rounded border border-[#2a475e] overflow-hidden flex flex-col justify-between cursor-pointer";
+                
+                // Обработка клика: если это наша игра или относительная ссылка, переключаем на магазин, иначе открываем внешнюю ссылку в новой вкладке
+                card.onclick = () => {
+                    if (game.link === '#store') {
+                        switchTab('store');
+                    } else {
+                        window.open(game.link, '_blank');
+                    }
+                };
+
+                let newBadge = game.isNew ? `<div class="absolute top-2 left-2 bg-[#1a9fff] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow z-10">НОВОЕ</div>` : '';
+
+                card.innerHTML = `
+                    <div class="relative w-full h-72 bg-[#1b2838] overflow-hidden">
+                        <img src="${game.poster}" class="w-full h-full object-cover" onerror="this.src='user/frick/poster.png'">
+                        ${newBadge}
+                    </div>
+                    <div class="p-2 text-center bg-[#171a21]">
+                        <span class="text-xs font-bold text-white truncate block">${game.title}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            document.getElementById('library-count-text').textContent = `Всего игр: ${LibraryGames.length}`;
+        }
+
+        /* ========================================================================
+           5. РЕНДЕР ДРУЗЕЙ И ДОСТИЖЕНИЙ
+           ======================================================================== */
+        function initSidebarData() {
+            // Друзья
+            const friendsContainer = document.getElementById('friends-list');
+            friendsContainer.innerHTML = '';
+            FriendsData.forEach(friend => {
+                friendsContainer.innerHTML += `
+                    <div class="flex flex-col items-center cursor-pointer" title="${friend.name}">
+                        <img src="${friend.ava}" class="w-8 h-8 rounded border border-[#66c0f4] object-cover">
+                        <span class="text-[10px] text-[#8f98a0] mt-0.5">${friend.name}</span>
+                    </div>
+                `;
+            });
+
+            // Достижения
+            const achContainer = document.getElementById('achievements-list');
+            achContainer.innerHTML = '';
+            AchievementsData.forEach(ach => {
+                achContainer.innerHTML += `
+                    <div class="w-10 h-10 bg-[#212c3d] rounded border border-[#2a475e] overflow-hidden" title="${ach.title}">
+                        <img src="${ach.icon}" class="w-full h-full object-cover">
+                    </div>
+                `;
+            });
+        }
+
+        /* ========================================================================
+           6. ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+           ======================================================================== */
+        window.onload = () => {
+            loadMedia(0);
+            initSidebarData();
+        };
+    </script>
+</body>
+</html>

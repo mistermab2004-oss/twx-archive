@@ -6,13 +6,16 @@
     <title>НАШИ ШЕДЕВРЫ TWX</title>
     <link rel="icon" type="image/png" href="user/system/icon ara_ara.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { 'fredoka': ['Fredoka', 'sans-serif'] }
+                    fontFamily: { 
+                        'fredoka': ['Fredoka', 'sans-serif'],
+                        'handwriting': ['Caveat', 'cursive']
+                    }
                 }
             }
         }
@@ -69,6 +72,35 @@
             color: #ef4444;
         }
         @keyframes blink { 50% { opacity: 0; } }
+
+        /* Эффект линованной тетради для истории */
+        .notebook-paper {
+            background: repeating-linear-gradient(
+                transparent,
+                transparent 31px,
+                #991b1b 31px,
+                #991b1b 32px
+            );
+            line-height: 32px;
+        }
+
+        /* Анимация частиц для лайка и кубка */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            animation: floatUpAndFade 1.2s ease-out forwards;
+        }
+        @keyframes floatUpAndFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.5) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(calc(-50% + var(--dx)), calc(-50% - 100px)) scale(1.4) rotate(var(--rot));
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between relative">
@@ -95,8 +127,7 @@ const KatyaGallery = [
                     },
                     "history": {
                         "21/10/26": [
-                            { title: "Я всегда возвращаюсь... И в этот раз заберу твою душу." },
-                            { title: "Запчасти аниматроников пахли кровью и старой ржавчиной." }
+                            { text: "Я всегда возвращаюсь... И в этот раз заберу твою душу.\nЗапчасти аниматроников пахли кровью и старой ржавчиной." }
                         ]
                     }
                 }
@@ -136,7 +167,7 @@ const KatyaGallery = [
                     },
                     "history": {
                         "21/10/26": [
-                            { title: "Никого кроме нас. Только ты и я в этом пустом коде." }
+                            { text: "Никого кроме нас. Только ты и я в этом пустом коде." }
                         ]
                     }
                 }
@@ -198,7 +229,7 @@ const KatyaGallery = [
     <header class="sticky top-0 z-30 w-full pt-4 pb-6 px-4 md:px-12 pointer-events-none">
         <div class="stripe-banner"></div>
         
-        <!-- Верхняя панель: Музыкальный плеер + Кнопка "Главная" -->
+        <!-- Верхняя панель: Музыкальный плеер + Квадратик авторов + Поиск + Кнопка "Главная" -->
         <div class="max-w-7xl mx-auto relative z-40 flex flex-wrap justify-between items-center gap-3 mb-2 pointer-events-auto">
             <!-- Блок Музыки с автозапуском -->
             <div class="flex items-center space-x-2 bg-black/80 border-2 border-red-600/70 p-1.5 px-3 rounded-xl shadow-lg">
@@ -212,13 +243,20 @@ const KatyaGallery = [
                 </div>
             </div>
 
-            <!-- Поиск злодея -->
-            <div class="relative w-full sm:w-72">
-                <div class="flex items-center bg-black/90 border-2 border-red-600/70 rounded-xl px-3 py-2 shadow-lg backdrop-blur-md">
-                    <i class="fas fa-search text-red-500 mr-2"></i>
-                    <input type="text" id="artistSearchInput" placeholder="Найти злодея..." oninput="handleSearchInput(this.value)" class="bg-transparent text-white text-xs w-full focus:outline-none placeholder-red-400 font-bold">
+            <!-- Поиск злодея + Фиолетовый квадратик количества художников -->
+            <div class="flex items-center space-x-2 w-full sm:w-auto">
+                <div class="relative w-full sm:w-72">
+                    <div class="flex items-center bg-black/90 border-2 border-red-600/70 rounded-xl px-3 py-2 shadow-lg backdrop-blur-md">
+                        <i class="fas fa-search text-red-500 mr-2"></i>
+                        <input type="text" id="artistSearchInput" placeholder="Найти злодея..." oninput="handleSearchInput(this.value)" class="bg-transparent text-white text-xs w-full focus:outline-none placeholder-red-400 font-bold">
+                    </div>
+                    <div id="searchResultsDropdown" class="absolute left-0 right-0 mt-2 bg-gray-950/95 border-2 border-red-600 rounded-xl shadow-2xl max-h-60 overflow-y-auto z-50 hidden backdrop-blur-md divide-y divide-red-950"></div>
                 </div>
-                <div id="searchResultsDropdown" class="absolute left-0 right-0 mt-2 bg-gray-950/95 border-2 border-red-600 rounded-xl shadow-2xl max-h-60 overflow-y-auto z-50 hidden backdrop-blur-md divide-y divide-red-950"></div>
+
+                <!-- Фиолетовый квадратик со счетчиком основных авторов -->
+                <div title="Количество основных авторов" class="bg-purple-900/90 border-2 border-purple-500 text-yellow-300 font-black text-xs px-3 py-2 rounded-xl shadow-lg flex items-center justify-center shrink-0 h-[38px] min-w-[38px]">
+                    <span id="authorsCountDisplay">0</span>
+                </div>
             </div>
 
             <!-- Кнопка "Главная" ведет на index_zlo.html -->
@@ -233,7 +271,7 @@ const KatyaGallery = [
                 <i class="fas fa-chevron-left"></i>
             </button>
 
-            <!-- Блок с Аватаркой и Саб-аккаунтами -->
+            <!-- Блок с Аватаркой, Ником и Кубками -->
             <div class="flex items-center space-x-2 bg-black/70 p-2.5 rounded-2xl border-2 border-red-600/50 backdrop-blur-md min-w-[280px]">
                 
                 <button onclick="prevSubProfile()" class="w-7 h-7 bg-red-900 rounded-full flex items-center justify-center text-white hover:bg-red-700 transition-colors shadow cursor-pointer">
@@ -249,7 +287,16 @@ const KatyaGallery = [
                 </button>
 
                 <div class="flex flex-col justify-center min-h-[50px] overflow-hidden">
-                    <div id="mainAccountName" class="text-red-400 font-black text-sm md:text-base drop-shadow"></div>
+                    <div class="flex items-center space-x-1.5">
+                        <span id="mainAccountName" class="text-red-400 font-black text-sm md:text-base drop-shadow"></span>
+                        <!-- Значок кубка возле ника автора с всплывающим тултипом -->
+                        <div id="authorTrophyBadge" class="hidden relative group cursor-pointer">
+                            <span class="text-yellow-400 text-base animate-bounce">🏆</span>
+                            <div id="trophyTooltip" class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-black/95 text-yellow-300 border border-yellow-500/50 text-[10px] font-bold py-1 px-2 rounded-lg whitespace-nowrap shadow-xl z-50">
+                                Награды автора: 0 кубков
+                            </div>
+                        </div>
+                    </div>
                     <div id="subAccountName" class="text-red-300 font-bold text-xs mt-0.5 typing-cursor h-4"></div>
                 </div>
             </div>
@@ -290,14 +337,48 @@ const KatyaGallery = [
         <div id="artworks-grid" class="flex flex-col space-y-8"></div>
     </main>
 
-    <!-- Модальное окно просмотра шедевра -->
+    <!-- Модальное окно просмотра шедевра с навигацией и кнопками оценок -->
     <div id="fullsize-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-gray-950 border-4 border-red-600 rounded-3xl p-6 md:p-8 max-w-4xl w-full shadow-2xl relative flex flex-col items-center">
             <button onclick="closeFullSizeModal()" class="absolute top-4 right-4 w-10 h-10 bg-red-600 hover:bg-red-500 rounded-full font-bold text-white text-lg flex items-center justify-center cursor-pointer z-20 shadow-lg">✕</button>
-            <h3 id="fullsize-title" class="text-2xl font-black mb-1 text-center text-red-500 drop-shadow">Название</h3>
+            
+            <h3 id="fullsize-title" class="text-xl md:text-2xl font-black mb-1 text-center text-red-500 drop-shadow">Название</h3>
             <p id="fullsize-year" class="text-xs font-bold text-red-300 mb-4 bg-black/60 px-3 py-1 rounded-full border border-red-600/50">Дата: </p>
-            <div class="relative w-full flex flex-col items-center bg-black/85 border-[6px] border-red-600 rounded-[3rem] p-6 shadow-2xl">
-                <div id="fullsize-content-container" class="w-full flex items-center justify-center bg-black/50 rounded-2xl border-2 border-red-900 p-3 overflow-auto max-h-[65vh]"></div>
+            
+            <div class="relative w-full flex flex-col items-center bg-black/85 border-[6px] border-red-600 rounded-[2.5rem] p-4 md:p-6 shadow-2xl">
+                <!-- Контейнер для Контента (Картинка / История) -->
+                <div id="fullsize-content-container" class="w-full flex items-center justify-center bg-black/50 rounded-2xl border-2 border-red-900 p-3 overflow-auto max-h-[55vh]"></div>
+
+                <!-- Нижняя панель: Стрелка Лево + Реакции (Сердце, Дизлайк, Кубок) + Стрелка Право -->
+                <div class="w-full flex items-center justify-between mt-5 px-2 md:px-6">
+                    <!-- Стрелка Назад (Левая) -->
+                    <button id="modalPrevBtn" onclick="navigateModal(-1)" class="w-12 h-12 bg-black border-2 border-red-600 rounded-full flex items-center justify-center text-red-500 hover:bg-red-950 hover:scale-110 active:scale-95 transition-all shadow-lg cursor-pointer">
+                        <i class="fas fa-arrow-left text-lg"></i>
+                    </button>
+
+                    <!-- Панель трёх кнопок оценок по центру -->
+                    <div class="flex items-center space-x-3 md:space-x-6 bg-black/90 border-2 border-red-700/80 px-4 py-2 rounded-2xl shadow-xl">
+                        <!-- Кнопка Лайк (Сердечко) -->
+                        <button id="likeBtn" onclick="toggleReaction('like', event)" class="flex items-center space-x-1.5 text-red-500 hover:scale-125 transition-all cursor-pointer text-xl p-1">
+                            <span id="likeIcon">🤍</span>
+                        </button>
+
+                        <!-- Кнопка Дизлайк (Какашка) -->
+                        <button id="dislikeBtn" onclick="toggleReaction('dislike', event)" class="flex items-center space-x-1.5 text-gray-400 hover:scale-125 transition-all cursor-pointer text-xl p-1">
+                            <span id="dislikeIcon">💩</span>
+                        </button>
+
+                        <!-- Кнопка Награды (Приз зрительских симпатий / Кубок) -->
+                        <button id="cupBtn" onclick="awardTrophy(event)" class="flex items-center space-x-1.5 text-yellow-500 hover:scale-125 transition-all cursor-pointer text-xl p-1" title="Наградить автора кубком!">
+                            <span>🏆</span>
+                        </button>
+                    </div>
+
+                    <!-- Стрелка Вперед (Правая) -->
+                    <button id="modalNextBtn" onclick="navigateModal(1)" class="w-12 h-12 bg-black border-2 border-red-600 rounded-full flex items-center justify-center text-red-500 hover:bg-red-950 hover:scale-110 active:scale-95 transition-all shadow-lg cursor-pointer">
+                        <i class="fas fa-arrow-right text-lg"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -315,6 +396,7 @@ const KatyaGallery = [
     <script>
         const monthNames = {'01':'Января','02':'Февраля','03':'Марта','04':'Апреля','05':'Мая','06':'Июня','07':'Июля','08':'Августа','09':'Сентября','10':'Октября','11':'Ноября','12':'Декабря'};
         const modeTitles = {'all':'НАШИ ШЕДЕВРЫ TWX','classic':'КЛАССИКА','plagiarist':'ПЛАГИАТ','history':'ИСТОРИЯ'};
+        const modeCategoryNames = {'classic':'Классика','plagiarist':'Плагиат','history':'История'};
         
         let dbItems = [];
         let currentAccountIdx = 0;
@@ -322,8 +404,10 @@ const KatyaGallery = [
         let currentMode = 'all';
         let selectedFilterDate = null;
         let currentDisplayedItems = [];
+        let currentModalIdx = 0;
         let typingTimer;
 
+        // Покраска и анимация элементов
         function updateMusicUI(playing) {
             const btnText = document.getElementById('musicText');
             const btnIcon = document.getElementById('musicIcon');
@@ -339,11 +423,7 @@ const KatyaGallery = [
         function toggleMusic() {
             const audio = document.getElementById('bgMusic');
             if (audio.paused) {
-                audio.play().then(() => {
-                    updateMusicUI(true);
-                }).catch(err => {
-                    console.log("Ошибка воспроизведения:", err);
-                });
+                audio.play().then(() => updateMusicUI(true)).catch(err => console.log("Ошибка воспроизведения:", err));
             } else {
                 audio.pause();
                 updateMusicUI(false);
@@ -353,6 +433,12 @@ const KatyaGallery = [
         function updateVolume(value) {
             const audio = document.getElementById('bgMusic');
             if (audio) audio.volume = parseFloat(value);
+        }
+
+        // Обновление фиолетового квадратика со счетчиком главных авторов
+        function updateAuthorsCounter() {
+            const el = document.getElementById('authorsCountDisplay');
+            if(el) el.textContent = KatyaGallery.length;
         }
 
         // Поиск злодея
@@ -411,15 +497,18 @@ const KatyaGallery = [
         }
 
         document.addEventListener('click', (e) => {
-            const searchContainer = document.getElementById('artistSearchInput').closest('div').parentNode;
-            if (!searchContainer.contains(e.target)) {
+            const searchInput = document.getElementById('artistSearchInput');
+            if (searchInput && !searchInput.parentNode.contains(e.target)) {
                 document.getElementById('searchResultsDropdown').classList.add('hidden');
             }
         });
 
         function buildInternalDatabase() {
             dbItems = [];
+            
             KatyaGallery.forEach((acc, aIdx) => {
+                let categoryCounters = {}; // Подсчет нумерации по категориям
+                
                 acc.subProfiles.forEach((sub, sIdx) => {
                     for (let mode in sub.modes) {
                         for (let dateRaw in sub.modes[mode]) {
@@ -427,15 +516,23 @@ const KatyaGallery = [
                             let dateObj = { raw: dateRaw, day: parts[0], month: parts[1], year: (parts[2].length===2?"20"+parts[2]:parts[2]) };
                             
                             sub.modes[mode][dateRaw].forEach(fileData => {
-                                let item = { aIdx, sIdx, mode, dateObj, type: mode === 'history' ? 'history' : 'image' };
+                                if(!categoryCounters[mode]) categoryCounters[mode] = 0;
+                                categoryCounters[mode]++;
+                                let num = categoryCounters[mode];
+
+                                let item = { aIdx, sIdx, mode, dateObj, type: mode === 'history' ? 'history' : 'image', num };
                                 
+                                // Позиционирование названий: Работа [Категория] [Имя] №X
+                                const authorName = sub.subName ? sub.subName : acc.accountName;
                                 if (item.type === 'history') {
-                                    item.title = fileData.title;
+                                    item.title = `Запись Истории ${authorName} №${num}`;
                                     item.text = fileData.text;
                                 } else {
-                                    item.title = fileData.split('/').pop().split('.')[0]; 
+                                    let catName = modeCategoryNames[mode] || 'Работа';
+                                    item.title = `Работа ${catName} ${authorName} №${num}`;
                                     item.image = `user/zlo/art/${fileData}`;
                                 }
+                                item.uniqueId = `${aIdx}_${sIdx}_${mode}_${num}`;
                                 dbItems.push(item);
                             });
                         }
@@ -463,10 +560,12 @@ const KatyaGallery = [
 
         function onUserInteraction() {
             const audio = document.getElementById('bgMusic');
-            audio.play().then(() => {
-                updateMusicUI(true);
-                removeInteractionListeners();
-            }).catch(e => console.log(e));
+            if (audio) {
+                audio.play().then(() => {
+                    updateMusicUI(true);
+                    removeInteractionListeners();
+                }).catch(e => console.log(e));
+            }
         }
 
         function addInteractionListeners() {
@@ -483,6 +582,7 @@ const KatyaGallery = [
 
         function initPage() {
             buildInternalDatabase();
+            updateAuthorsCounter();
             if(KatyaGallery.length > 0) switchAccount(0);
             tryPlayAudio();
         }
@@ -542,6 +642,20 @@ const KatyaGallery = [
             triggerAvatarAnimationAndSwitch(); 
         }
 
+        function updateAuthorTrophyUI() {
+            const authorKey = `trophies_author_${currentAccountIdx}`;
+            const trophyCount = parseInt(localStorage.getItem(authorKey) || '0');
+            const badge = document.getElementById('authorTrophyBadge');
+            const tooltip = document.getElementById('trophyTooltip');
+            
+            if (trophyCount > 0) {
+                badge.classList.remove('hidden');
+                tooltip.textContent = `Награды автора: ${trophyCount} кубков`;
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
         function switchSubProfile(idx) {
             currentSubProfileIdx = parseInt(idx);
             selectedFilterDate = null;
@@ -558,6 +672,7 @@ const KatyaGallery = [
             let desc = sub.subDir === "" ? "ГЛАВНЫЙ ЗЛОДЕЙ" : "АЛЬТЕРНАТИВНАЯ ФОРМА";
             typeWriterEffect(desc);
 
+            updateAuthorTrophyUI();
             renderGrid();
         }
 
@@ -621,26 +736,162 @@ const KatyaGallery = [
 
             if (item.type === 'history') {
                 card.className = "bg-gray-950 rounded-2xl shadow-xl overflow-hidden border-4 border-red-800 flex flex-col justify-between p-4 transform hover:-translate-y-1 transition-all duration-300 relative group cursor-pointer aspect-square text-red-200";
-                card.innerHTML = `<div class="w-full h-full overflow-y-auto font-bold text-sm p-2" onclick="openFullSizeModal(${idx})"><p>${item.title}</p></div><div class="mt-2 text-[10px] text-red-400 flex justify-between items-center"><span class="bg-red-900 text-white px-2 py-0.5 rounded font-bold">${dateStr}</span></div>`;
+                card.innerHTML = `
+                    <div class="w-full h-full overflow-y-auto font-bold text-sm p-2 flex flex-col" onclick="openFullSizeModal(${idx})">
+                        <span class="text-xs text-red-400 font-black mb-1">✍️ ${item.title}</span>
+                        <p class="text-xs font-handwriting text-red-200 line-clamp-4 leading-snug">${item.text}</p>
+                    </div>
+                    <div class="mt-2 text-[10px] text-red-400 flex justify-between items-center border-t border-red-900/50 pt-2">
+                        <span class="bg-red-900 text-white px-2 py-0.5 rounded font-bold">${dateStr}</span>
+                    </div>
+                `;
             } else {
                 card.className = "bg-black/95 rounded-2xl shadow-xl overflow-hidden border-4 border-red-800 flex flex-col justify-between transform hover:-translate-y-1 transition-all relative group cursor-pointer aspect-square";
-                card.innerHTML = `<div class="flex-grow overflow-hidden bg-gray-900 relative" onclick="openFullSizeModal(${idx})"><img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" onerror="this.src='https://placehold.co/300x200/220000/ff0000?text=Файл+не+найден'"><div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-red-400 font-bold text-sm">Осмотреть 🔍</div></div><div class="p-3 bg-red-950 text-white font-bold text-xs truncate flex items-center justify-between px-4"><span class="truncate">${item.title}</span><span class="text-[10px] bg-red-700 px-2 py-0.5 rounded font-bold">${dateStr}</span></div>`;
+                card.innerHTML = `
+                    <div class="flex-grow overflow-hidden bg-gray-900 relative" onclick="openFullSizeModal(${idx})">
+                        <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" onerror="this.src='https://placehold.co/300x200/220000/ff0000?text=Файл+не+найден'">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-red-400 font-bold text-sm">Осмотреть 🔍</div>
+                    </div>
+                    <div class="p-3 bg-red-950 text-white font-bold text-xs truncate flex items-center justify-between px-4">
+                        <span class="truncate">${item.title}</span>
+                        <span class="text-[10px] bg-red-700 px-2 py-0.5 rounded font-bold">${dateStr}</span>
+                    </div>
+                `;
             }
             return card;
         }
 
+        // =======================================================================
+        // 🔮 ЛОГИКА ПРОСМОТРА СТРЕЛОК, ЛАЙКОВ, ДИЗЛАЙКОВ И КУБКА 🔮
+        // =======================================================================
+        
         function openFullSizeModal(idx) {
-            let item = currentDisplayedItems[idx];
-            document.getElementById('fullsize-title').textContent = item.title;
-            document.getElementById('fullsize-year').textContent = `📅 Дата: ${item.dateObj.day} ${monthNames[item.dateObj.month]} ${item.dateObj.year} г.`;
-            const container = document.getElementById('fullsize-content-container');
-            if (item.type === 'history') {
-                container.innerHTML = `<div class="text-red-200 p-4 font-bold text-base w-full max-h-[50vh] overflow-y-auto whitespace-pre-wrap">${item.text}</div>`;
-            } else {
-                container.innerHTML = `<img src="${item.image}" alt="Полный размер" class="max-w-full max-h-[60vh] w-auto h-auto object-contain rounded-xl shadow-2xl">`;
-            }
+            currentModalIdx = idx;
+            updateModalContent();
             document.getElementById('fullsize-modal').classList.add('flex');
             document.getElementById('fullsize-modal').classList.remove('hidden');
+        }
+
+        function updateModalContent() {
+            let item = currentDisplayedItems[currentModalIdx];
+            if (!item) return;
+
+            document.getElementById('fullsize-title').textContent = item.title;
+            document.getElementById('fullsize-year').textContent = `📅 Дата: ${item.dateObj.day} ${monthNames[item.dateObj.month]} ${item.dateObj.year} г.`;
+            
+            const container = document.getElementById('fullsize-content-container');
+            if (item.type === 'history') {
+                // Рукописный стиль тетради с прочерками
+                container.innerHTML = `
+                    <div class="notebook-paper text-red-100 font-handwriting text-xl md:text-2xl w-full max-h-[50vh] overflow-y-auto p-4 leading-[32px] tracking-wide">
+                        <span class="text-2xl mr-2">✍️</span>${item.text}
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `<img src="${item.image}" alt="${item.title}" class="max-w-full max-h-[50vh] w-auto h-auto object-contain rounded-xl shadow-2xl">`;
+            }
+
+            // Обновление состояния стрелочек
+            const prevBtn = document.getElementById('modalPrevBtn');
+            const nextBtn = document.getElementById('modalNextBtn');
+
+            if (currentModalIdx === 0) {
+                prevBtn.classList.add('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
+                prevBtn.classList.remove('hover:scale-110');
+            } else {
+                prevBtn.classList.remove('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
+                prevBtn.classList.add('hover:scale-110');
+            }
+
+            if (currentModalIdx === currentDisplayedItems.length - 1) {
+                nextBtn.classList.add('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
+                nextBtn.classList.remove('hover:scale-110');
+            } else {
+                nextBtn.classList.remove('opacity-40', 'cursor-not-allowed', 'pointer-events-none');
+                nextBtn.classList.add('hover:scale-110');
+            }
+
+            // Обновление кнопок реакций для текущей работы
+            updateReactionsUI();
+        }
+
+        function navigateModal(direction) {
+            let newIdx = currentModalIdx + direction;
+            if (newIdx >= 0 && newIdx < currentDisplayedItems.length) {
+                currentModalIdx = newIdx;
+                updateModalContent();
+            }
+        }
+
+        function updateReactionsUI() {
+            let item = currentDisplayedItems[currentModalIdx];
+            if (!item) return;
+
+            const reactKey = `react_${item.uniqueId}`;
+            const userReaction = localStorage.getItem(reactKey); // 'like', 'dislike', or null
+
+            const likeIcon = document.getElementById('likeIcon');
+            const dislikeIcon = document.getElementById('dislikeIcon');
+
+            if (userReaction === 'like') {
+                likeIcon.textContent = '❤️';
+                dislikeIcon.textContent = '💩';
+            } else if (userReaction === 'dislike') {
+                likeIcon.textContent = '🤍';
+                dislikeIcon.textContent = '💩'; // Дизлайк активно проставлен
+            } else {
+                likeIcon.textContent = '🤍';
+                dislikeIcon.textContent = '💩';
+            }
+        }
+
+        function toggleReaction(type, event) {
+            let item = currentDisplayedItems[currentModalIdx];
+            if (!item) return;
+
+            const reactKey = `react_${item.uniqueId}`;
+            const currentReaction = localStorage.getItem(reactKey);
+
+            if (currentReaction === type) {
+                localStorage.removeItem(reactKey);
+            } else {
+                localStorage.setItem(reactKey, type);
+                if (type === 'like') {
+                    spawnParticles(event.clientX, event.clientY, ['❤️', '💖', '✨', '💕']);
+                }
+            }
+            updateReactionsUI();
+        }
+
+        function awardTrophy(event) {
+            const authorKey = `trophies_author_${currentAccountIdx}`;
+            let count = parseInt(localStorage.getItem(authorKey) || '0');
+            count++;
+            localStorage.setItem(authorKey, count);
+
+            spawnParticles(event.clientX, event.clientY, ['🏆', '⭐', '✨', '🎉', '🌟']);
+            updateAuthorTrophyUI();
+        }
+
+        // Анимация вылетающих звёзд / сердечек / блёсток
+        function spawnParticles(x, y, symbols) {
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                
+                const dx = (Math.random() - 0.5) * 160 + 'px';
+                const rot = (Math.random() - 0.5) * 360 + 'deg';
+                
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                particle.style.setProperty('--dx', dx);
+                particle.style.setProperty('--rot', rot);
+                particle.style.fontSize = `${16 + Math.random() * 16}px`;
+
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1200);
+            }
         }
 
         function closeFullSizeModal() { 

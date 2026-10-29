@@ -100,7 +100,7 @@
 
         <!-- ==================== 1. СТРАНИЦА МАГАЗИНА (STORE) ==================== -->
         <div id="page-store" class="block">
-<!-- Заголовок игры -->
+            <!-- Заголовок игры -->
             <div class="flex justify-between items-end mb-4">
                 <h1 class="text-3xl font-normal text-white tracking-wide">Five Nights at Frickbear's 3 + Four Layers Down</h1>
             </div>
@@ -252,24 +252,25 @@
                     </div>
 
                     <!-- Рейтинг Контента (Возрастной меткой) -->
-<div class="bg-[#121e2d] p-3 rounded border border-[#2a475e] space-y-2">
-    <span class="text-[#8f98a0] font-bold block">Справочник по рейтингу:</span>
-    <div class="flex items-center space-x-4">
-        <!-- Большой квадратный блок 16+ -->
-        <div class="w-20 h-20 bg-black border-2 border-[#363a43] flex flex-col items-center justify-center text-white rounded flex-shrink-0 shadow-lg">
-            <span class="text-2xl font-black text-red-500 tracking-wider">16+</span>
-        </div>
-        <!-- Список особенностей -->
-        <div class="text-[11px] text-yellow-500 space-y-0.5">
-            <p>• Мультяшное насилие</p>
-            <p>• Анимированное кровопролитие</p>
-            <p>• Употребление алкоголя и табака</p>
-            <p>• Намекающие темы и язык</p>
-            <p>• Забавные выходки</p>
-            <p>• Имитация азартных игр</p>
-        </div>
-    </div>
-</div>
+                    <div class="bg-[#121e2d] p-3 rounded border border-[#2a475e] space-y-2">
+                        <span class="text-[#8f98a0] font-bold block">Справочник по рейтингу:</span>
+                        <div class="flex items-center space-x-4">
+                            <!-- Большой квадратный блок 16+ -->
+                            <div class="w-20 h-20 bg-black border-2 border-[#363a43] flex flex-col items-center justify-center text-white rounded flex-shrink-0 shadow-lg">
+                                <span class="text-2xl font-black text-red-500 tracking-wider">16+</span>
+                            </div>
+                            <!-- Список особенностей -->
+                            <div class="text-[11px] text-yellow-500 space-y-0.5">
+                                <p>• Мультяшное насилие</p>
+                                <p>• Анимированное кровопролитие</p>
+                                <p>• Употребление алкоголя и табака</p>
+                                <p>• Намекающие темы и язык</p>
+                                <p>• Забавные выходки</p>
+                                <p>• Имитация азартных игр</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -325,7 +326,7 @@
     <!-- ==================== JAVASCRIPT ДАННЫЕ И ЛОГИКА ==================== -->
     <script>
         /* ========================================================================
-           1. ДАННЫЕ И МАССИВЫДЛЯ РЕДАКТИРОВАНИЯ (Ссылки, Авы, Медиа, Библиотека)
+           1. ДАННЫЕ И МАССИВЫ ДЛЯ РЕДАКТИРОВАНИЯ (Ссылки, Авы, Медиа, Библиотека)
            ======================================================================== */
 
         // 🎬 МЕДИАПЛЕЕР ИГРЫ (Трейлеры и Скриншоты)
@@ -358,7 +359,7 @@
             { title: "Выживший", icon: "user/ava/f 4.png" }
         ];
 
-       let LibraryGames = [
+        let LibraryGames = [
             { title: "Doki Doki Literature Club!", poster: "https://i.pinimg.com/736x/bc/bc/9c/bcbc9c8fb10757f7dc9377948554e8c1.jpg", isNew: false, link: "https://store.steampowered.com/app/698780/Doki_Doki_Literature_Club/" },
             { title: "Bendy and the Ink Machine", poster: "https://avatars.mds.yandex.net/get-mpic/20891650/pica33f1381b7c83c7198d61c0299ff44ca/orig", isNew: false, link: "https://store.steampowered.com/app/622650/Bendy_and_the_Ink_Machine/" },
             { title: "MiSide", poster: "https://img.byrutgame.org/uploads/posts/2026-09/ae5e27b4b1_miside.webp", isNew: false, link: "https://store.steampowered.com/app/2527500/MiSide/" },
@@ -430,7 +431,6 @@
             const videoElem = document.getElementById('main-video');
             const imgElem = document.getElementById('main-image');
 
-            // Очищаем предыдущий таймер смены картинок, если он был
             if (mediaTimer) {
                 clearTimeout(mediaTimer);
                 mediaTimer = null;
@@ -447,7 +447,6 @@
                 imgElem.classList.remove('hidden');
                 imgElem.src = media.src;
 
-                // Если это картинка, включаем таймер ровно на 15 секунд для перехода к следующей
                 mediaTimer = setTimeout(() => {
                     playNextMedia();
                 }, 15000);
@@ -473,24 +472,24 @@
             });
         }
 
+        /* ========================================================================
+           4. СКАЧИВАНИЕ И ДОБАВЛЕНИЕ В БИБЛИОТЕКУ
+           ======================================================================== */
         function downloadGame() {
-    // Открываем ссылку на Google Диск в новой вкладке
-    window.open('https://drive.google.com/file/d/1H5uHCjuwJXMlC1grgfltJqfmdQVHYWLS/view?usp=drive_link', '_blank');
+            window.open('https://drive.google.com/file/d/1H5uHCjuwJXMlC1grgfltJqfmdQVHYWLS/view?usp=drive_link', '_blank');
 
-    // Добавляем игру в начало библиотеки с плашкой «НОВОЕ» и ссылкой на магазин
-    const exists = LibraryGames.some(g => g.title.includes("Frickbear's 3"));
-    if (!exists) {
-        LibraryGames.unshift({
-            title: "Five Nights at Frickbear's 3",
-            poster: "user/frick/poster.png",
-            isNew: true,
-            link: "#store"
-        });
-    }
+            const exists = LibraryGames.some(g => g.title.includes("Frickbear's 3"));
+            if (!exists) {
+                LibraryGames.unshift({
+                    title: "Five Nights at Frickbear's 3",
+                    poster: "user/frick/poster.png",
+                    isNew: true,
+                    link: "#store"
+                });
+            }
 
-    // Переключаем вкладку в библиотеку
-    switchTab('library');
-}
+            switchTab('library');
+        }
 
         function renderLibrary() {
             const grid = document.getElementById('library-grid');
@@ -499,7 +498,6 @@
                 const card = document.createElement('div');
                 card.className = "poster-card relative bg-[#121e2d] rounded border border-[#2a475e] overflow-hidden flex flex-col justify-between cursor-pointer";
                 
-                // Обработка клика: если это наша игра или относительная ссылка, переключаем на магазин, иначе открываем внешнюю ссылку в новой вкладке
                 card.onclick = () => {
                     if (game.link === '#store') {
                         switchTab('store');
@@ -525,31 +523,21 @@
         }
 
         /* ========================================================================
-           5. РЕНДЕР ДРУЗЕЙ И ДОСТИЖЕНИЙ
+           5. РЕНДЕР ДРУЗЕЙ
            ======================================================================== */
         function initSidebarData() {
-            // Друзья
             const friendsContainer = document.getElementById('friends-list');
-            friendsContainer.innerHTML = '';
-            FriendsData.forEach(friend => {
-                friendsContainer.innerHTML += `
-                    <div class="flex flex-col items-center cursor-pointer" title="${friend.name}">
-                        <img src="${friend.ava}" class="w-8 h-8 rounded border border-[#66c0f4] object-cover">
-                        <span class="text-[10px] text-[#8f98a0] mt-0.5">${friend.name}</span>
-                    </div>
-                `;
-            });
-
-            // Достижения
-            const achContainer = document.getElementById('achievements-list');
-            achContainer.innerHTML = '';
-            AchievementsData.forEach(ach => {
-                achContainer.innerHTML += `
-                    <div class="w-10 h-10 bg-[#212c3d] rounded border border-[#2a475e] overflow-hidden" title="${ach.title}">
-                        <img src="${ach.icon}" class="w-full h-full object-cover">
-                    </div>
-                `;
-            });
+            if (friendsContainer) {
+                friendsContainer.innerHTML = '';
+                FriendsData.forEach(friend => {
+                    friendsContainer.innerHTML += `
+                        <div class="flex flex-col items-center cursor-pointer" title="${friend.name}">
+                            <img src="${friend.ava}" class="w-8 h-8 rounded border border-[#66c0f4] object-cover">
+                            <span class="text-[10px] text-[#8f98a0] mt-0.5">${friend.name}</span>
+                        </div>
+                    `;
+                });
+            }
         }
 
         /* ========================================================================

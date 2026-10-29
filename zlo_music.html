@@ -65,6 +65,28 @@
             object-fit: contain;
             pointer-events: none;
         }
+
+        /* Анимация выпускания розовых звёздочек */
+        @keyframes starParticle {
+            0% {
+                transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(-50% + var(--tw-tx)), calc(-50% + var(--tw-ty))) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        .star-burst-particle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            pointer-events: none;
+            color: #ec4899;
+            font-size: 14px;
+            animation: starParticle 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+            z-index: 40;
+        }
     </style>
 </head>
 <body class="dot-pattern h-screen w-screen flex flex-col justify-between p-4 sm:p-6 relative">
@@ -254,6 +276,20 @@
             {
                 png: "user/system/gog/dancer1_stop.png",
                 gif: "user/system/gog/dancer1_dance.gif"
+            },
+            {
+                png: "user/system/gog/dancer10_stop.png",
+                gif: "user/system/gog/dancer10_dance.gif"
+            },
+,
+            {
+                png: "user/system/gog/dancer8_stop.png",
+                gif: "user/system/gog/dancer8_dance.gif"
+            },
+,
+            {
+                png: "user/system/gog/dancer9_stop.png",
+                gif: "user/system/gog/dancer9_dance.gif"
             }
         ];
     </script>
@@ -310,9 +346,15 @@
                     </div>
 
                     <div class="flex flex-col items-center sm:items-start text-center sm:text-left space-y-3 flex-grow">
-                        <h1 id="song-title" class="text-3xl sm:text-4xl font-extrabold text-red-500 drop-shadow-md tracking-wide">
-                            НАЗВАНИЕ ПЕСНИ
-                        </h1>
+                        <!-- Название песни + Звёздочка Лайка -->
+                        <div class="flex items-center justify-center sm:justify-start space-x-3 w-full">
+                            <h1 id="song-title" class="text-3xl sm:text-4xl font-extrabold text-red-500 drop-shadow-md tracking-wide">
+                                НАЗВАНИЕ ПЕСНИ
+                            </h1>
+                            <button id="btn-star-like" onclick="toggleLike(event)" class="relative focus:outline-none transition-transform hover:scale-125 cursor-pointer text-2xl sm:text-3xl" title="Поставить лайк">
+                                <i id="star-icon" class="fa-regular fa-star text-pink-400"></i>
+                            </button>
+                        </div>
                         <div class="border-2 border-red-600 bg-black/50 backdrop-blur px-4 py-1.5 rounded-lg text-sm font-semibold text-red-300">
                             <span id="song-source">ИСТОЧНИК</span>
                         </div>
@@ -322,12 +364,17 @@
                     </div>
                 </div>
 
-                <!-- Нижние кнопки: Повтор, Справка и кнопка Лузеры -->
+                <!-- Нижние кнопки: Повтор, Скачать, Справка и кнопка Лузеры -->
                 <div class="flex items-center justify-between pt-2">
                     <div class="flex items-center space-x-3">
                         <button id="btn-loop-one" onclick="toggleLoopOne()" class="w-12 h-12 bg-black border-2 border-red-700 rounded-xl flex items-center justify-center text-white hover:bg-red-950 cursor-pointer shadow transition-all" title="Повтор трека">
                             <i class="fa-solid fa-repeat text-lg text-red-400"></i>
                         </button>
+                        <!-- Вторая кнопка: Скачать -->
+                        <button id="btn-download" onclick="downloadCurrentTrack()" class="w-12 h-12 bg-black border-2 border-red-700 rounded-xl flex items-center justify-center text-white hover:bg-red-600 hover:border-red-500 active:bg-red-700 cursor-pointer shadow transition-all group" title="Скачать композицию">
+                            <i class="fa-solid fa-download text-lg text-black group-hover:text-white transition-colors"></i>
+                        </button>
+                        <!-- Третья кнопка: Справка -->
                         <button id="btn-help" onclick="openHelpModal()" class="w-12 h-12 bg-red-900 border-2 border-red-500 rounded-xl flex items-center justify-center text-white font-extrabold text-xl hover:bg-red-800 cursor-pointer shadow transition-all" title="Справка">
                             <i class="fa-solid fa-question"></i>
                         </button>
@@ -372,7 +419,7 @@
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО СПРАВКИ -->
+    <!-- МОДАЛЬНОЕ ОКНО СПРАВКИ (ОБНОВЛЁННОЕ) -->
     <div id="help-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
         <div class="bg-gray-950 border-4 border-red-600 rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl relative overflow-hidden">
             <div class="bg-red-950 p-4 px-6 border-b-2 border-red-600 flex justify-between items-center">
@@ -382,6 +429,26 @@
             <div class="p-6 overflow-y-auto custom-scroll space-y-4 text-red-200 text-sm">
                 <p>Добро пожаловать в аудио-архив злодеев. Здесь собраны мрачные композиции и темы персонажей игр.</p>
                 <p>Используйте стрелочки для переключения профилей злодеев, управляйте плейлистом и наслаждайтесь атмосферой.</p>
+                
+                <hr class="border-red-900 border">
+
+                <div class="space-y-3 pt-2">
+                    <div class="flex items-start space-x-3">
+                        <i class="fa-solid fa-download text-red-500 text-lg mt-1 flex-shrink-0"></i>
+                        <div>
+                            <span class="font-bold text-red-400 uppercase">Кнопка «Скачать» (вторая кнопка):</span>
+                            <p class="text-xs text-red-300 mt-0.5">Позволяет сохранить текущую воспроизводимую композицию прямо на ваше устройство. Файл будет автоматически сохранён с названием, соответствующим названию трека, а не исходному файлу сервера.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-3">
+                        <i class="fa-solid fa-star text-pink-500 text-lg mt-1 flex-shrink-0"></i>
+                        <div>
+                            <span class="font-bold text-pink-400 uppercase">Кнопка «Звёздочка Лайк»:</span>
+                            <p class="text-xs text-red-300 mt-0.5">Нажмите на звёздочку рядом с названием трека, чтобы отдать ему свой голос! При прожатии звёздочка заполняется ярким розовым цветом и выпускает волшебный салют из мелких звёзд. Ваши реакции надежно сохраняются в системе браузера на вашем устройстве и не сбрасываются при перезагрузке.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="bg-red-950 p-3 px-6 border-t border-red-800 text-center">
                 <button onclick="closeHelpModal()" class="bg-red-700 hover:bg-red-600 text-white font-black px-6 py-2 rounded-xl uppercase text-xs cursor-pointer">Закрыть</button>
@@ -389,7 +456,7 @@
         </div>
     </div>
 
-    <!-- СКРИПТЫ ПЛЕЕРА -->
+    <!-- СКРИПТЫ ПЛЕЕРА И ЛОГИКИ -->
     <script>
         let currentProfileIndex = 0;
         let currentTrackIndex = 0;
@@ -489,6 +556,7 @@
             audio.src = track.file;
             playMusic();
             renderPlaylist();
+            updateLikeButtonState();
         }
 
         function playMusic() {
@@ -569,6 +637,77 @@
             const imgEl = document.getElementById('dancer-avatar');
             const dancer = DancersData[currentDancerIndex];
             imgEl.src = isPlaying ? dancer.gif : dancer.png;
+        }
+
+        /* =======================================================================
+        ⭐ СИСТЕМА ЛАЙКОВ И СКАЧИВАНИЯ С МЕМОРИАЛИЗАЦИЕЙ (LOCALSTORAGE) ⭐
+        ======================================================================== */
+
+        function getTrackKey() {
+            const track = ProfilesData[activePlayingProfileIndex].playlist[currentTrackIndex];
+            return `zlo_like_${track.title}_${track.author}`;
+        }
+
+        function updateLikeButtonState() {
+            const starIcon = document.getElementById('star-icon');
+            const key = getTrackKey();
+            const isLiked = localStorage.getItem(key) === 'true';
+
+            if (isLiked) {
+                starIcon.className = "fa-solid fa-star text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.8)]";
+            } else {
+                starIcon.className = "fa-regular fa-star text-pink-400 hover:text-pink-300";
+            }
+        }
+
+        function toggleLike(e) {
+            const key = getTrackKey();
+            const currentState = localStorage.getItem(key) === 'true';
+            const newState = !currentState;
+            
+            localStorage.setItem(key, newState ? 'true' : 'false');
+            updateLikeButtonState();
+
+            if (newState) {
+                triggerStarAnimation(e.currentTarget);
+            }
+        }
+
+        function triggerStarAnimation(btn) {
+            const numParticles = 8;
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('i');
+                particle.className = 'fa-solid fa-star star-burst-particle';
+                
+                const angle = (i / numParticles) * (2 * Math.PI);
+                const distance = 40 + Math.random() * 25;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+
+                particle.style.setProperty('--tw-tx', `${tx}px`);
+                particle.style.setProperty('--tw-ty', `${ty}px`);
+
+                btn.appendChild(particle);
+
+                setTimeout(() => {
+                    particle.remove();
+                }, 600);
+            }
+        }
+
+        function downloadCurrentTrack() {
+            const track = ProfilesData[activePlayingProfileIndex].playlist[currentTrackIndex];
+            if (!track || !track.file) return;
+
+            const fileUrl = track.file;
+            const fileName = `${track.title}.mp3`;
+
+            const link = document.createElement('a');
+            link.href = fileUrl;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>

@@ -80,6 +80,28 @@
         body.rickroll-active #profile-name {
             color: #4ade80 !important;
         }
+
+        /* Анимация для лайков-звездочек */
+        @keyframes starBurst {
+            0% { transform: scale(0.5); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .star-animated {
+            animation: starBurst 0.4s ease-in-out;
+        }
+        @keyframes particleFly {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+        }
+        .star-particle {
+            position: absolute;
+            pointer-events: none;
+            color: #facc15;
+            font-size: 12px;
+            animation: particleFly 0.6s ease-out forwards;
+            z-index: 20;
+        }
     </style>
 </head>
 <body class="dot-pattern h-screen w-screen flex flex-col justify-between p-4 sm:p-6 relative">
@@ -185,6 +207,13 @@
                         source: "",
                         file: "user/music/play/mab/psy.mp3",
                         cover: "https://avatars.yandex.net/get-music-content/2424959/2ac98e63.a.571465-2/m1000x1000"
+                    },
+                    {
+                        title: "How to Train Your Dragon - Main Theme",
+                        author: "Джон Пауэлл",
+                        source: "Мультфильм: Как Приручить Дракона",
+                        file: "user/music/play/mab/dragon.mp3",
+                        cover: "https://avatars.yandex.net/get-music-content/49707/4dbc8e2d.a.3259224-1/m1000x1000"
                     },
                     {
                         title: "День Гнева",
@@ -299,11 +328,25 @@
                         cover: "https://cdn-images.dzcdn.net/images/cover/c7c505974928001c6b35ed89009205b8/1000x1000.jpg"
                     },
                     {
+                        title: "Second Trumpet",
+                        author: "ProjectMoon",
+                        source: "Игра: Lobotomy Corporation",
+                        file: "user/music/play/mab/seco.mp3",
+                        cover: "https://i1.sndcdn.com/artworks-000413771604-nn7n00-t1080x1080.jpg"
+                    },
+                    {
                         title: "Close to Me",
                         author: "Subrepulse",
                         source: "Игра: Just Shapes & Beats",
                         file: "user/music/play/mab/me.mp3",
                         cover: "https://i.ytimg.com/vi/7nYpBdH3g9M/maxresdefault.jpg"
+                    },
+                    {
+                        title: "Overture",
+                        author: "Дерек Дьюк",
+                        source: "Игра: Overwatch",
+                        file: "user/music/play/mab/ower.mp3",
+                        cover: "https://cdn-images.dzcdn.net/images/cover/f1e602b578699673b2ab31bec5687e19/1000x1000.jpg"
                     },
                     {
                         title: "Garden",
@@ -327,6 +370,13 @@
                         cover: "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ab/38/00/ab3800ea-a3ae-0166-0284-73211e2a2208/859789505462_cover.jpg/1200x1200bf-60.jpg"
                     },
                     {
+                        title: "Overworld Day",
+                        author: "Скотт Шелли",
+                        source: "Игра: Terraria",
+                        file: "user/music/play/mab/day.mp3",
+                        cover: "https://cdn-image.zvuk.com/pic?hash=54111292-b4e2-473c-a204-5dd2a3d7d28a&id=213818153&size=large&type=artist"
+                    },
+                    {
                         title: "Bilewater",
                         author: "Кристофер Ларкин",
                         source: "Игра: Hollow Knight: Silksong",
@@ -339,6 +389,13 @@
                         source: "Игра: Hello Neighbor",
                         file: "user/music/play/mab/hello.mp3",
                         cover: "https://yt3.googleusercontent.com/ytc/AIdro_mNi5IWpKeyViFbfkQxiYCTE6MGF6XnFQ4Wl1g1BNC99g=s900-c-k-c0x00ffffff-no-rj"
+                    },
+                    {
+                        title: "First Steps",
+                        author: "Lena Raine",
+                        source: "Игра: Celeste",
+                        file: "user/music/play/mab/celes.mp3",
+                        cover: "https://skillbox.com/upload/setka_images/13444525012022_08fda0244b5397e030ee401fd2bea5b24f78a72b.jpg"
                     },
                     {
                         title: "Kill Command",
@@ -388,6 +445,13 @@
                         source: "Игра: Lobotomy Corporation",
                         file: "user/music/play/xahtep/net.mp3",
                         cover: "https://i1.sndcdn.com/artworks-000206481028-o0n2dz-t1080x1080.jpg"
+                    },
+                    {
+                        title: "Build Our Machine",
+                        author: "DAGames",
+                        source: "Игра: Bendy and the Ink Machine",
+                        file: "user/zlo/music/bendy_theme.mp3",
+                        cover: "https://cdn-image.zvuk.com/pic?hash=057749e5-21dc-4c8c-9b1c-ccdfe0b32758&id=40650866&size=large&type=release"
                     }
                 ]
             },
@@ -969,6 +1033,46 @@
         };
 
         // ==========================================================
+        // 🌟 СИСТЕМА ЛАЙКОВ (ЗВЕЗДОЧЕК) С LOCALSTORAGE И АНИМАЦИЕЙ 🌟
+        // ==========================================================
+        function getTrackKey(profileId, trackIndex, title) {
+            return `twx_like_${profileId}_${trackIndex}_${encodeURIComponent(title)}`;
+        }
+
+        function toggleLike(profileId, trackIndex, trackTitle, btnElement, event) {
+            event.stopPropagation(); // Чтобы трек не переключался при клике на звездочку
+            const key = getTrackKey(profileId, trackIndex, trackTitle);
+            const isCurrentlyLiked = localStorage.getItem(key) === 'true';
+            const newLikedState = !isCurrentlyLiked;
+
+            localStorage.setItem(key, newLikedState);
+
+            const icon = btnElement.querySelector('i');
+            if (newLikedState) {
+                icon.className = "fa-solid fa-star text-yellow-400 star-animated";
+                createStarParticles(btnElement);
+            } else {
+                icon.className = "fa-regular fa-star text-gray-400 hover:text-yellow-300";
+            }
+        }
+
+        function createStarParticles(parent) {
+            const numParticles = 6;
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('i');
+                particle.className = "fa-solid fa-star star-particle";
+                const angle = (i / numParticles) * 2 * Math.PI;
+                const distance = 25 + Math.random() * 15;
+                const dx = Math.cos(angle) * distance;
+                const dy = Math.sin(angle) * distance;
+                particle.style.setProperty('--dx', `${dx}px`);
+                particle.style.setProperty('--dy', `${dy}px`);
+                parent.appendChild(particle);
+                setTimeout(() => particle.remove(), 600);
+            }
+        }
+
+        // ==========================================================
         // 🤡 ЛОГИКА ТАЙНОЙ ПАСХАЛКИ (РИКРОЛЛ) 🤡
         // ==========================================================
         function toggleRickroll() {
@@ -1020,10 +1124,20 @@
             container.innerHTML = '';
 
             RickrollProfileData.playlist.forEach((track, idx) => {
+                const trackKey = getTrackKey(RickrollProfileData.id, idx, track.title);
+                const isLiked = localStorage.getItem(trackKey) === 'true';
+
                 const item = document.createElement('div');
-                item.className = 'p-3 rounded-xl cursor-pointer font-bold text-sm transition-all border bg-green-600 border-lime-300 text-white shadow-lg scale-[1.02]';
-                item.innerHTML = `<div class="truncate">${track.title}</div><div class="text-xs text-lime-100 font-normal">${track.author}</div>`;
-                item.onclick = () => selectTrack(0, idx);
+                item.className = 'p-3 rounded-xl cursor-pointer font-bold text-sm transition-all border bg-green-600 border-lime-300 text-white shadow-lg scale-[1.02] flex items-center justify-between';
+                item.innerHTML = `
+                    <div class="truncate flex-grow" onclick="selectTrack(0, ${idx})">
+                        <div class="truncate">${track.title}</div>
+                        <div class="text-xs text-lime-100 font-normal">${track.author}</div>
+                    </div>
+                    <button onclick="toggleLike('${RickrollProfileData.id}', ${idx}, '${track.title}', this, event)" class="relative p-2 text-xl focus:outline-none transition-transform hover:scale-125 ml-2" title="Оценить звездочкой">
+                        <i class="${isLiked ? 'fa-solid fa-star text-yellow-400' : 'fa-regular fa-star text-lime-200 hover:text-white'}"></i>
+                    </button>
+                `;
                 container.appendChild(item);
             });
         }
@@ -1063,16 +1177,25 @@
             
             profile.playlist.forEach((track, idx) => {
                 const isCurrent = (idx === currentTrackIndex && currentProfileIndex === activePlayingProfileIndex);
+                const trackKey = getTrackKey(profile.id, idx, track.title);
+                const isLiked = localStorage.getItem(trackKey) === 'true';
                 
                 const item = document.createElement('div');
-                item.className = `p-3 rounded-xl cursor-pointer font-bold text-sm transition-all border ${
+                item.className = `p-3 rounded-xl cursor-pointer font-bold text-sm transition-all border flex items-center justify-between ${
                     isCurrent 
                     ? 'bg-orange-600 border-yellow-300 text-white shadow-lg scale-[1.02]' 
                     : 'bg-black/50 border-gray-700 text-gray-200 hover:bg-gray-800'
                 }`;
                 
-                item.innerHTML = `<div class="truncate">${track.title}</div><div class="text-xs text-gray-400 font-normal">${track.author}</div>`;
-                item.onclick = () => selectTrack(currentProfileIndex, idx);
+                item.innerHTML = `
+                    <div class="truncate flex-grow" onclick="selectTrack(${currentProfileIndex}, ${idx})">
+                        <div class="truncate">${track.title}</div>
+                        <div class="text-xs ${isCurrent ? 'text-orange-200' : 'text-gray-400'} font-normal">${track.author}</div>
+                    </div>
+                    <button onclick="toggleLike('${profile.id}', ${idx}, '${track.title}', this, event)" class="relative p-2 text-xl focus:outline-none transition-transform hover:scale-125 ml-2" title="Оценить звездочкой">
+                        <i class="${isLiked ? 'fa-solid fa-star text-yellow-400' : 'fa-regular fa-star text-gray-400 hover:text-yellow-300'}"></i>
+                    </button>
+                `;
                 
                 container.appendChild(item);
             });
@@ -1179,7 +1302,7 @@
 
         function queueProfileChange(newIdx) {
             pendingProfileIndex = newIdx;
- loadProfile(newIdx);
+            loadProfile(newIdx);
         }
 
         // Обработка окончания трека

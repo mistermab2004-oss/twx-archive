@@ -314,12 +314,14 @@
 
             // 6. СПИСОК ФНФ МОДОВ ДЛЯ ПРОХОЖДЕНИЯ
             fnf: [
-                { title: "FNF: Doki Doki Takeover Plus!", poster: "https://i.pinimg.com/736x/c6/03/23/c603237b29190c2a2432d424f80b88f8.jpg", link: "https://gamejolt.com/games/DDTOPlus/791558" },
-                { title: "Friday Night Funkin' VS Sunday ", poster: "https://i.pinimg.com/736x/de/0d/0b/de0d0b097c0dee79e8c6149cc8d04e2f.jpg", link: "https://gamebanana.com/mods/300849" },
-                { title: "Sonic.EXE Mod", poster: "https://images.gamebanana.com/img/embeddables/Wip_89461_sd_image.jpg?1733070785", link: "https://gamejolt.com/games/Vs_SonicExe/713473" },
-                { title: "Friday Night Funkin' VS Hex", poster: "https://i.ytimg.com/vi/Q7qTXx4UC_0/maxresdefault.jpg", link: "https://gamebanana.com/mods/44225" },
-                { title: "Friday Night Funkin' The Blue Balls Incident", poster: "https://i.pinimg.com/originals/67/c4/5f/67c45f23980bbef2e43c7dbd5bf9f8b2.jpg?nii=t", link: "https://gamejolt.com/games/_-incident-_/1013034" },
-                { title: "Friday Night Funkin' Trololo", poster: "https://www.y9freegames.com/wp-content/uploads/thumbs/custom/F/FNF-vs-Mr.-Trololo.jpg", link: "https://gamejolt.com/games/fridaynightincident/645374" }
+                { title: "Friday Night Funkin' VS Whitty", poster: "https://imagecdn.voicify.ai/models/55b8b2eb-41c4-485c-b723-5f873ef4573c.png", status: "yoyu", link: "https://gamebanana.com/mods/44214" },
+                { title: "Friday Night Funkin' VS Garcello", poster: "https://i.pinimg.com/736x/00/bc/df/00bcdf00299b1ed02a774b0dd4048a98.jpg", status: "xox", link: "https://gamebanana.com/mods/166531" },
+                { title: "FNF: Doki Doki Takeover Plus!", poster: "https://i.pinimg.com/736x/c6/03/23/c603237b29190c2a2432d424f80b88f8.jpg", status: "opop", link: "https://gamejolt.com/games/DDTOPlus/791558" },
+                { title: "Friday Night Funkin' VS Sunday", poster: "https://i.pinimg.com/736x/de/0d/0b/de0d0b097c0dee79e8c6149cc8d04e2f.jpg", status: "opop", link: "https://gamebanana.com/mods/300849" },
+                { title: "Sonic.EXE Mod", poster: "https://images.gamebanana.com/img/embeddables/Wip_89461_sd_image.jpg?1733070785", status: "opop", link: "https://gamejolt.com/games/Vs_SonicExe/713473" },
+                { title: "Friday Night Funkin' VS Hex", poster: "https://i.ytimg.com/vi/Q7qTXx4UC_0/maxresdefault.jpg", status: "opop", link: "https://gamebanana.com/mods/44225" },
+                { title: "Friday Night Funkin' The Blue Balls Incident", poster: "https://i.pinimg.com/originals/67/c4/5f/67c45f23980bbef2e43c7dbd5bf9f8b2.jpg?nii=t", status: "opop", link: "https://gamejolt.com/games/_-incident-_/1013034" },
+                { title: "Friday Night Funkin' Trololo", poster: "https://www.y9freegames.com/wp-content/uploads/thumbs/custom/F/FNF-vs-Mr.-Trololo.jpg", status: "opop", link: "https://gamejolt.com/games/fridaynightincident/645374" }
             ],
 
             // 7. СПИСОК КОМИКСОВ
@@ -358,7 +360,6 @@
                 { title: "Outer Wilds", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/753640/library_600x900.jpg", link: "https://store.steampowered.com/app/753640/Outer_Wilds/" },
 		{ title: "Clickertale 3", poster: "https://images.igdb.com/igdb/image/upload/t_cover_big_2x/co9epq.jpg", link: "https://gamejolt.com/games/clickertale3/528743" },
                 { title: "Bonetale", poster: "https://images.igdb.com/igdb/image/upload/t_cover_big_2x/co5x1u.jpg", link: "https://gamejolt.com/games/bonetale/264434" },
-                { title: "Friday Night Funkin' VS Whitty", poster: "https://imagecdn.voicify.ai/models/55b8b2eb-41c4-485c-b723-5f873ef4573c.png", link: "https://gamebanana.com/mods/44214" },
                 { title: "Five Nights at Freddy's 3", poster: "https://img.byrutgame.org/uploads/posts/2026-09/five-nights-at-freddys-3-poster.webp", link: "https://store.steampowered.com/app/354140/Five_Nights_at_Freddys_3/" },
                 { title: "Cuphead", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/268910/library_600x900.jpg", link: "https://store.steampowered.com/app/268910/Cuphead/" },
                 { title: "Danganronpa: Trigger Happy Havoc", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413410/library_600x900.jpg", link: "https://store.steampowered.com/app/413410/Danganronpa_Trigger_Happy_Havoc/" }
@@ -390,7 +391,7 @@
             unpassed: "Список не пройденных игр",
             debts: "Список долгов (Надо поиграть)",
             reactions: "Список реакций для просмотра",
-            fnf: "ФНФ Моды для прохождения",
+            fnf: "ФНФ Моды",
             comics: "Комиксы",
             abandoned: "Заброшенные игры",
             unlikely: "Маловероятные игры на рассмотрение"
@@ -420,9 +421,34 @@
                     window.open(item.link, '_blank');
                 };
 
-                /* ПОСТЕР С ПРОПОРЦИЕЙ 2:3 (ПОЛНОСТЬЮ КАК В СТИМЕ) */
+                // Логика плашки статуса для FNF модов
+                let statusBadge = '';
+                if (item.status) {
+                    let bgClass = 'bg-gray-600';
+                    let text = 'В планах';
+                    
+                    if (item.status === 'xox') {
+                        bgClass = 'bg-emerald-600';
+                        text = 'Пройден';
+                    } else if (item.status === 'yoyu') {
+                        bgClass = 'bg-red-600';
+                        text = 'Заброшен';
+                    } else if (item.status === 'opop') {
+                        bgClass = 'bg-gray-500';
+                        text = 'В планах';
+                    }
+
+                    statusBadge = `
+                        <div class="absolute top-2 right-2 z-10 px-2 py-1 rounded shadow-lg text-[10px] font-black uppercase tracking-wider text-white ${bgClass} border border-white/30 backdrop-blur-sm">
+                            ${text}
+                        </div>
+                    `;
+                }
+
+                /* ПОСТЕР С ПРОПОРЦИЕЙ 2:3 */
                 card.innerHTML = `
                     <div class="relative w-full aspect-[2/3] bg-[#1b1b1b] overflow-hidden">
+                        ${statusBadge}
                         <img src="${item.poster}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=600&auto=format&fit=crop'">
                     </div>
                     <div class="p-3 text-center bg-black border-t border-white/10">

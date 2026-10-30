@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TWX Список</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link id="site-favicon" rel="icon" type="image/png" href="user/system/icon gnom.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            /* Фоновое изображение user/system/popu.png с фолбеком на стильный черный */
+            background: #000000 url('user/system/popu.png') no-repeat center top fixed;
+            background-size: cover;
+            color: #ffffff;
+            font-family: "Motiva Sans", Arial, Helvetica, sans-serif;
+            user-select: none;
+        }
+
+        /* Кастомный скроллбар */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #000000; }
+        ::-webkit-scrollbar-thumb { background: #333333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555555; }
+
+        /* Эффект прожатой/вдавленной кнопки списка */
+        .list-tab-btn {
+            transition: all 0.1s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+            padding: 8px 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .list-tab-btn:hover {
+            filter: brightness(1.1);
+        }
+        .list-tab-btn.pressed, .list-tab-btn:active {
+            transform: translateY(2px);
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.2) !important;
+            filter: brightness(0.85);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* Эффект свечения и подъема постеров */
+        .poster-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .poster-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.15);
+        }
+
+        /* Квадратный ползунок звука как молния */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: #222;
+            height: 8px;
+            border-radius: 2px;
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #ffffff;
+            border-radius: 2px;
+            cursor: pointer;
+            box-shadow: 0 0 8px rgba(255,255,255,0.9);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:active {
+            transform: scale(0.85);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between bg-black">
+
+    <!-- 🎵 АУДИОПЛЕЕР (Фоновая музыка) -->
+    <audio id="bg-music" src="user/music/popy.mp3" loop></audio>
+
+    <!-- 🔝 УНИКАЛЬНАЯ ШАПКА СТРАНИЦЫ СПИСКА -->
+    <header class="bg-black/90 border-b border-white/20 sticky top-0 z-50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex flex-col xl:flex-row items-center justify-between px-4 py-3 gap-4">
+            
+            <!-- Левый блок: Кнопка музыки + Главная -->
+            <div class="flex items-center space-x-3 w-full xl:w-auto justify-between xl:justify-start">
+                <div class="flex items-center space-x-2">
+                    <!-- Квадратная кнопка музыки со значком -->
+                    <button id="music-toggle-btn" onclick="toggleMusic()" class="w-10 h-10 bg-[#1a1a1a] border border-white/30 rounded flex items-center justify-center text-white hover:bg-[#333] transition cursor-pointer shadow-lg active:scale-95" title="Включить/Выключить музыку">
+                        <i id="music-icon" class="fa-solid fa-music text-sm"></i>
+                    </button>
+                    <!-- Ползунок громкости слева (большой белый квадратный) -->
+                    <div class="flex items-center bg-[#111] px-2 py-1.5 rounded border border-white/20">
+                        <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" oninput="setVolume(this.value)" class="w-24 cursor-pointer" title="Громкость">
+                    </div>
+                </div>
+
+                <!-- Кнопка Главная (возврат на index.html) -->
+                <a href="index.html" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2.5 rounded border border-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.5)] transition active:translate-y-0.5">
+                    <i class="fa-solid fa-house mr-1"></i> ГЛАВНАЯ
+                </a>
+            </div>
+
+            <!-- Правый блок: 9 Кнопок списков -->
+            <nav class="flex flex-wrap items-center justify-center gap-1.5">
+                <button id="btn-passed" onclick="switchList('passed')" class="list-tab-btn bg-orange-600 text-white">Пройденные</button>
+                <button id="btn-party" onclick="switchList('party')" class="list-tab-btn bg-yellow-500 text-black">Игры на вечерок</button>
+                <button id="btn-unpassed" onclick="switchList('unpassed')" class="list-tab-btn bg-red-600 text-white">Не пройденные</button>
+                <button id="btn-debts" onclick="switchList('debts')" class="list-tab-btn bg-blue-600 text-white">Долги</button>
+                <button id="btn-reactions" onclick="switchList('reactions')" class="list-tab-btn bg-purple-600 text-white">Реакции</button>
+                <button id="btn-fnf" onclick="switchList('fnf')" class="list-tab-btn bg-pink-600 text-white">ФНФ Моды</button>
+                <button id="btn-comics" onclick="switchList('comics')" class="list-tab-btn bg-indigo-600 text-white">Комиксы</button>
+                <button id="btn-abandoned" onclick="switchList('abandoned')" class="list-tab-btn bg-amber-600 text-white">Заброшенные</button>
+                <button id="btn-unlikely" onclick="switchList('unlikely')" class="list-tab-btn bg-emerald-700 text-white">Маловероятные</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 🎯 ОСНОВНОЙ КОНТЕНТ -->
+    <main class="max-w-7xl mx-auto w-full px-4 py-8 flex-grow">
+        <!-- Название активного списка сверху -->
+        <div class="flex justify-between items-center mb-6 border-b border-white/20 pb-4">
+            <h1 id="active-list-title" class="text-3xl font-black text-white tracking-wider uppercase">Игры которые играли</h1>
+            <span id="list-count" class="text-xs text-gray-400 font-mono">Элементов: 0</span>
+        </div>
+
+        <!-- Сетка 5 столбцов с правильным соотношением сторон постеров Steam (2:3) -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="poster-grid">
+            <!-- Динамически заполняется через JS -->
+        </div>
+    </main>
+
+    <!-- 🦶 ПОДВАЛ -->
+    <footer class="bg-black border-t border-white/10 py-6 text-center text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 space-y-1">
+            <p class="font-bold text-white tracking-widest">TWX СПИСОК</p>
+            <p>Все права защищены архивом. Создано для лучших прохождений.</p>
+        </div>
+    </footer>
+
+    <!-- ========================================================================
+       ⚙️ БЛОК ДАННЫХ ДЛЯ РЕДАКТИРОВАНИЯ
+       ======================================================================== -->
+    <script>
+        const GameLists = {
+            // 1. СПИСОК ПРОЙДЕННЫХ ИГР
+            passed: [
+                { title: "Wizardry 8", poster: "https://img.byrutgame.org/uploads/posts/2026-09/8665fdc57b_wizardry-8.webp", isNew: false, link: "https://store.steampowered.com/app/245450/Wizardry_8/" },
+                { title: "Doki Doki Literature Club!", poster: "https://img.byrutgame.org/uploads/posts/2026-09/328b539b31_doki-doki-literature-club.webp", link: "https://store.steampowered.com/app/698780/Doki_Doki_Literature_Club/" },
+                { title: "Undertale", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/391540/library_600x900.jpg", link: "https://store.steampowered.com/app/391540/Undertale/" },
+                { title: "Sally Face", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/541570/library_600x900.jpg", link: "https://store.steampowered.com/app/541570/Sally_Face/" },
+                { title: "MiSide", poster: "https://img.byrutgame.org/uploads/posts/2026-09/ae5e27b4b1_miside.webp", isNew: false, link: "https://store.steampowered.com/app/2527500/MiSide/" },
+                { title: "Spooky's Jump Scare Mansion", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/356670/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/356670/Spookys_Jump_Scare_Mansion/" },
+                { title: "Little Nightmares II", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/860510/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/860510/Little_Nightmares_II/" },
+                { title: "Lobotomy Corporation | Monster Management Simulation", poster: "https://img.byrutgame.org/uploads/posts/2026-09/b56977bbb8_lobotomy-corporation-monster-management-simulation.webp", isNew: false, link: "https://store.steampowered.com/app/568220/Lobotomy_Corporation_Monster_Management_Simulation/" },
+                { title: "Library of Ruina", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1256670/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/1256670/Library_of_Ruina/" },
+                { title: "Little Nightmares", poster: "https://store-images.s-microsoft.com/image/apps.21849.14040297946202100.6fa86a09-9303-48d5-9ee2-31fcb012aba5.8af927a3-bb64-4e18-b8d3-f12f179edacc", isNew: false, link: "https://store.steampowered.com/app/424840/Little_Nightmares/" },
+                { title: "Detroit: Become Human", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1222140/library_600x900.jpg", link: "https://store.steampowered.com/app/1222140/Detroit_Become_Human/" },
+                { title: "SCP: Containment Breach", poster: "https://s3.gamescribe.io/high/9a16571c-65a5-51a9-91ec-1b4e39e32cf5.jpg", isNew: false, link: "https://store.steampowered.com/app/2178380/SCP_Containment_Breach/" },
+                { title: "Cell to Singularity - Evolution Never Ends", poster: "https://i.playground.ru/e/AWU_BXTfR5lgpchcZwka8g.jpeg", link: "https://store.steampowered.com/app/977400/Cell_to_Singularity_Evolution_Never_Ends/" },
+                { title: "Five Nights at Freddy's", poster: "https://img.byrutgame.org/uploads/posts/2026-09/five-nights-at-freddys-poster.webp", link: "https://store.steampowered.com/app/319510/Five_Nights_at_Freddys/" },
+                { title: "Gnarled Hag", poster: "https://img.gamebrain.co/games/381/gnarled_hag_pompasaur_2020_2_xl.jpg", isNew: false, link: "https://pompasaur.itch.io/gnarled-hag" },
+                { title: "Mogeko Castle", poster: "https://indie-torrent.ru/_ld/13/71027870.jpg", link: "https://indie-torrent.ru/load/khorrory/mogeko_castle/4-1-0-1397" },
+                { title: "OneShot", poster: "https://img.byrutgame.org/uploads/posts/2026-09/f1ef345299_oneshot.webp", link: "https://store.steampowered.com/app/420530/OneShot/" },
+                { title: "FRIDAY NIGHT FUNKIN' ", poster: "https://ih1.redbubble.net/image.3619309393.1552/flat,750x,075,f-pad,750x1000,f8f8f8.jpg", link: "https://ninja-muffin24.itch.io/funkin" },
+                { title: "Five Nights at Freddy's 4", poster: "https://img.byrutgame.org/uploads/posts/2026-09/five-nights-at-freddys-4-poster.webp", link: "https://store.steampowered.com/app/388090/Five_Nights_at_Freddys_4/" },
+		{ title: "Dead Cells", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/588650/library_600x900.jpg", link: "https://store.steampowered.com/app/588650/Dead_Cells/" },
+                { title: "Darkest Dungeon", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/262060/library_600x900.jpg", link: "https://store.steampowered.com/app/262060/Darkest_Dungeon/" },
+                { title: "Vampire Survivors", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1794680/library_600x900.jpg", link: "https://store.steampowered.com/app/1794680/Vampire_Survivors/" },
+                { title: "DOOM (2016)", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/379720/library_600x900.jpg", link: "https://store.steampowered.com/app/379720/DOOM/" },
+                { title: "Risk of Rain 2", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/632360/library_600x900.jpg", link: "https://store.steampowered.com/app/632360/Risk_of_Rain_2/" },
+                { title: "Slay the Spire", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/646570/library_600x900.jpg", link: "https://store.steampowered.com/app/646570/Slay_the_Spire/" },
+                { title: "Iratus: Lord of the Dead", poster: "https://img.byrutgame.org/uploads/posts/2026-09/86c9b60ace_iratus-lord-of-the-dead.webp", link: "https://store.steampowered.com/app/807120/Iratus_Lord_of_the_Dead/" },
+                { title: "Path of Exile 2", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2694490/library_600x900.jpg", link: "https://store.steampowered.com/app/2694490/Path_of_Exile_2/" },
+                { title: "Outcore: Desktop Adventure", poster: "https://img.byrutgame.org/uploads/posts/2026-09/2c63363aaa_outcore-desktop-adventure.webp", link: "https://store.steampowered.com/app/1275670/Outcore_Desktop_Adventure/" },
+                { title: "It Takes Two", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1426210/library_600x900.jpg", link: "https://store.steampowered.com/app/1426210/It_Takes_Two/" },
+                { title: "The Dark Pictures Anthology: Little Hope", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1194630/library_600x900.jpg", link: "https://store.steampowered.com/app/1194630/The_Dark_Pictures_Anthology_Little_Hope/" },
+                { title: "The Dark Pictures Anthology: House of Ashes", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1281590/library_600x900.jpg", link: "https://store.steampowered.com/app/1281590/The_Dark_Pictures_Anthology_House_of_Ashes/" },
+                { title: "The Dark Pictures Anthology: Man of Medan", poster: "https://img.byrutgame.org/uploads/posts/2026-09/8b750b8d00_the-dark-pictures-anthology-man-of-medan.webp", link: "https://store.steampowered.com/app/939850/The_Dark_Pictures_Anthology_Man_of_Medan/" },
+                { title: "Just Shapes & Beats", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/531510/library_600x900.jpg", link: "https://store.steampowered.com/app/531510/Just_Shapes__Beats/" },
+                { title: "Helltaker", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1289310/library_600x900.jpg", link: "https://store.steampowered.com/app/1289310/Helltaker/" },
+                { title: "The Henry Stickmin Collection", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1089980/library_600x900.jpg", link: "https://store.steampowered.com/app/1089980/The_Henry_Stickmin_Collection/" },
+                { title: "Бесконечное Лето", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/331470/library_600x900.jpg", link: "https://store.steampowered.com/app/331470/_/" },
+                { title: "Everhood", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1229380/library_600x900.jpg", link: "https://store.steampowered.com/app/1229380/Everhood/" },
+                { title: "XCOM 2", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/268500/library_600x900.jpg", link: "https://store.steampowered.com/app/268500/XCOM_2/" },
+                { title: "Late Shift", poster: "https://img.byrutgame.org/uploads/posts/2026-09/d6c22202db_late-shift.webp", link: "https://store.steampowered.com/app/584980/Late_Shift/" },
+                { title: "Legend of Keepers: Career of a Dungeon Manager", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/978520/library_600x900.jpg", link: "https://store.steampowered.com/app/978520/Legend_of_Keepers_Career_of_a_Dungeon_Manager/" },
+		{ title: "Vampyr", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/427290/library_600x900.jpg", link: "https://store.steampowered.com/app/427290/Vampyr/" },
+                { title: "To the Moon", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/206440/library_600x900.jpg", link: "https://store.steampowered.com/app/206440/To_the_Moon/" },
+                { title: "CHUCHEL", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/711660/library_600x900.jpg", link: "https://store.steampowered.com/app/711660/CHUCHEL/" },
+                { title: "Borderlands 3", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/397540/library_600x900.jpg", link: "https://store.steampowered.com/app/397540/Borderlands_3/" },
+                { title: "Titanfall 2", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1237970/library_600x900.jpg", link: "https://store.steampowered.com/app/1237970/Titanfall_2/" },
+                { title: "Stray", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1332010/library_600x900.jpg", link: "https://store.steampowered.com/app/1332010/Stray/" },
+                { title: "Crimsonland", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/262830/library_600x900.jpg", link: "https://store.steampowered.com/app/262830/Crimsonland/" },
+                { title: "Треш про Шурыгину", poster: "https://s11.stc.yc.kpcdn.net/share/i/12/12742637/wr-960.webp", link: "https://youtu.be/_T52pelsXUs?si=cH2E3auRCwzLF-2y" }
+            ],
+
+            // 2. ИГРЫ НА ВЕЧЕРОК
+            party: [
+                { title: "Акинатор", poster: "https://cdn.mobygames.com/screenshots/16395506-akinator-iphone-the-title-screen.png", link: "https://ru.akinator.com/" },
+                { title: "Gartic Phone", poster: "https://images.igdb.com/igdb/image/upload/t_cover_big_2x/cobw2s.jpg", link: "https://garticphone.com/" },
+                { title: "The Jackbox Party Pack 1", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/331670/library_600x900.jpg", link: "https://store.steampowered.com/app/331670/The_Jackbox_Party_Pack/" },
+                { title: "The Jackbox Party Pack 2", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/397460/library_600x900.jpg", link: "https://store.steampowered.com/app/397460/The_Jackbox_Party_Pack_2/" },
+                { title: "The Jackbox Party Pack 3", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/434170/library_600x900.jpg", link: "https://store.steampowered.com/app/434170/The_Jackbox_Party_Pack_3/" },
+                { title: "The Jackbox Party Pack 4", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/610180/library_600x900.jpg", link: "https://store.steampowered.com/app/610180/The_Jackbox_Party_Pack_4/" },
+                { title: "Among Us", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/945360/library_600x900.jpg", link: "https://store.steampowered.com/app/945360/Among_Us/" },
+                { title: "The Jackbox Party Pack 5", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/774461/library_600x900.jpg", link: "https://store.steampowered.com/app/774461/The_Jackbox_Party_Pack_5/" },
+                { title: "The Jackbox Party Pack 6", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1005300/library_600x900.jpg", link: "https://store.steampowered.com/app/1005300/The_Jackbox_Party_Pack_6/" },
+                { title: "The Jackbox Party Pack 7", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1211630/library_600x900.jpg", link: "https://store.steampowered.com/app/1211630/The_Jackbox_Party_Pack_7/" },
+                { title: "The Jackbox Party Pack 8", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1552350/library_600x900.jpg", link: "https://store.steampowered.com/app/1552350/The_Jackbox_Party_Pack_8/" },
+		{ title: "Beat Saber", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/620980/library_600x900.jpg", link: "https://store.steampowered.com/app/620980/Beat_Saber/" },
+                { title: "League of Legends", poster: "https://img.byrutgame.org/uploads/posts/2026-09/league-of-legends-poster.webp", link: "https://www.leagueoflegends.com/" },
+                { title: "Rock 'n Roll Racing", poster: "https://i.imgur.com/wkPXZ5f.jpeg?fb", link: "https://www.emu-land.net/consoles/genesis/roms/rock-n-roll-racing" },
+                { title: "Hearthstone", poster: "https://img.byrutgame.org/uploads/posts/2026-09/hearthstone-poster.webp", link: "https://hearthstone.blizzard.com/" },
+                { title: "Teamfight Tactics", poster: "https://cdn1.epicgames.com/offer/ada73cc2d68a46a18f529ebb87328dee/EGS_TeamfightTactics_RiotGames_S2_1200x1600-f98c77d0fda446569e48c1f0487e95eb", link: "https://teamfighttactics.leagueoflegends.com/" },
+                { title: "Choice Chamber", poster: "https://i.playground.ru/e/91yllPT1KjfzFMDgT180qQ.jpeg", link: "https://store.steampowered.com/app/359960/Choice_Chamber/" },
+		{ title: "Incredibox", poster: "https://img.byrutgame.org/uploads/posts/2026-09/506ce8322c_incredibox.webp", link: "https://store.steampowered.com/app/1545450/Incredibox/" }
+            ],
+
+            // 3. СПИСОК НЕ ПРОЙДЕННЫХ ИГР
+            unpassed: [
+                { title: "Resident Evil Village", poster: "https://upload.wikimedia.org/wikipedia/ru/2/24/%D0%9E%D0%B1%D0%BB%D0%BE%D0%B6%D0%BA%D0%B0_Resident_Evil_Village.jpg", link: "https://store.steampowered.com/app/1196590/Resident_Evil_Village/" },
+                { title: "Omori", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1150690/library_600x900.jpg", link: "https://store.steampowered.com/app/1150690/OMORI/" },
+                { title: "Monster Sanctuary", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/814370/library_600x900.jpg", link: "https://store.steampowered.com/app/814370/Monster_Sanctuary/" },
+                { title: "The Binding of Isaac", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/250900/library_600x900.jpg", link: "https://store.steampowered.com/app/250900/The_Binding_of_Isaac_Rebirth/" },
+                { title: "Steins;Gate", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/412830/library_600x900.jpg", link: "https://store.steampowered.com/app/412830/SteinsGate/" },
+                { title: "Atomic Heart", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/668580/library_600x900.jpg", link: "https://store.steampowered.com/app/668580/Atomic_Heart/" },
+                { title: "Ведьмак 3", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/292030/library_600x900.jpg", link: "https://store.steampowered.com/app/292030/The_Witcher_3_Wild_Hunt/" },
+                { title: "DELTARUNE", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1671210/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/1671210/DELTARUNE/" },
+                { title: "Fran Bow", poster: "https://i.pinimg.com/736x/40/81/2e/40812ec291a438ff46c8825606500dd9.jpg", link: "https://store.steampowered.com/app/362680/Fran_Bow/" },
+		{ title: "Cyberpunk 2077", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/library_600x900.jpg", link: "https://store.steampowered.com/app/1091500/Cyberpunk_2077/" },
+                { title: "Slime Rancher", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/433340/library_600x900.jpg", link: "https://store.steampowered.com/app/433340/Slime_Rancher/" },
+                { title: "Зайчик (Tiny Bunny)", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1421250/library_600x900.jpg", link: "https://store.steampowered.com/app/1421250/Tiny_Bunny/" },
+                { title: "Castle Crashers", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/204360/library_600x900.jpg", link: "https://store.steampowered.com/app/204360/Castle_Crashers/" },
+                { title: "Neon Abyss", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/788100/library_600x900.jpg", link: "https://store.steampowered.com/app/788100/Neon_Abyss/" },
+                { title: "Hollow Knight", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/367520/library_600x900.jpg", link: "https://store.steampowered.com/app/367520/Hollow_Knight/" },
+                { title: "FINAL FANTASY IX", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/377840/library_600x900.jpg", link: "https://store.steampowered.com/app/377840/FINAL_FANTASY_IX/" },
+                { title: "Enter the Gungeon", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/311690/library_600x900.jpg", link: "https://store.steampowered.com/app/311690/Enter_the_Gungeon/" },
+                { title: "Hades", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145360/library_600x900.jpg", link: "https://store.steampowered.com/app/1145360/Hades/" },
+                { title: "Knock on the Coffin Lid", poster: "https://img.byrutgame.org/uploads/posts/2026-09/a0666a47c9_knock-on-the-coffin-lid.webp", link: "https://store.steampowered.com/app/1232580/Knock_on_the_Coffin_Lid/" },
+                { title: "Night in the Woods", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/481510/library_600x900.jpg", link: "https://store.steampowered.com/app/481510/Night_in_the_Woods/" },
+		{ title: "Bad End Theater", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1764390/library_600x900.jpg", link: "https://store.steampowered.com/app/1764390/Bad_End_Theater/" }
+            ],
+
+            // 4. СПИСОК ДОЛГОВ
+            debts: [
+                { title: "Awaria", poster: "https://img.byrutgame.org/uploads/posts/2026-09/b6462233d4_awaria.webp", link: "https://store.steampowered.com/" },
+                { title: "Dark Deception", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/332950/library_600x900.jpg", link: "https://store.steampowered.com/app/332950/Dark_Deception/" },
+                { title: "Pony Island", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/405640/library_600x900.jpg", link: "https://store.steampowered.com/app/405640/Pony_Island/" },
+                { title: "Bendy and the Dark Revival", poster: "https://img.byrutgame.org/uploads/posts/2026-09/f60050cf8e_bendy-and-the-dark-revival.webp", isNew: false, link: "https://store.steampowered.com/app/1063660/Bendy_and_the_Dark_Revival/" },
+                { title: "Indigo Park", poster: "https://img.byrutgame.org/uploads/posts/2026-09/8495bcede9_indigo-park-chapter-1.webp", isNew: false, link: "https://store.steampowered.com/app/2504480/Indigo_Park_Chapter_1/" },
+                { title: "Little Misfortune", poster: "https://img.byrutgame.org/uploads/posts/2026-09/405f9df1ad_little-misfortune.webp", isNew: false, link: "https://store.steampowered.com/app/714120/Little_Misfortune/" },
+                { title: "Corpse Party (2021)", poster: "https://img.byrutgame.org/uploads/posts/2026-09/89d8cea5e6_corpse-party-2021.webp", isNew: false, link: "https://store.steampowered.com/app/1273260/Corpse_Party_2021/" },
+                { title: "Buckshot Roulette", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2835570/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/2835570/Buckshot_Roulette/" },
+                { title: "Bonbon", poster: "https://images.igdb.com/igdb/image/upload/t_cover_big_2x/co2333.jpg", isNew: false, link: "https://store.steampowered.com/app/734120/Bonbon/" },
+                { title: "Dicey Dungeons", poster: "https://img.byrutgame.org/uploads/posts/2026-09/5d3316566b_dicey-dungeons.webp", isNew: false, link: "https://store.steampowered.com/app/861540/Dicey_Dungeons/" },
+                { title: "Five Nights at Frickbear's 3", poster: "user/frick/poster.png", isNew: false, link: "https://gamejolt.com/games/frickbears3/930477" },
+                { title: "OneShot: World Machine Edition", poster: "https://img.byrutgame.org/uploads/posts/2026-09/e86947fce8_oneshot-world-machine-edition.webp", link: "https://store.steampowered.com/app/2915460/OneShot_World_Machine_Edition/" },
+                { title: "Five Nights at Freddy's: Into the Pit", poster: "https://img.byrutgame.org/uploads/posts/2026-09/ba2472254e_five-nights-at-freddys-into-the-pit.webp", link: "https://store.steampowered.com/app/2638370/Five_Nights_at_Freddys_Into_the_Pit/" },
+		{ title: "Among the Sleep", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/250620/library_600x900.jpg", link: "https://store.steampowered.com/app/250620/Among_the_Sleep/" },
+                { title: "Amanda the Adventurer", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2166060/library_600x900.jpg", link: "https://store.steampowered.com/app/2166060/Amanda_the_Adventurer/" },
+                { title: "Zoochosis", poster: "https://img.byrutgame.org/uploads/posts/2026-09/64e5acce15_zoochosis.webp", link: "https://store.steampowered.com/app/2458560/Zoochosis/" },
+                { title: "Bio Inc. Redemption", poster: "https://img.byrutgame.org/uploads/posts/2026-09/0753a2f849_bio-inc-redemption.webp", link: "https://store.steampowered.com/app/612470/Bio_Inc_Redemption/" },
+                { title: "Oxygen Not Included", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/457140/library_600x900.jpg", link: "https://store.steampowered.com/app/457140/Oxygen_Not_Included/" },
+                { title: "Ring of Pain", poster: "https://img.byrutgame.org/uploads/posts/2026-09/52e9ae0e52_ring-of-pain.webp", link: "https://store.steampowered.com/app/998740/Ring_of_Pain/" },
+                { title: "Dead Estate", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1484720/library_600x900.jpg", link: "https://store.steampowered.com/app/1484720/Dead_Estate/" },
+                { title: "Goose Goose Duck", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1568590/library_600x900.jpg", link: "https://store.steampowered.com/app/1568590/Goose_Goose_Duck/" },
+                { title: "For The King", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/527230/library_600x900.jpg", link: "https://store.steampowered.com/app/527230/For_The_King/" },
+                { title: "The Past Within", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1515210/library_600x900.jpg", link: "https://store.steampowered.com/app/1515210/The_Past_Within/" },
+                { title: "Not For Broadcast", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1147550/library_600x900.jpg", link: "https://store.steampowered.com/app/1147550/Not_For_Broadcast/" },
+                { title: "Shovel Knight: Treasure Trove", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/250760/library_600x900.jpg", link: "https://store.steampowered.com/app/250760/Shovel_Knight_Treasure_Trove/" },
+                { title: "Celeste", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/504230/library_600x900.jpg", link: "https://store.steampowered.com/app/504230/Celeste/" },
+                { title: "NEEDY STREAMER OVERLOAD", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1451940/library_600x900.jpg", link: "https://store.steampowered.com/app/1451940/NEEDY_STREAMER_OVERLOAD/" },
+                { title: "Tokyo Dark", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/687260/library_600x900.jpg", link: "https://store.steampowered.com/app/687260/Tokyo_Dark/" },
+                { title: "Rock of Ages", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/22230/library_600x900.jpg", link: "https://store.steampowered.com/app/22230/Rock_of_Ages/" },
+                { title: "Rock of Ages 2: Bigger & Boulder", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/434460/library_600x900.jpg", link: "https://store.steampowered.com/app/434460/Rock_of_Ages_2_Bigger__Boulder/" },
+                { title: "Rock of Ages 3: Make & Break", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1101360/library_600x900.jpg", link: "https://store.steampowered.com/app/1101360/Rock_of_Ages_3_Make__Break/" },
+                { title: "CODE VEIN", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/678960/library_600x900.jpg", link: "https://store.steampowered.com/app/678960/CODE_VEIN/" },
+                { title: "Mad Father (Батя-псих)", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/483980/library_600x900.jpg", link: "https://store.steampowered.com/app/483980/Mad_Father/" },
+                { title: "Misao: Definitive Edition", poster: "https://img.byrutgame.org/uploads/posts/2026-09/e40ff5d635_misao-definitive-edition.webp", link: "https://store.steampowered.com/app/691450/Misao_2024_HD_Remaster/" },
+                { title: "Inscryption", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1092790/library_600x900.jpg", link: "https://store.steampowered.com/app/1092790/Inscryption/" },
+                { title: "The Hex", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/510420/library_600x900.jpg", link: "https://store.steampowered.com/app/510420/The_Hex/" },
+                { title: "A Space for the Unbound", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1201270/library_600x900.jpg", link: "https://store.steampowered.com/app/1201270/A_Space_for_the_Unbound/" },
+                { title: "VA-11 Hall-A: Cyberpunk Bartender Action", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/447530/library_600x900.jpg", link: "https://store.steampowered.com/app/447530/VA11_HallA_Cyberpunk_Bartender_Action/" },
+                { title: "Undertale Yellow", poster: "https://i.ytimg.com/vi/WY-0Jax6oB0/maxresdefault.jpg", link: "https://gamejolt.com/games/undertaleyellow/136925" },
+                { title: "The Joy of Creation", poster: "https://s3.us-east-2.amazonaws.com/gmag.io-live-us/games/logos/7921_64647cdee08fb.jpg", link: "https://www.zoneofgames.ru/games/joy_of_creation_story_mode_the/files/6962.html" },
+		{ title: "Dispatch", poster: "https://img.byrutgame.org/uploads/posts/2026-09/b1f461ebf7_dispatch.webp", link: "https://store.steampowered.com/app/2592160/Dispatch/" },
+                { title: "Clair Obscur: Expedition 33", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1903340/library_600x900.jpg", link: "https://store.steampowered.com/app/1903340/Clair_Obscur_Expedition_33/" },
+                { title: "ANTONBLAST", poster: "https://img.byrutgame.org/uploads/posts/2026-09/06abf20f09_antonblast.webp", link: "https://store.steampowered.com/app/1887400/ANTONBLAST/" },
+                { title: "Press X to Not Die", poster: "https://img.byrutgame.org/uploads/posts/2026-09/e1f9d63bb6_press-x-to-not-die.webp", link: "https://store.steampowered.com/app/402330/Press_X_to_Not_Die/" },
+                { title: "Doodle God", poster: "https://img.byrutgame.org/uploads/posts/2026-09/15d23ad5fb_doodle-god.webp", link: "https://store.steampowered.com/app/348360/Doodle_God/" },
+                { title: "Happy's Humble Burger Farm", poster: "https://img.byrutgame.org/uploads/posts/2026-09/2565582560_happys-humble-burger-farm.webp", link: "https://store.steampowered.com/app/1433340/Happys_Humble_Burger_Farm/" },
+                { title: "AI: The Somnium Files", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/948740/library_600x900.jpg", link: "https://store.steampowered.com/app/948740/AI_The_Somnium_Files/" }
+            ],
+
+            // 5. СПИСОК РЕАКЦИЙ ДЛЯ ПРОСМОТРА
+            reactions: [
+                { title: "Удивительный цифровой цирк", poster: "https://avatars.mds.yandex.net/get-kinopoisk-image/1898899/300edb70-bfe9-4b52-8865-1bf0f346a41b/3840x", link: "https://youtube.com/playlist?list=PLHovnlOusNLgvAbnxluXCVB3KLj8e4QB-&si=XuZ7bd0d6zd61FH5" },
+                { title: "Gameoverse", poster: "https://static.wikia.nocookie.net/gameoverse/images/c/c2/Gameoverse_New_Poster.jpg/revision/latest?cb=20260501191433", link: "https://youtube.com/playlist?list=PLHovnlOusNLjUykpV3X-hI45o6n4haPGW&si=hE9m70Pa8TDN_p_p" },
+                { title: "Инди Кросс", poster: "https://i.pinimg.com/474x/44/8a/eb/448aeb8c48175f6744969d632c697268.jpg", link: "https://youtube.com/playlist?list=PLLfDD5uFkq-p-p9qondyuRR0kGk2dMPB1&si=GDM200mk2c6VEQtt" },
+                { title: "ИСТОРИИ О ТЫКВЕННОМ КРОЛИКЕ", poster: "https://en-images-s.kinorium.com/movie/1080/11946030.jpg?1732357610", link: "https://vk.ru/video-203501768_456239772" },
+                { title: "Жуткий Месяц", poster: "https://i.pinimg.com/originals/78/54/d1/7854d1ccc45900700bf8a9c89877f63c.jpg", link: "https://www.youtube.com/playlist?list=PL431KQTio9AoBLSxKt6_8haeOmhO7dAcY" },
+                { title: "Mystery Skulls", poster: "https://i.pinimg.com/736x/d3/a0/1d/d3a01dc82f167de54b3b139fc641e79d.jpg", link: "https://youtu.be/z2LxYvA49sk?si=ad961MqDQVTO6TLK" }
+            ],
+
+            // 6. СПИСОК ФНФ МОДОВ ДЛЯ ПРОХОЖДЕНИЯ
+            fnf: [
+                { title: "FNF: Doki Doki Takeover Plus!", poster: "https://i.pinimg.com/736x/c6/03/23/c603237b29190c2a2432d424f80b88f8.jpg", link: "https://gamejolt.com/games/DDTOPlus/791558" },
+                { title: "Friday Night Funkin' VS Sunday ", poster: "https://i.pinimg.com/736x/de/0d/0b/de0d0b097c0dee79e8c6149cc8d04e2f.jpg", link: "https://gamebanana.com/mods/300849" },
+                { title: "Sonic.EXE Mod", poster: "https://images.gamebanana.com/img/embeddables/Wip_89461_sd_image.jpg?1733070785", link: "https://gamejolt.com/games/Vs_SonicExe/713473" }
+            ],
+
+            // 7. СПИСОК КОМИКСОВ
+            comics: [
+                { title: "Homestuck", poster: "https://i.pinimg.com/originals/57/ae/ea/57aeeabb10e609103cde72a203183dc5.jpg", link: "https://mspaintadventures.ru/" },
+                { title: "Голубь Генадий", poster: "https://cdn.insales-shop.ru/images/products/1/7552/449158528/76f4d3816c9ec28a83c9a9cf57c6d224c1262d561.jpg", link: "https://youtu.be/eM-7Esy8LUY?si=2b7Hy-ypWbPQN-d1" },
+                { title: "Азбука Ролевика", poster: "https://cdna.artstation.com/p/assets/images/images/009/321/884/large/cecil-porter-asset.jpg?1518333571", link: "https://youtu.be/hnXURQb_6k8?si=3tOoRVgH6lOru2tR" }
+            ],
+
+            // 8. ЗАБРОШЕННЫЕ ИГРЫ
+            abandoned: [
+                { title: "Doki Doki Literature Club Plus!", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1388880/library_600x900.jpg", link: "https://store.steampowered.com/app/1388880/Doki_Doki_Literature_Club_Plus/" },
+                { title: "Scratchin' Melodii", poster: "https://cdn.ag.ru/media/screenshots/b7b/b7b8c9a51aadf446f2aea386167e827e.jpg", link: "https://store.steampowered.com/app/2728050/Scratchin_Melodii/" },
+                { title: "SCP: Unity", poster: "https://img.byrutgame.org/uploads/posts/2026-09/scp-containment-breach-unity-remake-poster.webp", link: "https://byrutgame.org/11807-scp-containment-breach-unity-remake.html" },
+                { title: "Beholder", poster: "https://img.byrutgame.org/uploads/posts/2026-09/b6680ef759_beholder.webp", link: "https://store.steampowered.com/app/475550/Beholder/" },
+                { title: "Phasmophobia", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/739630/library_600x900.jpg", isNew: false, link: "https://store.steampowered.com/app/739630/Phasmophobia/" },
+                { title: "Happy Game", poster: "https://img.byrutgame.org/uploads/posts/2026-09/00d130eca0_happy-game.webp", link: "https://store.steampowered.com/app/1206060/Happy_Game/" },
+                { title: "Touhou 6: Embodiment of Scarlet Devil", poster: "https://retrolords.com/assets/img/games/2025/07/29/touhou-6-embodiment-of-scarlet-devil_cover2.webp", link: "https://retrolords.com/ru/touhou-6-embodiment-of-scarlet-devil-1377" },
+                { title: "Lost Ruins", poster: "https://img.byrutgame.org/uploads/posts/2026-09/528e95c43e_lost-ruins.webp", link: "https://store.steampowered.com/app/1306630/Lost_Ruins/" },
+                { title: "Five Nights at Freddy's 2", poster: "https://img.byrutgame.org/uploads/posts/2026-09/five-nights-at-freddys-2-poster.webp", link: "https://store.steampowered.com/app/332800/Five_Nights_at_Freddys_2/" },
+		{ title: "Peace, Death!", poster: "https://img.byrutgame.org/uploads/posts/2026-09/99dc898d75_peace-death.webp", link: "https://store.steampowered.com/app/588690/Peace_Death/" },
+                { title: "LISA: The Painful", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/335670/library_600x900.jpg", link: "https://store.steampowered.com/app/335670/LISA_The_Painful/" },
+                { title: "DARK SOULS III", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/374320/library_600x900.jpg", link: "https://store.steampowered.com/app/374320/DARK_SOULS_III/" },
+                { title: "A Hat in Time", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/253230/library_600x900.jpg", link: "https://store.steampowered.com/app/253230/A_Hat_in_Time/" },
+                { title: "Ragtag Crew", poster: "https://i.playground.ru/i/pix/3420782/image.jpg", link: "https://repack-byrutor.org/77-ragtag-crew.html" },
+                { title: "Любовь, деньги, рок-н-ролл", poster: "https://img.byrutgame.org/uploads/posts/2026-09/b59efe148e_love-money-rocknroll.webp", link: "https://store.steampowered.com/app/615530/Love_Money_RocknRoll/" },
+                { title: "Despot's Game: Dystopian Army Builder", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1227280/library_600x900.jpg", link: "https://store.steampowered.com/app/1227280/Despots_Game_Dystopian_Army_Builder/" },
+                { title: "River City Girls 2", poster: "https://img.byrutgame.org/uploads/posts/2026-09/6141eba92a_river-city-girls-2.webp", link: "https://store.steampowered.com/app/1920480/River_City_Girls_2/" },
+                { title: "Spaceland: Sci-Fi Indie Tactics", poster: "https://img.byrutgame.org/uploads/posts/2026-09/2c04678629_spaceland-sci-fi-indie-tactics.webp", link: "https://store.steampowered.com/app/1021070/Spaceland_SciFi_Indie_Tactics/" },
+                { title: "The Stanley Parable: Ultra Deluxe", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1703340/library_600x900.jpg", link: "https://store.steampowered.com/app/1703340/The_Stanley_Parable_Ultra_Deluxe/" },
+                { title: "God of War (2018)", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1593500/library_600x900.jpg", link: "https://store.steampowered.com/app/1593500/God_of_War/" },
+                { title: "XCOM: Enemy Unknown (Enemy Anonymus)", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/200510/library_600x900.jpg", link: "https://store.steampowered.com/app/200510/XCOM_Enemy_Unknown/" },
+                { title: "Loop Hero", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1282730/library_600x900.jpg", link: "https://store.steampowered.com/app/1282730/Loop_Hero/" },
+                { title: "Honkai: Star Rail", poster: "https://diskomir.ru/upload/dev2fun.imagecompress/webp/iblock/a7e/ntxqc8vjrhqo8k3d2e9e2uyd8buvc0px/plakat_bumazhnyy_khonkay_star_reyl_honkai_star_rail_3.webp", link: "https://hsr.hoyoverse.com/ru-ru/" },
+                { title: "Knock-knock", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/250380/library_600x900.jpg", link: "https://store.steampowered.com/app/250380/Knockknock/" },
+                { title: "Outer Wilds", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/753640/library_600x900.jpg", link: "https://store.steampowered.com/app/753640/Outer_Wilds/" },
+		{ title: "Clickertale 3", poster: "https://images.igdb.com/igdb/image/upload/t_cover_big_2x/co9epq.jpg", link: "https://gamejolt.com/games/clickertale3/528743" },
+                { title: "Bonetale", poster: "https://images.igdb.com/igdb/image/upload/t_cover_big_2x/co5x1u.jpg", link: "https://gamejolt.com/games/bonetale/264434" },
+                { title: "Friday Night Funkin' VS Whitty", poster: "https://imagecdn.voicify.ai/models/55b8b2eb-41c4-485c-b723-5f873ef4573c.png", link: "https://gamebanana.com/mods/44214" },
+                { title: "Five Nights at Freddy's 3", poster: "https://img.byrutgame.org/uploads/posts/2026-09/five-nights-at-freddys-3-poster.webp", link: "https://store.steampowered.com/app/354140/Five_Nights_at_Freddys_3/" },
+                { title: "Cuphead", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/268910/library_600x900.jpg", link: "https://store.steampowered.com/app/268910/Cuphead/" },
+                { title: "Danganronpa: Trigger Happy Havoc", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413410/library_600x900.jpg", link: "https://store.steampowered.com/app/413410/Danganronpa_Trigger_Happy_Havoc/" }
+            ],
+
+            // 9. МАЛОВЕРОЯТНЫЕ ИГРЫ НА РАССМОТРЕНИЕ
+            unlikely: [
+                { title: "Limbus Company", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1973530/library_600x900.jpg", link: "https://store.steampowered.com/app/1973530/Limbus_Company/" },
+                { title: "Subnautica", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/264710/library_600x900.jpg", link: "https://store.steampowered.com/app/264710/Subnautica/" },
+                { title: "Minecraft", poster: "https://img.byrutgame.org/uploads/posts/2026-09/minecraft-poster.webp", link: "https://www.minecraft.net" },
+                { title: "Reverse: 1999", poster: "https://img.byrutgame.org/uploads/posts/2026-09/c92845d64b_reverse-1999.webp", link: "https://store.steampowered.com/app/3092660/Reverse_1999/" },
+		{ title: "Umineko: When They Cry (Когда плачут Чайки)", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/406550/library_600x900.jpg", link: "https://store.steampowered.com/app/406550/Umineko_When_They_Cry__Question_Arcs/" },
+                { title: "Danganronpa 2: Goodbye Despair", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413420/library_600x900.jpg", link: "https://store.steampowered.com/app/413420/Danganronpa_2_Goodbye_Despair/" },
+                { title: "Danganronpa V3: Killing Harmony", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/567640/library_600x900.jpg", link: "https://store.steampowered.com/app/567640/Danganronpa_V3_Killing_Harmony/" },
+                { title: "Ларёк на улице Ленина", poster: "https://cdn.3dnews.ru/assets/external/illustrations/2025/01/22/1117110/0.jpg", link: "https://store.steampowered.com/app/3225880/%D0%9B%D0%B0%D1%80%D0%B5%D0%BA_%D0%BD%D0%B0_%D1%83%D0%BB%D0%B8%D1%86%D0%B5_%D0%9B%D0%B5%D0%BD%D0%B8%D0%BD%D0%B0/" },
+                { title: "Sally Face 2", poster: "https://media.ixbt.games/1600x900/smart/jpeg/ixbt-data/1289208/5416a7e5-7578-4c28-aede-151c921ec912.jpg", link: "https://store.steampowered.com/app/3937470/Sally_Face_2/" },
+                { title: "Pizza Tower", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2231450/library_600x900.jpg", link: "https://store.steampowered.com/app/2231450/Pizza_Tower/" },
+                { title: "Hello Neighbor", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/521890/library_600x900.jpg", link: "https://store.steampowered.com/app/521890/Hello_Neighbor/" },
+                { title: "Yuppie Psycho", poster: "https://img.byrutgame.org/uploads/posts/2026-09/ce56d381c8_yuppie-psycho-executive-edition.webp", link: "https://store.steampowered.com/app/597760/Yuppie_Psycho_Executive_Edition/" },
+                { title: "The Count Lucanor", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/440880/library_600x900.jpg", link: "https://store.steampowered.com/app/440880/The_Count_Lucanor/" },
+                { title: "Tattletail", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/568090/library_600x900.jpg", link: "https://store.steampowered.com/app/568090/Tattletail/" }
+            ]
+        };
+
+        const ListTitles = {
+            passed: "Игры которые играли",
+            party: "Игры на вечерок",
+            unpassed: "Список не пройденных игр",
+            debts: "Список долгов (Надо поиграть)",
+            reactions: "Список реакций для просмотра",
+            fnf: "ФНФ Моды для прохождения",
+            comics: "Комиксы",
+            abandoned: "Заброшенные игры",
+            unlikely: "Маловероятные игры на рассмотрение"
+        };
+
+        /* ========================================================================
+           🎮 ЛОГИКА ПЕРЕКЛЮЧЕНИЯ И РЕНДЕРИНГА СПИСКОВ
+           ======================================================================== */
+        function switchList(key) {
+            document.querySelectorAll('.list-tab-btn').forEach(btn => btn.classList.remove('pressed'));
+            const activeBtn = document.getElementById(`btn-${key}`);
+            if (activeBtn) activeBtn.classList.add('pressed');
+
+            document.getElementById('active-list-title').textContent = ListTitles[key];
+            renderGrid(GameLists[key] || []);
+        }
+
+        function renderGrid(items) {
+            const grid = document.getElementById('poster-grid');
+            grid.innerHTML = '';
+            
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "poster-card relative bg-[#111] rounded border border-white/20 overflow-hidden flex flex-col justify-between cursor-pointer shadow-xl";
+                
+                card.onclick = () => {
+                    window.open(item.link, '_blank');
+                };
+
+                /* ПОСТЕР С ПРОПОРЦИЕЙ 2:3 (ПОЛНОСТЬЮ КАК В СТИМЕ) */
+                card.innerHTML = `
+                    <div class="relative w-full aspect-[2/3] bg-[#1b1b1b] overflow-hidden">
+                        <img src="${item.poster}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=600&auto=format&fit=crop'">
+                    </div>
+                    <div class="p-3 text-center bg-black border-t border-white/10">
+                        <span class="text-xs font-bold text-white truncate block tracking-wide">${item.title}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            document.getElementById('list-count').textContent = `Элементов: ${items.length}`;
+        }
+
+        /* ========================================================================
+           🎵 АУДИО ЛОГИКА (АВТОВКЛЮЧЕНИЕ И УПРАВЛЕНИЕ)
+           ======================================================================== */
+        const music = document.getElementById('bg-music');
+        const musicIcon = document.getElementById('music-icon');
+        const volumeSlider = document.getElementById('volume-slider');
+
+        music.volume = 0.5;
+
+        function toggleMusic() {
+            if (music.paused) {
+                music.play().then(() => {
+                    musicIcon.className = "fa-solid fa-music text-sm";
+                }).catch(e => console.log("Требуется взаимодействие"));
+            } else {
+                music.pause();
+                musicIcon.className = "fa-solid fa-music-slash text-sm text-red-400";
+            }
+        }
+
+        function setVolume(val) {
+            music.volume = val;
+            if (val == 0) {
+                musicIcon.className = "fa-solid fa-volume-xmark text-sm text-red-400";
+            } else {
+                musicIcon.className = "fa-solid fa-volume-high text-sm";
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            switchList('passed');
+
+            music.play().then(() => {
+                musicIcon.className = "fa-solid fa-music text-sm";
+            }).catch(() => {
+                const unlockAudio = () => {
+                    music.play().then(() => {
+                        musicIcon.className = "fa-solid fa-music text-sm";
+                        window.removeEventListener('click', unlockAudio);
+                        window.removeEventListener('keydown', unlockAudio);
+                    });
+                };
+                window.addEventListener('click', unlockAudio);
+                window.addEventListener('keydown', unlockAudio);
+            });
+        });
+    </script>
+</body>
+</html>

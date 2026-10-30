@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            /* Фоновое изображение user/system/popu.png с фолбеком на стильный черный */
             background: #000000 url('user/system/popu.png') no-repeat center top fixed;
             background-size: cover;
             color: #ffffff;
@@ -44,6 +43,29 @@
             box-shadow: inset 0 3px 6px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.2) !important;
             filter: brightness(0.85);
             border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* Кнопки подблоков (внутри категорий вроде Реакций или Другого) */
+        .sub-tab-btn {
+            transition: all 0.1s ease;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 11px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: #1a1a1a;
+            color: #bbb;
+        }
+        .sub-tab-btn:hover {
+            background: #333;
+            color: #fff;
+        }
+        .sub-tab-btn.active-sub {
+            background: #e11d48;
+            color: #fff;
+            border-color: #f43f5e;
+            box-shadow: 0 0 10px rgba(225, 29, 72, 0.5);
         }
 
         /* Эффект свечения и подъема постеров */
@@ -91,33 +113,31 @@
             <!-- Левый блок: Кнопка музыки + Главная -->
             <div class="flex items-center space-x-3 w-full xl:w-auto justify-between xl:justify-start">
                 <div class="flex items-center space-x-2">
-                    <!-- Квадратная кнопка музыки со значком -->
                     <button id="music-toggle-btn" onclick="toggleMusic()" class="w-10 h-10 bg-[#1a1a1a] border border-white/30 rounded flex items-center justify-center text-white hover:bg-[#333] transition cursor-pointer shadow-lg active:scale-95" title="Включить/Выключить музыку">
                         <i id="music-icon" class="fa-solid fa-music text-sm"></i>
                     </button>
-                    <!-- Ползунок громкости слева (большой белый квадратный) -->
                     <div class="flex items-center bg-[#111] px-2 py-1.5 rounded border border-white/20">
                         <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" oninput="setVolume(this.value)" class="w-24 cursor-pointer" title="Громкость">
                     </div>
                 </div>
 
-                <!-- Кнопка Главная (возврат на index.html) -->
                 <a href="index.html" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2.5 rounded border border-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.5)] transition active:translate-y-0.5">
                     <i class="fa-solid fa-house mr-1"></i> ГЛАВНАЯ
                 </a>
             </div>
 
-            <!-- Правый блок: 9 Кнопок списков -->
+            <!-- Правый блок: 10 Кнопок списков -->
             <nav class="flex flex-wrap items-center justify-center gap-1.5">
                 <button id="btn-passed" onclick="switchList('passed')" class="list-tab-btn bg-orange-600 text-white">Пройденные</button>
-                <button id="btn-party" onclick="switchList('party')" class="list-tab-btn bg-yellow-500 text-black">Игры на вечерок</button>
+                <button id="btn-party" onclick="switchList('party')" class="list-tab-btn bg-yellow-500 text-black">На вечерок</button>
                 <button id="btn-unpassed" onclick="switchList('unpassed')" class="list-tab-btn bg-red-600 text-white">Не пройденные</button>
                 <button id="btn-debts" onclick="switchList('debts')" class="list-tab-btn bg-blue-600 text-white">Долги</button>
                 <button id="btn-reactions" onclick="switchList('reactions')" class="list-tab-btn bg-purple-600 text-white">Реакции</button>
-                <button id="btn-fnf" onclick="switchList('fnf')" class="list-tab-btn bg-pink-600 text-white">ФНФ Моды</button>
+                <button id="btn-fnf" onclick="switchList('fnf')" class="list-tab-btn bg-pink-600 text-white">ФНФ</button>
                 <button id="btn-comics" onclick="switchList('comics')" class="list-tab-btn bg-indigo-600 text-white">Комиксы</button>
                 <button id="btn-abandoned" onclick="switchList('abandoned')" class="list-tab-btn bg-amber-600 text-white">Заброшенные</button>
                 <button id="btn-unlikely" onclick="switchList('unlikely')" class="list-tab-btn bg-emerald-700 text-white">Маловероятные</button>
+                <button id="btn-other" onclick="switchList('other')" class="list-tab-btn bg-cyan-700 text-white">Другое</button>
             </nav>
         </div>
     </header>
@@ -125,12 +145,18 @@
     <!-- 🎯 ОСНОВНОЙ КОНТЕНТ -->
     <main class="max-w-7xl mx-auto w-full px-4 py-8 flex-grow">
         <!-- Название активного списка сверху -->
-        <div class="flex justify-between items-center mb-6 border-b border-white/20 pb-4">
-            <h1 id="active-list-title" class="text-3xl font-black text-white tracking-wider uppercase">Игры которые играли</h1>
-            <span id="list-count" class="text-xs text-gray-400 font-mono">Элементов: 0</span>
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b border-white/20 pb-4 gap-4">
+            <div>
+                <h1 id="active-list-title" class="text-3xl font-black text-white tracking-wider uppercase">Игры которые играли</h1>
+            </div>
+            <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+                <!-- Контейнер для динамических подменю (подблоков) -->
+                <div id="sub-tabs-container" class="flex flex-wrap gap-2 hidden"></div>
+                <span id="list-count" class="text-xs text-gray-400 font-mono whitespace-nowrap">Элементов: 0</span>
+            </div>
         </div>
 
-        <!-- Сетка 5 столбцов с правильным соотношением сторон постеров Steam (2:3) -->
+        <!-- Сетка 5 столбцов -->
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4" id="poster-grid">
             <!-- Динамически заполняется через JS -->
         </div>
@@ -301,18 +327,60 @@
                 { title: "AI: The Somnium Files", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/948740/library_600x900.jpg", link: "https://store.steampowered.com/app/948740/AI_The_Somnium_Files/" }
             ],
 
-            // 5. СПИСОК РЕАКЦИЙ ДЛЯ ПРОСМОТРА
-            reactions: [
-                { title: "Удивительный цифровой цирк", poster: "https://avatars.mds.yandex.net/get-kinopoisk-image/1898899/300edb70-bfe9-4b52-8865-1bf0f346a41b/3840x", link: "https://youtube.com/playlist?list=PLHovnlOusNLgvAbnxluXCVB3KLj8e4QB-&si=XuZ7bd0d6zd61FH5" },
-                { title: "Gameoverse", poster: "https://i.pinimg.com/236x/a1/80/c9/a180c905e7d8b74ebd1bd92fdefc3fed.jpg", link: "https://youtube.com/playlist?list=PLHovnlOusNLjUykpV3X-hI45o6n4haPGW&si=hE9m70Pa8TDN_p_p" },
-                { title: "Инди Кросс", poster: "https://i.pinimg.com/474x/44/8a/eb/448aeb8c48175f6744969d632c697268.jpg", link: "https://youtube.com/playlist?list=PLLfDD5uFkq-p-p9qondyuRR0kGk2dMPB1&si=GDM200mk2c6VEQtt" },
-                { title: "ИСТОРИИ О ТЫКВЕННОМ КРОЛИКЕ", poster: "https://en-images-s.kinorium.com/movie/1080/11946030.jpg?1732357610", link: "https://vk.ru/video-203501768_456239772" },
-                { title: "Жуткий Месяц", poster: "https://i.pinimg.com/originals/78/54/d1/7854d1ccc45900700bf8a9c89877f63c.jpg", link: "https://www.youtube.com/playlist?list=PL431KQTio9AoBLSxKt6_8haeOmhO7dAcY" },
-                { title: "Mystery Skulls", poster: "https://i.pinimg.com/736x/d3/a0/1d/d3a01dc82f167de54b3b139fc641e79d.jpg", link: "https://youtu.be/z2LxYvA49sk?si=ad961MqDQVTO6TLK" },
-                { title: "Доки Доки: Клуб Сердец!!", poster: "user/system/dokk.png", link: "https://youtube.com/playlist?list=PLbjFAFe3uVYY&si=x1ouAv2k0YFgw8RW" }
-            ],
+            // 5. РЕАКЦИИ (с подблоками: сняты / надо снять)
+            reactions: {
+                toFilm: [
+                { title: "Удивительный цифровой цирк", poster: "https://avatars.mds.yandex.net/get-kinopoisk-image/1898899/300edb70-bfe9-4b52-8865-1bf0f346a41b/3840x", status: "z", link: "https://youtube.com/playlist?list=PLHovnlOusNLgvAbnxluXCVB3KLj8e4QB-&si=XuZ7bd0d6zd61FH5" },
+                { title: "Gameoverse", poster: "https://i.pinimg.com/236x/a1/80/c9/a180c905e7d8b74ebd1bd92fdefc3fed.jpg", status: "ccc", link: "https://youtube.com/playlist?list=PLHovnlOusNLjUykpV3X-hI45o6n4haPGW&si=hE9m70Pa8TDN_p_p" },
+                { title: "Инди Кросс", poster: "https://i.pinimg.com/474x/44/8a/eb/448aeb8c48175f6744969d632c697268.jpg", status: "mmm", link: "https://youtube.com/playlist?list=PLLfDD5uFkq-p-p9qondyuRR0kGk2dMPB1&si=GDM200mk2c6VEQtt" },
+                { title: "ИСТОРИИ О ТЫКВЕННОМ КРОЛИКЕ", poster: "https://en-images-s.kinorium.com/movie/1080/11946030.jpg?1732357610", status: "mmm", link: "https://vk.ru/video-203501768_456239772" },
+                { title: "Жуткий Месяц", poster: "https://i.pinimg.com/originals/78/54/d1/7854d1ccc45900700bf8a9c89877f63c.jpg", status: "xax", link: "https://www.youtube.com/playlist?list=PL431KQTio9AoBLSxKt6_8haeOmhO7dAcY" },
+                { title: "Mystery Skulls", poster: "https://i.pinimg.com/736x/d3/a0/1d/d3a01dc82f167de54b3b139fc641e79d.jpg", status: "ccc", link: "https://youtu.be/z2LxYvA49sk?si=ad961MqDQVTO6TLK" },
+                { title: "Доки Доки: Клуб Сердец!!", poster: "user/system/dokk.png", status: "x", link: "https://youtube.com/playlist?list=PLbjFAFe3uVYY&si=x1ouAv2k0YFgw8RW" }
+                ],
+                filmed: [
+                { title: "Андертейл АУ", poster: "https://i.pinimg.com/736x/4e/a8/ec/4ea8ec5c61cc1beebebefa28fbc638a7.jpg", status: "u", link: "https://youtube.com/playlist?list=PLIKw-LjWLR1w&si=MtX0V-BDnqLKZU7F" },
+    		{ title: "Доки Доки Песни", poster: "https://i.pinimg.com/originals/8b/27/a4/8b27a43baef64159135fbf101f5c950f.png", status: "xop", link: "https://youtube.com/playlist?list=PLZbWqldudDiE&si=4ia-eGCKKyZ6HOC0" },
+    		{ title: "Glitchtale", poster: "https://i.pinimg.com/736x/c6/1c/cb/c61ccb7f0018f78f36fe76a521c26a5c.jpg", status: "rr", link: "https://youtube.com/playlist?list=PLey7_rui1H8E&si=a63wA8QN_4hnfpkj" },
+    		{ title: "UnderPants", poster: "https://i.ytimg.com/vi/ZZnNzKEi9Kw/maxresdefault.jpg", status: "dd", link: "https://youtube.com/playlist?list=PLPRIhmh2sD4o&si=Tjk3NWWoFnkHvJwp" },
+    		{ title: "Злыдни", poster: "https://i.pinimg.com/originals/b1/78/9c/b1789cc1ec9292dc9f0c6745693b4740.jpg", status: "vvv", link: "https://youtube.com/playlist?list=PLfdnzXH6yL2Q&si=7uvt25wSpeqMa19f" },
+    		{ title: "UnderVerse", poster: "https://i.pinimg.com/736x/2c/9c/36/2c9c369149e63907f85fd30183d2d4ed.jpg", status: "z", link: "https://youtube.com/playlist?list=PLQa0NV2aZRKk&si=XTB_Xi_38a00-pax" },
+    		{ title: "Даша Чупущественица", poster: "https://i.ytimg.com/vi/_0_nhheVFdE/maxresdefault.jpg", status: "vvv", link: "https://youtube.com/playlist?list=PLZwkjhMtU7aA&si=8vCVZlKMZ2_jaUXM" },
+    		{ title: "Главный Враг Человека паука", poster: "https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=600", status: "f", link: "https://youtu.be/FcPqS076CBQ?si=OBeIdplFh-HAbfIc" },
+    		{ title: "Расконадзон тян", poster: "https://cs8.pikabu.ru/post_img/2016/12/23/11/148251864515332265.jpg", status: "f", link: "https://youtu.be/rRnVVUWMI0A?si=l_AChmv1mjHvhU_g" },
+    		{ title: "Фоллаут 4 с пони", poster: "https://i.pinimg.com/originals/30/38/2b/30382bec5ccdf3dfeb908d4bda8ad346.jpg", status: "f", link: "https://youtu.be/Q4nd_eZjPzU?si=S9roT5nAPvMOI0rX" },
+    		{ title: "Секреты Героев Овервотч", poster: "https://i.pinimg.com/originals/a3/50/6a/a3506a4c0586519f10654e823a22d96b.jpg", status: "f", link: "https://youtu.be/Ll0wlqyrdoA?si=CkRZkEVbCAjmTB7z" },
+    		{ title: "Знакомьтесь, Боб", poster: "http://images-s.kinorium.com/movie/poster/8120472/w1500_55081780.jpg", status: "far", link: "https://youtube.com/playlist?list=PLW5vb-fGcKEs&si=x9IshJQDHnhJPTee" },
+    		{ title: "Желейный Медведь Валера", poster: "https://basket-25.wbbasket.ru/vol4526/part452617/452617328/images/big/1.webp", status: "f", link: "https://youtu.be/-7rU1clIcLE?si=8KfOgwXoivJk46QM" },
+    		{ title: "Трейлер мстителей война бесконечности", poster: "https://cdn.ananasposter.ru/image/cache/catalog/poster/film/80/24549-1000x830.jpg", status: "f", link: "https://youtu.be/OnmwHJANkOs?si=aYiW8lM0qEUrVXbT" },
+    		{ title: "Кошачий Передоз", poster: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=600", status: "f", link: "https://youtu.be/zDA0DiwDlwM?si=oTdI9zKsMcb_aVKw" },
+    		{ title: "Рик и Морти", poster: "https://fkniga.ru/media/product/05/03080406/KA-00354373.jpg", status: "ram", link: "https://youtube.com/playlist?list=PLC44mVspEz8I&si=TRdVg8ahGIhh2jnz" },
+    		{ title: "Земля Тян", poster: "https://i.pinimg.com/736x/f7/b3/af/f7b3af74ab3bcfea282d364bade4b875.jpg", status: "f", link: "https://youtu.be/CJaDPnqTsj8?si=tbVHYWGNwOnNv2ie" },
+    		{ title: "Спанч Боб Аниме", poster: "https://ru2-files.vgtimes.ru/posts/2020-07/po-spanch-bobu-vypustili-anime-v-kotorom-pokazali-naskolko-geroy-silen-v-boyu-68861.webp?1595830764?1595830764", status: "mmm", link: "https://youtube.com/playlist?list=PLDe9FShq-C7c&si=wprtIN2CwBvPj7TY" },
+    		{ title: "Все блогеры", poster: "https://i.ytimg.com/vi/Cp50oQwbgoE/maxresdefault.jpg", status: "pox", link: "https://youtu.be/Y0xubLAASWs?si=Eho62LuHpekUPPIj" },
+    		{ title: "Теории Доки Доки", poster: "https://store.serenityforge.com/cdn/shop/files/00_SAYORI_1200x1200.png?v=1698442799", status: "ram", link: "https://youtube.com/playlist?list=PLS7qWbmN6Cq8&si=lzD36x5-22eMUzW1" },
+    		{ title: "Mystery Skulls", poster: "https://i.pinimg.com/736x/d3/a0/1d/d3a01dc82f167de54b3b139fc641e79d.jpg", status: "xop", link: "https://youtube.com/playlist?list=PLKf1rXXw7VZc&si=jEmHvCy3FyiGGh-q" },
+    		{ title: "Салли Фейс Жив", poster: "https://cdn.ananasposter.ru/image/cache/catalog/poster/pos23/57/79607-1000x830.jpg", status: "f", link: "https://youtu.be/v5UGgL68SjM?si=VqAul6a93Yox2TOy" },
+    		{ title: "Зараза", poster: "https://minsknews.by/wp-content/uploads/2020/05/maxresdefault-86.jpg?original", status: "pox", link: "https://youtu.be/_ciglglnRvk?si=vmJQSFucWDCGXUMT" },
+    		{ title: "Копите Капитал", poster: "https://cdn-images.dzcdn.net/images/cover/71b0a1d329a1aa0e1252c1869783be03/1000x1000.jpg", status: "pox", link: "https://youtu.be/-UnCu6b8Oa0?si=Mv0qDqnGzfKwJ9wl" },
+    		{ title: "Дух Моей Общаги", poster: "http://images-s.kinorium.com/movie/poster/10344788/w1500_51882044.jpg", status: "ccc", link: "https://youtu.be/0lJposQ3JTY?si=fbC4dVoctSETfcVh" },
+    		{ title: "Металл Фемили", poster: "https://en-images-s.kinorium.com/movie/1080/2419013.jpg?1687253232", status: "ccc", link: "https://youtu.be/fcsSx3n6Xo4?si=6D75r-fru9m6xI3G" },
+    		{ title: "5 ночей у Фредди", poster: "https://avatars.mds.yandex.net/get-kinopoisk-image/10893610/a289f7c8-05b6-4413-bec2-2769d56ee687/3840x", status: "f", link: "https://youtu.be/j-x0pgC6obc?si=FSyZWhTJv-Gp2w1H" },
+    		{ title: "Фнаф Фильм", poster: "https://i.pinimg.com/736x/5f/f1/7a/5ff17a95db026bb8f9e902d55ebf0b37.jpg", status: "f", link: "https://youtube.com/playlist?list=PLPcfS8lr7IM4&si=liG0XrsJRMNtKsCA" },
+    		{ title: "Undertale Touhou", poster: "https://i.pinimg.com/originals/34/bc/c7/34bcc702c5b651faac0e0b00cc6db2da.jpg", status: "mmm", link: "https://youtube.com/playlist?list=PLNe0FcRe4NmQ&si=nfeTYj3Au9c5Qzxj" },
+    		{ title: "Адский Босс", poster: "https://avatars.mds.yandex.net/get-kinopoisk-image/4716873/8409668a-1956-444b-b2ee-898823045d10/1920x", status: "ccc", link: "https://youtu.be/tJWSa_h2W9o?si=eAVUytG5D9RhdNGU" },
+    		{ title: "Злыдни Пилот", poster: "https://i.pinimg.com/736x/39/ae/a8/39aea89ae960d6259e2033800c254df0.jpg", status: "zozz", link: "https://main4.kinogo.news/40980-zlydni.html" },
+    		{ title: "Xtale", poster: "https://en-images.kinorium.com/movie/1080/8906358.jpg?1707318166", status: "lol", link: "https://youtube.com/playlist?list=PLUkhlSNgN4Lk&si=QixGGR76QRm456yW" },
+    		{ title: "Жуткий месяц", poster: "https://i.pinimg.com/originals/78/54/d1/7854d1ccc45900700bf8a9c89877f63c.jpg", status: "vvv", link: "https://youtu.be/bAQ0NjWUiEU?si=reCybn-C87pp0gqt" },
+    		{ title: "С приветом по планетам", poster: "https://avatars.mds.yandex.net/get-kinopoisk-image/1599028/5f535917-7a35-4142-9d3c-ebed8fe650dc/3840x", status: "ccc", link: "https://youtu.be/bItWqgKKLo4?si=DC4N9YkTSLZ0JBHN" },
+    		{ title: "Грехи Дельтарун", poster: "https://ir.ozone.ru/s3/multimedia-1-n/7753267463.jpg", status: "f", link: "https://youtu.be/kSqkOwgiPcs?si=_W98r5wBOueM87ZF" },
+    		{ title: "Madness Combat", poster: "https://i.pinimg.com/originals/b7/8f/12/b78f122974ade44fe2e2c926f8c523b1.jpg?nii=t", status: "ram", link: "https://youtube.com/playlist?list=PLQfpxJuKEQXY&si=hRb9N4kcFeDTc6NH" },
+    		{ title: "Стрим по Рекциям", poster: "https://i.pinimg.com/originals/20/db/f3/20dbf35d19a26034feff9ba80065c316.jpg?nii=t", status: "cop", link: "https://www.youtube.com/live/VwL3HGG9M80?si=s62yMxYf4vaAPxo2" },
+                { title: "Доки Доки: Клуб Сердец!!", poster: "user/system/dokk.png", status: "ccc", link: "https://youtu.be/_tgWnlyRLI0?si=PiioqWZFtSXH9k2F" }
+                ]
+            },
 
-            // 6. СПИСОК ФНФ МОДОВ ДЛЯ ПРОХОЖДЕНИЯ
+            // 6. ФНФ МОДЫ
             fnf: [
                 { title: "Friday Night Funkin' VS Whitty", poster: "https://imagecdn.voicify.ai/models/55b8b2eb-41c4-485c-b723-5f873ef4573c.png", status: "yoyu", link: "https://gamebanana.com/mods/44214" },
                 { title: "Friday Night Funkin' VS Garcello", poster: "https://i.pinimg.com/736x/00/bc/df/00bcdf00299b1ed02a774b0dd4048a98.jpg", status: "xox", link: "https://gamebanana.com/mods/166531" },
@@ -324,11 +392,11 @@
                 { title: "Friday Night Funkin' Trololo", poster: "https://www.y9freegames.com/wp-content/uploads/thumbs/custom/F/FNF-vs-Mr.-Trololo.jpg", status: "opop", link: "https://gamejolt.com/games/fridaynightincident/645374" }
             ],
 
-            // 7. СПИСОК КОМИКСОВ
+            // 7. КОМИКСЫ
             comics: [
                 { title: "Homestuck", poster: "https://i.pinimg.com/originals/57/ae/ea/57aeeabb10e609103cde72a203183dc5.jpg", link: "https://mspaintadventures.ru/" },
-                { title: "Голубь Генадий", poster: "https://cdn.insales-shop.ru/images/products/1/7552/449158528/76f4d3816c9ec28a83c9a9cf57c6d224c1262d561.jpg", link: "https://youtu.be/eM-7Esy8LUY?si=2b7Hy-ypWbPQN-d1" },
-                { title: "Азбука Ролевика", poster: "https://cdna.artstation.com/p/assets/images/images/009/321/884/large/cecil-porter-asset.jpg?1518333571", link: "https://youtu.be/hnXURQb_6k8?si=3tOoRVgH6lOru2tR" }
+                { title: "Голубь Генадий", poster: "https://cdn.insales-shop.ru/images/products/1/7552/449158528/76f4d3816c9ec28a83c9a9cf57c6d224c1262d561.jpg", link: "https://youtube.com" },
+                { title: "Азбука Ролевика", poster: "https://cdna.artstation.com/p/assets/images/images/009/321/884/large/cecil-porter-asset.jpg?1518333571", link: "https://youtube.com" }
             ],
 
             // 8. ЗАБРОШЕННЫЕ ИГРЫ
@@ -365,7 +433,7 @@
                 { title: "Danganronpa: Trigger Happy Havoc", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413410/library_600x900.jpg", link: "https://store.steampowered.com/app/413410/Danganronpa_Trigger_Happy_Havoc/" }
             ],
 
-            // 9. МАЛОВЕРОЯТНЫЕ ИГРЫ НА РАССМОТРЕНИЕ
+            // 9. МАЛОВЕРОЯТНЫЕ ИГРЫ
             unlikely: [
                 { title: "Limbus Company", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1973530/library_600x900.jpg", link: "https://store.steampowered.com/app/1973530/Limbus_Company/" },
                 { title: "Subnautica", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/264710/library_600x900.jpg", link: "https://store.steampowered.com/app/264710/Subnautica/" },
@@ -382,7 +450,83 @@
                 { title: "The Count Lucanor", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/440880/library_600x900.jpg", link: "https://store.steampowered.com/app/440880/The_Count_Lucanor/" },
                 { title: "Tattletail", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/568090/library_600x900.jpg", link: "https://store.steampowered.com/app/568090/Tattletail/" },
                 { title: "Baldi's Basics Classic Remastered", poster: "https://torrentxs.com/uploads/posts/2023-03/baldis-basics-classic-remastered-1.webp", link: "https://store.steampowered.com/app/1712830/Baldis_Basics_Classic_Remastered/" }
-            ]
+            ],
+
+            // 10. ДРУГОЕ (с 8 подблоками)
+            other: {
+                castle: [
+		    { title: "Ратуша", poster: "https://avatars.mds.yandex.net/i?id=46009621668e033621f6538ec0b8d2bc_l-5111908-images-thumbs&n=13", link: "https://youtu.be/DVhkL_kHm9g?si=54sGIxkdUT72cyXx" },
+    		    { title: "Кузня", poster: "https://regions.kidsreview.ru/sites/default/files/styles/oww/public/07/19/2016-2239/img_5586.jpg", link: "https://youtu.be/-jm81RTb7IU?si=52BPikCrI_BsgAaY" },
+    		    { title: "Гильдия магии", poster: "https://avatars.mds.yandex.net/i?id=ebab3c2f062bb8dc73730d5cc3e947db_l-4825537-images-thumbs&n=13", link: "https://youtu.be/-ADIEtoMlfQ?si=Ow1cbliKGChJNVC0" },
+    		    { title: "Форт", poster: "https://photo.brestcity.com/2022/04/fort5_1.jpg", link: "https://youtu.be/QfPZ6W8y-zA?si=zIkqIm3RF6lPppw2" },
+    		    { title: "Таверна", poster: "https://i.pinimg.com/originals/db/77/02/db770201e4c9eed37d1b5f133bfaa456.jpg?nii=t", link: "https://youtu.be/g_HVX2O58TQ?si=zK324_eTZeabT9hM" },
+    		    { title: "Зданий", poster: "https://i.pinimg.com/originals/68/ba/8b/68ba8bfa030ab849b26f7250fe443a39.jpg?nii=t", link: "https://youtu.be/IJzoQunNmRQ?si=0zhUpLQEAQIegQH0" },
+    		    { title: "Рынок", poster: "https://pastvu.com/_p/a/0/4/7/0472y9d8cbliwxyeci.jpg", link: "https://youtu.be/u8ASMFF46v8?si=YBcv398gVsBuZayS" }
+                ],
+                characters: [
+	            { title: "Фриск", poster: "https://static.wikia.nocookie.net/character-stats-and-profiles/images/2/28/Frisktarot.png/revision/latest?cb=20181217213818", link: "https://youtu.be/8EgpIikjJZA?si=46ev5ipfvdj_iZVB" },
+    		    { title: "Чара", poster: "https://static.wikia.nocookie.net/undertale/images/a/a3/Chara_tarot.png/revision/latest?cb=20260622124611&amp;path-prefix=ru", link: "https://youtu.be/ESD49KhC58A?si=JKtEFAlKN7-8Bifj" },
+    		    { title: "Асмодей", poster: "https://diskomir.com/upload/iblock/700/magnit-pryamougolnyy-khelltaker-modeus.jpg", link: "https://youtu.be/I6nSPLcRSEQ?si=eaR8nIq8j8IBHoXu" }
+                ],
+                hunterTries: [
+                    { title: "Личинка Шелкопряда", poster: "https://avatars.mds.yandex.net/get-shedevrum/16913138/img_38f720c77e9b11f0a98306489f4ccb3a/orig", link: "https://youtu.be/ueRO7nP5SQs?si=rxiys9WOAWBMLwvq" },
+    		    { title: "Лапшычка", poster: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=600", link: "https://youtu.be/8ffM8RWWCA4?si=gcN_zNtVuxyJHzkY" },
+    		    { title: "Звездофрукт", poster: "https://travelask.ru/system/images/files/001/481/875/wysiwyg_jpg/5.jpg?1626330179", link: "https://youtu.be/UmgXwKIn_wM?si=MbbHKcjPzW9ryk-J" },
+    		    { title: "Газява", poster: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=600", link: "https://youtu.be/7QGFT7xZ4RY?si=AtWBJCO27_Gfwo-E" },
+    		    { title: "Поваренок", poster: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=600", link: "https://youtu.be/vuSSU3yJQGc?si=WdrY9bK12U3Tnfae" },
+    		    { title: "Сухарики с чайком", poster: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=600", link: "https://youtu.be/jX-Z_oN94I0?si=piaNfSpwCD6m0Ud_" },
+    	   	    { title: "Сладкая сырная палочка", poster: "https://www.sports.ru/dynamic_images/post/326/304/7/share/ce71b7_no_logo_no_text.jpg", link: "https://youtu.be/2izqo3Iaj2s?si=8g6WdulE1IiAURgY" },
+    	   	    { title: "Чокопай", poster: "https://irecommend.ru/sites/default/files/imagecache/copyright1/user-images/608923/MHbS0lwg7Gv042rjCKnmRg.jpg", link: "https://youtu.be/aLiaeUyPKb0?si=YxFV8QoizgNNVhRf" },
+    		    { title: "Лейс с лаймом", poster: "https://irecommend.ru/sites/default/files/imagecache/copyright1/user-images/419269/nzjMAkmiizzdcKWTxE2cg.jpg", link: "https://youtu.be/cYtMff2F6-Q?si=6MPYnX5mfxLPFrtP" },
+    		    { title: "Конкретная Отрава", poster: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=600", link: "https://youtu.be/ZbBAFvJT99k?si=FIX3QXD2WBpbdGQN" },
+    		    { title: "Сочек", poster: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?q=80&w=600", link: "https://youtu.be/w6OWuVkRKyY?si=ctvsByJVf08OOeyh" },
+    		    { title: "ПеченюХи", poster: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=600", link: "https://youtu.be/hMV4Q7CxEow?si=AlBQj4oix75USgmO" },
+    		    { title: "Бухло", poster: "https://i.pinimg.com/474x/1f/6d/8e/1f6d8eb553363d0062b0181ea8d120d3.jpg", link: "https://youtu.be/Ur2LfE_XbO8?si=4Jbewl3lPNWgSJjN" }
+                ],
+                cities: [
+                    { title: "Новосибирск", poster: "https://aif-s3.aif.ru/images/025/592/1f8f96cbe63d2f13688af5e88e0472b8.jpg", link: "https://youtube.com/playlist?list=PLZRJRc1WtptiPIMA8Qz1u4Xnbwk9-SkA0&si=AlU5LZkhL3YvUzmN" },
+    	   	    { title: "Кемерово", poster: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_65e596c2f24f8a744be8ee62_65e59934ba2c6c0740774672/scale_1200", link: "https://youtube.com/playlist?list=PLZRJRc1WtptiPIMA8Qz1u4Xnbwk9-SkA0&si=AlU5LZkhL3YvUzmN" },
+    		    { title: "Красноярск", poster: "https://s.newslab.ru/photoalbum/85155/m/355961.jpg", link: "https://youtube.com/playlist?list=PLZRJRc1WtptiPIMA8Qz1u4Xnbwk9-SkA0&si=AlU5LZkhL3YvUzmN" },
+   		    { title: "Иркутск", poster: "https://evroservis.ooo/uploads/upload_883a0a9256f616354db26ff7f8a94b0b.jpg", link: "https://youtube.com/playlist?list=PLZRJRc1WtptiPIMA8Qz1u4Xnbwk9-SkA0&si=AlU5LZkhL3YvUzmN" }
+                ],
+                modds: [
+                    { title: "Doki Doki: Новый День", poster: "https://images.steamusercontent.com/ugc/1749058299667161878/483C151B194C2470934736F81ECC79DE3B7ABF3B/", status: "yoyu", link: "https://drive.google.com/file/d/1eh64vC9PwVTKUC1mMZoobkWLyOYGg7pf/view" },
+    		    { title: "История одного Пионера", poster: "https://i.ytimg.com/vi/kX5jjQodTR0/maxresdefault.jpg", status: "xox", link: "https://www.youtube.com/live/R5gVz1689C4?si=_yotP3J5rIzpPdZO" },
+    		    { title: "Бесконечная Доза", poster: "https://i.ytimg.com/vi/V0-eWl5o980/maxresdefault.jpg", status: "xox", link: "https://steamcommunity.com/sharedfiles/filedetails/?id=708753937" },
+    		    { title: "Мод Саманта", poster: "user/system/samanta.png", status: "xox", link: "https://steamcommunity.com/workshop/filedetails/?l=russian&id=354397869" }
+                ],
+                gratitude: [
+                    { title: "300 подписчиков", poster: "https://i.ytimg.com/vi/oTVEi3MwDok/maxresdefault.jpg", link: "https://youtu.be/oTVEi3MwDok?si=hKarbJs7Rr2yX0T5" }
+                ],
+                films: [
+                    { title: "Клаус", poster: "https://static.hdrezka.ac/i/2020/10/28/u68cbb611c739sr35n56r.png", status: "zozz", link: "https://rezka-ua.pub/cartoons/adventures/32468-klaus-2019.html" }
+                ],
+                interesting: [
+                    { title: "Кнопка Ютуба", poster: "https://avatars.mds.yandex.net/i?id=6ba90886dd5951650dde21635b23712e_l-5359702-images-thumbs&n=13", link: "https://youtu.be/QY0kZE3KeZI?si=VQrmjzLZyqCLjf48" }
+                ],
+                prazdnik: [
+                    { title: "Новый Год 2018", poster: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?q=80&w=600", link: "https://youtu.be/GFDS-reGFno?si=-Fp8eP2pI2oFSEKZ" },
+    		    { title: "Новый Год 2019", poster: "https://images.unsplash.com/photo-1543589077-47d81606c1bf?q=80&w=600", link: "https://youtu.be/Eos7-e8W7-s?si=MmpIBkNvhzTRRIcq" },
+    		    { title: "Дед Мороз", poster: "https://media.istockphoto.com/id/1620422121/ru/%D1%84%D0%BE%D1%82%D0%BE/%D0%BF%D1%8C%D1%8F%D0%BD%D1%8B%D0%B9-%D1%81%D0%B0%D0%BD%D1%82%D0%B0-%D0%BA%D0%BB%D0%B0%D1%83%D1%81-%D0%B2-%D1%88%D0%BB%D1%8F%D0%BF%D0%B5-%D0%B8-%D0%BF%D1%80%D0%B0%D0%B7%D0%B4%D0%BD%D0%B8%D1%87%D0%BD%D1%8B%D1%85-%D0%B1%D0%BE%D0%BA%D0%B0%D0%BB%D0%B0%D1%85-%D0%BF%D1%8C%D0%B5%D1%82-%D0%B2%D0%B8%D0%BD%D0%BE-%D0%B8%D0%B7-%D0%B1%D1%83%D1%82%D1%8B%D0%BB%D0%BA%D0%B8-%D0%BD%D0%B0-%D0%BA%D1%80%D0%B0%D1%81%D0%BD%D0%BE%D0%BC-%D1%84%D0%BE%D0%BD%D0%B5-%D0%BC%D1%83%D0%B6%D1%87%D0%B8%D0%BD%D0%B0.jpg?s=612x612&w=0&k=20&c=FghQDoKp3RUW45pjR3MTSeyp94dViO5mgEtT-V-MeHc=", link: "https://youtu.be/6qY-6HzGmDw?si=WanrQNiEEzDazCxQ" },
+    		    { title: "Новый Год 2021", poster: "https://i.pinimg.com/736x/6b/1e/c8/6b1ec8b7827e7c9b6c1fb2b6c89d9de0.jpg", link: "https://youtu.be/-2kFQJ_BWTQ?si=-4mhklzE4pChcPlb" },
+    		    { title: "Новый Год 2026", poster: "https://images.unsplash.com/photo-1513297887119-d46091b24bfa?q=80&w=600", link: "https://youtu.be/n0li5g9WWSs?si=l1DarShMWsA6Nveh" }
+                ],
+                doso: [
+                    { title: "Достопримечательности: Новосибирск", poster: "https://www.larecz.ru/wp-content/uploads/2023/10/Sibirskij-botanicheskij-sad-2.jpg", link: "https://youtu.be/KgiAPbPYbR8?si=mw6gckrayUw-jwHM" }
+                ],
+                otherActivity: [
+                    { title: "Обращение к народу", poster: "https://images.meme-arsenal.com/a3f5901293b2e76cf9ebfb2bfa0e2900.jpg", link: "https://youtube.com/playlist?list=PLZRJRc1WtptgRe7RK-1Cm2EqhExCbw2sx&si=N6lnlY9WKtDY_XLV" },
+                    { title: "В честь Прохождение", poster: "https://i.ytimg.com/vi/FoW8TVWC59Y/maxresdefault.jpg", link: "https://youtube.com/playlist?list=PLZRJRc1WtptjXExKhrgXexTNszXibJoqe&si=mlFRK77Y8EDrhY-8" },
+    		    { title: "Хантер сбил Маба", poster: "https://i.ytimg.com/vi/_tgWnlyRLI0/maxresdefault.jpg", link: "https://youtu.be/_tgWnlyRLI0?si=bDJRx5N3uICFuEep" },
+    		    { title: "Трейлер стрим канала", poster: "https://i.ytimg.com/vi/0zy0FV9wQe8/maxresdefault.jpg", link: "https://youtu.be/0zy0FV9wQe8?si=mnhRGecmY1Zlm8I9" },
+    		    { title: "Intro Iratus: Lord of the Dead (переозвучено Хантером)", poster: "https://i.ytimg.com/vi/V5BnEbDDTk4/maxresdefault.jpg", link: "https://youtu.be/V5BnEbDDTk4?si=2AI6SsngUlAwSwaC" },
+    		    { title: "Distraction Dance Хантера", poster: "https://i.ytimg.com/vi/cLu7jRfxrbw/maxresdefault.jpg", link: "https://youtu.be/t9FqFFgApHw?si=bMibuepWh9uuzljt" },
+    		    { title: "Настольгия", poster: "https://i.ytimg.com/vi/iRpwFF-d5i4/maxresdefault.jpg", link: "https://www.youtube.com/live/iRpwFF-d5i4?si=vs2dWhFOotCBQcPW" },
+    		    { title: "Тир лист Привью", poster: "https://i.ytimg.com/vi/pS-YXNyB250/maxresdefault.jpg", status: "yoyu", link: "https://www.youtube.com/live/pS-YXNyB250?si=yIbkBFb6aZg3VbI_" },
+    		    { title: "Турнир по персонажем", poster: "https://i.ytimg.com/vi/TGxO2O-MCdc/maxresdefault.jpg", link: "https://www.youtube.com/live/TGxO2O-MCdc?si=8QNSwLi1LKx1oDun" },
+    		    { title: "Месть Путина", poster: "https://avatars.mds.yandex.net/i?id=18ed58341875f4fa7939bdab67625660_l-4960599-images-thumbs&n=13", link: "https://youtu.be/HPC1I5fjVFI?si=BREtWOb4lFrYCFoi" }
+                ]
+            }
         };
 
         const ListTitles = {
@@ -390,23 +534,96 @@
             party: "Игры на вечерок",
             unpassed: "Список не пройденных игр",
             debts: "Список долгов (Надо поиграть)",
-            reactions: "Список реакций для просмотра",
+            reactions: "Реакции",
             fnf: "ФНФ Моды",
             comics: "Комиксы",
             abandoned: "Заброшенные игры",
-            unlikely: "Маловероятные игры на рассмотрение"
+            unlikely: "Маловероятные игры на рассмотрение",
+            other: "Другое"
         };
+
+        const SubListTitles = {
+            toFilm: "Реакции которые надо снять",
+            filmed: "Реакции которые отсняты",
+            castle: "Замок",
+            characters: "Персонажи",
+            hunterTries: "Хантер пробует",
+            cities: "Города",
+            modds: "Моды",
+            gratitude: "Благодарности",
+            films: "Фильмы",
+            interesting: "Самое интересное",
+            prazdnik: "Новый Год",
+            doso: "Достопримечательности",
+            otherActivity: "Другая деятельность"
+        };
+
+        let currentMainKey = 'passed';
+        let currentSubKey = null;
 
         /* ========================================================================
            🎮 ЛОГИКА ПЕРЕКЛЮЧЕНИЯ И РЕНДЕРИНГА СПИСКОВ
            ======================================================================== */
         function switchList(key) {
+            currentMainKey = key;
+            currentSubKey = null;
+
             document.querySelectorAll('.list-tab-btn').forEach(btn => btn.classList.remove('pressed'));
             const activeBtn = document.getElementById(`btn-${key}`);
             if (activeBtn) activeBtn.classList.add('pressed');
 
+            const subContainer = document.getElementById('sub-tabs-container');
+            subContainer.innerHTML = '';
+            subContainer.classList.add('hidden');
+
+	    if (key === 'reactions') {
+                subContainer.classList.remove('hidden');
+                subContainer.innerHTML = `
+                    <button onclick="switchSubList('reactions', 'toFilm')" id="sub-btn-toFilm" class="sub-tab-btn">Надо снять</button>
+                    <button onclick="switchSubList('reactions', 'filmed')" id="sub-btn-filmed" class="sub-tab-btn">Отснятые</button>
+                `;
+                switchSubList('reactions', 'toFilm');
+                return;
+            }
+
+            if (key === 'other') {
+                subContainer.classList.remove('hidden');
+                subContainer.innerHTML = `
+                    <button onclick="switchSubList('other', 'castle')" id="sub-btn-castle" class="sub-tab-btn">Замок</button>
+                    <button onclick="switchSubList('other', 'characters')" id="sub-btn-characters" class="sub-tab-btn">Персонажи</button>
+                    <button onclick="switchSubList('other', 'hunterTries')" id="sub-btn-hunterTries" class="sub-tab-btn">Хантер пробует</button>
+                    <button onclick="switchSubList('other', 'cities')" id="sub-btn-cities" class="sub-tab-btn">Города</button>
+                    <button onclick="switchSubList('other', 'modds')" id="sub-btn-modds" class="sub-tab-btn">Моды</button>
+                    <button onclick="switchSubList('other', 'gratitude')" id="sub-btn-gratitude" class="sub-tab-btn">Благодарности</button>
+                    <button onclick="switchSubList('other', 'films')" id="sub-btn-films" class="sub-tab-btn">Фильмы</button>
+                    <button onclick="switchSubList('other', 'interesting')" id="sub-btn-interesting" class="sub-tab-btn">Самое интересное</button>
+                    <button onclick="switchSubList('other', 'prazdnik')" id="sub-btn-prazdnik" class="sub-tab-btn">Новый Год</button>
+                    <button onclick="switchSubList('other', 'doso')" id="sub-btn-doso" class="sub-tab-btn">Достопримечательности</button>
+                    <button onclick="switchSubList('other', 'otherActivity')" id="sub-btn-otherActivity" class="sub-tab-btn">Другая деятельность</button>
+                `;
+                switchSubList('other', 'castle');
+                return;
+            }
+
             document.getElementById('active-list-title').textContent = ListTitles[key];
             renderGrid(GameLists[key] || []);
+        }
+
+        function switchSubList(mainKey, subKey) {
+            currentSubKey = subKey;
+            
+            document.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active-sub'));
+            const activeSubBtn = document.getElementById(`sub-btn-${subKey}`);
+            if (activeSubBtn) activeSubBtn.classList.add('active-sub');
+
+            document.getElementById('active-list-title').textContent = SubListTitles[subKey];
+            
+            const dataObj = GameLists[mainKey];
+            if (dataObj && dataObj[subKey]) {
+                renderGrid(dataObj[subKey]);
+            } else {
+                renderGrid([]);
+            }
         }
 
         function renderGrid(items) {
@@ -421,8 +638,8 @@
                     window.open(item.link, '_blank');
                 };
 
-                // Логика плашки статуса для FNF модов
-                let statusBadge = '';
+                // Логика плашек (статусы прохождения для FNF или желтая плашка "Утерено" zozz)
+                let badgeHTML = '';
                 if (item.status) {
                     let bgClass = 'bg-gray-600';
                     let text = 'В планах';
@@ -436,19 +653,70 @@
                     } else if (item.status === 'opop') {
                         bgClass = 'bg-gray-500';
                         text = 'В планах';
+                    } else if (item.status === 'zozz') {
+                        bgClass = 'bg-yellow-500';
+                        text = 'Утеряно';
+                    } else if (item.status === 'ccc') {
+                        bgClass = 'bg-purple-500';
+                        text = '1 серия';
+                    } else if (item.status === 'mmm') {
+                        bgClass = 'bg-purple-500';
+                        text = '2 серии';
+                    } else if (item.status === 'vvv') {
+                        bgClass = 'bg-purple-500';
+                        text = '3 серии';
+                    } else if (item.status === 'xax') {
+                        bgClass = 'bg-purple-500';
+                        text = '4 серии';
+                    } else if (item.status === 'lol') {
+                        bgClass = 'bg-purple-500';
+                        text = '5 серии';
+                    } else if (item.status === 'far') {
+                        bgClass = 'bg-purple-500';
+                        text = '6 серии';
+                    } else if (item.status === 'rr') {
+                        bgClass = 'bg-purple-500';
+                        text = '2 сезон';
+                    } else if (item.status === 'z') {
+                        bgClass = 'bg-purple-500';
+                        text = '1 сезон';
+                    } else if (item.status === 'f') {
+                        bgClass = 'bg-emerald-500';
+                        text = 'Просмотрен';
+                    } else if (item.status === 'x') {
+                        bgClass = 'bg-red-500';
+                        text = '0 серии';
+                    } else if (item.status === 'u') {
+                        bgClass = 'bg-purple-500';
+                        text = '58 видео';
+                    } else if (item.status === 'dd') {
+                        bgClass = 'bg-purple-500';
+                        text = '4 видео';
+                    } else if (item.status === 'ram') {
+                        bgClass = 'bg-purple-500';
+                        text = '2 видео';
+                    } else if (item.status === 'xop') {
+                        bgClass = 'bg-blue-500';
+                        text = '4 песни';
+                    } else if (item.status === 'pox') {
+                        bgClass = 'bg-blue-500';
+                        text = '1 песни';
+                    } else if (item.status === 'cop') {
+                        bgClass = 'bg-pink-500';
+                        text = 'Стрим';
                     }
 
-                    statusBadge = `
-                        <div class="absolute top-2 right-2 z-10 px-2 py-1 rounded shadow-lg text-[10px] font-black uppercase tracking-wider text-white ${bgClass} border border-white/30 backdrop-blur-sm">
+
+                    badgeHTML = `
+                        <div class="absolute top-2 right-2 z-10 px-2 py-1 rounded shadow-lg text-[10px] font-black uppercase tracking-wider ${bgClass} border border-white/30 backdrop-blur-sm">
                             ${text}
                         </div>
                     `;
                 }
 
-                /* ПОСТЕР С ПРОПОРЦИЕЙ 2:3 */
                 card.innerHTML = `
                     <div class="relative w-full aspect-[2/3] bg-[#1b1b1b] overflow-hidden">
-                        ${statusBadge}
+                        ${badgeHTML}
                         <img src="${item.poster}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=600&auto=format&fit=crop'">
                     </div>
                     <div class="p-3 text-center bg-black border-t border-white/10">
@@ -462,7 +730,7 @@
         }
 
         /* ========================================================================
-           🎵 АУДИО ЛОГИКА (АВТОВКЛЮЧЕНИЕ И УПРАВЛЕНИЕ)
+           🎵 АУДИО ЛОГИКА
            ======================================================================== */
         const music = document.getElementById('bg-music');
         const musicIcon = document.getElementById('music-icon');

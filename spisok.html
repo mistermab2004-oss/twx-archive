@@ -134,10 +134,11 @@
                 <button id="btn-debts" onclick="switchList('debts')" class="list-tab-btn bg-blue-600 text-white">Долги</button>
                 <button id="btn-reactions" onclick="switchList('reactions')" class="list-tab-btn bg-purple-600 text-white">Реакции</button>
                 <button id="btn-fnf" onclick="switchList('fnf')" class="list-tab-btn bg-pink-600 text-white">ФНФ</button>
+                <button id="btn-mods" onclick="switchList('mods')" class="list-tab-btn bg-cyan-600 text-white">Моды</button>
                 <button id="btn-comics" onclick="switchList('comics')" class="list-tab-btn bg-indigo-600 text-white">Комиксы</button>
                 <button id="btn-abandoned" onclick="switchList('abandoned')" class="list-tab-btn bg-amber-600 text-white">Заброшенные</button>
-                <button id="btn-unlikely" onclick="switchList('unlikely')" class="list-tab-btn bg-emerald-700 text-white">Маловероятные</button>
-                <button id="btn-other" onclick="switchList('other')" class="list-tab-btn bg-cyan-700 text-white">Другое</button>
+                <button id="btn-unlikely" onclick="switchList('unlikely')" class="list-tab-btn bg-emerald-700 text-white">Врядли</button>
+                <button id="btn-other" onclick="switchList('other')" class="list-tab-btn bg-gray-700 text-white">Другое</button>
             </nav>
         </div>
     </header>
@@ -393,13 +394,21 @@
             ],
 
             // 7. КОМИКСЫ
+            mods: [
+                { title: "Doki Doki: Новый День", poster: "https://images.steamusercontent.com/ugc/1749058299667161878/483C151B194C2470934736F81ECC79DE3B7ABF3B/", status: "yoyu", link: "https://drive.google.com/file/d/1eh64vC9PwVTKUC1mMZoobkWLyOYGg7pf/view" },
+                { title: "История одного Пионера", poster: "https://i.ytimg.com/vi/kX5jjQodTR0/maxresdefault.jpg", status: "xox", link: "https://www.youtube.com/live/R5gVz1689C4?si=_yotP3J5rIzpPdZO" },
+    	        { title: "Бесконечная Доза", poster: "https://i.ytimg.com/vi/V0-eWl5o980/maxresdefault.jpg", status: "xox", link: "https://steamcommunity.com/sharedfiles/filedetails/?id=708753937" },
+    		{ title: "Мод Саманта", poster: "user/system/samanta.png", status: "xox", link: "https://steamcommunity.com/workshop/filedetails/?l=russian&id=354397869" }
+            ],
+
+            // 8. КОМИКСЫ
             comics: [
                 { title: "Homestuck", poster: "https://i.pinimg.com/originals/57/ae/ea/57aeeabb10e609103cde72a203183dc5.jpg", link: "https://mspaintadventures.ru/" },
                 { title: "Голубь Генадий", poster: "https://cdn.insales-shop.ru/images/products/1/7552/449158528/76f4d3816c9ec28a83c9a9cf57c6d224c1262d561.jpg", link: "https://youtube.com" },
                 { title: "Азбука Ролевика", poster: "https://cdna.artstation.com/p/assets/images/images/009/321/884/large/cecil-porter-asset.jpg?1518333571", link: "https://youtube.com" }
             ],
 
-            // 8. ЗАБРОШЕННЫЕ ИГРЫ
+            // 9. ЗАБРОШЕННЫЕ ИГРЫ
             abandoned: [
                 { title: "Doki Doki Literature Club Plus!", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1388880/library_600x900.jpg", link: "https://store.steampowered.com/app/1388880/Doki_Doki_Literature_Club_Plus/" },
                 { title: "Scratchin' Melodii", poster: "https://cdn.ag.ru/media/screenshots/b7b/b7b8c9a51aadf446f2aea386167e827e.jpg", link: "https://store.steampowered.com/app/2728050/Scratchin_Melodii/" },
@@ -433,7 +442,7 @@
                 { title: "Danganronpa: Trigger Happy Havoc", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413410/library_600x900.jpg", link: "https://store.steampowered.com/app/413410/Danganronpa_Trigger_Happy_Havoc/" }
             ],
 
-            // 9. МАЛОВЕРОЯТНЫЕ ИГРЫ
+            // 10. МАЛОВЕРОЯТНЫЕ ИГРЫ
             unlikely: [
                 { title: "Limbus Company", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1973530/library_600x900.jpg", link: "https://store.steampowered.com/app/1973530/Limbus_Company/" },
                 { title: "Subnautica", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/264710/library_600x900.jpg", link: "https://store.steampowered.com/app/264710/Subnautica/" },
@@ -452,7 +461,7 @@
                 { title: "Baldi's Basics Classic Remastered", poster: "https://torrentxs.com/uploads/posts/2023-03/baldis-basics-classic-remastered-1.webp", link: "https://store.steampowered.com/app/1712830/Baldis_Basics_Classic_Remastered/" }
             ],
 
-            // 10. ДРУГОЕ (с 8 подблоками)
+            // 11. ДРУГОЕ (с 8 подблоками)
             other: {
                 castle: [
 		    { title: "Ратуша", poster: "https://avatars.mds.yandex.net/i?id=46009621668e033621f6538ec0b8d2bc_l-5111908-images-thumbs&n=13", link: "https://youtu.be/DVhkL_kHm9g?si=54sGIxkdUT72cyXx" },
@@ -488,12 +497,6 @@
     	   	    { title: "Кемерово", poster: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_65e596c2f24f8a744be8ee62_65e59934ba2c6c0740774672/scale_1200", link: "https://youtube.com/playlist?list=PLZRJRc1WtptiPIMA8Qz1u4Xnbwk9-SkA0&si=AlU5LZkhL3YvUzmN" },
     		    { title: "Красноярск", poster: "https://s.newslab.ru/photoalbum/85155/m/355961.jpg", link: "https://youtube.com/playlist?list=PLZRJRc1WtptiPIMA8Qz1u4Xnbwk9-SkA0&si=AlU5LZkhL3YvUzmN" },
    		    { title: "Иркутск", poster: "https://evroservis.ooo/uploads/upload_883a0a9256f616354db26ff7f8a94b0b.jpg", link: "https://youtube.com/playlist?list=PLZRJRc1WtptiPIMA8Qz1u4Xnbwk9-SkA0&si=AlU5LZkhL3YvUzmN" }
-                ],
-                modds: [
-                    { title: "Doki Doki: Новый День", poster: "https://images.steamusercontent.com/ugc/1749058299667161878/483C151B194C2470934736F81ECC79DE3B7ABF3B/", status: "yoyu", link: "https://drive.google.com/file/d/1eh64vC9PwVTKUC1mMZoobkWLyOYGg7pf/view" },
-    		    { title: "История одного Пионера", poster: "https://i.ytimg.com/vi/kX5jjQodTR0/maxresdefault.jpg", status: "xox", link: "https://www.youtube.com/live/R5gVz1689C4?si=_yotP3J5rIzpPdZO" },
-    		    { title: "Бесконечная Доза", poster: "https://i.ytimg.com/vi/V0-eWl5o980/maxresdefault.jpg", status: "xox", link: "https://steamcommunity.com/sharedfiles/filedetails/?id=708753937" },
-    		    { title: "Мод Саманта", poster: "user/system/samanta.png", status: "xox", link: "https://steamcommunity.com/workshop/filedetails/?l=russian&id=354397869" }
                 ],
                 gratitude: [
                     { title: "300 подписчиков", poster: "https://i.ytimg.com/vi/oTVEi3MwDok/maxresdefault.jpg", link: "https://youtu.be/oTVEi3MwDok?si=hKarbJs7Rr2yX0T5" }
@@ -536,6 +539,7 @@
             debts: "Список долгов (Надо поиграть)",
             reactions: "Реакции",
             fnf: "ФНФ Моды",
+            mods: "Моды Игр",
             comics: "Комиксы",
             abandoned: "Заброшенные игры",
             unlikely: "Маловероятные игры на рассмотрение",
@@ -549,7 +553,6 @@
             characters: "Персонажи",
             hunterTries: "Хантер пробует",
             cities: "Города",
-            modds: "Моды",
             gratitude: "Благодарности",
             films: "Фильмы",
             interesting: "Самое интересное",
@@ -593,7 +596,6 @@
                     <button onclick="switchSubList('other', 'characters')" id="sub-btn-characters" class="sub-tab-btn">Персонажи</button>
                     <button onclick="switchSubList('other', 'hunterTries')" id="sub-btn-hunterTries" class="sub-tab-btn">Хантер пробует</button>
                     <button onclick="switchSubList('other', 'cities')" id="sub-btn-cities" class="sub-tab-btn">Города</button>
-                    <button onclick="switchSubList('other', 'modds')" id="sub-btn-modds" class="sub-tab-btn">Моды</button>
                     <button onclick="switchSubList('other', 'gratitude')" id="sub-btn-gratitude" class="sub-tab-btn">Благодарности</button>
                     <button onclick="switchSubList('other', 'films')" id="sub-btn-films" class="sub-tab-btn">Фильмы</button>
                     <button onclick="switchSubList('other', 'interesting')" id="sub-btn-interesting" class="sub-tab-btn">Самое интересное</button>
@@ -654,7 +656,7 @@
                         bgClass = 'bg-gray-500';
                         text = 'В планах';
                     } else if (item.status === 'zozz') {
-                        bgClass = 'bg-yellow-500';
+                        bgClass = 'bg-yellow-500 text-black font-black animate-pulse';
                         text = 'Утеряно';
                     } else if (item.status === 'ccc') {
                         bgClass = 'bg-purple-500';

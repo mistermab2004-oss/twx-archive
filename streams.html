@@ -26,7 +26,10 @@
         
         /* ⚡ ФИОЛЕТОВЫЙ ПОЛЗУНОК-МОЛНИЯ (Скроллбар) ⚡ */
         ::-webkit-scrollbar {
-            width: 24px;
+            width: 16px;
+        }
+        @media (min-width: 640px) {
+            ::-webkit-scrollbar { width: 24px; }
         }
         ::-webkit-scrollbar-track {
             background: #f3e8ff;
@@ -41,7 +44,7 @@
         }
         ::-webkit-scrollbar-thumb:active {
             background: #6b21a8;
-            border-width: 8px;
+            border-width: 6px;
             box-shadow: inset 0 6px 12px rgba(0,0,0,0.7);
         }
 
@@ -92,6 +95,14 @@
             transform: translate(2px, 2px);
             box-shadow: 1px 1px 0px #21041e;
         }
+        /* Эффект вдавления для красных кнопок переключения */
+        .archive-switch-btn {
+            transition: all 0.1s ease;
+        }
+        .archive-switch-btn:active {
+            transform: scale(0.95) translateY(2px);
+            box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.6) !important;
+        }
         [contenteditable="true"]:focus {
             outline: 2px dashed #FFD369;
             background: rgba(85, 18, 75, 0.6);
@@ -104,13 +115,16 @@
     🎀 👇 ТУТ ДОБАВЛЯТЬ СТРИМЫ 👇 🎀
     Доступные статусы:
     - status: "ready" (Вырезан)
-    - status: 'prosses("60%")' или 'process("75%")' (В процессе с процентами)
+    - status: 'prosses("60%")' (В процессе с процентами)
     - status: "zabil" (Забил - серый)
     - status: "work" (В работе)
-    Также можно указывать дату: date: "15.05.2026" (день, месяц, год)
+    - status: "wols" (Запечатлено на том же стриме)
+    - status: "qwen" (На Память)
+    Также можно указывать дату: date: "15.05.2026"
     ======================================================================== -->
     <script>
-        const StreamsData = [
+        // 1. Блок: Стримы с Gartic Phone
+        const GarticStreamsData = [
             {
                 title: "Джекбоксимся не по детски! (JackBox)",
                 url: "https://www.youtube.com/live/9PGzpf3LfqI?si=4qPndvXYidmEQgAt",
@@ -245,6 +259,11 @@
                 date: "18.06.2023"
             }
         ];
+
+        // 2. Блок: Стримы/видео с TWX Сайта (Второй блок). 
+        // ЕСЛИ ЗДЕСЬ ПУСТО ([]), то кнопки переключения автоматически скрываются!
+        const TwxStreamsData = [
+        ];
     </script>
     <!-- ======================================================================= -->
 
@@ -253,31 +272,31 @@
         <source src="user/music/streams.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-        <div id="volume-panel" class="hidden bg-white/95 backdrop-blur-sm border-4 border-purple-400 p-5 rounded-2xl shadow-2xl mb-3 flex-col items-center space-y-4 w-40">
-            <span class="text-sm font-black text-purple-900 uppercase">Громкость</span>
+    <div class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end">
+        <div id="volume-panel" class="hidden bg-white/95 backdrop-blur-sm border-4 border-purple-400 p-4 sm:p-5 rounded-2xl shadow-2xl mb-3 flex-col items-center space-y-3 w-36 sm:w-40">
+            <span class="text-xs sm:text-sm font-black text-purple-900 uppercase">Громкость</span>
             <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" class="w-full">
-            <button onclick="toggleMusic()" class="bg-purple-600 text-white px-4 py-2 rounded-xl font-bold hover:bg-purple-500 shadow-[0_4px_0_#4c1d95] active:shadow-none active:translate-y-[4px] transition-all uppercase text-xs">Вкл / Выкл</button>
+            <button onclick="toggleMusic()" class="bg-purple-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl font-bold hover:bg-purple-500 shadow-[0_4px_0_#4c1d95] active:shadow-none active:translate-y-[4px] transition-all uppercase text-xs">Вкл / Выкл</button>
         </div>
-        <button onclick="toggleVolumePanel()" class="w-16 h-16 bg-pink-500 hover:bg-pink-400 border-4 border-white rounded-full flex items-center justify-center text-3xl text-white shadow-[0_6px_0_#9d174d] active:shadow-none active:translate-y-[6px] cursor-pointer transition-all">
+        <button onclick="toggleVolumePanel()" class="w-14 h-14 sm:w-16 sm:h-16 bg-pink-500 hover:bg-pink-400 border-4 border-white rounded-full flex items-center justify-center text-2xl sm:text-3xl text-white shadow-[0_6px_0_#9d174d] active:shadow-none active:translate-y-[6px] cursor-pointer transition-all">
             <i id="music-icon" class="fa-solid fa-volume-xmark"></i>
         </button>
     </div>
 
     <!-- Шапка -->
-    <header class="sticky top-0 z-30 w-full pt-4 pb-5 px-4 sm:px-8 pointer-events-none">
+    <header class="sticky top-0 z-30 w-full pt-3 pb-4 sm:pt-4 sm:pb-5 px-3 sm:px-8 pointer-events-none">
         <div class="gartic-header-bg"></div>
         <div class="max-w-7xl mx-auto relative z-20 flex items-center justify-between pointer-events-auto">
-            <a href="index.html" class="flex items-center space-x-6 group cursor-pointer no-underline">
-                <div class="w-32 h-32 sm:w-40 sm:h-40 flex-shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
+            <a href="index.html" class="flex items-center space-x-3 sm:space-x-6 group cursor-pointer no-underline">
+                <div class="w-24 h-24 sm:w-40 sm:h-40 flex-shrink-0 group-hover:scale-105 transition-transform flex items-center justify-center">
                     <img id="main-logo-img" src="user/ava/logo.png" alt="Лого" class="w-full h-full object-contain drop-shadow-2xl">
                 </div>
-                <span id="site-title-text" class="font-black text-3xl sm:text-5xl tracking-wider text-yellow-300 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)] uppercase group-hover:text-yellow-200 transition-colors">
+                <span id="site-title-text" class="font-black text-xl sm:text-5xl tracking-wider text-yellow-300 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)] uppercase group-hover:text-yellow-200 transition-colors">
                     TWX АРХИВ
                 </span>
             </a>
-            <div class="flex items-center space-x-2 sm:space-x-3">
-                <a href="index.html" class="bg-[#a3ff00] hover:bg-[#8ee000] text-purple-950 font-black px-4 sm:px-5 py-2.5 rounded-xl retro-shadow border-2 border-white/60 text-xs sm:text-sm cursor-pointer transition-transform uppercase no-underline">
+            <div class="flex items-center space-x-2">
+                <a href="index.html" class="bg-[#a3ff00] hover:bg-[#8ee000] text-purple-950 font-black px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl retro-shadow border-2 border-white/60 text-xs sm:text-sm cursor-pointer transition-transform uppercase no-underline">
                     Главная
                 </a>
             </div>
@@ -285,15 +304,15 @@
     </header>
 
     <!-- Основной контент -->
-    <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-12 z-25 flex flex-col space-y-6">
+    <main class="flex-grow max-w-5xl mx-auto w-full px-3 sm:px-4 py-6 sm:py-12 z-25 flex flex-col space-y-6">
         
-        <div class="bg-purple-900/70 border-4 border-purple-400/60 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md flex flex-col sm:flex-row items-center gap-6">
-            <div class="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl border-4 border-yellow-400 bg-red-600 flex-shrink-0 flex items-center justify-center shadow-xl overflow-hidden group relative">
-                <i class="fab fa-youtube text-6xl sm:text-7xl text-white drop-shadow-md"></i>
+        <div class="bg-purple-900/70 border-4 border-purple-400/60 rounded-3xl p-5 sm:p-8 shadow-2xl backdrop-blur-md flex flex-col sm:flex-row items-center gap-5 sm:gap-6">
+            <div class="w-24 h-24 sm:w-36 sm:h-36 rounded-3xl border-4 border-yellow-400 bg-red-600 flex-shrink-0 flex items-center justify-center shadow-xl overflow-hidden group relative">
+                <i class="fab fa-youtube text-5xl sm:text-7xl text-white drop-shadow-md"></i>
             </div>
             <div class="flex-grow space-y-3 text-center sm:text-left">
-                <h2 class="text-2xl sm:text-3xl font-black text-yellow-300 uppercase drop-shadow">🔴 Архивы Стримов</h2>
-                <div id="streams-top-desc" class="text-sm sm:text-base text-purple-100 font-medium leading-relaxed outline-none min-h-[60px]">
+                <h2 class="text-xl sm:text-3xl font-black text-yellow-300 uppercase drop-shadow">🔴 Архивы Стримов</h2>
+                <div id="streams-top-desc" class="text-xs sm:text-base text-purple-100 font-medium leading-relaxed outline-none min-h-[60px]">
                     <p class="text-pink-300 font-bold italic mb-2">для удобства они тоже тут лежат.</p>
                     Вся наша общая память и самые теплые моменты намертво связаны с этими стримами с канала <strong>XaHTep Play Stream</strong>. Кто-то их искренне любит, кто-то до сих пор эмоционально бомбит от былого азарта, а кто-то увлеченно рисовал прямо во время эфиров, оставляя частичку себя в каждом штрихе. Эмоции утихают, но память живет вечно. Перед тобой — бережно собранный архив ссылок на те самые стримы!
                 </div>
@@ -301,14 +320,22 @@
         </div>
 
         <!-- Виджет списка стримов -->
-        <div class="bg-purple-900/70 border-4 border-purple-400/60 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-md space-y-6">
-            <div class="flex items-center justify-between">
-                <h3 class="text-lg sm:text-xl font-black text-pink-300 uppercase">📺 Список записей стримов</h3>
+        <div class="bg-purple-900/70 border-4 border-purple-400/60 rounded-3xl p-4 sm:p-8 shadow-2xl backdrop-blur-md space-y-6">
+            <!-- ШАПКА ВИДЖЕТА: Название, Кнопки переключения архивов и Стрелочки на одной линии -->
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
+                <h3 id="current-archive-title" class="text-base sm:text-xl font-black text-pink-300 uppercase text-center lg:text-left">📺 Gartic Phone — Список записей</h3>
                 
-                <!-- Стрелочки для страниц -->
-                <div class="flex space-x-2">
-                    <button onclick="prevPage()" class="w-10 h-10 bg-yellow-400 text-purple-900 font-black rounded-xl hover:bg-yellow-300 retro-shadow cursor-pointer flex items-center justify-center text-lg">&lt;</button>
-                    <button onclick="nextPage()" class="w-10 h-10 bg-yellow-400 text-purple-900 font-black rounded-xl hover:bg-yellow-300 retro-shadow cursor-pointer flex items-center justify-center text-lg">&gt;</button>
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <!-- 🎀 КНОПКИ ПЕРЕКЛЮЧЕНИЯ АРХИВОВ (на одной линии со стрелочками) 🎀 -->
+                    <div id="archive-switcher-container" class="hidden items-center gap-2">
+                        <!-- Рендерится динамически из скрипта -->
+                    </div>
+
+                    <!-- Стрелочки для страниц -->
+                    <div class="flex space-x-2">
+                        <button onclick="prevPage()" class="w-10 h-10 bg-yellow-400 text-purple-900 font-black rounded-xl hover:bg-yellow-300 retro-shadow cursor-pointer flex items-center justify-center text-lg">&lt;</button>
+                        <button onclick="nextPage()" class="w-10 h-10 bg-yellow-400 text-purple-900 font-black rounded-xl hover:bg-yellow-300 retro-shadow cursor-pointer flex items-center justify-center text-lg">&gt;</button>
+                    </div>
                 </div>
             </div>
 
@@ -317,24 +344,24 @@
                 <!-- Рендерится из JS -->
             </div>
             
-            <div id="page-indicator" class="text-center text-sm font-bold text-purple-300 mt-4">
+            <div id="page-indicator" class="text-center text-xs sm:text-sm font-bold text-purple-300 mt-4">
                 Страница 1
             </div>
         </div>
     </main>
 
     <!-- Модальное окно для YouTube Iframe -->
-    <div id="yt-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+    <div id="yt-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4 opacity-0 transition-opacity duration-300">
         <div class="relative w-full max-w-5xl aspect-video bg-purple-950 border-4 border-pink-500 rounded-3xl shadow-[0_0_40px_rgba(236,72,153,0.6)] overflow-hidden transform scale-95 transition-transform duration-300" id="yt-modal-content">
-            <button onclick="closeYtModal()" class="absolute top-4 right-4 z-10 w-12 h-12 bg-red-600 text-white font-black rounded-full border-4 border-white hover:bg-red-500 shadow-[0_4px_0_#7f1d1d] active:shadow-none active:translate-y-[4px] cursor-pointer text-xl">X</button>
+            <button onclick="closeYtModal()" class="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-red-600 text-white font-black rounded-full border-4 border-white hover:bg-red-500 shadow-[0_4px_0_#7f1d1d] active:shadow-none active:translate-y-[4px] cursor-pointer text-lg sm:text-xl flex items-center justify-center">X</button>
             <iframe id="yt-iframe" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
     <!-- Футер -->
-    <footer class="w-full bg-purple-950/95 backdrop-blur-md border-t-4 border-purple-600 px-6 py-4 flex flex-col sm:flex-row items-center justify-between z-20 shadow-2xl mt-12">
-        <div class="flex items-center space-x-3 mb-3 sm:mb-0">
-            <div class="bg-purple-900 px-4 py-2 rounded-xl font-extrabold tracking-widest text-sm border border-white/20 shadow">TWX_ARCHIVE</div>
+    <footer class="w-full bg-purple-950/95 backdrop-blur-md border-t-4 border-purple-600 px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between z-20 shadow-2xl mt-12 text-center sm:text-left gap-2">
+        <div class="flex items-center space-x-3">
+            <div class="bg-purple-900 px-3 sm:px-4 py-2 rounded-xl font-extrabold tracking-widest text-xs sm:text-sm border border-white/20 shadow">TWX_ARCHIVE</div>
             <span class="text-xs text-purple-300 font-semibold">Time With XaHTeP Project</span>
         </div>
         <div class="flex items-center space-x-3">
@@ -404,10 +431,56 @@
         checkHolidayAndStyle();
 
         // ==========================================
-        // ЛОГИКА СТРАНИЦ И ВИДЖЕТА СТРИМОВ
+        // ЛОГИКА СТРАНИЦ И АРХИВОВ (ПЕРЕКЛЮЧАТЕЛЬ)
         // ==========================================
         const ITEMS_PER_PAGE = 6;
         let currentPage = 0;
+        let activeArchive = 'gartic'; // 'gartic' или 'twx'
+
+        function getActiveData() {
+            return activeArchive === 'twx' ? TwxStreamsData : GarticStreamsData;
+        }
+
+        function switchArchive(archiveKey) {
+            activeArchive = archiveKey;
+            currentPage = 0;
+            renderArchiveSwitcher();
+            renderStreams();
+        }
+
+        function renderArchiveSwitcher() {
+            const container = document.getElementById('archive-switcher-container');
+            const titleEl = document.getElementById('current-archive-title');
+
+            // Условие: если во втором блоке нет информации или ссылок, кнопки скрыты!
+            if (!TwxStreamsData || TwxStreamsData.length === 0) {
+                container.classList.add('hidden');
+                container.classList.remove('flex');
+                return;
+            }
+
+            // Если информация есть — показываем на одной линии со стрелочками
+            container.classList.remove('hidden');
+            container.classList.add('flex');
+
+            const isGarticActive = activeArchive === 'gartic';
+            const isTwxActive = activeArchive === 'twx';
+
+            container.innerHTML = `
+                <button onclick="switchArchive('gartic')" class="archive-switch-btn font-black px-3 py-2 rounded-xl text-xs uppercase shadow-[0_4px_0_#7f1d1d] cursor-pointer flex items-center gap-1.5 ${isGarticActive ? 'bg-red-700 text-white border-2 border-yellow-300 ring-2 ring-yellow-400' : 'bg-red-600 hover:bg-red-500 text-white/90 border-2 border-white/40'}">
+                    <i class="fa-solid fa-paintbrush"></i>
+                    <span>Gartic Phone</span>
+                </button>
+                <button onclick="switchArchive('twx')" class="archive-switch-btn font-black px-3 py-2 rounded-xl text-xs uppercase shadow-[0_4px_0_#7f1d1d] cursor-pointer flex items-center gap-1.5 ${isTwxActive ? 'bg-red-700 text-white border-2 border-yellow-300 ring-2 ring-yellow-400' : 'bg-red-600 hover:bg-red-500 text-white/90 border-2 border-white/40'}">
+                    <i class="fa-solid fa-globe"></i>
+                    <span>TWX Сайт</span>
+                </button>
+            `;
+
+            if (titleEl) {
+                titleEl.textContent = isGarticActive ? "📺 Gartic Phone — Список записей" : "🌐 TWX Сайт — Записи и Стримы";
+            }
+        }
 
         function getYouTubeVideoId(url) {
             let videoId = '';
@@ -428,19 +501,24 @@
             const container = document.getElementById('streams-container');
             container.innerHTML = '';
 
+            const currentData = getActiveData();
             const start = currentPage * ITEMS_PER_PAGE;
             const end = start + ITEMS_PER_PAGE;
-            const pageItems = StreamsData.slice(start, end);
+            const pageItems = currentData.slice(start, end);
 
             pageItems.forEach((st) => {
                 const videoId = getYouTubeVideoId(st.url);
                 
-                // Обработка статусов (Вырезан, Забил, В процессе с %, В работе)
+                // Обработка статусов включая wols и qwen
                 let statusHtml = '';
                 let stStatus = (st.status || "").toLowerCase();
                 let progressMatch = stStatus.match(/prosses\("(\d+%)"\)/) || stStatus.match(/process\("(\d+%)"\)/) || stStatus.match(/prosses\(["']?(\d+%)["']?\)/);
 
-                if (st.isReady === true || stStatus === 'ready' || stStatus === 'вырезан') {
+                if (stStatus === 'wols') {
+                    statusHtml = `<span class="bg-amber-600 text-white px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-bold border-2 border-amber-800 shadow-sm inline-flex items-center gap-1"><i class="fa-solid fa-eye"></i> Запечатлено на том же стриме</span>`;
+                } else if (stStatus === 'qwen') {
+                    statusHtml = `<span class="bg-purple-600 text-white px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[10px] sm:text-xs font-bold border-2 border-purple-800 shadow-sm inline-flex items-center gap-1"><i class="fa-solid fa-heart"></i> На Память</span>`;
+                } else if (st.isReady === true || stStatus === 'ready' || stStatus === 'вырезан') {
                     statusHtml = `<span class="bg-green-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold border-2 border-green-700 shadow-sm inline-flex items-center gap-1.5"><i class="fa-solid fa-check"></i> Вырезан</span>`;
                 } else if (stStatus.includes('zabil') || stStatus === 'забил') {
                     statusHtml = `<span class="bg-gray-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold border-2 border-gray-700 shadow-sm inline-flex items-center gap-1.5"><i class="fa-solid fa-ban"></i> Забил</span>`;
@@ -460,22 +538,20 @@
                             </div>
                         </div>
                     `;
-                } else if (st.isReady === false) {
-                    statusHtml = `<span class="bg-red-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold border-2 border-red-700 shadow-sm inline-flex items-center gap-1.5"><i class="fa-solid fa-xmark"></i> В процессе</span>`;
                 } else {
                     statusHtml = `<span class="bg-gray-500 text-white px-2.5 py-1 rounded-lg text-xs font-bold border-2 border-gray-700 shadow-sm inline-flex items-center gap-1.5">Неизвестно</span>`;
                 }
 
-                // Дата выхода (день, месяц, год)
+                // Дата выхода
                 const dateHtml = st.date 
                     ? `<span class="text-xs text-purple-300 font-bold flex items-center gap-1"><i class="fa-regular fa-calendar"></i> ${st.date}</span>`
                     : `<span class="text-xs text-purple-400/60 font-medium">📅 Дата не указана</span>`;
 
                 const card = document.createElement('div');
-                card.className = "bg-purple-950/80 border-2 border-purple-400/60 rounded-2xl p-4 shadow-lg flex flex-col xl:flex-row items-center gap-4 text-left relative group hover:border-pink-400 transition-colors";
+                card.className = "bg-purple-950/80 border-2 border-purple-400/60 rounded-2xl p-3 sm:p-4 shadow-lg flex flex-col xl:flex-row items-center gap-4 text-left relative group hover:border-pink-400 transition-colors";
                 
                 card.innerHTML = `
-                    <div onclick="openYtModal('${videoId}')" class="w-full xl:w-48 h-28 rounded-xl overflow-hidden flex-shrink-0 bg-purple-900 flex items-center justify-center border-2 border-yellow-400/50 shadow-md relative group/img cursor-pointer">
+                    <div onclick="openYtModal('${videoId}')" class="w-full xl:w-48 h-32 sm:h-28 rounded-xl overflow-hidden flex-shrink-0 bg-purple-900 flex items-center justify-center border-2 border-yellow-400/50 shadow-md relative group/img cursor-pointer">
                         <img src="${st.thumb}" alt="Превью" class="w-full h-full object-cover group-hover/img:scale-105 transition-transform">
                         <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-opacity">
                             <i class="fa-solid fa-play text-4xl text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]"></i>
@@ -484,12 +560,12 @@
                     
                     <div class="flex-grow space-y-2 w-full flex flex-col justify-between h-full py-1">
                         <div class="space-y-1">
-                            <div class="min-h-[42px] flex items-center">
-                                <h4 class="text-sm font-black text-yellow-300 uppercase tracking-wide leading-snug line-clamp-2">
+                            <div class="min-h-[38px] sm:min-h-[42px] flex items-center">
+                                <h4 class="text-xs sm:text-sm font-black text-yellow-300 uppercase tracking-wide leading-snug line-clamp-2">
                                     ${st.title}
                                 </h4>
                             </div>
-                            <div class="flex items-center justify-between gap-2 pt-0.5">
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pt-0.5">
                                 ${statusHtml}
                                 ${dateHtml}
                             </div>
@@ -506,12 +582,13 @@
                 container.appendChild(card);
             });
 
-            const totalPages = Math.ceil(StreamsData.length / ITEMS_PER_PAGE);
+            const totalPages = Math.ceil(currentData.length / ITEMS_PER_PAGE);
             document.getElementById('page-indicator').textContent = `Страница ${currentPage + 1} из ${totalPages || 1}`;
         }
 
         function nextPage() {
-            if ((currentPage + 1) * ITEMS_PER_PAGE < StreamsData.length) {
+            const currentData = getActiveData();
+            if ((currentPage + 1) * ITEMS_PER_PAGE < currentData.length) {
                 currentPage++;
                 renderStreams();
             }
@@ -608,15 +685,14 @@
             });
 
             audioMain.volume = volumeSlider.value;
+            renderArchiveSwitcher();
             renderStreams();
 
-            // Сразу пытаемся запустить музыку при загрузке/обновлении
             audioMain.play().then(() => {
                 isMusicPlaying = true;
                 icon.classList.remove('fa-volume-xmark');
                 icon.classList.add('fa-volume-high');
             }).catch(() => {
-                // Если браузер заблокировал автоплей без взаимодействия, разблокируем по первому клику/касанию
                 const unlockAudio = () => {
                     audioMain.play().then(() => {
                         isMusicPlaying = true;

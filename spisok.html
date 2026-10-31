@@ -527,7 +527,7 @@
     		    { title: "Настольгия", poster: "https://i.ytimg.com/vi/iRpwFF-d5i4/maxresdefault.jpg", status: "xox", link: "https://www.youtube.com/live/iRpwFF-d5i4?si=vs2dWhFOotCBQcPW" },
     		    { title: "Тир лист Привью", poster: "https://i.ytimg.com/vi/pS-YXNyB250/maxresdefault.jpg", status: "yoyu", link: "https://www.youtube.com/live/pS-YXNyB250?si=yIbkBFb6aZg3VbI_" },
     		    { title: "Турнир по персонажем", poster: "https://i.ytimg.com/vi/TGxO2O-MCdc/maxresdefault.jpg", status: "xox", link: "https://www.youtube.com/live/TGxO2O-MCdc?si=8QNSwLi1LKx1oDun" },
-    		    { title: "Месть Путина", poster: "https://avatars.mds.yandex.net/i?id=18ed58341875f4fa7939bdab67625660_l-4960599-images-thumbs&n=13", link: "https://youtu.be/HPC1I5fjVFI?si=BREtWOb4lFrYCFoi" }
+    		    { title: "Месть Путина", poster: "https://avatars.mds.yandex.net/i?id=18ed58341875f4fa7939bdab67625660_l-4960599-images-thumbs&n=13", status: "reda", link: "https://youtu.be/HPC1I5fjVFI?si=BREtWOb4lFrYCFoi" }
                 ]
             }
         };
@@ -706,6 +706,9 @@
                     } else if (item.status === 'cop') {
                         bgClass = 'bg-pink-500';
                         text = 'Стрим';
+                    } else if (item.status === 'reda') {
+                        bgClass = 'bg-blue-500 text-red';
+                        text = 'Red Alert';
                     }
 
 

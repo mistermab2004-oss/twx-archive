@@ -518,12 +518,12 @@
                     { title: "Достопримечательности: Новосибирск", poster: "https://www.larecz.ru/wp-content/uploads/2023/10/Sibirskij-botanicheskij-sad-2.jpg", link: "https://youtu.be/KgiAPbPYbR8?si=mw6gckrayUw-jwHM" }
                 ],
                 otherActivity: [
-                    { title: "Обращение к народу", poster: "https://images.meme-arsenal.com/a3f5901293b2e76cf9ebfb2bfa0e2900.jpg", link: "https://youtube.com/playlist?list=PLZRJRc1WtptgRe7RK-1Cm2EqhExCbw2sx&si=N6lnlY9WKtDY_XLV" },
-                    { title: "В честь Прохождение", poster: "https://i.ytimg.com/vi/FoW8TVWC59Y/maxresdefault.jpg", link: "https://youtube.com/playlist?list=PLZRJRc1WtptjXExKhrgXexTNszXibJoqe&si=mlFRK77Y8EDrhY-8" },
-    		    { title: "Хантер сбил Маба", poster: "https://i.ytimg.com/vi/_tgWnlyRLI0/maxresdefault.jpg", link: "https://youtu.be/_tgWnlyRLI0?si=bDJRx5N3uICFuEep" },
-    		    { title: "Трейлер стрим канала", poster: "https://i.ytimg.com/vi/0zy0FV9wQe8/maxresdefault.jpg", link: "https://youtu.be/0zy0FV9wQe8?si=mnhRGecmY1Zlm8I9" },
-    		    { title: "Intro Iratus: Lord of the Dead (переозвучено Хантером)", poster: "https://i.ytimg.com/vi/V5BnEbDDTk4/maxresdefault.jpg", link: "https://youtu.be/V5BnEbDDTk4?si=2AI6SsngUlAwSwaC" },
-    		    { title: "Distraction Dance Хантера", poster: "https://i.ytimg.com/vi/cLu7jRfxrbw/maxresdefault.jpg", link: "https://youtu.be/t9FqFFgApHw?si=bMibuepWh9uuzljt" },
+                    { title: "Обращение к народу", poster: "https://images.meme-arsenal.com/a3f5901293b2e76cf9ebfb2bfa0e2900.jpg", status: "ob", link: "https://youtube.com/playlist?list=PLZRJRc1WtptgRe7RK-1Cm2EqhExCbw2sx&si=N6lnlY9WKtDY_XLV" },
+                    { title: "В честь Прохождение", poster: "https://i.ytimg.com/vi/FoW8TVWC59Y/maxresdefault.jpg", status: "to", link: "https://youtube.com/playlist?list=PLZRJRc1WtptjXExKhrgXexTNszXibJoqe&si=mlFRK77Y8EDrhY-8" },
+    		    { title: "Хантер сбил Маба", poster: "https://i.ytimg.com/vi/_tgWnlyRLI0/maxresdefault.jpg", status: "ii", link: "https://youtu.be/_tgWnlyRLI0?si=bDJRx5N3uICFuEep" },
+    		    { title: "Трейлер стрим канала", poster: "https://i.ytimg.com/vi/0zy0FV9wQe8/maxresdefault.jpg", status: "vv", link: "https://youtu.be/0zy0FV9wQe8?si=mnhRGecmY1Zlm8I9" },
+    		    { title: "Intro Iratus: Lord of the Dead (переозвучено Хантером)", poster: "https://i.ytimg.com/vi/V5BnEbDDTk4/maxresdefault.jpg", status: "kk", link: "https://youtu.be/V5BnEbDDTk4?si=2AI6SsngUlAwSwaC" },
+    		    { title: "Distraction Dance Хантера", poster: "https://i.ytimg.com/vi/cLu7jRfxrbw/maxresdefault.jpg", status: "uu", link: "https://youtu.be/t9FqFFgApHw?si=bMibuepWh9uuzljt" },
     		    { title: "Настольгия", poster: "https://i.ytimg.com/vi/iRpwFF-d5i4/maxresdefault.jpg", status: "xox", link: "https://www.youtube.com/live/iRpwFF-d5i4?si=vs2dWhFOotCBQcPW" },
     		    { title: "Тир лист Привью", poster: "https://i.ytimg.com/vi/pS-YXNyB250/maxresdefault.jpg", status: "yoyu", link: "https://www.youtube.com/live/pS-YXNyB250?si=yIbkBFb6aZg3VbI_" },
     		    { title: "Турнир по персонажем", poster: "https://i.ytimg.com/vi/TGxO2O-MCdc/maxresdefault.jpg", status: "xox", link: "https://www.youtube.com/live/TGxO2O-MCdc?si=8QNSwLi1LKx1oDun" },
@@ -709,6 +709,24 @@
                     } else if (item.status === 'reda') {
                         bgClass = 'bg-blue-500 text-red';
                         text = 'Red Alert';
+                    } else if (item.status === 'ob') {
+                        bgClass = 'bg-purple-500';
+                        text = '3 видео';
+                    } else if (item.status === 'to') {
+                        bgClass = 'bg-blue-500';
+                        text = 'To the Moon';
+                    } else if (item.status === 'uu') {
+                        bgClass = 'bg-blue-500';
+                        text = '1 видео';
+                    } else if (item.status === 'ii') {
+                        bgClass = 'bg-emerald-500';
+                        text = 'Анимация';
+                    } else if (item.status === 'vv') {
+                        bgClass = 'bg-purple-500';
+                        text = 'Трейлер';
+                    } else if (item.status === 'kk') {
+                        bgClass = 'bg-pink-500';
+                        text = 'Озвучка';
                     }
 
 

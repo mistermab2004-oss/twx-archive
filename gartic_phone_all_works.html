@@ -2481,6 +2481,11 @@ const KatyaGallery = [
                         <i class="fas fa-arrow-left"></i>
                     </button>
 
+                    <!-- 🌟 Кнопка: На самую первую работу (<<) -->
+    		   <button id="modal-first-btn" onclick="goToFirstModalItem()" class="w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg transition-all duration-200" title="На первую работу">
+        		<i class="fas fa-angles-left"></i>
+    		   </button>
+
                     <!-- Панель Реакций Посередине -->
                     <div class="flex items-center space-x-3 sm:space-x-5 bg-purple-900/80 px-4 py-2 rounded-2xl border border-purple-500/40 shadow-inner">
                         
@@ -2505,6 +2510,11 @@ const KatyaGallery = [
                         <!-- Счётчик страниц в альбоме -->
                         <span id="modal-counter-badge" class="text-xs font-black text-yellow-300 bg-purple-950 px-2.5 py-1 rounded-lg border border-purple-700 ml-2">1 / 1</span>
                     </div>
+
+                    <!-- 🌟 Кнопка: На самую последнюю работу (>>) -->
+    		    <button id="modal-last-btn" onclick="goToLastModalItem()" class="w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg transition-all duration-200" title="На последнюю работу">
+        		<i class="fas fa-angles-right"></i>
+    		    </button>
 
                     <!-- Стрелочка Вправо (Следующая работа в альбоме) -->
                     <button id="modal-next-btn" onclick="nextModalItem()" class="w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg transition-all duration-200">
@@ -3018,32 +3028,67 @@ const KatyaGallery = [
             updateReactionButtonsState();
         }
 
-        // Обновление состояния стрелочек (первая/последняя серые и не кликаются)
-        function updateModalNavigationState() {
-            const prevBtn = document.getElementById('modal-prev-btn');
-            const nextBtn = document.getElementById('modal-next-btn');
-            const counter = document.getElementById('modal-counter-badge');
+        // 🎀 ФУНКЦИИ ПЕРЕХОДА НА ПЕРВУЮ И ПОСЛЕДНЮЮ РАБОТУ 🎀
+function goToFirstModalItem() {
+    if (currentModalIdx > 0) {
+        currentModalIdx = 0;
+        renderModalContent();
+    }
+}
 
-            counter.textContent = `${currentModalIdx + 1} / ${currentDisplayedItems.length}`;
+function goToLastModalItem() {
+    if (currentModalIdx < currentDisplayedItems.length - 1) {
+        currentModalIdx = currentDisplayedItems.length - 1;
+        renderModalContent();
+    }
+}
 
-            // Первая работа: левая стрелка серая и отключена
-            if (currentModalIdx === 0) {
-                prevBtn.disabled = true;
-                prevBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow bg-gray-600 text-gray-400 cursor-not-allowed opacity-50 border-2 border-gray-700";
-            } else {
-                prevBtn.disabled = false;
-                prevBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg bg-purple-800 hover:bg-purple-700 text-yellow-300 border-2 border-yellow-400 hover:scale-110 active:scale-95 cursor-pointer transition-all";
-            }
+// Обновленная функция управления состоянием кнопок листания (включая << и >>)
+function updateModalNavigationState() {
+    const firstBtn = document.getElementById('modal-first-btn');
+    const prevBtn = document.getElementById('modal-prev-btn');
+    const nextBtn = document.getElementById('modal-next-btn');
+    const lastBtn = document.getElementById('modal-last-btn');
+    const counter = document.getElementById('modal-counter-badge');
 
-            // Последняя работа: правая стрелка серая и отключена
-            if (currentModalIdx === currentDisplayedItems.length - 1) {
-                nextBtn.disabled = true;
-                nextBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow bg-gray-600 text-gray-400 cursor-not-allowed opacity-50 border-2 border-gray-700";
-            } else {
-                nextBtn.disabled = false;
-                nextBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg bg-purple-800 hover:bg-purple-700 text-yellow-300 border-2 border-yellow-400 hover:scale-110 active:scale-95 cursor-pointer transition-all";
-            }
-        }
+    counter.textContent = `${currentModalIdx + 1} / ${currentDisplayedItems.length}`;
+
+    // Состояние для Кнопки "На первую работу" (<<)
+    if (currentModalIdx === 0) {
+        firstBtn.disabled = true;
+        firstBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow bg-gray-600 text-gray-400 cursor-not-allowed opacity-50 border-2 border-gray-700";
+    } else {
+        firstBtn.disabled = false;
+        firstBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg bg-purple-800 hover:bg-purple-700 text-yellow-300 border-2 border-yellow-400 hover:scale-110 active:scale-95 cursor-pointer transition-all";
+    }
+
+    // Состояние для Стрелочки Влево (<)
+    if (currentModalIdx === 0) {
+        prevBtn.disabled = true;
+        prevBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow bg-gray-600 text-gray-400 cursor-not-allowed opacity-50 border-2 border-gray-700";
+    } else {
+        prevBtn.disabled = false;
+        prevBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg bg-purple-800 hover:bg-purple-700 text-yellow-300 border-2 border-yellow-400 hover:scale-110 active:scale-95 cursor-pointer transition-all";
+    }
+
+    // Состояние для Стрелочки Вправо (>)
+    if (currentModalIdx === currentDisplayedItems.length - 1) {
+        nextBtn.disabled = true;
+        nextBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow bg-gray-600 text-gray-400 cursor-not-allowed opacity-50 border-2 border-gray-700";
+    } else {
+        nextBtn.disabled = false;
+        nextBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg bg-purple-800 hover:bg-purple-700 text-yellow-300 border-2 border-yellow-400 hover:scale-110 active:scale-95 cursor-pointer transition-all";
+    }
+
+    // Состояние для Кнопки "На последнюю работу" (>>)
+    if (currentModalIdx === currentDisplayedItems.length - 1) {
+        lastBtn.disabled = true;
+        lastBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow bg-gray-600 text-gray-400 cursor-not-allowed opacity-50 border-2 border-gray-700";
+    } else {
+        lastBtn.disabled = false;
+        lastBtn.className = "w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg bg-purple-800 hover:bg-purple-700 text-yellow-300 border-2 border-yellow-400 hover:scale-110 active:scale-95 cursor-pointer transition-all";
+    }
+}
 
         function prevModalItem() {
             if (currentModalIdx > 0) {

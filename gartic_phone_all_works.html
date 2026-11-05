@@ -2494,7 +2494,12 @@ const KatyaGallery = [
                             <i id="icon-like" class="far fa-heart text-pink-400"></i>
                         </button>
 
-                        <!-- 2. Дизлайк (Какашка) -->
+		        <!-- 2. Осмеяться (Забавно) -->
+                        <button id="btn-funny" onclick="toggleFunny(event)" class="text-xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100" title="Забавно / Осмеяться">
+                            😂
+                        </button>
+
+                        <!-- 3. Дизлайк (Какашка) -->
                         <button id="btn-dislike" onclick="toggleDislike(event)" class="text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-50 grayscale hover:grayscale-0 hover:opacity-100" title="Поставить Дизлайк">
                             💩
                         </button>
@@ -3112,31 +3117,39 @@ function updateModalNavigationState() {
             if (!item) return;
 
             const db = getSavedReactions();
-            const rec = db[item.id] || { like: false, dislike: false, trophy: false };
+            const rec = db[item.id] || { like: false, funny: false, dislike: false, trophy: false };
 
             const iconLike = document.getElementById('icon-like');
+            const btnFunny = document.getElementById('btn-funny');
             const btnDislike = document.getElementById('btn-dislike');
             const btnTrophy = document.getElementById('btn-trophy');
 
-           // 1. Лайк
+            // 1. Лайк
             if (rec.like) {
                 iconLike.className = "fas fa-heart text-pink-500 scale-110";
             } else {
                 iconLike.className = "far fa-heart text-pink-400";
             }
 
-            // 2. Дизлайк
-            if (rec.dislike) {
-                btnDislike.className = "text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-100 scale-110";
+            // 2. Осмеяться (Забавно)
+            if (rec.funny) {
+                btnFunny.className = "text-xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-100 scale-110";
             } else {
-                btnDislike.className = "text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100";
+                btnFunny.className = "text-xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100";
             }
 
-            // 3. Кубок
-            if (rec.trophy) {
-                btnTrophy.className = "text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none scale-125 drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]";
+            // 3. Дизлайк
+            if (rec.dislike) {
+                btnDislike.className = "text-xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-100 scale-110";
             } else {
-                btnTrophy.className = "text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-60 hover:opacity-100";
+                btnDislike.className = "text-xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100";
+            }
+
+            // 4. Кубок
+            if (rec.trophy) {
+                btnTrophy.className = "text-xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none scale-125 drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]";
+            } else {
+                btnTrophy.className = "text-xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-60 hover:opacity-100";
             }
         }
 
@@ -3149,8 +3162,26 @@ function updateModalNavigationState() {
 
             db[item.id].like = !db[item.id].like;
             if (db[item.id].like) {
-                db[item.id].dislike = false; // снимаем дизлайк при лайке
+                db[item.id].dislike = false;
+                db[item.id].funny = false;
                 createParticles(e.clientX, e.clientY, ['💖', '❤️', '💕', '✨', '🌸']);
+            }
+            saveReactions(db);
+            updateReactionButtonsState();
+        }
+
+        function toggleFunny(e) {
+            let item = currentDisplayedItems[currentModalIdx];
+            if (!item) return;
+
+            const db = getSavedReactions();
+            if (!db[item.id]) db[item.id] = { author: item.authorName };
+
+            db[item.id].funny = !db[item.id].funny;
+            if (db[item.id].funny) {
+                db[item.id].like = false;
+                db[item.id].dislike = false;
+                createParticles(e.clientX, e.clientY, ['😂', '😆', '🤣', '✨']);
             }
             saveReactions(db);
             updateReactionButtonsState();
@@ -3165,7 +3196,9 @@ function updateModalNavigationState() {
 
             db[item.id].dislike = !db[item.id].dislike;
             if (db[item.id].dislike) {
-                db[item.id].like = false; // снимаем лайк при дизлайке
+                db[item.id].like = false;
+                db[item.id].funny = false;
+                createParticles(e.clientX, e.clientY, ['🤮', '🤢', '💩', '💀']);
             }
             saveReactions(db);
             updateReactionButtonsState();

@@ -2498,11 +2498,6 @@ const KatyaGallery = [
 
                     <!-- Панель Реакций Посередине -->
                     <div class="flex items-center space-x-3 sm:space-x-5 bg-purple-900/80 px-4 py-2 rounded-2xl border border-purple-500/40 shadow-inner">
-                        
-                        <!-- 1. Избранное (Звёздочка) -->
-                        <button id="btn-fav" onclick="toggleFavorite(event)" class="text-lg hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100" title="Добавить в Избранное">
-                            ⭐
-                        </button>
 
                         <!-- 2. Лайк (Сердечко) -->
                         <button id="btn-like" onclick="toggleLike(event)" class="text-lg hover:scale-125 active:scale-90 transition-transform relative focus:outline-none" title="Поставить Лайк">
@@ -2536,6 +2531,12 @@ const KatyaGallery = [
 
                         <!-- Разделитель -->
                         <div class="h-6 w-0.5 bg-purple-700/60"></div>
+
+                        
+                        <!-- 1. Избранное (Звёздочка) -->
+                        <button id="btn-fav" onclick="toggleFavorite(event)" class="text-lg hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100" title="Добавить в Избранное">
+                            ⭐
+                        </button>
 
                         <!-- 3. Приз зрительских симпатий (Кубок) -->
                         <button id="btn-trophy" onclick="rewardTrophy(event)" class="text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none" title="Наградить автора (Приз зрительских симпатий)">
@@ -2938,7 +2939,7 @@ const KatyaGallery = [
                 // Сортируем по популярности (лайки + кубки + огонь)
                 items = [...dbItems].filter(i => {
                     const r = db[i.id];
-                    return r && (r.like || r.trophy || r.fire || r.funny);
+                    return r && (r.trophy);
                 }).sort((a, b) => {
                     const rA = db[a.id] || {};
                     const rB = db[b.id] || {};

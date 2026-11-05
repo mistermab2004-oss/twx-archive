@@ -2374,9 +2374,19 @@ const KatyaGallery = [
             </div>
 
             <!-- Зеленая кнопка "Главная" -->
-            <a href="index.html" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs px-4 py-2 rounded-xl shadow transform hover:scale-105 transition-all flex items-center space-x-1.5 cursor-pointer no-underline">
-                <i class="fas fa-home"></i> <span>Главная</span>
+            <a href="index.html" class="bg-[#a3ff00] hover:bg-[#8ee000] text-purple-950 font-black px-4 sm:px-5 py-2.5 rounded-xl retro-shadow border-2 border-white/60 text-xs sm:text-sm cursor-pointer transition-transform uppercase no-underline" title="Главная">
+                <i class="fas fa-home"></i>
+             </a>
+            <a onclick="openRandomWork()" class="bg-[#ff0000] hover:bg-[#ff4d00] text-purple-950 font-black px-4 sm:px-5 py-2.5 rounded-xl retro-shadow border-2 border-white/60 text-xs sm:text-sm cursor-pointer transition-transform uppercase no-underline" title="Случайная Работа">
+                🎲
             </a>
+            <a onclick="switchMode('favorites')" class="bg-[#ffc0cb] hover:bg-[#fa6057] text-purple-950 font-black px-4 sm:px-5 py-2.5 rounded-xl retro-shadow border-2 border-white/60 text-xs sm:text-sm cursor-pointer transition-transform uppercase no-underline" data-mode="favorites" title="Избраные">
+                ⭐
+             </a>
+            <a onclick="switchMode('top')" class="bg-[#ffff00] hover:bg-[#f3da0b] text-purple-950 font-black px-4 sm:px-5 py-2.5 rounded-xl retro-shadow border-2 border-white/60 text-xs sm:text-sm cursor-pointer transition-transform uppercase no-underline" data-mode="top" title="Зал Славы">
+                🏆
+            </a>
+
         </div>
 
         <div class="max-w-7xl mx-auto relative z-20 flex flex-col md:flex-row items-center justify-between pointer-events-auto gap-4">
@@ -2489,18 +2499,38 @@ const KatyaGallery = [
                     <!-- Панель Реакций Посередине -->
                     <div class="flex items-center space-x-3 sm:space-x-5 bg-purple-900/80 px-4 py-2 rounded-2xl border border-purple-500/40 shadow-inner">
                         
-                        <!-- 1. Лайк (Сердечко) -->
-                        <button id="btn-like" onclick="toggleLike(event)" class="text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none" title="Поставить Лайк">
+                        <!-- 1. Избранное (Звёздочка) -->
+                        <button id="btn-fav" onclick="toggleFavorite(event)" class="text-lg hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100" title="Добавить в Избранное">
+                            ⭐
+                        </button>
+
+                        <!-- 2. Лайк (Сердечко) -->
+                        <button id="btn-like" onclick="toggleLike(event)" class="text-lg hover:scale-125 active:scale-90 transition-transform relative focus:outline-none" title="Поставить Лайк">
                             <i id="icon-like" class="far fa-heart text-pink-400"></i>
                         </button>
 
-		        <!-- 2. Осмеяться (Забавно) -->
-                        <button id="btn-funny" onclick="toggleFunny(event)" class="text-xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100" title="Забавно / Осмеяться">
+                        <!-- 3. Осмеяться (Забавно) -->
+                        <button id="btn-funny" onclick="toggleFunny(event)" class="text-lg hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100" title="Забавно">
                             😂
                         </button>
 
-                        <!-- 3. Дизлайк (Какашка) -->
-                        <button id="btn-dislike" onclick="toggleDislike(event)" class="text-2xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-50 grayscale hover:grayscale-0 hover:opacity-100" title="Поставить Дизлайк">
+                        <!-- 4. Клоун / Кринж -->
+                        <button id="btn-clown" onclick="toggleClown(event)" class="text-lg hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100" title="Кринж / Клоун">
+                            🤡
+                        </button>
+
+                        <!-- 5. Огонь / Имба -->
+                        <button id="btn-fire" onclick="toggleFire(event)" class="text-lg hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100" title="Имба / Огонь">
+                            🔥
+                        </button>
+
+                        <!-- 6. Умер с момента -->
+                        <button id="btn-skull" onclick="toggleSkull(event)" class="text-lg hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100" title="Умер с момента">
+                            💀
+                        </button>
+
+                        <!-- 7. Дизлайк (Какашка) -->
+                        <button id="btn-dislike" onclick="toggleDislike(event)" class="text-lg hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100" title="Поставить Дизлайк">
                             💩
                         </button>
 
@@ -2542,7 +2572,7 @@ const KatyaGallery = [
 
     <script>
         const monthNames = {'01':'Января','02':'Февраля','03':'Марта','04':'Апреля','05':'Мая','06':'Июня','07':'Июля','08':'Августа','09':'Сентября','10':'Октября','11':'Ноября','12':'Декабря'};
-        const modeTitles = {'all':'ВСЕ РАБОТЫ','classic':'КЛАССИКА','anime':'АНИМАЦИЯ','forsecret':'СЕКРЕТ','plagiarist':'ПЛАГИАТ','express':'ЭКСПРЕСС','icebreaker':'ЛЕДОКОЛ','sandwich':'СЭНДВИЧ','addendum':'ДОПОЛНЕНИЕ','missing':'НЕДОСТАЮЩАЯ ЧАСТЬ','ochko':'СЧЁТ','tolpa':'ТОЛПА','history':'ИСТОРИЯ'};
+        const modeTitles = {'all':'ВСЕ РАБОТЫ','classic':'КЛАССИКА','anime':'АНИМАЦИЯ','forsecret':'СЕКРЕТ','plagiarist':'ПЛАГИАТ','express':'ЭКСПРЕСС','icebreaker':'ЛЕДОКОЛ','sandwich':'СЭНДВИЧ','addendum':'ДОПОЛНЕНИЕ','missing':'НЕДОСТАЮЩАЯ ЧАСТЬ','ochko':'СЧЁТ','tolpa':'ТОЛПА','history':'ИСТОРИЯ','favorites':'⭐ ИЗБРАННОЕ','top':'🏆 ЗАЛ СЛАВЫ (ТОП)'};
         
         let dbItems = [];
         let currentAccountIdx = 0;
@@ -2898,14 +2928,34 @@ const KatyaGallery = [
             const container = document.getElementById('artworks-grid');
             container.innerHTML = '';
 
-            let items = dbItems.filter(i => i.aIdx === currentAccountIdx && i.sIdx === currentSubProfileIdx);
-            if (currentMode !== 'all') items = items.filter(i => i.mode === currentMode);
-            if (selectedFilterDate) items = items.filter(i => i.dateObj.raw === selectedFilterDate);
+            let items = [];
+            const db = getSavedReactions();
+
+            if (currentMode === 'favorites') {
+                // Фильтруем то, что пользователь отметил звездочкой
+                items = dbItems.filter(i => db[i.id] && db[i.id].favorite);
+            } else if (currentMode === 'top') {
+                // Сортируем по популярности (лайки + кубки + огонь)
+                items = [...dbItems].filter(i => {
+                    const r = db[i.id];
+                    return r && (r.like || r.trophy || r.fire || r.funny);
+                }).sort((a, b) => {
+                    const rA = db[a.id] || {};
+                    const rB = db[b.id] || {};
+                    const scoreA = (rA.trophy ? 5 : 0) + (rA.like ? 2 : 0) + (rA.fire ? 2 : 0) + (rA.funny ? 1 : 0);
+                    const scoreB = (rB.trophy ? 5 : 0) + (rB.like ? 2 : 0) + (rB.fire ? 2 : 0) + (rB.funny ? 1 : 0);
+                    return scoreB - scoreA;
+                });
+            } else {
+                items = dbItems.filter(i => i.aIdx === currentAccountIdx && i.sIdx === currentSubProfileIdx);
+                if (currentMode !== 'all') items = items.filter(i => i.mode === currentMode);
+                if (selectedFilterDate) items = items.filter(i => i.dateObj.raw === selectedFilterDate);
+            }
 
             currentDisplayedItems = items;
 
             if (items.length === 0) {
-                container.innerHTML = '<div class="text-center text-purple-300 py-10 font-bold">В этой папке пока пусто. Ня~ ✨</div>';
+                container.innerHTML = '<div class="text-center text-purple-300 py-10 font-bold">Здесь пока пусто, ня~ ✨</div>';
                 return;
             }
 
@@ -3109,6 +3159,23 @@ function updateModalNavigationState() {
             }
         }
 
+	// 🎲 ФУНКЦИЯ «СЛУЧАЙНАЯ РАБОТА»
+        function openRandomWork() {
+            if (dbItems.length === 0) return;
+            const randomIdx = Math.floor(Math.random() * dbItems.length);
+            const item = dbItems[randomIdx];
+            
+            // Переключаемся на профиль этого автора и открываем
+            currentAccountIdx = item.aIdx;
+            currentSubProfileIdx = item.sIdx;
+            switchSubProfile(currentSubProfileIdx);
+            
+            const targetIdx = currentDisplayedItems.findIndex(i => i.id === item.id);
+            if (targetIdx !== -1) {
+                openFullSizeModal(targetIdx);
+            }
+        }
+
         // =======================================================================
         // 🎀 КНОПКИ РЕАКЦИЙ (ЛАЙК, ДИЗЛАЙК, КУБОК) 🎀
         // =======================================================================
@@ -3117,55 +3184,63 @@ function updateModalNavigationState() {
             if (!item) return;
 
             const db = getSavedReactions();
-            const rec = db[item.id] || { like: false, funny: false, dislike: false, trophy: false };
+            const rec = db[item.id] || { favorite: false, like: false, funny: false, clown: false, fire: false, skull: false, dislike: false, trophy: false };
 
+            const btnFav = document.getElementById('btn-fav');
             const iconLike = document.getElementById('icon-like');
             const btnFunny = document.getElementById('btn-funny');
+            const btnClown = document.getElementById('btn-clown');
+            const btnFire = document.getElementById('btn-fire');
+            const btnSkull = document.getElementById('btn-skull');
             const btnDislike = document.getElementById('btn-dislike');
             const btnTrophy = document.getElementById('btn-trophy');
 
-            // 1. Лайк
+            const setBtnState = (btn, active) => {
+                if (!btn) return;
+                btn.className = active 
+                    ? "text-lg hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-100 scale-125"
+                    : "text-lg hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100";
+            };
+
+            setBtnState(btnFav, rec.favorite);
+            setBtnState(btnFunny, rec.funny);
+            setBtnState(btnClown, rec.clown);
+            setBtnState(btnFire, rec.fire);
+            setBtnState(btnSkull, rec.skull);
+            setBtnState(btnDislike, rec.dislike);
+
             if (rec.like) {
-                iconLike.className = "fas fa-heart text-pink-500 scale-110";
+                iconLike.className = "fas fa-heart text-pink-500 scale-125";
             } else {
-                iconLike.className = "far fa-heart text-pink-400";
+                iconLike.className = "far fa-heart text-pink-400 opacity-60 hover:opacity-100";
             }
 
-            // 2. Осмеяться (Забавно)
-            if (rec.funny) {
-                btnFunny.className = "text-xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-100 scale-110";
-            } else {
-                btnFunny.className = "text-xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100";
-            }
-
-            // 3. Дизлайк
-            if (rec.dislike) {
-                btnDislike.className = "text-xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-100 scale-110";
-            } else {
-                btnDislike.className = "text-xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-40 grayscale hover:grayscale-0 hover:opacity-100";
-            }
-
-            // 4. Кубок
             if (rec.trophy) {
-                btnTrophy.className = "text-xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none scale-125 drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]";
+                btnTrophy.className = "text-lg hover:scale-125 active:scale-90 transition-transform relative focus:outline-none scale-125 drop-shadow-[0_0_8px_rgba(250,204,21,0.8)]";
             } else {
-                btnTrophy.className = "text-xl hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-60 hover:opacity-100";
+                btnTrophy.className = "text-lg hover:scale-125 active:scale-90 transition-transform relative focus:outline-none opacity-60 hover:opacity-100";
             }
+        }
+
+        // ОБРАБОТЧИКИ НАЖАТИЙ НА РЕАКЦИИ
+        function toggleFavorite(e) {
+            let item = currentDisplayedItems[currentModalIdx];
+            if (!item) return;
+            const db = getSavedReactions();
+            if (!db[item.id]) db[item.id] = { author: item.authorName };
+            db[item.id].favorite = !db[item.id].favorite;
+            if (db[item.id].favorite) createParticles(e.clientX, e.clientY, ['⭐', '✨', '🌟']);
+            saveReactions(db);
+            updateReactionButtonsState();
         }
 
         function toggleLike(e) {
             let item = currentDisplayedItems[currentModalIdx];
             if (!item) return;
-
             const db = getSavedReactions();
             if (!db[item.id]) db[item.id] = { author: item.authorName };
-
             db[item.id].like = !db[item.id].like;
-            if (db[item.id].like) {
-                db[item.id].dislike = false;
-                db[item.id].funny = false;
-                createParticles(e.clientX, e.clientY, ['💖', '❤️', '💕', '✨', '🌸']);
-            }
+            if (db[item.id].like) { db[item.id].dislike = false; createParticles(e.clientX, e.clientY, ['💖', '❤️', '💕']); }
             saveReactions(db);
             updateReactionButtonsState();
         }
@@ -3173,16 +3248,43 @@ function updateModalNavigationState() {
         function toggleFunny(e) {
             let item = currentDisplayedItems[currentModalIdx];
             if (!item) return;
-
             const db = getSavedReactions();
             if (!db[item.id]) db[item.id] = { author: item.authorName };
-
             db[item.id].funny = !db[item.id].funny;
-            if (db[item.id].funny) {
-                db[item.id].like = false;
-                db[item.id].dislike = false;
-                createParticles(e.clientX, e.clientY, ['😂', '😆', '🤣', '✨']);
-            }
+            if (db[item.id].funny) createParticles(e.clientX, e.clientY, ['😂', '😆', '🤣']);
+            saveReactions(db);
+            updateReactionButtonsState();
+        }
+
+        function toggleClown(e) {
+            let item = currentDisplayedItems[currentModalIdx];
+            if (!item) return;
+            const db = getSavedReactions();
+            if (!db[item.id]) db[item.id] = { author: item.authorName };
+            db[item.id].clown = !db[item.id].clown;
+            if (db[item.id].clown) createParticles(e.clientX, e.clientY, ['🤡', '🎈', '🎪']);
+            saveReactions(db);
+            updateReactionButtonsState();
+        }
+
+        function toggleFire(e) {
+            let item = currentDisplayedItems[currentModalIdx];
+            if (!item) return;
+            const db = getSavedReactions();
+            if (!db[item.id]) db[item.id] = { author: item.authorName };
+            db[item.id].fire = !db[item.id].fire;
+            if (db[item.id].fire) createParticles(e.clientX, e.clientY, ['🔥', '💥', '⚡']);
+            saveReactions(db);
+            updateReactionButtonsState();
+        }
+
+        function toggleSkull(e) {
+            let item = currentDisplayedItems[currentModalIdx];
+            if (!item) return;
+            const db = getSavedReactions();
+            if (!db[item.id]) db[item.id] = { author: item.authorName };
+            db[item.id].skull = !db[item.id].skull;
+            if (db[item.id].skull) createParticles(e.clientX, e.clientY, ['💀', '☠️', '👻']);
             saveReactions(db);
             updateReactionButtonsState();
         }
@@ -3190,16 +3292,10 @@ function updateModalNavigationState() {
         function toggleDislike(e) {
             let item = currentDisplayedItems[currentModalIdx];
             if (!item) return;
-
             const db = getSavedReactions();
             if (!db[item.id]) db[item.id] = { author: item.authorName };
-
             db[item.id].dislike = !db[item.id].dislike;
-            if (db[item.id].dislike) {
-                db[item.id].like = false;
-                db[item.id].funny = false;
-                createParticles(e.clientX, e.clientY, ['🤮', '🤢', '💩', '💀']);
-            }
+            if (db[item.id].dislike) db[item.id].like = false;
             saveReactions(db);
             updateReactionButtonsState();
         }

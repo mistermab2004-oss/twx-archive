@@ -1681,7 +1681,7 @@
             const pageItems = filtered.slice(start, end);
 
             if (pageItems.length === 0) {
-                const emptyText = isZloMode ? "Злодеи не найдены!" : "Художники не найдены, милый!";
+                const emptyText = isZloMode ? "Злодеи не найдены!" : "Художники не найдены!";
                 grid.innerHTML = `<div class="col-span-2 sm:col-span-3 text-center text-purple-900 font-bold py-8">${emptyText}</div>`;
                 return;
             }

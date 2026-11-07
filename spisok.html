@@ -131,7 +131,7 @@
                 <button id="btn-passed" onclick="switchList('passed')" class="list-tab-btn bg-orange-600 text-white">Пройденные</button>
                 <button id="btn-party" onclick="switchList('party')" class="list-tab-btn bg-yellow-500 text-black">На вечерок</button>
                 <button id="btn-unpassed" onclick="switchList('unpassed')" class="list-tab-btn bg-red-600 text-white">Не пройденные</button>
-                <button id="btn-debts" onclick="switchList('debts')" class="list-tab-btn bg-blue-600 text-white">Долги</button>
+                <button id="btn-debts" onclick="switchList('debtss')" class="list-tab-btn bg-blue-600 text-white">Долги</button>
                 <button id="btn-reactions" onclick="switchList('reactions')" class="list-tab-btn bg-purple-600 text-white">Реакции</button>
                 <button id="btn-fnf" onclick="switchList('fnf')" class="list-tab-btn bg-pink-600 text-white">ФНФ</button>
                 <button id="btn-mods" onclick="switchList('mods')" class="list-tab-btn bg-cyan-600 text-white">Моды</button>
@@ -276,7 +276,8 @@
             ],
 
             // 4. СПИСОК ДОЛГОВ
-            debts: [
+            debtss: {
+	        debts: [
                 { title: "Awaria", poster: "https://img.byrutgame.org/uploads/posts/2026-09/b6462233d4_awaria.webp", link: "https://store.steampowered.com/app/3274300/Awaria/" },
                 { title: "Dark Deception", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/332950/library_600x900.jpg", link: "https://store.steampowered.com/app/332950/Dark_Deception/" },
                 { title: "Pony Island", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/405640/library_600x900.jpg", link: "https://store.steampowered.com/app/405640/Pony_Island/" },
@@ -307,7 +308,7 @@
                 { title: "Shovel Knight: Treasure Trove", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/250760/library_600x900.jpg", link: "https://store.steampowered.com/app/250760/Shovel_Knight_Treasure_Trove/" },
                 { title: "Celeste", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/504230/library_600x900.jpg", link: "https://store.steampowered.com/app/504230/Celeste/" },
                 { title: "MechaNika", poster: "https://img.byrutgame.org/uploads/posts/2026-09/dec29c0776_mechanika.webp", link: "https://store.steampowered.com/app/384680/MechaNika/" },
-                { title: "BOKURA", poster: "https://img.byrutgame.org/uploads/posts/2026-09/2930e922a1_bokura.webp", link: "https://store.steampowered.com/app/1801110/BOKURA/" },
+                { title: "Мы становимся тем, что видим", poster: "https://igroutka.ru/uploads/posts/2021-11/WeBecomeWhatWeBehold_1636970793619231297cee17.11557976.jpg", link: "https://silamedia.ru/game/" },
 		{ title: "NEEDY STREAMER OVERLOAD", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1451940/library_600x900.jpg", link: "https://store.steampowered.com/app/1451940/NEEDY_STREAMER_OVERLOAD/" },
                 { title: "Tokyo Dark", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/687260/library_600x900.jpg", link: "https://store.steampowered.com/app/687260/Tokyo_Dark/" },
                 { title: "Rock of Ages", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/22230/library_600x900.jpg", link: "https://store.steampowered.com/app/22230/Rock_of_Ages/" },
@@ -329,7 +330,15 @@
                 { title: "Doodle God", poster: "https://img.byrutgame.org/uploads/posts/2026-09/15d23ad5fb_doodle-god.webp", link: "https://store.steampowered.com/app/348360/Doodle_God/" },
                 { title: "Happy's Humble Burger Farm", poster: "https://img.byrutgame.org/uploads/posts/2026-09/2565582560_happys-humble-burger-farm.webp", link: "https://store.steampowered.com/app/1433340/Happys_Humble_Burger_Farm/" },
                 { title: "AI: The Somnium Files", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/948740/library_600x900.jpg", link: "https://store.steampowered.com/app/948740/AI_The_Somnium_Files/" }
-            ],
+            	],
+		mabs: [
+                { title: "BOKURA", poster: "https://img.byrutgame.org/uploads/posts/2026-09/2930e922a1_bokura.webp", link: "https://store.steampowered.com/app/1801110/BOKURA/" },
+                { title: "Goose Goose Duck", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1568590/library_600x900.jpg", status: "mabsss", link: "https://store.steampowered.com/app/1568590/Goose_Goose_Duck/" },
+                { title: "Buckshot Roulette", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2835570/library_600x900.jpg", status: "mabsss", link: "https://store.steampowered.com/app/2835570/Buckshot_Roulette/" },
+		{ title: "For The King", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/527230/library_600x900.jpg", link: "https://store.steampowered.com/app/527230/For_The_King/" },
+                { title: "The Past Within", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1515210/library_600x900.jpg", link: "https://store.steampowered.com/app/1515210/The_Past_Within/" }
+		]
+            },
 
             // 5. РЕАКЦИИ (с подблоками: сняты / надо снять)
             reactions: {
@@ -563,7 +572,9 @@
             interesting: "Самое интересное",
             prazdnik: "Новый Год",
             doso: "Достопримечательности",
-            otherActivity: "Другая деятельность"
+            otherActivity: "Другая деятельность",
+	    debts: "Долги",
+            mabs: "Поиграть с Мабом"
         };
 
         let currentMainKey = 'passed';
@@ -583,6 +594,16 @@
             const subContainer = document.getElementById('sub-tabs-container');
             subContainer.innerHTML = '';
             subContainer.classList.add('hidden');
+
+	    if (key === 'debtss') {
+                subContainer.classList.remove('hidden');
+                subContainer.innerHTML = `
+                    <button onclick="switchSubList('debtss', 'debts')" id="sub-btn-debts" class="sub-tab-btn">Долги</button>
+                    <button onclick="switchSubList('debtss', 'mabs')" id="sub-btn-mabs" class="sub-tab-btn">Поиграть с Мабом</button>
+                `;
+                switchSubList('debtss', 'debts');
+                return;
+            }
 
 	    if (key === 'reactions') {
                 subContainer.classList.remove('hidden');
@@ -657,6 +678,9 @@
                     } else if (item.status === 'yoyu') {
                         bgClass = 'bg-red-600';
                         text = 'Заброшен';
+                    } else if (item.status === 'mabsss') {
+                        bgClass = 'bg-red-600';
+                        text = 'Под Вопросом';
                     } else if (item.status === 'opop') {
                         bgClass = 'bg-gray-500';
                         text = 'В планах';

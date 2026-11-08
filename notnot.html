@@ -66,17 +66,17 @@ button {
 }
 
 /* ===================================
-   ОХРАННИКИ (ОПУЩЕНЫ В САМЫЙ НИЗ)
+   ОХРАННИКИ (НИЖНЯЯ ГРАНИЦА ВИДЕО)
 =================================== */
 
 .guardian {
     position: absolute;
-    bottom: 0; /* Прижимаем к самому низу */
-    top: auto; /* Сбрасываем центровку по вертикали если была */
-    transform: none; /* Убираем translateY(-50%) */
-    width: clamp(76px, 11vw, 145px);
+    bottom: 0;
+    width: clamp(110px, 15vw, 190px);
+    height: auto;
     z-index: 10;
     pointer-events: none;
+    transition: opacity .3s, transform .3s;
 }
 
 .guardian img {
@@ -101,14 +101,14 @@ button {
 
 .guard-close {
     position: absolute;
-    top: -25px;
-    width: 25px;
-    height: 25px;
+    top: -26px;
+    width: 26px;
+    height: 26px;
     background: #080808;
     border: 1px solid #c5b77d;
     color: #e9d99c;
     font-size: 17px;
-    line-height: 20px;
+    line-height: 22px;
     z-index: 15;
     pointer-events: auto;
 }
@@ -249,7 +249,7 @@ button {
 }
 
 /* ===================================
-   ИНТЕРФЕЙС ДОСЬЕ
+   ИНТЕРФЕЙС ДОСЬЕ (СЕТКА МИЛАНЫ 3 КОЛОНКИ)
 =================================== */
 
 #dossier {
@@ -257,8 +257,8 @@ button {
     inset: 0;
     z-index: 5;
     display: grid;
-    grid-template-columns: 240px 1fr 310px; /* Чёткие пропорции колонок */
-    gap: 12px;
+    grid-template-columns: 250px 1fr 320px; /* Отличные пропорции без сжатия */
+    gap: 14px;
     padding: 16px;
     opacity: 0;
     pointer-events: none;
@@ -279,23 +279,24 @@ button {
     top: 0;
     left: 0;
     right: 0;
-    height: 88px;
+    height: 90px;
     z-index: 10;
     pointer-events: none;
 }
 
 .logo-kok {
     position: absolute;
-    top: 1px;
-    left: 5px;
-    width: 75px;
-    height: 75px;
-    padding: 4px;
+    top: 10px;
+    left: 16px;
+    width: 72px;
+    height: 72px;
+    border: 2px solid #d6bd43;
     background: #080808;
-    border: 3px solid #d6bd43;
-    transform: rotate(-12deg); /* Тот самый поворот */
+    padding: 3px;
     pointer-events: auto;
+    box-shadow: 0 0 10px rgba(214, 189, 67, 0.4);
 }
+
 .logo-kok img {
     width: 100%;
     height: 100%;
@@ -304,8 +305,8 @@ button {
 
 .diagonal-nav {
     position: absolute;
-    top: 12px;
-    left: 95px;
+    top: 14px;
+    left: 100px;
     width: 460px;
     height: 48px;
     border-top: 2px solid #b9a65e;
@@ -339,41 +340,40 @@ button {
 }
 
 /* ===================================
-   БОКОВЫЕ ХАРАКТЕРИСТИКИ
+   ЛЕВАЯ КОЛОНКА
 =================================== */
 
 .left-column {
     position: relative;
+    padding-top: 95px;
     min-width: 0;
-    padding-top: 112px; /* Опускаем весь блок чуть ниже */
-    overflow: visible;
 }
 
 .stats {
     transform: skewX(-6deg);
-    margin-left: 8px;
+    margin-left: 10px;
     margin-top: 10px;
     color: #e8d79a;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
 }
 
 .stat {
-    margin-bottom: 14px;
+    margin-bottom: 16px;
     white-space: nowrap;
 }
 
 .stat span {
-    font-size: 18px;
-    margin-right: 8px;
+    font-size: 20px;
+    margin-right: 10px;
     color: #f5e6a4;
     font-weight: bold;
 }
 
 .research-level {
-    margin-top: 35px;
+    margin-top: 40px;
     color: #ffe6a2;
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.4;
     font-weight: bold;
     text-transform: uppercase;
@@ -381,18 +381,8 @@ button {
 }
 
 /* ===================================
-   ЦЕНТРАЛЬНЫЕ БЛОКИ
+   ОБЩИЕ ПАНЕЛИ И ЗАГОЛОВКИ
 =================================== */
-
-.center-column {
-    min-width: 0;
-    height: 100%;
-    padding-top: 85px;
-    padding-bottom: 45px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
 
 .panel {
     border: 1px solid var(--line);
@@ -404,7 +394,7 @@ button {
 
 .panel-title {
     position: absolute;
-    top: -12px;
+    top: -13px;
     left: 50%;
     transform: translateX(-50%);
     background: #000;
@@ -418,19 +408,32 @@ button {
     border: 1px solid var(--line);
 }
 
-.profile-panel {
-    padding: 10px;
+/* ===================================
+   КОЛОНКА 2: БАЗОВАЯ ИНФОРМАЦИЯ (ПОРТРЕТ ЦЕЛИКОМ)
+=================================== */
+
+.base-column {
+    min-width: 0;
+    height: 100%;
+    padding-top: 90px;
+    padding-bottom: 45px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 12px;
+}
+
+.profile-panel {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .portrait {
-    display: block;
     width: 100%;
-    height: 140px; /* Уменьшаем высоту, чтобы портрет встал компактно и квадратно */
-    object-fit: contain; /* Запрещаем обрезать края, картинка влезет целиком */
-    background: #050505; /* Задник для пустых зон */
+    height: 190px;
+    object-fit: contain; /* Портрет теперь показывается целиком, не обрезаясь */
+    background: #050505;
     border: 1px solid #514d3c;
 }
 
@@ -438,9 +441,9 @@ button {
     background: #171711;
     text-align: center;
     color: #fff;
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: bold;
-    padding: 3px;
+    padding: 4px;
 }
 
 .name-row {
@@ -448,25 +451,25 @@ button {
     align-items: center;
     justify-content: space-between;
     background: #171711;
-    padding: 4px 10px;
-    font-size: 13px;
+    padding: 5px 10px;
+    font-size: 13.5px;
     color: #ccc;
 }
 
 .name-row strong {
     color: #ed994d;
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .character-data {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6px;
+    gap: 8px;
 }
 
 .data-box {
     border: 1px solid #55523d;
-    padding: 6px;
+    padding: 8px;
     text-align: center;
     min-width: 0;
     background: #0a0905;
@@ -474,26 +477,15 @@ button {
 
 .data-label {
     color: #bcb18a;
-    font-size: 11px;
-    margin-bottom: 2px;
-}
-
-.data-value {
-    color: #e9dfa6;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.data-value img {
-    height: 24px;
-    object-fit: contain;
-    vertical-align: middle;
+    font-size: 11.5px;
+    margin-bottom: 3px;
 }
 
 .attack-type {
-    font-size: 11px;
+    font-size: 12px;
     color: #ed994d;
     font-weight: bold;
+    margin-top: 4px;
 }
 
 .attack-type small {
@@ -504,21 +496,22 @@ button {
 
 .condition-box {
     border: 1px solid #514c37;
-    padding: 6px 8px;
+    padding: 8px 10px;
     background: #0a0905;
 }
 
 .condition-title {
     color: #f3dfa0;
-    font-size: 11px;
+    font-size: 11.5px;
     font-weight: bold;
     text-transform: uppercase;
-    margin-bottom: 4px;
+    margin-bottom: 5px;
+    text-align: center;
 }
 
 .condition {
-    font-size: 12px;
-    margin-bottom: 2px;
+    font-size: 12.5px;
+    margin-bottom: 3px;
 }
 
 .condition.good { color: #65d53e; }
@@ -531,85 +524,98 @@ button {
 }
 
 /* ===================================
-   ИНСТРУКЦИИ (РУКОВОДСТВА ПО ОБРАЩЕНИЮ)
+   КОЛОНКА 3: ЦЕНТР (РУКОВОДСТВА СВЕРХУ, ПРЕДПОЧТЕНИЯ СНИЗУ)
 =================================== */
+
+.center-column {
+    min-width: 0;
+    height: 100%;
+    padding-top: 90px;
+    padding-bottom: 45px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
 
 .instructions-box {
     border: 1px solid var(--line);
     outline: 1px solid rgba(190,175,100,.25);
     background: rgba(8,6,2,.95);
     position: relative;
-    padding: 12px 10px 8px 10px;
+    padding: 14px 10px 10px 10px;
     display: flex;
     flex-direction: column;
-    height: 140px;
+    height: 220px;
 }
 
 .instructions-scroll {
     overflow-y: auto;
     flex: 1;
-    font-size: 11px;
-    line-height: 1.45;
+    font-size: 11.5px;
+    line-height: 1.5;
     color: #d8cba0;
     padding-right: 6px;
 }
 
-.instructions-scroll::-webkit-scrollbar { width: 4px; }
+.instructions-scroll::-webkit-scrollbar { width: 5px; }
 .instructions-scroll::-webkit-scrollbar-thumb { background: #b9a65e; }
 
 .instructions-scroll p {
-    margin: 0 0 8px 0;
+    margin: 0 0 10px 0;
 }
 
 .instructions-scroll strong {
     color: #ed994d;
 }
 
-/* ===================================
-   ПРЕДПОЧТЕНИЯ
-=================================== */
-
 .preferences {
-    padding: 12px 8px 8px;
+    flex: 1;
+    padding: 14px 10px 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .preference-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 6px;
+    grid-template-rows: 1fr 1fr;
+    gap: 8px;
+    flex: 1;
 }
 
 .preference {
     border: 1px solid #60583f;
     background: #0a0905;
     display: flex;
-    gap: 6px;
+    gap: 8px;
     align-items: center;
-    padding: 6px;
+    padding: 8px;
 }
 
 .preference img {
-    width: 100%;
-    height: 100%;
-    max-height: 52px; /* Чуть увеличили иконку */
+    width: 36px;
+    height: 36px;
     object-fit: contain;
 }
+
 .preference-info {
-    font-size: clamp(9px, 0.8vw, 11px); /* Чуть увеличили шрифт уровня */
+    font-size: 10.5px;
+    color: #ccc;
+    line-height: 1.25;
 }
 
 .preference-info strong {
     color: #fff;
     display: block;
-    margin-bottom: 1px;
+    margin-bottom: 2px;
 }
 
 /* ===================================
-   ПРАВЫЙ БЛОК
+   ПРАВАЯ КОЛОНКА
 =================================== */
 
 .right-column {
-    padding-top: 85px;
+    padding-top: 90px;
     padding-bottom: 45px;
     min-width: 0;
     display: flex;
@@ -619,27 +625,27 @@ button {
 
 .escape-panel {
     display: grid;
-    grid-template-columns: 90px 1fr;
+    grid-template-columns: 95px 1fr;
     gap: 6px;
 }
 
 .escape-counter {
     border: 1px solid #927346;
     background: #0a0905;
-    padding: 6px;
+    padding: 8px 6px;
     text-align: center;
 }
 
 .escape-counter h3,
 .escape-result h3 {
-    font-size: 10.5px;
+    font-size: 11px;
     color: #d99a57;
     margin: 0 0 4px;
     text-transform: uppercase;
 }
 
 .counter-number {
-    font-size: 26px;
+    font-size: 28px;
     font-weight: bold;
     color: #ed994d;
 }
@@ -648,41 +654,41 @@ button {
     border: 1px solid #ed454b;
     background: rgba(237, 69, 75, 0.1);
     text-align: center;
-    padding: 6px;
+    padding: 8px 6px;
 }
 
 .escape-result strong {
     display: block;
     color: #ed454b;
-    font-size: 20px;
+    font-size: 21px;
     margin-top: 4px;
     letter-spacing: 1px;
 }
 
 .gift-panel {
     display: flex;
-    padding: 8px;
+    padding: 10px;
     gap: 10px;
     align-items: center;
 }
 
 .gift-panel img {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     object-fit: contain;
 }
 
 .gift-text h3 {
-    font-size: 11.5px;
+    font-size: 12px;
     color: #e8dc9e;
     margin: 0;
     text-transform: uppercase;
 }
 
 .gift-text p {
-    font-size: 10px;
+    font-size: 10.5px;
     color: #aaa184;
-    margin: 2px 0 0 0;
+    margin: 3px 0 0 0;
     line-height: 1.35;
 }
 
@@ -696,58 +702,58 @@ button {
     border: 1px solid #88815b;
     background: #0a0905;
     position: relative;
-    padding: 8px 6px;
+    padding: 10px 6px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    min-height: 130px;
+    min-height: 135px;
     justify-content: space-between;
 }
 
 .equipment h3 {
-    font-size: 11px;
+    font-size: 11.5px;
     color: #e5dba0;
     margin: 0 0 6px 0;
     text-transform: uppercase;
 }
 
 .equipment img {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     object-fit: contain;
     margin: 4px 0;
 }
 
 .equipment strong {
     color: #fff;
-    font-size: 11.5px;
+    font-size: 12px;
 }
 
 .equipment small {
-    font-size: 9.5px;
+    font-size: 10px;
     color: #aaa;
-    margin-top: 2px;
+    margin-top: 3px;
 }
 
 .bottom-info {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 8px;
+    gap: 12px;
+    padding: 10px;
     border: 1px solid var(--line);
     background: #0a0905;
 }
 
 .bottom-info img {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     object-fit: contain;
 }
 
 .bottom-info strong {
-    font-size: 15px;
+    font-size: 16px;
     color: #f2e4a7;
     line-height: 1.1;
 }
@@ -822,8 +828,8 @@ button {
 
 .bottom-navigation {
     position: absolute;
-    bottom: 10px;
-    left: 14px;
+    bottom: 12px;
+    left: 16px;
     z-index: 40;
     display: flex;
     gap: 8px;
@@ -844,8 +850,8 @@ button {
 
 #exit-button {
     position: absolute;
-    right: 14px;
-    bottom: 10px;
+    right: 16px;
+    bottom: 12px;
     z-index: 45;
     background: #d93a3d;
     color: #fff;
@@ -869,7 +875,8 @@ button {
 }
 
 #dossier.history-mode .center-column,
-#dossier.history-mode .right-column {
+#dossier.history-mode .right-column,
+#dossier.history-mode .base-column {
     display: none;
 }
 
@@ -877,14 +884,14 @@ button {
     position: absolute;
     top: 0;
     left: 0;
-    width: 240px;
+    width: 250px;
     height: 100%;
 }
 
 #dossier.history-mode #history-page {
     display: block;
     position: absolute;
-    left: 240px;
+    left: 250px;
     right: 0;
     top: 0;
     bottom: 0;
@@ -901,7 +908,7 @@ button {
         <div id="youtube-player"></div>
     </div>
 
-    <!-- ОХРАННИКИ (ОПУЩЕНЫ СНИЗУ К ЭКРАНУ) -->
+    <!-- ОХРАННИКИ (НИЖНЯЯ ГРАНИЦА) -->
     <div class="guardian" id="left-guardian">
         <button class="guard-close" onclick="hideGuardian('left')">×</button>
         <img id="left-gif" src="user/system/ms/banana.gif" alt="">
@@ -912,7 +919,6 @@ button {
         <img id="right-gif" src="user/system/ms/clife.gif" alt="">
     </div>
 
-    <!-- ВОССТАНОВЛЕНИЕ ОХРАННИКОВ -->
     <button class="restore-guard" id="restore-left" onclick="restoreGuardian('left')">_</button>
     <button class="restore-guard" id="restore-right" onclick="restoreGuardian('right')">_</button>
 
@@ -945,18 +951,17 @@ button {
                 <img src="user/lobo/kok.png" alt="Аномалия Детали">
             </div>
 
-            <!-- Заменяем кнопки на такие: -->
-	<div class="diagonal-nav">
-    	<button class="nav-tab active" id="details-tab" onclick="switchPage('details')">
-        	<img src="user/system/anoma.png" alt="Детали" style="height: 24px; object-fit: contain;">
-    	</button>
-    	<button class="nav-tab" id="history-tab" onclick="switchPage('history')">
-        	<img src="user/system/goty.png" alt="История" style="height: 24px; object-fit: contain;">
-    	</button>
-	</div>
+            <div class="diagonal-nav">
+                <button class="nav-tab active" id="details-tab" onclick="switchPage('details')">
+                    АНОМАЛИЯ ДЕТАЛИ
+                </button>
+                <button class="nav-tab" id="history-tab" onclick="switchPage('history')">
+                    АНОМАЛИЯ ИСТОРИЯ
+                </button>
+            </div>
         </div>
 
-        <!-- ЛЕВАЯ КОЛОНКА -->
+        <!-- КОЛОНКА 1: СТАТЫ ИССЛЕДОВАНИЙ -->
         <div class="left-column">
             <div class="stats">
                 <div class="stat"><span>│</span> Скорость работы +5</div>
@@ -970,10 +975,8 @@ button {
             </div>
         </div>
 
-        <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА -->
-        <div class="center-column" id="details-content">
-
-            <!-- ПРОФИЛЬ -->
+        <!-- КОЛОНКА 2: БАЗОВАЯ ИНФОРМАЦИЯ И ПОРТРЕТ -->
+        <div class="base-column">
             <div class="panel profile-panel">
                 <div class="panel-title">АНОМАЛИЯ БАЗОВАЯ ИНФОРМАЦИЯ</div>
                 <img class="portrait" src="user/lobo/portrey.png" alt="Алкаш Хантер">
@@ -987,9 +990,9 @@ button {
                 <div class="character-data">
                     <div class="data-box">
                         <div class="data-label">Тип атаки</div>
-                        <div class="data-value" style="color: var(--orange); font-weight: 700; font-size: 20px; text-transform: uppercase;">
-    				ORANGE
-			</div>
+                        <div style="margin: 4px 0;">
+                            <img src="user/lobo/att.png" style="height: 22px; object-fit: contain;" alt="">
+                        </div>
                         <div class="attack-type">
                             ОРАНЖЕВЫЙ
                             <small>0.1 - 1</small>
@@ -998,10 +1001,10 @@ button {
 
                     <div class="data-box">
                         <div class="data-label">Даёт PE-Ячеек</div>
-                        <div class="data-value">
-                            <img src="user/lobo/ii.png" alt="">
+                        <div style="margin: 4px 0;">
+                            <img src="user/lobo/ii.png" style="height: 20px; object-fit: contain;" alt="">
                         </div>
-                        <div style="font-size: 16px; color: #fff; font-weight: bold; margin-top: 2px;">10</div>
+                        <div style="font-size: 18px; color: #fff; font-weight: bold; margin-top: 2px;">10</div>
                     </div>
                 </div>
 
@@ -1012,7 +1015,11 @@ button {
                     <div class="condition bad">🔴 Ужасно <span>0-3</span></div>
                 </div>
             </div>
+        </div>
 
+        <!-- КОЛОНКА 3: ЦЕНТР (РУКОВОДСТВА СВЕРХУ + ПРЕДПОЧТЕНИЯ СНИЗУ) -->
+        <div class="center-column">
+            
             <!-- ИНСТРУКЦИИ (РУКОВОДСТВА ПО ОБРАЩЕНИЮ) -->
             <div class="instructions-box">
                 <div class="panel-title">АНОМАЛИЯ ИЗУЧЕННЫЕ ОСОБЕННОСТИ</div>
@@ -1034,7 +1041,7 @@ button {
                         <img src="user/lobo/y1.png" alt="">
                         <div class="preference-info">
                             <strong>Пригрозить</strong>
-                            <span>1: Низкий | 2: Низкий<br>3: Обычный<br>4: Высокий | 5: Высокий</span>
+                            <span>1-2: Низкий<br>3: Обычный<br>4-5: Высокий</span>
                         </div>
                     </div>
 
@@ -1049,7 +1056,7 @@ button {
                     <div class="preference">
                         <img src="user/lobo/y3.png" alt="">
                         <div class="preference-info">
-                            <strong>Прибодрить</strong>
+                            <strong>Приободрить</strong>
                             <span>Все 1-5: Высокий</span>
                         </div>
                     </div>
@@ -1066,8 +1073,8 @@ button {
 
         </div>
 
-        <!-- ПРАВАЯ КОЛОНКА -->
-        <div class="right-column" id="right-content">
+        <!-- КОЛОНКА 4: ПРАВЫЙ БЛОК (ПОБЕГ, ДАР, ЭКИПИРОВКА) -->
+        <div class="right-column">
 
             <!-- СБЕГАНИЕ -->
             <div class="escape-panel">
@@ -1127,7 +1134,7 @@ button {
             </section>
         </div>
 
-        <!-- ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ В СТИЛЕ СТРЕЛОК -->
+        <!-- СТРЕЛКИ НАВИГАЦИИ -->
         <div class="bottom-navigation">
             <button class="page-arrow" onclick="switchPage('details')"></button>
             <button class="page-arrow right" onclick="switchPage('history')"></button>
@@ -1153,29 +1160,29 @@ document.head.appendChild(tag);
 
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('youtube-player', {
-    videoId: videoID,
-    playerVars: {
-        autoplay: 1,
-        mute: 0,        // 0 — звук включен (1 — звук выключен)
-        controls: 1,
-        playsinline: 1,
-        rel: 0
-    },
-    events: {
-        onReady: function(event) {
-            playerReady = true;
-            event.target.playVideo();
+        videoId: videoID,
+        playerVars: {
+            autoplay: 1,
+            mute: 0,
+            controls: 1,
+            playsinline: 1,
+            rel: 0
         },
-        onStateChange: function(event) {
-            if(event.data === YT.PlayerState.PLAYING) {
-                leaveSecretMode();
-            }
-            if(event.data === YT.PlayerState.PAUSED) {
-                enterSecretMode();
+        events: {
+            onReady: function(event) {
+                playerReady = true;
+                event.target.playVideo();
+            },
+            onStateChange: function(event) {
+                if(event.data === YT.PlayerState.PLAYING) {
+                    leaveSecretMode();
+                }
+                if(event.data === YT.PlayerState.PAUSED) {
+                    enterSecretMode();
+                }
             }
         }
-    }
-});
+    });
 }
 
 function enterSecretMode() {

@@ -66,14 +66,13 @@ button {
 }
 
 /* ===================================
-   ОХРАННИКИ
+   ОХРАННИКИ (ОПУЩЕНЫ В САМЫЙ НИЗ)
 =================================== */
 
 .guardian {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: clamp(90px, 13vw, 175px);
+    bottom: 0; /* Опущены в самый низ поверх видео */
+    width: clamp(100px, 14vw, 180px);
     height: auto;
     z-index: 10;
     pointer-events: none;
@@ -102,7 +101,7 @@ button {
 
 .guard-close {
     position: absolute;
-    top: 0;
+    top: -25px;
     width: 25px;
     height: 25px;
     background: #080808;
@@ -258,9 +257,9 @@ button {
     inset: 0;
     z-index: 5;
     display: grid;
-    grid-template-columns: 22% 1fr 29%;
-    gap: 8px;
-    padding: 12px;
+    grid-template-columns: 240px 1fr 310px; /* Чёткие пропорции колонок */
+    gap: 12px;
+    padding: 16px;
     opacity: 0;
     pointer-events: none;
     transition: opacity .3s;
@@ -287,15 +286,15 @@ button {
 
 .logo-kok {
     position: absolute;
-    top: 0;
-    left: 4px;
-    width: 78px;
-    height: 78px;
-    transform: rotate(-12deg);
-    border: 3px solid #d6bd43;
+    top: 8px;
+    left: 14px;
+    width: 70px;
+    height: 70px;
+    border: 2px solid #d6bd43;
     background: #080808;
-    padding: 4px;
+    padding: 3px;
     pointer-events: auto;
+    box-shadow: 0 0 10px rgba(214, 189, 67, 0.4);
 }
 
 .logo-kok img {
@@ -306,15 +305,16 @@ button {
 
 .diagonal-nav {
     position: absolute;
-    top: 8px;
-    left: 83px;
-    width: 440px;
-    height: 53px;
+    top: 12px;
+    left: 95px;
+    width: 460px;
+    height: 48px;
     border-top: 2px solid #b9a65e;
-    border-bottom: 1px solid #b9a65e;
-    transform: skewY(-12deg);
+    border-bottom: 2px solid #b9a65e;
+    transform: skewX(-15deg);
     display: flex;
     align-items: center;
+    background: rgba(15, 12, 5, 0.85);
     pointer-events: auto;
 }
 
@@ -323,11 +323,11 @@ button {
     border: none;
     color: #e6d18c;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 13.5px;
     text-transform: uppercase;
-    padding: 8px 12px;
+    padding: 8px 16px;
     white-space: nowrap;
-    transform: skewY(12deg);
+    transform: skewX(15deg);
 }
 
 .nav-tab.active {
@@ -345,40 +345,39 @@ button {
 
 .left-column {
     position: relative;
-    padding-top: 100px;
+    padding-top: 95px;
     min-width: 0;
 }
 
 .stats {
-    transform: rotate(-13deg);
-    transform-origin: top left;
-    width: 120%;
-    margin-left: 12px;
-    margin-top: 5px;
+    transform: skewX(-6deg);
+    margin-left: 8px;
+    margin-top: 10px;
     color: #e8d79a;
-    font-size: clamp(11px, 1.1vw, 16px);
+    font-size: 14px;
     font-weight: 600;
 }
 
 .stat {
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     white-space: nowrap;
 }
 
 .stat span {
-    font-size: 20px;
-    margin-right: 9px;
+    font-size: 18px;
+    margin-right: 8px;
     color: #f5e6a4;
+    font-weight: bold;
 }
 
 .research-level {
-    margin-top: 22px;
-    margin-left: 45px;
+    margin-top: 35px;
     color: #ffe6a2;
-    font-size: 16px;
-    line-height: 1.5;
+    font-size: 15px;
+    line-height: 1.4;
     font-weight: bold;
     text-transform: uppercase;
+    transform: skewX(0deg);
 }
 
 /* ===================================
@@ -388,50 +387,47 @@ button {
 .center-column {
     min-width: 0;
     height: 100%;
-    padding-top: 94px;
-    padding-bottom: 40px;
+    padding-top: 85px;
+    padding-bottom: 45px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
 }
 
 .panel {
     border: 1px solid var(--line);
     outline: 1px solid rgba(190,175,100,.25);
-    background: rgba(0,0,0,.95);
+    background: rgba(8,6,2,.95);
     position: relative;
     min-width: 0;
 }
 
 .panel-title {
     position: absolute;
-    top: -13px;
+    top: -12px;
     left: 50%;
     transform: translateX(-50%);
     background: #000;
     color: #f3dfa0;
-    font-size: clamp(10px, 1vw, 14px);
+    font-size: 12px;
     font-weight: bold;
     text-transform: uppercase;
-    padding: 0 8px;
+    padding: 0 10px;
     white-space: nowrap;
     z-index: 2;
+    border: 1px solid var(--line);
 }
 
 .profile-panel {
-    flex: 1;
-    min-height: 0;
     padding: 10px;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: minmax(100px, 1.6fr) auto auto auto;
-    gap: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .portrait {
     width: 100%;
-    height: 100%;
-    min-height: 0;
+    height: 150px;
     object-fit: cover;
     border: 1px solid #514d3c;
 }
@@ -439,8 +435,9 @@ button {
 .character-caption {
     background: #171711;
     text-align: center;
-    color: #b9ad7b;
-    font-size: 12px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
     padding: 3px;
 }
 
@@ -449,13 +446,14 @@ button {
     align-items: center;
     justify-content: space-between;
     background: #171711;
-    padding: 3px 10px;
+    padding: 4px 10px;
     font-size: 13px;
+    color: #ccc;
 }
 
 .name-row strong {
-    color: #e74c4c;
-    font-size: 16px;
+    color: #ed994d;
+    font-size: 14px;
 }
 
 .character-data {
@@ -466,126 +464,144 @@ button {
 
 .data-box {
     border: 1px solid #55523d;
-    padding: 5px;
+    padding: 6px;
     text-align: center;
     min-width: 0;
+    background: #0a0905;
 }
 
 .data-label {
     color: #bcb18a;
     font-size: 11px;
+    margin-bottom: 2px;
 }
 
 .data-value {
     color: #e9dfa6;
-    font-size: 24px;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .data-value img {
-    width: 45px;
-    height: 38px;
+    height: 24px;
     object-fit: contain;
     vertical-align: middle;
 }
 
 .attack-type {
-    font-size: 12px;
-    color: #d8d2a6;
+    font-size: 11px;
+    color: #ed994d;
+    font-weight: bold;
 }
 
 .attack-type small {
     display: block;
-    color: #e3e3b9;
+    color: #aaa;
+    font-weight: normal;
 }
 
 .condition-box {
-    border-top: 1px solid #514c37;
-    padding: 5px;
+    border: 1px solid #514c37;
+    padding: 6px 8px;
+    background: #0a0905;
 }
 
 .condition-title {
-    color: #a79e73;
-    font-size: 10px;
-    text-align: center;
+    color: #f3dfa0;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 4px;
 }
 
 .condition {
     font-size: 12px;
-    padding: 2px 5px;
+    margin-bottom: 2px;
 }
 
-.condition.good { color: #69d77b; }
+.condition.good { color: #65d53e; }
 .condition.normal { color: #e5d64f; }
-.condition.bad { color: #df604c; }
+.condition.bad { color: #ed454b; }
 
 .condition span {
     float: right;
+    color: #ddd;
 }
 
 /* ===================================
-   ИНСТРУКЦИИ
+   ИНСТРУКЦИИ (РУКОВОДСТВА ПО ОБРАЩЕНИЮ)
 =================================== */
 
-.instructions {
-    flex: 1;
-    min-height: 0;
-    padding: 12px 9px 20px;
+.instructions-box {
+    border: 1px solid var(--line);
+    outline: 1px solid rgba(190,175,100,.25);
+    background: rgba(8,6,2,.95);
+    position: relative;
+    padding: 12px 10px 8px 10px;
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    height: 140px;
 }
 
-.instruction-slider {
+.instructions-scroll {
+    overflow-y: auto;
     flex: 1;
-    min-height: 0;
-    overflow: hidden;
-    position: relative;
-}
-
-.instruction-card {
-    position: absolute;
-    inset: 0;
-    border: 1px solid #705439;
-    padding: 12px;
-    display: none;
-    background: rgba(0,0,0,.85);
-}
-
-.instruction-card.active {
-    display: block;
-}
-
-.instruction-card small {
-    display: block;
-    color: #d38e48;
-    text-align: center;
-    font-size: 9px;
-    margin-bottom: 8px;
-}
-
-.instruction-card p {
-    color: #d8a16c;
-    font-size: clamp(10px, .85vw, 13px);
-    line-height: 1.6;
-}
-
-.instruction-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
-
-.instruction-controls input {
-    width: 100%;
-    accent-color: #ed994d;
-    cursor: pointer;
-}
-
-.instruction-count {
-    color: #e49b52;
     font-size: 11px;
-    white-space: nowrap;
+    line-height: 1.45;
+    color: #d8cba0;
+    padding-right: 6px;
+}
+
+.instructions-scroll::-webkit-scrollbar { width: 4px; }
+.instructions-scroll::-webkit-scrollbar-thumb { background: #b9a65e; }
+
+.instructions-scroll p {
+    margin: 0 0 8px 0;
+}
+
+.instructions-scroll strong {
+    color: #ed994d;
+}
+
+/* ===================================
+   ПРЕДПОЧТЕНИЯ
+=================================== */
+
+.preferences {
+    padding: 12px 8px 8px;
+}
+
+.preference-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.preference {
+    border: 1px solid #60583f;
+    background: #0a0905;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding: 6px;
+}
+
+.preference img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.preference-info {
+    font-size: 10px;
+    color: #ccc;
+    line-height: 1.2;
+}
+
+.preference-info strong {
+    color: #fff;
+    display: block;
+    margin-bottom: 1px;
 }
 
 /* ===================================
@@ -593,8 +609,8 @@ button {
 =================================== */
 
 .right-column {
-    padding-top: 12px;
-    padding-bottom: 38px;
+    padding-top: 85px;
+    padding-bottom: 45px;
     min-width: 0;
     display: flex;
     flex-direction: column;
@@ -603,181 +619,137 @@ button {
 
 .escape-panel {
     display: grid;
-    grid-template-columns: 34% 1fr;
-    gap: 5px;
-    min-height: 100px;
+    grid-template-columns: 90px 1fr;
+    gap: 6px;
 }
 
 .escape-counter {
     border: 1px solid #927346;
-    padding: 8px 4px;
+    background: #0a0905;
+    padding: 6px;
     text-align: center;
 }
 
 .escape-counter h3,
 .escape-result h3 {
-    font-size: 11px;
+    font-size: 10.5px;
     color: #d99a57;
-    margin: 0 0 8px;
+    margin: 0 0 4px;
+    text-transform: uppercase;
 }
 
 .counter-number {
-    font-size: 30px;
+    font-size: 26px;
+    font-weight: bold;
     color: #ed994d;
 }
 
 .escape-result {
-    border: 1px solid #927346;
+    border: 1px solid #ed454b;
+    background: rgba(237, 69, 75, 0.1);
     text-align: center;
-    padding: 8px;
+    padding: 6px;
 }
 
 .escape-result strong {
     display: block;
-    color: #ef9b51;
-    font-size: clamp(17px, 1.7vw, 25px);
-    margin-top: 12px;
+    color: #ed454b;
+    font-size: 20px;
+    margin-top: 4px;
+    letter-spacing: 1px;
 }
 
 .gift-panel {
-    min-height: 76px;
-    display: grid;
-    grid-template-columns: 55px 1fr;
-    padding: 6px;
-    gap: 8px;
+    display: flex;
+    padding: 8px;
+    gap: 10px;
+    align-items: center;
 }
 
 .gift-panel img {
-    width: 53px;
-    height: 53px;
+    width: 42px;
+    height: 42px;
     object-fit: contain;
-    align-self: center;
 }
 
 .gift-text h3 {
-    font-size: 13px;
+    font-size: 11.5px;
     color: #e8dc9e;
     margin: 0;
     text-transform: uppercase;
 }
 
 .gift-text p {
-    font-size: 9px;
+    font-size: 10px;
     color: #aaa184;
-    margin: 3px 0;
-    line-height: 1.4;
+    margin: 2px 0 0 0;
+    line-height: 1.35;
 }
 
 .equipment-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 9px;
-    flex: 1;
-    min-height: 0;
+    gap: 8px;
 }
 
 .equipment {
     border: 1px solid #88815b;
-    outline: 1px solid #514d39;
+    background: #0a0905;
     position: relative;
-    padding: 9px 5px;
+    padding: 8px 6px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    min-width: 0;
+    min-height: 130px;
+    justify-content: space-between;
 }
 
 .equipment h3 {
-    font-size: clamp(10px, 1vw, 14px);
+    font-size: 11px;
     color: #e5dba0;
-    margin: -1px 0 12px;
+    margin: 0 0 6px 0;
+    text-transform: uppercase;
 }
 
 .equipment img {
-    width: 75%;
-    height: 45%;
+    width: 40px;
+    height: 40px;
     object-fit: contain;
-    margin: auto;
+    margin: 4px 0;
 }
 
 .equipment strong {
-    color: #e9dfa1;
-    font-size: clamp(12px, 1.2vw, 16px);
+    color: #fff;
+    font-size: 11.5px;
 }
 
 .equipment small {
-    font-size: 9px;
-    color: #b3a985;
-    margin-top: 5px;
-    line-height: 1.5;
+    font-size: 9.5px;
+    color: #aaa;
+    margin-top: 2px;
 }
 
 .bottom-info {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    min-height: 55px;
+    gap: 10px;
+    padding: 8px;
+    border: 1px solid var(--line);
+    background: #0a0905;
 }
 
 .bottom-info img {
-    width: 90px;
-    height: 60px;
+    width: 32px;
+    height: 32px;
     object-fit: contain;
 }
 
 .bottom-info strong {
-    font-size: 19px;
+    font-size: 15px;
     color: #f2e4a7;
     line-height: 1.1;
-}
-
-/* ===================================
-   ПРЕДПОЧТЕНИЯ
-=================================== */
-
-.preferences {
-    flex: 1;
-    min-height: 0;
-    padding: 13px 7px 7px;
-}
-
-.preference-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 7px;
-    height: 100%;
-}
-
-.preference {
-    border: 1px solid #60583f;
-    display: grid;
-    grid-template-columns: 40% 1fr;
-    align-items: center;
-    padding: 4px;
-    min-width: 0;
-}
-
-.preference img {
-    width: 100%;
-    height: 70px;
-    object-fit: contain;
-}
-
-.preference-info {
-    font-size: 9px;
-    color: #d4cda0;
-    min-width: 0;
-}
-
-.preference-info p {
-    margin: 2px 0;
-    white-space: nowrap;
-}
-
-.preference-info strong {
-    color: #e5d89e;
 }
 
 /* ===================================
@@ -789,7 +761,7 @@ button {
     position: absolute;
     inset: 0;
     overflow-y: auto;
-    padding: 105px 25px 55px;
+    padding: 95px 30px 55px;
     color: #d6c99a;
     background: #000;
     scrollbar-color: #5d553d #000;
@@ -845,60 +817,49 @@ button {
 }
 
 /* ===================================
-   НИЖНИЕ СТРЕЛКИ
+   НИЖНИЕ СТРЕЛКИ И ВЫХОД
 =================================== */
 
 .bottom-navigation {
     position: absolute;
     bottom: 10px;
-    left: 10px;
+    left: 14px;
     z-index: 40;
     display: flex;
     gap: 8px;
 }
 
 .page-arrow {
-    width: 39px;
-    height: 39px;
+    width: 32px;
+    height: 32px;
+    background: #ffcc00;
     border: none;
-    background: transparent;
-    color: #e9dca4;
-    font-size: 35px;
-    line-height: 30px;
-    text-shadow: 0 0 6px #ad9747;
+    clip-path: polygon(100% 0, 0 50%, 100% 100%);
+    cursor: pointer;
 }
 
-.page-arrow:hover {
-    color: #fff;
-    transform: scale(1.12);
+.page-arrow.right {
+    transform: scaleX(-1);
 }
 
 #exit-button {
     position: absolute;
-    right: 0;
-    bottom: 0;
+    right: 14px;
+    bottom: 10px;
     z-index: 45;
     background: #d93a3d;
-    color: #090000;
-    border: none;
+    color: #fff;
+    border: 1px solid #ff5252;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 15px;
     padding: 6px 28px;
-    transform: skewX(-15deg);
-}
-
-#exit-button span {
-    display: inline-block;
-    transform: skewX(15deg);
+    text-transform: uppercase;
+    cursor: pointer;
 }
 
 /* ===================================
    РЕЖИМЫ
 =================================== */
-
-#dossier.history-mode {
-    display: block;
-}
 
 #dossier.history-mode .left-column,
 #dossier.history-mode .top-navigation,
@@ -916,103 +877,17 @@ button {
     position: absolute;
     top: 0;
     left: 0;
-    width: 22%;
+    width: 240px;
     height: 100%;
 }
 
 #dossier.history-mode #history-page {
     display: block;
     position: absolute;
-    left: 22%;
+    left: 240px;
     right: 0;
     top: 0;
     bottom: 0;
-}
-
-#dossier.history-mode .bottom-navigation {
-    display: flex;
-}
-
-#dossier.history-mode #exit-button {
-    display: block;
-}
-
-/* ===================================
-   АДАПТИВНОСТЬ
-=================================== */
-
-@media(max-width: 850px) {
-    #dossier {
-        grid-template-columns: 20% 1fr 28%;
-        gap: 5px;
-        padding: 5px;
-    }
-
-    .left-column {
-        padding-top: 85px;
-    }
-
-    .center-column {
-        padding-top: 85px;
-    }
-
-    .top-navigation {
-        transform: scale(.8);
-        transform-origin: top left;
-    }
-
-    .right-column {
-        padding-top: 8px;
-    }
-
-    .stats {
-        font-size: 10px;
-    }
-
-    .research-level {
-        font-size: 12px;
-    }
-
-    .equipment small {
-        font-size: 8px;
-    }
-}
-
-@media(max-width: 600px) {
-    #dossier {
-        grid-template-columns: 1fr;
-        overflow-y: auto;
-        display: block;
-    }
-
-    .left-column {
-        display: none;
-    }
-
-    .center-column,
-    .right-column {
-        padding-top: 100px;
-        min-height: 500px;
-    }
-
-    #dossier.history-mode .left-column {
-        display: block;
-        width: 100%;
-    }
-
-    #dossier.history-mode #history-page {
-        left: 0;
-        top: 85px;
-    }
-
-    .guardian {
-        width: 90px;
-    }
-
-    #secret-top {
-        width: 95vw;
-        height: 150px;
-    }
 }
 </style>
 </head>
@@ -1021,29 +896,25 @@ button {
 
 <div id="main">
 
-    <!-- YOUTUBE -->
+    <!-- YOUTUBE PLAYER -->
     <div id="video-container">
         <div id="youtube-player"></div>
     </div>
 
-    <!-- ОХРАННИК СЛЕВА -->
+    <!-- ОХРАННИКИ (ОПУЩЕНЫ СНИЗУ К ЭКРАНУ) -->
     <div class="guardian" id="left-guardian">
         <button class="guard-close" onclick="hideGuardian('left')">×</button>
         <img id="left-gif" src="user/system/ms/banana.gif" alt="">
     </div>
 
-    <!-- ОХРАННИК СПРАВА -->
     <div class="guardian" id="right-guardian">
         <button class="guard-close" onclick="hideGuardian('right')">×</button>
         <img id="right-gif" src="user/system/ms/clife.gif" alt="">
     </div>
 
     <!-- ВОССТАНОВЛЕНИЕ ОХРАННИКОВ -->
-    <button class="restore-guard" id="restore-left"
-        onclick="restoreGuardian('left')">_</button>
-
-    <button class="restore-guard" id="restore-right"
-        onclick="restoreGuardian('right')">_</button>
+    <button class="restore-guard" id="restore-left" onclick="restoreGuardian('left')">_</button>
+    <button class="restore-guard" id="restore-right" onclick="restoreGuardian('right')">_</button>
 
     <!-- СЕКРЕТНАЯ МУЗЫКА -->
     <audio id="secret-music" src="user/music/seca.mp3" loop></audio>
@@ -1056,18 +927,12 @@ button {
     <!-- МОДАЛЬНОЕ ОКНО -->
     <div id="modal" onclick="closeModalOutside(event)">
         <div class="modal-window">
-
-            <div class="modal-heading">
-                ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ
-            </div>
-
+            <div class="modal-heading">ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ</div>
             <img class="modal-art" src="user/system/to.png" alt="">
-
             <div class="modal-buttons">
                 <button onclick="closeModal()">ЗАКРЫТЬ</button>
                 <button onclick="closeModal()">ВЕРНУТЬСЯ</button>
             </div>
-
         </div>
     </div>
 
@@ -1076,52 +941,32 @@ button {
 
         <!-- НАВИГАЦИЯ -->
         <div class="top-navigation">
-
             <div class="logo-kok">
-                <img src="user/system/kok.png" alt="Аномалия Детали">
+                <img src="user/lobo/kok.png" alt="Аномалия Детали">
             </div>
 
             <div class="diagonal-nav">
-                <button class="nav-tab active" id="details-tab"
-                    onclick="switchPage('details')">
-                    ☢ АНОМАЛИЯ ДЕТАЛИ
+                <button class="nav-tab active" id="details-tab" onclick="switchPage('details')">
+                    АНОМАЛИЯ ДЕТАЛИ
                 </button>
-
-                <button class="nav-tab" id="history-tab"
-                    onclick="switchPage('history')">
-                    ☢ АНОМАЛИЯ ИСТОРИЯ
+                <button class="nav-tab" id="history-tab" onclick="switchPage('history')">
+                    АНОМАЛИЯ ИСТОРИЯ
                 </button>
             </div>
         </div>
 
         <!-- ЛЕВАЯ КОЛОНКА -->
         <div class="left-column">
-
             <div class="stats">
-
-                <div class="stat">
-                    <span>I</span> Скорость работы +5
-                </div>
-
-                <div class="stat">
-                    <span>II</span> Шанс успеха +5%
-                </div>
-
-                <div class="stat">
-                    <span>III</span> Скорость работы +5
-                </div>
-
-                <div class="stat">
-                    <span>IV</span> Шанс успеха +5%
-                </div>
-
+                <div class="stat"><span>│</span> Скорость работы +5</div>
+                <div class="stat"><span>II</span> Шанс успеха +5</div>
+                <div class="stat"><span>III</span> Скорость работы +5</div>
+                <div class="stat"><span>IV</span> Шанс успеха +5</div>
+                
                 <div class="research-level">
-                    УРОВЕНЬ<br>
-                    ИССЛЕДОВАНИЯ 4
+                    УРОВЕНЬ<br>ИССЛЕДОВАНИЯ 4
                 </div>
-
             </div>
-
         </div>
 
         <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА -->
@@ -1129,26 +974,16 @@ button {
 
             <!-- ПРОФИЛЬ -->
             <div class="panel profile-panel">
-
-                <div class="panel-title">
-                    АНОМАЛИЯ БАЗОВАЯ ИНФОРМАЦИЯ
-                </div>
-
-                <img class="portrait"
-                    src="user/lobo/portrey.png"
-                    alt="Алкаш Хантер">
-
-                <div class="character-caption">
-                    Алкаш Хантер
-                </div>
-
+                <div class="panel-title">АНОМАЛИЯ БАЗОВАЯ ИНФОРМАЦИЯ</div>
+                <img class="portrait" src="user/lobo/portrey.png" alt="Алкаш Хантер">
+                <div class="character-caption">Алкаш Хантер</div>
+                
                 <div class="name-row">
                     <span>X-00-35</span>
-                    <strong>ALEPH</strong>
+                    <strong>XAHT</strong>
                 </div>
 
                 <div class="character-data">
-
                     <div class="data-box">
                         <div class="data-label">Тип атаки</div>
                         <div class="data-value">
@@ -1165,53 +1000,40 @@ button {
                         <div class="data-value">
                             <img src="user/lobo/ii.png" alt="">
                         </div>
+                        <div style="font-size: 16px; color: #fff; font-weight: bold; margin-top: 2px;">10</div>
                     </div>
-
                 </div>
 
                 <div class="condition-box">
-
-                    <div class="condition-title">
-                        Эмоциональное состояние
-                    </div>
-
-                    <div class="condition good">
-                        🟢 Хорошо
-                        <span>Пообещает</span>
-                    </div>
-
-                    <div class="condition normal">
-                        🟡 Нормально
-                        <span>Поноет</span>
-                    </div>
-
-                    <div class="condition bad">
-                        🔴 Ужасно
-                        <span>Лень</span>
-                    </div>
-
+                    <div class="condition-title">Эмоциональное состояние</div>
+                    <div class="condition good">🟢 Хорошо <span>8-10</span></div>
+                    <div class="condition normal">🟡 Нормально <span>4-7</span></div>
+                    <div class="condition bad">🔴 Ужасно <span>0-3</span></div>
                 </div>
+            </div>
 
+            <!-- ИНСТРУКЦИИ (РУКОВОДСТВА ПО ОБРАЩЕНИЮ) -->
+            <div class="instructions-box">
+                <div class="panel-title">АНОМАЛИЯ ИЗУЧЕННЫЕ ОСОБЕННОСТИ</div>
+                <div class="instructions-scroll">
+                    <p><strong>Руководство по обращению 1:</strong> В результате плохой работы, уровень счётчика Клипота понизится.</p>
+                    <p><strong>Руководство по обращению 2:</strong> В результате хорошей работы, уровень счётчика Клипота понизится.</p>
+                    <p><strong>Руководство по обращению 3:</strong> Если уровень Чрезвычайного положения достигнет 2-х, уровень счётчика Клипота понизится.</p>
+                    <p><strong>Руководство по обращению 4:</strong> При регулярном пополнении запасов коньяка стабильность камеры содержания возрастает.</p>
+                    <p><strong>Руководство по обращению 5:</strong> Работа "Прибодрить" позволяет избежать падения рассудка сотрудников в секторе.</p>
+                    <p><strong>Руководство по обращению 6:</strong> Ни в коем случае не отбирайте у Аномалии Пробуханые наушники во время трансляции.</p>
+                </div>
             </div>
 
             <!-- ПРЕДПОЧТЕНИЯ -->
             <div class="panel preferences">
-
-                <div class="panel-title">
-                    АНОМАЛИЯ ПРЕДПОЧТЕНИЕ
-                </div>
-
+                <div class="panel-title">АНОМАЛИЯ ПРЕДПОЧТЕНИЕ</div>
                 <div class="preference-grid">
-
                     <div class="preference">
                         <img src="user/lobo/y1.png" alt="">
                         <div class="preference-info">
                             <strong>Пригрозить</strong>
-                            <p>I — Низкий</p>
-                            <p>II — Низкий</p>
-                            <p>III — Обычный</p>
-                            <p>IV — Высокий</p>
-                            <p>V — Высокий</p>
+                            <span>1: Низкий | 2: Низкий<br>3: Обычный<br>4: Высокий | 5: Высокий</span>
                         </div>
                     </div>
 
@@ -1219,23 +1041,15 @@ button {
                         <img src="user/lobo/y2.png" alt="">
                         <div class="preference-info">
                             <strong>Прибухнуть</strong>
-                            <p>I — Высокий</p>
-                            <p>II — Высокий</p>
-                            <p>III — Высокий</p>
-                            <p>IV — Высокий</p>
-                            <p>V — Высокий</p>
+                            <span>Все 1-5: Высокий</span>
                         </div>
                     </div>
 
                     <div class="preference">
                         <img src="user/lobo/y3.png" alt="">
                         <div class="preference-info">
-                            <strong>Приободрить</strong>
-                            <p>I — Высокий</p>
-                            <p>II — Высокий</p>
-                            <p>III — Высокий</p>
-                            <p>IV — Высокий</p>
-                            <p>V — Высокий</p>
+                            <strong>Прибодрить</strong>
+                            <span>Все 1-5: Высокий</span>
                         </div>
                     </div>
 
@@ -1243,16 +1057,10 @@ button {
                         <img src="user/lobo/y4.png" alt="">
                         <div class="preference-info">
                             <strong>Игнор</strong>
-                            <p>I — Низкий</p>
-                            <p>II — Низкий</p>
-                            <p>III — Низкий</p>
-                            <p>IV — Низкий</p>
-                            <p>V — Низкий</p>
+                            <span>Все 1-5: Низкие</span>
                         </div>
                     </div>
-
                 </div>
-
             </div>
 
         </div>
@@ -1262,340 +1070,76 @@ button {
 
             <!-- СБЕГАНИЕ -->
             <div class="escape-panel">
-
                 <div class="escape-counter">
-                    <h3>Счётчик Клипо́та</h3>
+                    <h3>Счётчик Клипота</h3>
                     <div class="counter-number">2</div>
                 </div>
 
                 <div class="escape-result">
-                    <h3>АНОМАЛИЯ ИНФОРМАЦИЯ О ПОБЕГЕ</h3>
+                    <h3>ИНФОРМАЦИЯ О ПОБЕГЕ</h3>
                     <strong>СБЕГАЕТ</strong>
                 </div>
-
             </div>
 
             <!-- ДАР -->
             <div class="panel gift-panel">
-
                 <img src="user/lobo/phone.png" alt="">
-
                 <div class="gift-text">
-                    <h3>Э.П.О.С. ДАР (ШАНС ПОЛУЧЕНИЯ: 0%)</h3>
-                    <p>
-                        Пробуханные наушники.<br>
-                        Необычный артефакт, позволяющий услышать
-                        даже самые тихие звуки окружающего мира.
-                        При использовании владелец получает
-                        +6 к концентрации и +6 к сопротивлению
-                        внешним раздражителям. Правда, иногда
-                        вместо полезных звуков слышит звон бутылок.
-                    </p>
+                    <h3>З.П.О.С. ДАР (ШАНС: 0%)</h3>
+                    <p><strong>Пробуханые наушники</strong><br>+15 скорость работы, +6 шанс успеха.</p>
                 </div>
-
             </div>
 
             <!-- ОРУЖИЕ И БРОНЯ -->
             <div class="equipment-row">
-
                 <div class="equipment">
-
-                    <h3>Э.П.О.С. ОРУЖИЕ</h3>
-
+                    <h3>З.П.О.С. ОРУЖИЕ</h3>
                     <img src="user/lobo/usss.png" alt="">
-
                     <strong>Бутылка Коньяка</strong>
-
-                    <small>
-                        Урон: 0.1–1.<br>
-                        Может нанести дополнительный
-                        психологический ущерб противнику.
-                    </small>
-
+                    <small>Урон: Оранжевый (10-18)</small>
                 </div>
 
                 <div class="equipment">
-
-                    <h3>Э.П.О.С. БРОНЯ</h3>
-
+                    <h3>З.П.О.С. БРОНЯ</h3>
                     <img src="user/lobo/dopp.png" alt="">
-
                     <strong>Амуниция Алкаша</strong>
-
-                    <small>
-                        Повышает стойкость владельца
-                        к внешним воздействиям.
-                        Дополнительная защита от
-                        последствий собственных решений.
-                    </small>
-
+                    <small>Защита от похмелья</small>
                 </div>
-
             </div>
 
             <!-- СОБРАННЫЕ ЯЧЕЙКИ -->
             <div class="bottom-info">
-
                 <img src="user/lobo/som.png" alt="">
-
-                <strong>
-                    СОБРАНО<br>
-                    PE-ЯЧЕЕК
-                </strong>
-
+                <strong>СОБРАНО RE-ЯЧЕЕК</strong>
             </div>
 
         </div>
 
         <!-- ИСТОРИЯ -->
         <div id="history-page">
-
-            <div class="history-heading">
-                АНОМАЛИЯ X-00-35
-            </div>
-
-            <div class="history-subtitle">
-                АРХИВНОЕ ДОСЬЕ / АЛЬТЕРНАТИВНАЯ ВЕТВЬ
-                / ДОСТУП ALEPH
-            </div>
+            <div class="history-heading">АНОМАЛИЯ X-00-35</div>
+            <div class="history-subtitle">АРХИВНОЕ ДОСЬЕ / АЛЬТЕРНАТИВНАЯ ВЕТВЬ</div>
 
             <section class="history-section">
-
                 <h2>01. ПРОИСХОЖДЕНИЕ ОБЪЕКТА</h2>
-
-                <p>
-                    До появления объекта X-00-35 в архивах
-                    исследовательского комплекса существовало
-                    множество записей о людях, которые обладали
-                    необычайной устойчивостью к аномальным
-                    воздействиям. Однако ни один из них не
-                    демонстрировал столь странного поведения,
-                    как альтернативная версия Хантера.
-                </p>
-
-                <p>
-                    В отличие от своего оригинального аналога,
-                    данный Хантер никогда не стремился искать
-                    спасение в алкоголе. Его история началась
-                    задолго до попадания в исследовательский
-                    комплекс. В юности он был человеком
-                    импульсивным, шумным и крайне упрямым,
-                    однако при этом обладал удивительной
-                    способностью признавать собственные ошибки.
-                </p>
-
-                <p>
-                    По сохранившимся сведениям, однажды он
-                    оказался перед выбором: продолжить привычный
-                    образ жизни или полностью изменить своё
-                    поведение. В отличие от оригинальной версии,
-                    он выбрал второй вариант.
-                </p>
-
-                <p>
-                    Именно это решение впоследствии стало
-                    причиной появления альтернативной ветви
-                    X-00-35.
-                </p>
-
+                <p>Данный субъект представляет собой альтернативную версию Хантера, добровольно сдавшую оригинального создателя научным сотрудникам корпорации с целью избавиться от бесконечного цикла стримов и пагубной тяги к напиткам.</p>
             </section>
-
-            <section class="history-section">
-
-                <h2>02. ОБНАРУЖЕНИЕ И ИЗОЛЯЦИЯ</h2>
-
-                <p>
-                    Первые сообщения об объекте появились после
-                    серии странных наблюдений. Сотрудники
-                    заметили человека, который демонстрировал
-                    почти полное отсутствие интереса к
-                    алкогольным веществам, хотя его оригинальная
-                    версия была известна совершенно противоположным
-                    поведением.
-                </p>
-
-                <p>
-                    Изначально исследователи предполагали,
-                    что перед ними обычный человек, обладающий
-                    необычной силой воли. Однако последующие
-                    наблюдения показали, что объект не просто
-                    отказался от старых привычек: его поведение
-                    стало настолько стабильным, что даже
-                    некоторые аномальные воздействия не могли
-                    изменить его решения.
-                </p>
-
-                <p>
-                    Объекту присвоили временный номер X-00-35.
-                    После нескольких дополнительных проверок
-                    было принято решение перевести его в
-                    отдельный исследовательский сектор.
-                </p>
-
-            </section>
-
-            <section class="history-section">
-
-                <h2>03. ПЕРВЫЕ ЭКСПЕРИМЕНТЫ</h2>
-
-                <p>
-                    В ходе первых экспериментов исследователи
-                    проверяли реакцию объекта на различные
-                    методы психологического воздействия.
-                    Угроза, давление, игнорирование и попытки
-                    манипуляции практически не изменяли
-                    основную линию его поведения.
-                </p>
-
-                <p>
-                    Особенно интересным оказалось то, что
-                    объект положительно реагировал на
-                    поддержку и конструктивное взаимодействие.
-                    В отличие от оригинальной версии, он не
-                    пытался скрыть собственные слабости за
-                    шутками или демонстративным безразличием.
-                </p>
-
-                <p>
-                    В одном из отчётов исследователь отметил,
-                    что объект словно заранее знает,
-                    насколько бесполезно пытаться заставить
-                    его сделать что-либо против собственной воли.
-                </p>
-
-            </section>
-
-            <section class="history-section">
-
-                <h2>04. СРАВНЕНИЕ С ОРИГИНАЛОМ</h2>
-
-                <p>
-                    Сравнительный анализ показал, что обе
-                    версии обладают одинаковой базовой
-                    индивидуальностью. Они могут быть
-                    раздражительными, упрямыми и склонными
-                    к резким эмоциональным реакциям.
-                    Однако главное отличие заключается
-                    в способе преодоления проблем.
-                </p>
-
-                <p>
-                    Оригинальная версия использует алкоголь
-                    как своеобразный способ ухода от
-                    действительности. Альтернативная версия,
-                    напротив, предпочитает решать проблемы
-                    непосредственно, даже если это требует
-                    дополнительных усилий.
-                </p>
-
-                <p>
-                    Исследователи установили, что при встрече
-                    двух версий возникает необычный эффект:
-                    каждая из них считает собственный путь
-                    наиболее разумным.
-                </p>
-
-            </section>
-
-            <section class="history-section">
-
-                <h2>05. ПЕРИОД НАБЛЮДЕНИЯ</h2>
-
-                <p>
-                    После завершения основных экспериментов
-                    объект был оставлен под наблюдением.
-                    Он не проявлял агрессии к персоналу,
-                    соблюдал большую часть установленных
-                    правил и регулярно интересовался
-                    результатами исследований.
-                </p>
-
-                <p>
-                    Со временем сотрудники начали воспринимать
-                    его не столько как опасную аномалию,
-                    сколько как своеобразный пример того,
-                    насколько сильно могут различаться
-                    две версии одного человека.
-                </p>
-
-                <p>
-                    Тем не менее объекту продолжали присваивать
-                    высокий уровень исследовательского
-                    внимания. Причина заключалась в том,
-                    что его существование подтверждало
-                    возможность радикального изменения
-                    аномальной личности без потери её
-                    первоначальных особенностей.
-                </p>
-
-            </section>
-
-            <section class="history-section">
-
-                <h2>06. ЗАКЛЮЧЕНИЕ</h2>
-
-                <p>
-                    Альтернативный Хантер является редким
-                    примером успешного изменения поведения
-                    аномального субъекта. Его существование
-                    демонстрирует, что даже при наличии
-                    устойчивых привычек и особенностей
-                    характера возможен совершенно иной
-                    жизненный путь.
-                </p>
-
-                <p>
-                    Последняя запись в архиве содержит
-                    короткую заметку исследователя:
-                </p>
-
-                <p class="history-warning">
-                    «Мы ожидали увидеть ещё одну версию
-                    привычной аномалии. Вместо этого мы
-                    обнаружили человека, который однажды
-                    просто решил больше не повторять
-                    собственные ошибки».
-                </p>
-
-                <p>
-                    Статус объекта: НАБЛЮДЕНИЕ ПРОДОЛЖАЕТСЯ.<br>
-                    Класс доступа: ALEPH.<br>
-                    Код объекта: X-00-35.<br>
-                    Угроза побега: ПРИСУТСТВУЕТ.
-                </p>
-
-            </section>
-
         </div>
 
-        <!-- ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ -->
+        <!-- ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ В СТИЛЕ СТРЕЛОК -->
         <div class="bottom-navigation">
-
-            <button class="page-arrow" onclick="switchPage('details')">
-                ◁
-            </button>
-
-            <button class="page-arrow" onclick="switchPage('history')">
-                ▶
-            </button>
-
+            <button class="page-arrow" onclick="switchPage('details')"></button>
+            <button class="page-arrow right" onclick="switchPage('history')"></button>
         </div>
 
         <!-- ВЫХОД -->
-        <button id="exit-button" onclick="exitDossier()">
-            <span>Выйти</span>
-        </button>
+        <button id="exit-button" onclick="exitDossier()">Выйти</button>
 
     </div>
 
 </div>
 
 <script>
-
-/* =====================================
-   YOUTUBE PLAYER
-===================================== */
-
 let player;
 let secretMode = false;
 let playerReady = false;
@@ -1607,202 +1151,103 @@ tag.src = 'https://www.youtube.com/iframe_api';
 document.head.appendChild(tag);
 
 function onYouTubeIframeAPIReady() {
-
     player = new YT.Player('youtube-player', {
-
         videoId: videoID,
-
         playerVars: {
             autoplay: 1,
-            mute: 1,
+            mute: 0,
             controls: 1,
             playsinline: 1,
-            rel: 0,
-            modestbranding: 1,
-            iv_load_policy: 3
+            rel: 0
         },
-
         events: {
-
             onReady: function(event) {
                 playerReady = true;
-                event.target.mute();
                 event.target.playVideo();
             },
-
             onStateChange: function(event) {
-
-                // Видео запущено
                 if(event.data === YT.PlayerState.PLAYING) {
                     leaveSecretMode();
                 }
-
-                // Видео поставлено на паузу
                 if(event.data === YT.PlayerState.PAUSED) {
                     enterSecretMode();
                 }
-
             }
-
         }
-
     });
-
 }
 
-/* =====================================
-   СЕКРЕТНЫЙ РЕЖИМ
-===================================== */
-
 function enterSecretMode() {
-
     if(secretMode) return;
-
     secretMode = true;
 
     const music = document.getElementById('secret-music');
-
     music.volume = 0.75;
     music.loop = true;
-
-    music.play().catch(() => {
-        console.warn('Браузер заблокировал автоматическое воспроизведение музыки.');
-    });
+    music.play().catch(() => {});
 
     document.getElementById('secret-top').classList.add('active');
-
-    document.getElementById('left-gif').src =
-        'user/system/ms/notnot.gif';
-
-    document.getElementById('right-gif').src =
-        'user/system/ms/notnot.gif';
-
+    document.getElementById('left-gif').src = 'user/system/ms/notnot.gif';
+    document.getElementById('right-gif').src = 'user/system/ms/notnot.gif';
 }
 
 function leaveSecretMode() {
-
     if(!secretMode) return;
-
     secretMode = false;
 
     const music = document.getElementById('secret-music');
-
     music.pause();
     music.currentTime = 0;
 
     document.getElementById('secret-top').classList.remove('active');
-
-    document.getElementById('left-gif').src =
-        'user/system/ms/banana.gif';
-
-    document.getElementById('right-gif').src =
-        'user/system/ms/clife.gif';
-
+    document.getElementById('left-gif').src = 'user/system/ms/banana.gif';
+    document.getElementById('right-gif').src = 'user/system/ms/clife.gif';
 }
 
-/* =====================================
-   ОХРАННИКИ
-===================================== */
-
 function hideGuardian(side) {
-
-    const guardian = document.getElementById(
-        side + '-guardian'
-    );
-
-    const restore = document.getElementById(
-        'restore-' + side
-    );
-
-    guardian.style.display = 'none';
-    restore.style.display = 'block';
-
+    document.getElementById(side + '-guardian').style.display = 'none';
+    document.getElementById('restore-' + side).style.display = 'block';
 }
 
 function restoreGuardian(side) {
-
-    const guardian = document.getElementById(
-        side + '-guardian'
-    );
-
-    const restore = document.getElementById(
-        'restore-' + side
-    );
-
-    guardian.style.display = 'block';
-    restore.style.display = 'none';
-
+    document.getElementById(side + '-guardian').style.display = 'block';
+    document.getElementById('restore-' + side).style.display = 'none';
 }
 
-/* =====================================
-   МОДАЛЬНОЕ ОКНО
-===================================== */
-
 function openModal() {
-
-    document.getElementById('modal')
-        .classList.add('active');
-
+    document.getElementById('modal').classList.add('active');
 }
 
 function closeModal() {
-
-    document.getElementById('modal')
-        .classList.remove('active');
-
+    document.getElementById('modal').classList.remove('active');
 }
 
 function closeModalOutside(event) {
-
-    if(event.target.id === 'modal') {
-        closeModal();
-    }
-
+    if(event.target.id === 'modal') closeModal();
 }
 
-/* =====================================
-   ПЕРЕКЛЮЧЕНИЕ ДЕТАЛИ / ИСТОРИЯ
-===================================== */
-
 function switchPage(page) {
-
     const dossier = document.getElementById('dossier');
-
     const detailsTab = document.getElementById('details-tab');
     const historyTab = document.getElementById('history-tab');
 
     if(page === 'history') {
-
         dossier.classList.add('history-mode');
-
         detailsTab.classList.remove('active');
         historyTab.classList.add('active');
-
     } else {
-
         dossier.classList.remove('history-mode');
-
         detailsTab.classList.add('active');
         historyTab.classList.remove('active');
-
     }
-
 }
-
-/* =====================================
-   ВЫХОД ИЗ ДОСЬЕ
-===================================== */
 
 function openDossier() {
     if (!secretMode) return;
-
     document.getElementById('dossier').classList.add('visible');
-
     document.getElementById('secret-top').style.display = 'none';
-
     document.getElementById('left-guardian').style.display = 'none';
     document.getElementById('right-guardian').style.display = 'none';
-
     document.getElementById('restore-left').style.display = 'none';
     document.getElementById('restore-right').style.display = 'none';
 }
@@ -1810,28 +1255,15 @@ function openDossier() {
 function exitDossier() {
     document.getElementById('dossier').classList.remove('visible');
     document.getElementById('secret-top').style.display = 'flex';
-
     if (secretMode) {
         document.getElementById('left-guardian').style.display = 'block';
         document.getElementById('right-guardian').style.display = 'block';
     }
 }
 
-/* =====================================
-   АКТИВАЦИЯ ДОСЬЕ
-===================================== */
-
 document.addEventListener('keydown', function(event) {
-
-    if(event.key === 'Escape') {
-
-        closeModal();
-
-    }
-
+    if(event.key === 'Escape') closeModal();
 });
-
-
 </script>
 
 </body>

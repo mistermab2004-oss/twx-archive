@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Здесь Ничего Нет</title>
+    <link rel="icon" href="user/system/msm.png">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace, sans-serif;
+            color: #fff;
+        }
+
+        /* Полноэкранный контейнер видео */
+        .video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .video-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Выезжающая сверху плашка */
+        .top-banner {
+            position: absolute;
+            top: -300px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            cursor: pointer;
+            transition: top 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .top-banner.active {
+            top: 0;
+        }
+        .top-banner img {
+            display: block;
+            max-width: 80vw;
+            max-height: 200px;
+            object-fit: contain;
+            border: none;
+        }
+
+        /* Боковые гифки */
+        .guard-gif {
+            position: absolute;
+            bottom: 0;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .guard-gif.left {
+            left: 0;
+        }
+        .guard-gif.right {
+            right: 0;
+            align-items: flex-end;
+        }
+
+        .close-btn {
+            background: rgba(0,0,0,0.7);
+            color: #ff0000;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 2px 6px;
+            cursor: pointer;
+            border: 1px solid #ff0000;
+            user-select: none;
+            margin-bottom: 2px;
+        }
+        .guard-gif.left .close-btn {
+            align-self: flex-start;
+        }
+        .guard-gif.right .close-btn {
+            align-self: flex-end;
+        }
+
+        .guard-img {
+            max-width: 180px;
+            max-height: 220px;
+            pointer-events: auto;
+        }
+        .mirror {
+            transform: scaleX(-1);
+        }
+
+        .minimized-placeholder {
+            position: absolute;
+            bottom: 10px;
+            font-weight: bold;
+            font-size: 24px;
+            color: #888;
+            cursor: pointer;
+            z-index: 5;
+            user-select: none;
+            letter-spacing: 2px;
+        }
+        .minimized-placeholder.left { left: 15px; }
+        .minimized-placeholder.right { right: 15px; }
+
+        /* МОДАЛЬНОЕ ОКНО (Lobotomy Corporation Style) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .lobo-window {
+            width: 1100px;
+            height: 680px;
+            background: #080808;
+            border: 2px solid #ff3b00;
+            box-shadow: 0 0 30px rgba(255, 59, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding: 15px;
+            color: #f7941d;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Шапка модалки */
+        .lobo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ff3b00;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+        .lobo-tabs {
+            display: flex;
+            gap: 15px;
+        }
+        .lobo-tab-btn {
+            background: #111;
+            color: #888;
+            border: 1px solid #444;
+            padding: 6px 16px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+        .lobo-tab-btn.active {
+            background: #ff3b00;
+            color: #000;
+            border-color: #ff3b00;
+        }
+
+        /* Специфический стиль для кастомного логотипа kok.png слева от вкладок */
+        .lobo-top-emblem {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            transform: scaleX(-1);
+            border: 2px solid #ffcc00;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(255, 204, 0, 0.8);
+            background: #111;
+        }
+
+        /* Контентная часть */
+        .lobo-content {
+            display: flex;
+            flex: 1;
+            gap: 15px;
+            overflow: hidden;
+        }
+
+        /* Левая колонка */
+        .lobo-col-left {
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .lobo-card {
+            border: 1px solid #ff3b00;
+            background: rgba(20, 10, 5, 0.6);
+            padding: 10px;
+        }
+        .lobo-card-title {
+            font-size: 12px;
+            background: #ff3b00;
+            color: #000;
+            font-weight: bold;
+            padding: 2px 6px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .portrait-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border: 1px solid #ff3b00;
+        }
+        .anomaly-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 6px;
+            font-size: 12px;
+        }
+
+        .stat-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+            font-size: 11px;
+        }
+        .stat-box img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+
+        /* Средняя колонка */
+        .lobo-col-mid {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .work-item {
+            border: 1px solid #ff3b00;
+            background: rgba(15, 8, 3, 0.8);
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .work-item img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+        .work-details {
+            font-size: 10px;
+            line-height: 1.2;
+        }
+
+        .instructions-block {
+            border: 1px solid #ff3b00;
+            background: rgba(15, 8, 3, 0.8);
+            padding: 8px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .instructions-scroll {
+            overflow-y: auto;
+            max-height: 160px;
+            padding-right: 5px;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #ddc;
+        }
+        .instructions-scroll::-webkit-scrollbar { width: 6px; }
+        .instructions-scroll::-webkit-scrollbar-thumb { background: #ff3b00; border-radius: 3px; }
+
+        /* Правая колонка */
+        .lobo-col-right {
+            width: 260px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .gear-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #ff3b00;
+            padding: 6px;
+            background: rgba(15, 8, 3, 0.8);
+        }
+        .gear-box img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+        .gear-info {
+            font-size: 10px;
+        }
+        .gear-title {
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 2px;
+        }
+
+        /* Подвал модалки */
+        .lobo-footer {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #ff3b00;
+            padding-top: 8px;
+        }
+        .pe-collected {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .pe-collected img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .exit-btn {
+            background: #ff3b00;
+            color: #000;
+            font-weight: bold;
+            border: none;
+            padding: 8px 24px;
+            cursor: pointer;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+        .exit-btn:hover {
+            background: #ff6600;
+        }
+
+        /* Раздел "История" (без рамок внутри, на черном фоне) */
+        .history-panel {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 10px;
+            font-size: 12px;
+            color: #ccc;
+            line-height: 1.6;
+            background: #000;
+            border: none;
+        }
+        .history-panel::-webkit-scrollbar { width: 8px; }
+        .history-panel::-webkit-scrollbar-thumb { background: #ff3b00; }
+        
+        .history-top-emblem {
+            display: block;
+            margin: 0 auto 15px auto;
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            transform: scaleX(-1);
+            border: 3px solid #ffcc00;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.8);
+            background: #111;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Фоновая музыка при паузе -->
+    <audio id="pauseMusic" src="user/music/seca.mp3" loop></audio>
+
+    <!-- Выезжающая плашка -->
+    <div class="top-banner" id="topBanner" onclick="openModal()">
+        <img src="user/system/to.png" alt="Banner">
+    </div>
+
+    <!-- Видеоплеер YouTube -->
+    <div class="video-container">
+        <div id="player"></div>
+    </div>
+
+    <!-- Гифки Охранники -->
+    <div class="guard-gif left" id="guardLeft">
+        <div class="close-btn" onclick="toggleGuard('left', false)">✕</div>
+        <img id="imgLeft" src="user/system/ms/banana.gif" class="guard-img" alt="Guard Left">
+    </div>
+    <div class="minimized-placeholder left" id="minLeft" style="display: none;" onclick="toggleGuard('left', true)">_</div>
+
+    <div class="guard-gif right" id="guardRight">
+        <div class="close-btn" onclick="toggleGuard('right', false)">✕</div>
+        <img id="imgRight" src="user/system/ms/clife.gif" class="guard-img mirror" alt="Guard Right">
+    </div>
+    <div class="minimized-placeholder right" id="minRight" style="display: none;" onclick="toggleGuard('right', true)">_</div>
+
+    <!-- МОДАЛЬНОЕ ОКНО (LOBOTOMY CORP STYLE) -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="lobo-window">
+            
+            <!-- Шапка окна с кастомной иконкой kok.png слева -->
+            <div class="lobo-header">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <img src="user/lobo/kok.png" class="lobo-top-emblem" alt="KOK">
+                    <div class="lobo-tabs">
+                        <button class="lobo-tab-btn active" id="tabDetailsBtn" onclick="switchTab('details')">Аномалия Детали</button>
+                        <button class="lobo-tab-btn" id="tabHistoryBtn" onclick="switchTab('history')">Аномалия История</button>
+                    </div>
+                </div>
+                <div style="font-weight: bold; font-size: 14px; color: #ff3b00;">Уровень Исследования: MAX</div>
+            </div>
+
+            <!-- ВКЛАДКА: ДЕТАЛИ -->
+            <div class="lobo-content" id="detailsTab">
+                
+                <!-- Колонка 1: Портрет и База -->
+                <div class="lobo-col-left">
+                    <div class="lobo-card">
+                        <div class="lobo-card-title">Базовая Информация</div>
+                        <img src="user/lobo/portrey.png" class="portrait-img" alt="Алкаш Хантер">
+                        <div style="text-align: center; font-weight: bold; font-size: 14px; color: #fff; margin-top: 6px;">Алкаш Хантер</div>
+                        <div class="anomaly-info-row">
+                            <span>Код: X-00-35</span>
+                            <span style="color: #ff0055; font-weight: bold;">WAW</span>
+                        </div>
+                    </div>
+
+                    <div class="lobo-card">
+                        <div class="anomaly-info-row">
+                            <span>Тип атаки:</span>
+                            <img src="user/lobo/att.png" style="width:20px; height:20px;" alt="Att">
+                        </div>
+                        <div style="font-size: 10px; color: #ffaa00; margin-top: 2px;">Оранжевый 0.1-1</div>
+                        <div class="anomaly-info-row" style="margin-top: 8px;">
+                            <span>Даёт PE-Ячеек:</span>
+                            <img src="user/lobo/ii.png" style="height: 18px;" alt="PE">
+                        </div>
+                    </div>
+
+                    <div class="lobo-card" style="font-size: 11px;">
+                        <div class="lobo-card-title">Эмоциональное состояние</div>
+                        <div>🟢 Хорошо: Пообещает</div>
+                        <div>🟡 Нормально: Поноет</div>
+                        <div>🔴 Ужасно: Лень</div>
+                    </div>
+                </div>
+
+                <!-- Колонка 2: Предрасположенности и Инструкции -->
+                <div class="lobo-col-mid">
+                    <div class="lobo-card-title">Предрасположенности к Работам</div>
+                    <div class="work-grid">
+                        <div class="work-item">
+                            <img src="user/lobo/y1.png" alt="y1">
+                            <div class="work-details">
+                                <div style="color: #fff; font-weight: bold;">Пригрозить</div>
+                                <div>1: Низкий | 2: Низкий<br>3: Обычный<br>4: Высокий | 5: Высокий</div>
+                            </div>
+                        </div>
+                        <div class="work-item">
+                            <img src="user/lobo/y2.png" alt="y2">
+                            <div class="work-details">
+                                <div style="color: #fff; font-weight: bold;">Прибухнуть</div>
+                                <div>Все 1-5: Высокий</div>
+                            </div>
+                        </div>
+                        <div class="work-item">
+                            <img src="user/lobo/y3.png" alt="y3">
+                            <div class="work-details">
+                                <div style="color: #fff; font-weight: bold;">Прибодрить</div>
+                                <div>Все 1-5: Высокий</div>
+                            </div>
+                        </div>
+                        <div class="work-item">
+                            <img src="user/lobo/y4.png" alt="y4">
+                            <div class="work-details">
+                                <div style="color: #fff; font-weight: bold;">Игнор</div>
+                                <div>Все 1-5: Низкие</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="instructions-block">
+                        <div class="lobo-card-title">Руководство по обращению (Инструкции)</div>
+                        <div class="instructions-scroll">
+                            <p><strong>Инструкция 1:</strong> Если сотрудник проявляет чрезмерную трезвость, Хантер немедленно читает ему часовую лекцию о смыслах жизни под пивко, снижая рассудок персонала.</p><br>
+                            <p><strong>Инструкция 2:</strong> При успешном завершении работы "Прибухнуть" уровень счётчика Клипота автоматически стабилизируется и наполняет комнату уютом.</p><br>
+                            <p><strong>Инструкция 3:</strong> Оставлять Аномалию в одиночестве без фоновой музыки категорически запрещено — это вызывает звуковой резонанс.</p><br>
+                            <p><strong>Инструкция 4:</strong> Работа "Прибодрить" повышает настроение Хантера, заставляя его вспоминать лучшие моменты былых стримов по старым играм.</p><br>
+                            <p><strong>Инструкция 5:</strong> При игнорировании запросов объекта (работа "Игнор") велика вероятность внезапного ухода в глубокий AFK-режим.</p><br>
+                            <p><strong>Инструкция 6:</strong> Запрещается предпринимать попытки конфискации Пробуханых наушников во время активной фазы трансляции.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Колонка 3: Информация о Побеге и Снаряжение -->
+                <div class="lobo-col-right">
+                    <div class="lobo-card">
+                        <div class="lobo-card-title">Информация о побеге</div>
+                        <div class="anomaly-info-row">
+                            <span>Счётчик Клипота:</span>
+                            <span style="font-weight: bold; color: #ff3b00; font-size: 16px;">2</span>
+                        </div>
+                        <div class="anomaly-info-row">
+                            <span>Статус:</span>
+                            <span style="color: #ff0055; font-weight: bold;">Сбегает</span>
+                        </div>
+                    </div>
+
+                    <div class="lobo-card">
+                        <div class="lobo-card-title">ЭПОС Дар</div>
+                        <div class="gear-box">
+                            <img src="user/lobo/phone.png" alt="phone">
+                            <div class="gear-info">
+                                <div class="gear-title">Пробуханые наушники</div>
+                                <div>Дают +15 к скорости работы и погружают владельца в вечный расслабленный вайб.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lobo-card">
+                        <div class="lobo-card-title">ЭПОС Оружие</div>
+                        <div class="gear-box">
+                            <img src="user/lobo/usss.png" alt="usss">
+                            <div class="gear-info">
+                                <div class="gear-title">Бутылка Коньяка</div>
+                                <div>Урон: Оранжевый (10-18). Наносит сокрушительный удар по рабочей дисциплине противников.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lobo-card">
+                        <div class="lobo-card-title">ЭПОС Броня</div>
+                        <div class="gear-box">
+                            <img src="user/lobo/dopp.png" alt="dopp">
+                            <div class="gear-info">
+                                <div class="gear-title">Амуниция Алкаша</div>
+                                <div>Надежная защита от любых жизненных невзгод и утреннего похмелья.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА: ИСТОРИЯ (Альтернативная версия без внутренних рамок на черном фоне) -->
+            <div class="history-panel" id="historyTab">
+                <img src="user/lobo/kok.png" class="history-top-emblem" alt="KOK History">
+                <h2 style="color: #ff3b00; margin-bottom: 12px; text-align: center;">Альтернативная история: Хроники сдавшегося Хантера</h2>
+                <p>В этом секретном ответвлении архивов содержится история той самой альтернативной версии Хантера. Осознав всю тяжесть бесконечных попыток выживания и постоянного стресса от утечек контента, этот субъект принял волевое решение: он добровольно сдал оригинального Хантера научным сотрудникам корпорации, лишь бы больше никогда не прикасаться к кружке с горьким напитком.</p><br>
+                <p><strong>Из отчетов исследователей:</strong></p>
+                <p><em>Этап первичного анализа:</em> Субъект был обнаружен у пустых серверов TWX Архива. На допросах он упорно утверждал, что теперь его жизнь чиста, как белый лист в блокноте Godot, а все старые стримы с Гартик Фона — лишь далекий сон. Тем не менее, аномальная тяга к созданию превью и мемной графике никуда не исчезла, трансформировавшись в чистую энергию кодинга.</p><br>
+                <p><em>Глубинные наблюдения:</em> Несмотря на предательство оригинала, система безопасности комплекса фиксирует странные сбои: по ночам из камеры доносятся звуки старых chiptune-мелодий и отрывки фраз про 150 купленных игр в Steam. Ученые сходятся во мнении, что полностью стереть прошлое не удалось никому — даже тем, кто добровольно обменял его на тишину и покой.</p>
+            </div>
+
+            <!-- Подвал окна -->
+            <div class="lobo-footer">
+                <div class="pe-collected">
+                    <img src="user/lobo/som.png" alt="som">
+                    <span>Собрано PE-ячеек: 10 / 10</span>
+                </div>
+                <button class="exit-btn" onclick="closeModal()">Выйти</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- API YOUTUBE Player -->
+    <script>
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        const pauseMusic = document.getElementById('pauseMusic');
+        const topBanner = document.getElementById('topBanner');
+        const imgLeft = document.getElementById('imgLeft');
+        const imgRight = document.getElementById('imgRight');
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                videoId: 'Bm6Z7b_Q40o',
+                playerVars: {
+                    'autoplay': 1,
+                    'controls': 1,
+                    'rel': 0
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.playVideo();
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PAUSED) {
+                pauseMusic.play();
+                topBanner.classList.add('active');
+                imgLeft.src = 'user/system/ms/notnot.gif';
+                imgRight.src = 'user/system/ms/notnot.gif';
+            } else if (event.data === YT.PlayerState.PLAYING) {
+                pauseMusic.pause();
+                pauseMusic.currentTime = 0;
+                topBanner.classList.remove('active');
+                imgLeft.src = 'user/system/ms/banana.gif';
+                imgRight.src = 'user/system/ms/clife.gif';
+            }
+        }
+
+        function toggleGuard(side, show) {
+            if (side === 'left') {
+                document.getElementById('guardLeft').style.display = show ? 'flex' : 'none';
+                document.getElementById('minLeft').style.display = show ? 'none' : 'block';
+            } else {
+                document.getElementById('guardRight').style.display = show ? 'flex' : 'none';
+                document.getElementById('minRight').style.display = show ? 'none' : 'block';
+            }
+        }
+
+        function openModal() {
+            document.getElementById('modalOverlay').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('open');
+        }
+
+        function switchTab(tab) {
+            const detailsTab = document.getElementById('detailsTab');
+            const historyTab = document.getElementById('historyTab');
+            const tabDetailsBtn = document.getElementById('tabDetailsBtn');
+            const tabHistoryBtn = document.getElementById('tabHistoryBtn');
+
+            if (tab === 'details') {
+                detailsTab.style.display = 'flex';
+                historyTab.style.display = 'none';
+                tabDetailsBtn.classList.add('active');
+                tabHistoryBtn.classList.remove('active');
+            } else {
+                detailsTab.style.display = 'none';
+                historyTab.style.display = 'flex';
+                tabDetailsBtn.classList.remove('active');
+                tabHistoryBtn.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

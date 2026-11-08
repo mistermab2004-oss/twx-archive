@@ -337,6 +337,9 @@
                 { title: "Buckshot Roulette", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2835570/library_600x900.jpg", status: "mabsss", link: "https://store.steampowered.com/app/2835570/Buckshot_Roulette/" },
 		{ title: "For The King", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/527230/library_600x900.jpg", link: "https://store.steampowered.com/app/527230/For_The_King/" },
                 { title: "The Past Within", poster: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1515210/library_600x900.jpg", link: "https://store.steampowered.com/app/1515210/The_Past_Within/" }
+		],
+		toch: [
+    		{ title: "ХРЕН ТЕБЯ ЗНАЕТ", poster: "https://i.ytimg.com/vi/0jLRET-RvfQ/hqdefault.jpg?sqp=-oaymwEmCOADEOgC8quKqQMa8AEB-AHUBIAC4AOKAgwIABABGGUgVyhFMA8=&rs=AOn4CLDsYjYpPG2PObir18jTc36HaMVQRw", link: "#" }
 		]
             },
 
@@ -574,7 +577,8 @@
             doso: "Достопримечательности",
             otherActivity: "Другая деятельность",
 	    debts: "Долги",
-            mabs: "Поиграть с Мабом"
+            mabs: "Поиграть с Мабом",
+	    toch: "Точно в Ближайшее Время"
         };
 
         let currentMainKey = 'passed';
@@ -600,6 +604,7 @@
                 subContainer.innerHTML = `
                     <button onclick="switchSubList('debtss', 'debts')" id="sub-btn-debts" class="sub-tab-btn">Долги</button>
                     <button onclick="switchSubList('debtss', 'mabs')" id="sub-btn-mabs" class="sub-tab-btn">Поиграть с Мабом</button>
+                    <button onclick="switchSubList('debtss', 'toch')" id="sub-btn-toch" class="sub-tab-btn">Точно</button>
                 `;
                 switchSubList('debtss', 'debts');
                 return;
@@ -663,8 +668,12 @@
                 card.className = "poster-card relative bg-[#111] rounded border border-white/20 overflow-hidden flex flex-col justify-between cursor-pointer shadow-xl";
                 
                 card.onclick = () => {
-                    window.open(item.link, '_blank');
-                };
+    		if (item.title === "ХРЕН ТЕБЯ ЗНАЕТ") {
+        		window.location.href = "notnot.html";
+    		} else {
+        		window.open(item.link, '_blank');
+    		}
+	  };
 
                 // Логика плашек (статусы прохождения для FNF или желтая плашка "Утерено" zozz)
                 let badgeHTML = '';

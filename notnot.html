@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Здесь Ничего Нет</title>
-    <link rel="icon" href="user/system/msm.png">
+    <link rel="icon" href="user/system/msm.icon">
     <style>
         * {
             box-sizing: border-box;
@@ -114,7 +114,7 @@
         .minimized-placeholder.left { left: 15px; }
         .minimized-placeholder.right { right: 15px; }
 
-        /* МОДАЛЬНОЕ ОКНО (Lobotomy Corporation Style) */
+        /* ТОЧНЫЙ СТИЛЬ МОДАЛЬНОГО ОКНА (Lobotomy Corporation Style) */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -132,193 +132,231 @@
         }
 
         .lobo-window {
-            width: 1100px;
-            height: 680px;
-            background: #080808;
+            width: 1160px;
+            height: 700px;
+            background: #000;
             border: 2px solid #ff3b00;
-            box-shadow: 0 0 30px rgba(255, 59, 0, 0.4);
+            box-shadow: 0 0 35px rgba(255, 59, 0, 0.5);
             display: flex;
             flex-direction: column;
             position: relative;
-            padding: 15px;
-            color: #f7941d;
+            padding: 12px;
+            color: #ffaa55;
             font-family: Arial, sans-serif;
             overflow: hidden;
         }
 
-        /* Шапка модалки */
+        /* Шапка окна */
         .lobo-header {
+            background: #d32f2f;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #ff3b00;
-            padding-bottom: 8px;
+            padding: 4px 10px;
             margin-bottom: 12px;
+            border: 1px solid #ff5252;
         }
         .lobo-tabs {
             display: flex;
-            gap: 15px;
+            gap: 10px;
+            align-items: center;
         }
-        .lobo-tab-btn {
-            background: #111;
-            color: #888;
-            border: 1px solid #444;
-            padding: 6px 16px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 13px;
-            text-transform: uppercase;
-        }
-        .lobo-tab-btn.active {
-            background: #ff3b00;
-            color: #000;
-            border-color: #ff3b00;
-        }
-
-        /* Специфический стиль для кастомного логотипа kok.png слева от вкладок */
         .lobo-top-emblem {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             object-fit: contain;
             transform: scaleX(-1);
             border: 2px solid #ffcc00;
             border-radius: 50%;
-            box-shadow: 0 0 8px rgba(255, 204, 0, 0.8);
+            box-shadow: 0 0 8px rgba(255, 204, 0, 0.9);
             background: #111;
         }
+        .lobo-tab-btn {
+            background: #b71c1c;
+            color: #fff;
+            border: 1px solid #ff8a80;
+            padding: 4px 14px;
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .lobo-tab-btn.inactive {
+            background: #8e0000;
+            color: #ffcccc;
+            border-color: #b71c1c;
+        }
 
-        /* Контентная часть */
+        /* Сетка содержимого модалки */
         .lobo-content {
             display: flex;
             flex: 1;
-            gap: 15px;
+            gap: 12px;
             overflow: hidden;
         }
 
-        /* Левая колонка */
-        .lobo-col-left {
-            width: 280px;
+        /* Слева: Шкала прогресса исследования и стрелки */
+        .lobo-sidebar-left {
+            width: 160px;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
+            padding-right: 5px;
+        }
+        .stat-prog-item {
+            font-size: 11px;
+            color: #ffaa55;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        .stat-prog-item span {
+            font-weight: bold;
+            color: #fff;
+        }
+        .nav-arrows {
+            display: flex;
             gap: 10px;
+            align-items: center;
+            margin-top: auto;
+            padding-bottom: 5px;
         }
-        .lobo-card {
-            border: 1px solid #ff3b00;
-            background: rgba(20, 10, 5, 0.6);
-            padding: 10px;
+        .arrow-btn {
+            width: 32px;
+            height: 32px;
+            background: #ffcc00;
+            border: none;
+            clip-path: polygon(100% 0, 0 50%, 100% 100%);
+            cursor: pointer;
         }
-        .lobo-card-title {
-            font-size: 12px;
+        .arrow-btn.right {
+            transform: scaleX(-1);
+        }
+
+        /* Колонка 1: Базовая информация */
+        .lobo-col-base {
+            width: 260px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .lobo-box {
+            border: 1px solid #ff5252;
+            background: rgba(20, 8, 4, 0.9);
+            padding: 8px;
+        }
+        .lobo-box-title {
             background: #ff3b00;
             color: #000;
             font-weight: bold;
+            font-size: 11px;
             padding: 2px 6px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-transform: uppercase;
         }
         .portrait-img {
             width: 100%;
-            height: 180px;
+            height: 160px;
             object-fit: cover;
             border: 1px solid #ff3b00;
         }
-        .anomaly-info-row {
+        .info-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 6px;
-            font-size: 12px;
-        }
-
-        .stat-box {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 5px;
             font-size: 11px;
-        }
-        .stat-box img {
-            width: 24px;
-            height: 24px;
-            object-fit: contain;
+            margin-top: 4px;
         }
 
-        /* Средняя колонка */
-        .lobo-col-mid {
+        /* Колонка 2: Особенности (инструкции) и Предпочтения */
+        .lobo-col-center {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-        }
-
-        .work-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
             gap: 8px;
         }
-        .work-item {
-            border: 1px solid #ff3b00;
-            background: rgba(15, 8, 3, 0.8);
-            padding: 6px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .work-item img {
-            width: 30px;
-            height: 30px;
-            object-fit: contain;
-        }
-        .work-details {
-            font-size: 10px;
-            line-height: 1.2;
-        }
-
-        .instructions-block {
-            border: 1px solid #ff3b00;
-            background: rgba(15, 8, 3, 0.8);
+        .instructions-panel {
+            border: 1px solid #ff5252;
+            background: rgba(15, 6, 2, 0.9);
             padding: 8px;
-            flex: 1;
+            height: 200px;
             display: flex;
             flex-direction: column;
             position: relative;
         }
         .instructions-scroll {
             overflow-y: auto;
-            max-height: 160px;
-            padding-right: 5px;
+            flex: 1;
             font-size: 11px;
             line-height: 1.4;
-            color: #ddc;
+            color: #ddd;
+            padding-right: 5px;
         }
-        .instructions-scroll::-webkit-scrollbar { width: 6px; }
-        .instructions-scroll::-webkit-scrollbar-thumb { background: #ff3b00; border-radius: 3px; }
-
-        /* Правая колонка */
-        .lobo-col-right {
-            width: 260px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .instructions-scroll::-webkit-scrollbar { width: 5px; }
+        .instructions-scroll::-webkit-scrollbar-thumb { background: #ff3b00; }
+        .scroll-indicator {
+            text-align: center;
+            color: #ff3b00;
+            font-size: 12px;
+            margin-top: 2px;
         }
 
-        .gear-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid #ff3b00;
+        /* Блок предпочтений (сетка 2x2) */
+        .preferences-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .pref-item {
+            border: 1px solid #ff5252;
+            background: rgba(15, 6, 2, 0.9);
             padding: 6px;
-            background: rgba(15, 8, 3, 0.8);
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
         }
-        .gear-box img {
-            width: 40px;
-            height: 40px;
+        .pref-item img {
+            width: 28px;
+            height: 28px;
             object-fit: contain;
         }
-        .gear-info {
-            font-size: 10px;
+        .pref-details {
+            font-size: 9px;
+            line-height: 1.2;
+            color: #ccc;
         }
-        .gear-title {
+        .pref-title {
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        /* Колонка 3: Побег и ЭПОС Снаряжение */
+        .lobo-col-right {
+            width: 270px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .epos-box {
+            border: 1px solid #ff5252;
+            background: rgba(15, 6, 2, 0.9);
+            padding: 6px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .epos-box img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
+        }
+        .epos-text {
+            font-size: 10px;
+            line-height: 1.2;
+        }
+        .epos-name {
             font-weight: bold;
             color: #fff;
             margin-bottom: 2px;
@@ -326,65 +364,66 @@
 
         /* Подвал модалки */
         .lobo-footer {
-            margin-top: 10px;
+            margin-top: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-top: 1px solid #ff3b00;
             padding-top: 8px;
         }
-        .pe-collected {
+        .pe-gathered {
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 13px;
             font-weight: bold;
+            color: #ffaa55;
         }
-        .pe-collected img {
-            width: 24px;
-            height: 24px;
-        }
-
-        .exit-btn {
-            background: #ff3b00;
-            color: #000;
-            font-weight: bold;
+        .pe-gathered img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
             border: none;
-            padding: 8px 24px;
+            background: transparent;
+        }
+        .exit-btn {
+            background: #d32f2f;
+            color: #fff;
+            font-weight: bold;
+            border: 1px solid #ff5252;
+            padding: 6px 28px;
             cursor: pointer;
             font-size: 13px;
             text-transform: uppercase;
         }
         .exit-btn:hover {
-            background: #ff6600;
+            background: #f44336;
         }
 
-        /* Раздел "История" (без рамок внутри, на черном фоне) */
+        /* История (Альтернативный режим) */
         .history-panel {
             display: none;
             flex: 1;
             flex-direction: column;
             overflow-y: auto;
-            padding: 10px;
+            padding: 15px;
             font-size: 12px;
             color: #ccc;
             line-height: 1.6;
             background: #000;
-            border: none;
         }
-        .history-panel::-webkit-scrollbar { width: 8px; }
+        .history-panel::-webkit-scrollbar { width: 6px; }
         .history-panel::-webkit-scrollbar-thumb { background: #ff3b00; }
-        
-        .history-top-emblem {
+        .history-emblem-center {
             display: block;
             margin: 0 auto 15px auto;
-            width: 70px;
-            height: 70px;
+            width: 65px;
+            height: 65px;
             object-fit: contain;
             transform: scaleX(-1);
             border: 3px solid #ffcc00;
             border-radius: 50%;
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.8);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.9);
             background: #111;
         }
     </style>
@@ -417,168 +456,184 @@
     </div>
     <div class="minimized-placeholder right" id="minRight" style="display: none;" onclick="toggleGuard('right', true)">_</div>
 
-    <!-- МОДАЛЬНОЕ ОКНО (LOBOTOMY CORP STYLE) -->
+    <!-- МОДАЛЬНОЕ ОКНО -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="lobo-window">
             
-            <!-- Шапка окна с кастомной иконкой kok.png слева -->
+            <!-- Шапка окна в точном стиле игры -->
             <div class="lobo-header">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <img src="user/lobo/kok.png" class="lobo-top-emblem" alt="KOK">
-                    <div class="lobo-tabs">
-                        <button class="lobo-tab-btn active" id="tabDetailsBtn" onclick="switchTab('details')">Аномалия Детали</button>
-                        <button class="lobo-tab-btn" id="tabHistoryBtn" onclick="switchTab('history')">Аномалия История</button>
-                    </div>
+                <div class="lobo-tabs">
+                    <button class="lobo-tab-btn" id="tabDetailsBtn" onclick="switchTab('details')">
+                        <img src="user/lobo/kok.png" class="lobo-top-emblem" alt="Emblem"> Аномалия Детали
+                    </button>
+                    <button class="lobo-tab-btn inactive" id="tabHistoryBtn" onclick="switchTab('history')">
+                        <i class="fa-solid fa-radiation"></i> Аномалия История
+                    </button>
                 </div>
-                <div style="font-weight: bold; font-size: 14px; color: #ff3b00;">Уровень Исследования: MAX</div>
+                <div style="font-weight: bold; font-size: 13px; color: #fff;">УРОВЕНЬ ИССЛЕДОВАНИЯ: MAX</div>
             </div>
 
-            <!-- ВКЛАДКА: ДЕТАЛИ -->
+            <!-- ВКЛАДКА: ДЕТАЛИ (Точная структура по образцу) -->
             <div class="lobo-content" id="detailsTab">
                 
-                <!-- Колонка 1: Портрет и База -->
-                <div class="lobo-col-left">
-                    <div class="lobo-card">
-                        <div class="lobo-card-title">Базовая Информация</div>
-                        <img src="user/lobo/portrey.png" class="portrait-img" alt="Алкаш Хантер">
-                        <div style="text-align: center; font-weight: bold; font-size: 14px; color: #fff; margin-top: 6px;">Алкаш Хантер</div>
-                        <div class="anomaly-info-row">
-                            <span>Код: X-00-35</span>
-                            <span style="color: #ff0055; font-weight: bold;">WAW</span>
+                <!-- Левая панель со статами и стрелками -->
+                <div class="lobo-sidebar-left">
+                    <div>
+                        <div class="stat-prog-item"><span>│</span> Скорость работы +5</div>
+                        <div class="stat-prog-item"><span>II</span> Шанс успеха +5</div>
+                        <div class="stat-prog-item"><span>III</span> Скорость работы +5</div>
+                        <div class="stat-prog-item"><span>IV</span> Шанс успеха +5</div>
+                        <div style="margin-top: 15px; font-weight: bold; color: #fff; font-size: 12px; line-height: 1.4;">
+                            УРОВЕНЬ<br>ИССЛЕДОВАНИЯ 4
                         </div>
                     </div>
-
-                    <div class="lobo-card">
-                        <div class="anomaly-info-row">
-                            <span>Тип атаки:</span>
-                            <img src="user/lobo/att.png" style="width:20px; height:20px;" alt="Att">
-                        </div>
-                        <div style="font-size: 10px; color: #ffaa00; margin-top: 2px;">Оранжевый 0.1-1</div>
-                        <div class="anomaly-info-row" style="margin-top: 8px;">
-                            <span>Даёт PE-Ячеек:</span>
-                            <img src="user/lobo/ii.png" style="height: 18px;" alt="PE">
-                        </div>
-                    </div>
-
-                    <div class="lobo-card" style="font-size: 11px;">
-                        <div class="lobo-card-title">Эмоциональное состояние</div>
-                        <div>🟢 Хорошо: Пообещает</div>
-                        <div>🟡 Нормально: Поноет</div>
-                        <div>🔴 Ужасно: Лень</div>
+                    <div class="nav-arrows">
+                        <button class="arrow-btn" onclick="closeModal()"></button>
+                        <button class="arrow-btn right" onclick="closeModal()"></button>
                     </div>
                 </div>
 
-                <!-- Колонка 2: Предрасположенности и Инструкции -->
-                <div class="lobo-col-mid">
-                    <div class="lobo-card-title">Предрасположенности к Работам</div>
-                    <div class="work-grid">
-                        <div class="work-item">
-                            <img src="user/lobo/y1.png" alt="y1">
-                            <div class="work-details">
-                                <div style="color: #fff; font-weight: bold;">Пригрозить</div>
-                                <div>1: Низкий | 2: Низкий<br>3: Обычный<br>4: Высокий | 5: Высокий</div>
-                            </div>
-                        </div>
-                        <div class="work-item">
-                            <img src="user/lobo/y2.png" alt="y2">
-                            <div class="work-details">
-                                <div style="color: #fff; font-weight: bold;">Прибухнуть</div>
-                                <div>Все 1-5: Высокий</div>
-                            </div>
-                        </div>
-                        <div class="work-item">
-                            <img src="user/lobo/y3.png" alt="y3">
-                            <div class="work-details">
-                                <div style="color: #fff; font-weight: bold;">Прибодрить</div>
-                                <div>Все 1-5: Высокий</div>
-                            </div>
-                        </div>
-                        <div class="work-item">
-                            <img src="user/lobo/y4.png" alt="y4">
-                            <div class="work-details">
-                                <div style="color: #fff; font-weight: bold;">Игнор</div>
-                                <div>Все 1-5: Низкие</div>
-                            </div>
+                <!-- Колонка 1: Базовая информация -->
+                <div class="lobo-col-base">
+                    <div class="lobo-box">
+                        <div class="lobo-box-title">Аномалия Базовая Информация</div>
+                        <img src="user/lobo/portrey.png" class="portrait-img" alt="Портрет">
+                        <div style="text-align: center; font-weight: bold; font-size: 13px; color: #fff; margin-top: 5px;">Алкаш Хантер</div>
+                        <div class="info-row" style="margin-top: 4px;">
+                            <span>X-00-35</span>
+                            <span style="color: #ffaa00; font-weight: bold; font-size: 13px;">XAHT</span>
                         </div>
                     </div>
 
-                    <div class="instructions-block">
-                        <div class="lobo-card-title">Руководство по обращению (Инструкции)</div>
+                    <div class="lobo-box">
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
+                            <span>Тип атаки</span>
+                            <span>Даёт РЕ-Ячеек</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                            <img src="user/lobo/att.png" style="width: 24px; height: 24px; object-fit: contain;" alt="Att">
+                            <img src="user/lobo/ii.png" style="height: 22px; object-fit: contain; background: transparent;" alt="PE">
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 10px; color: #ffaa00; margin-top: 2px;">
+                            <span>Оранжевый 0.1-1</span>
+                            <span style="font-size: 14px; font-weight: bold; color: #fff; margin-right: 12px;">10</span>
+                        </div>
+                    </div>
+
+                    <div class="lobo-box" style="font-size: 10px;">
+                        <div class="lobo-box-title" style="margin-bottom: 4px;">Эмоциональное состояние</div>
+                        <div>🟢 Хорошо: Пообещает &nbsp;&nbsp;&nbsp;&nbsp; 8-10</div>
+                        <div>🟡 Нормально: Поноет &nbsp;&nbsp;&nbsp;&nbsp; 4-7</div>
+                        <div>🔴 Ужасно: Лень &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0-3</div>
+                    </div>
+                </div>
+
+                <!-- Колонка 2: Изученные особенности и Предпочтения -->
+                <div class="lobo-col-center">
+                    <div class="instructions-panel">
+                        <div class="lobo-box-title" style="margin-bottom: 4px;">Аномалия Изученные Особенности</div>
                         <div class="instructions-scroll">
-                            <p><strong>Инструкция 1:</strong> Если сотрудник проявляет чрезмерную трезвость, Хантер немедленно читает ему часовую лекцию о смыслах жизни под пивко, снижая рассудок персонала.</p><br>
-                            <p><strong>Инструкция 2:</strong> При успешном завершении работы "Прибухнуть" уровень счётчика Клипота автоматически стабилизируется и наполняет комнату уютом.</p><br>
-                            <p><strong>Инструкция 3:</strong> Оставлять Аномалию в одиночестве без фоновой музыки категорически запрещено — это вызывает звуковой резонанс.</p><br>
-                            <p><strong>Инструкция 4:</strong> Работа "Прибодрить" повышает настроение Хантера, заставляя его вспоминать лучшие моменты былых стримов по старым играм.</p><br>
-                            <p><strong>Инструкция 5:</strong> При игнорировании запросов объекта (работа "Игнор") велика вероятность внезапного ухода в глубокий AFK-режим.</p><br>
-                            <p><strong>Инструкция 6:</strong> Запрещается предпринимать попытки конфискации Пробуханых наушников во время активной фазы трансляции.</p>
+                            <p><strong>Руководство по обращению 1:</strong> В результате плохой работы, уровень счётчика Клипота понизится.</p><br>
+                            <p><strong>Руководство по обращению 2:</strong> В результате хорошей работы, уровень счётчика Клипота понизится.</p><br>
+                            <p><strong>Руководство по обращению 3:</strong> Если уровень Чрезвычайного положения достигнет 2-х, уровень счётчика Клипота понизится.</p><br>
+                            <p><strong>Руководство по обращению 4:</strong> При регулярном пополнении запасов коньяка стабильность камеры содержания возрастает.</p><br>
+                            <p><strong>Руководство по обращению 5:</strong> Работа "Прибодрить" позволяет избежать падения рассудка сотрудников в секторе.</p><br>
+                            <p><strong>Руководство по обращению 6:</strong> Ни в коем случае не отбирайте у Аномалии Пробуханые наушники во время трансляции.</p>
+                        </div>
+                        <div class="scroll-indicator">▼</div>
+                    </div>
+
+                    <div class="lobo-box-title" style="margin-bottom: 2px;">Аномалия Предпочтение</div>
+                    <div class="preferences-grid">
+                        <div class="pref-item">
+                            <img src="user/lobo/y1.png" alt="y1">
+                            <div class="pref-details">
+                                <div class="pref-title">Пригрозить</div>
+                                <div>I: Низкий &nbsp; II: Низкий<br>III: Обычный<br>IV: Высокий &nbsp; V: Высокий</div>
+                            </div>
+                        </div>
+                        <div class="pref-item">
+                            <img src="user/lobo/y2.png" alt="y2">
+                            <div class="pref-details">
+                                <div class="pref-title">Прибухнуть</div>
+                                <div>I: Высокий &nbsp; II: Высокий<br>III: Высокий<br>IV: Высокий &nbsp; V: Высокий</div>
+                            </div>
+                        </div>
+                        <div class="pref-item">
+                            <img src="user/lobo/y3.png" alt="y3">
+                            <div class="pref-details">
+                                <div class="pref-title">Прибодрить</div>
+                                <div>I: Высокий &nbsp; II: Высокий<br>III: Высокий<br>IV: Высокий &nbsp; V: Высокий</div>
+                            </div>
+                        </div>
+                        <div class="pref-item">
+                            <img src="user/lobo/y4.png" alt="y4">
+                            <div class="pref-details">
+                                <div class="pref-title">Игнор</div>
+                                <div>I: Низкие &nbsp; II: Низкие<br>III: Низкие<br>IV: Низкие &nbsp; V: Низкие</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Колонка 3: Информация о Побеге и Снаряжение -->
+                <!-- Колонка 3: Побег и ЭПОС -->
                 <div class="lobo-col-right">
-                    <div class="lobo-card">
-                        <div class="lobo-card-title">Информация о побеге</div>
-                        <div class="anomaly-info-row">
+                    <div class="lobo-box">
+                        <div class="lobo-box-title" style="margin-bottom: 4px;">Аномалия Информация о побеге</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-bottom: 4px;">
                             <span>Счётчик Клипота:</span>
-                            <span style="font-weight: bold; color: #ff3b00; font-size: 16px;">2</span>
+                            <span style="font-weight: bold; color: #ff3b00; font-size: 15px;">2</span>
                         </div>
-                        <div class="anomaly-info-row">
-                            <span>Статус:</span>
-                            <span style="color: #ff0055; font-weight: bold;">Сбегает</span>
-                        </div>
-                    </div>
-
-                    <div class="lobo-card">
-                        <div class="lobo-card-title">ЭПОС Дар</div>
-                        <div class="gear-box">
-                            <img src="user/lobo/phone.png" alt="phone">
-                            <div class="gear-info">
-                                <div class="gear-title">Пробуханые наушники</div>
-                                <div>Дают +15 к скорости работы и погружают владельца в вечный расслабленный вайб.</div>
-                            </div>
+                        <div style="text-align: center; font-weight: bold; font-size: 16px; color: #ff0055; padding: 6px; border: 1px solid #ff0055; background: rgba(255,0,85,0.1); margin-top: 4px;">
+                            СБЕГАЕТ
                         </div>
                     </div>
 
-                    <div class="lobo-card">
-                        <div class="lobo-card-title">ЭПОС Оружие</div>
-                        <div class="gear-box">
-                            <img src="user/lobo/usss.png" alt="usss">
-                            <div class="gear-info">
-                                <div class="gear-title">Бутылка Коньяка</div>
-                                <div>Урон: Оранжевый (10-18). Наносит сокрушительный удар по рабочей дисциплине противников.</div>
-                            </div>
+                    <div class="epos-box">
+                        <img src="user/lobo/phone.png" alt="phone">
+                        <div class="epos-text">
+                            <div style="color: #ffaa55; font-size: 9px;">З.П.О.С. ДАР (ШАНС ПОЛУЧЕНИЯ: 0%)</div>
+                            <div class="epos-name">Пробуханые наушники</div>
+                            <div style="color: #ccc; font-size: 9px;">+15 скорость работы, +6 шанс успешной работы.</div>
                         </div>
                     </div>
 
-                    <div class="lobo-card">
-                        <div class="lobo-card-title">ЭПОС Броня</div>
-                        <div class="gear-box">
-                            <img src="user/lobo/dopp.png" alt="dopp">
-                            <div class="gear-info">
-                                <div class="gear-title">Амуниция Алкаша</div>
-                                <div>Надежная защита от любых жизненных невзгод и утреннего похмелья.</div>
-                            </div>
+                    <div class="epos-box">
+                        <img src="user/lobo/usss.png" alt="usss">
+                        <div class="epos-text">
+                            <div style="color: #ffaa55; font-size: 9px;">З.П.О.С. ОРУЖИЕ</div>
+                            <div class="epos-name">Бутылка Коньяка</div>
+                            <div style="color: #ccc; font-size: 9px;">Урон: Оранжевый (0.1-1). Ближний бой.</div>
+                        </div>
+                    </div>
+
+                    <div class="epos-box">
+                        <img src="user/lobo/dopp.png" alt="dopp">
+                        <div class="epos-text">
+                            <div style="color: #ffaa55; font-size: 9px;">З.П.О.С. БРОНЯ</div>
+                            <div class="epos-name">Амуниция Алкаша</div>
+                            <div style="color: #ccc; font-size: 9px;">Защита от ментального похмелья.</div>
                         </div>
                     </div>
                 </div>
+
             </div>
 
-            <!-- ВКЛАДКА: ИСТОРИЯ (Альтернативная версия без внутренних рамок на черном фоне) -->
+            <!-- ВКЛАДКА: ИСТОРИЯ -->
             <div class="history-panel" id="historyTab">
-                <img src="user/lobo/kok.png" class="history-top-emblem" alt="KOK History">
-                <h2 style="color: #ff3b00; margin-bottom: 12px; text-align: center;">Альтернативная история: Хроники сдавшегося Хантера</h2>
-                <p>В этом секретном ответвлении архивов содержится история той самой альтернативной версии Хантера. Осознав всю тяжесть бесконечных попыток выживания и постоянного стресса от утечек контента, этот субъект принял волевое решение: он добровольно сдал оригинального Хантера научным сотрудникам корпорации, лишь бы больше никогда не прикасаться к кружке с горьким напитком.</p><br>
-                <p><strong>Из отчетов исследователей:</strong></p>
-                <p><em>Этап первичного анализа:</em> Субъект был обнаружен у пустых серверов TWX Архива. На допросах он упорно утверждал, что теперь его жизнь чиста, как белый лист в блокноте Godot, а все старые стримы с Гартик Фона — лишь далекий сон. Тем не менее, аномальная тяга к созданию превью и мемной графике никуда не исчезла, трансформировавшись в чистую энергию кодинга.</p><br>
-                <p><em>Глубинные наблюдения:</em> Несмотря на предательство оригинала, система безопасности комплекса фиксирует странные сбои: по ночам из камеры доносятся звуки старых chiptune-мелодий и отрывки фраз про 150 купленных игр в Steam. Ученые сходятся во мнении, что полностью стереть прошлое не удалось никому — даже тем, кто добровольно обменял его на тишину и покой.</p>
+                <img src="user/lobo/kok.png" class="history-emblem-center" alt="History Emblem">
+                <h2 style="color: #ff3b00; margin-bottom: 12px; text-align: center;">Аномалия X-00-35: Архивные Материалы и Предыстория</h2>
+                <p>Данный субъект представляет собой альтернативную версию Хантера, добровольно сдавшую оригинального создателя научным сотрудникам корпорации с целью избавиться от бесконечного цикла стримов и пагубной тяги к напиткам. После прохождения многоуровневых процедур очистки памяти объект был классифицирован как аномалия WAW.</p><br>
+                <p><strong>Протокол научных наблюдений:</strong></p>
+                <p><em>Хроника 1:</em> При первичном помещении в камеру содержания субъект отказывался взаимодействовать с персоналом, требуя вернуть ему доступ к Godot и старым архивам Gartic Phone. Любые попытки проведения стандартных тестов прерывались монологами о 150 купленных играх в Steam.</p><br>
+                <p><em>Хроника 2:</em> Экспериментальным путем установлено, что оставление объекта без фоновой музыки вызывает критический резонанс звуковых частот. Взаимодействие с Пробухаными наушниками строго запрещено автоматическими протоколами безопасности во избежание мгновенного прорыва периметра.</p>
             </div>
 
-            <!-- Подвал окна -->
+            <!-- Подвал модалки -->
             <div class="lobo-footer">
-                <div class="pe-collected">
+                <div class="pe-gathered">
                     <img src="user/lobo/som.png" alt="som">
-                    <span>Собрано PE-ячеек: 10 / 10</span>
+                    <span>СОБРАНО РЕ-ЯЧЕЕК</span>
                 </div>
                 <button class="exit-btn" onclick="closeModal()">Выйти</button>
             </div>
@@ -660,13 +715,13 @@
             if (tab === 'details') {
                 detailsTab.style.display = 'flex';
                 historyTab.style.display = 'none';
-                tabDetailsBtn.classList.add('active');
-                tabHistoryBtn.classList.remove('active');
+                tabDetailsBtn.classList.remove('inactive');
+                tabHistoryBtn.classList.add('inactive');
             } else {
                 detailsTab.style.display = 'none';
                 historyTab.style.display = 'flex';
-                tabDetailsBtn.classList.remove('active');
-                tabHistoryBtn.classList.add('active');
+                tabDetailsBtn.classList.add('inactive');
+                tabHistoryBtn.classList.remove('inactive');
             }
         }
     </script>

@@ -1,112 +1,1271 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Здесь Ничего Нет</title>
-<link rel="icon" href="user/system/msm.icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Здесь Ничего Нет</title>
+
+<link rel="icon" type="image/png" href="user/system/msm.png">
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
-:root{--gold:#c7b879;--orange:#ed994d;--line:#82784e;--muted:#b9ad83}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#000;color:#e8dfae;font-family:Oswald,Arial,sans-serif;overflow:hidden}button{font:inherit;cursor:pointer}#main{position:relative;width:100vw;height:100dvh;min-height:420px;overflow:hidden;background:#000}
-/* Кинотеатр */
-#video-container{position:absolute;inset:0;background:#000;z-index:1}#youtube-player{position:absolute;inset:0;width:100%;height:100%}#youtube-player iframe{width:100%;height:100%;border:0}
-/* GIF-охранники */
-.guardian{position:absolute;top:50%;transform:translateY(-50%);width:clamp(76px,11vw,145px);z-index:10;pointer-events:none}.guardian img{display:block;width:100%;height:auto;object-fit:contain;pointer-events:none}#left-guardian{left:0}#right-guardian{right:0}#right-gif{transform:scaleX(-1)}
-.guard-close{position:absolute;top:0;width:23px;height:23px;padding:0;background:#080808;border:1px solid #c5b77d;color:#f0dfa0;font-size:17px;line-height:19px;z-index:2;pointer-events:auto}#left-guardian .guard-close{left:0}#right-guardian .guard-close{right:0}.guard-close:hover{background:#a82e2e;color:#fff}
-.restore-guard{position:absolute;bottom:10px;z-index:20;display:none;width:42px;height:26px;padding:0;background:#111;border:1px solid #a89d6a;color:#e5dba7;font-size:23px;line-height:18px}#restore-left{left:10px}#restore-right{right:10px}
-/* Плашка секретного режима */
-#secret-top{position:absolute;top:-225px;left:50%;transform:translateX(-50%);width:min(660px,78vw);height:210px;z-index:30;display:flex;align-items:flex-start;justify-content:center;transition:top .65s cubic-bezier(.2,.8,.2,1);cursor:pointer}#secret-top.active{top:0}#secret-top img{display:block;width:100%;height:100%;object-fit:contain;object-position:top center;filter:drop-shadow(0 4px 12px #000)}
-/* Досье */
-#dossier{position:absolute;inset:0;z-index:50;display:grid;grid-template-columns:16% minmax(0,1fr) 29%;gap:7px;padding:8px;background:#000;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s;overflow:hidden}#dossier.visible{opacity:1;visibility:visible;pointer-events:auto}
-.top-navigation{position:absolute;top:0;left:0;right:0;height:86px;z-index:10;pointer-events:none}.logo-kok{position:absolute;top:1px;left:5px;width:75px;height:75px;padding:4px;background:#080808;border:3px solid #d6bd43;transform:rotate(-12deg);pointer-events:auto}.logo-kok img{width:100%;height:100%;object-fit:contain}
-.diagonal-nav{position:absolute;top:9px;left:82px;width:min(440px,55vw);height:49px;border-top:2px solid #b9a65e;border-bottom:1px solid #b9a65e;transform:skewY(-12deg);display:flex;align-items:center;pointer-events:auto}.nav-tab{padding:7px 10px;border:0;background:transparent;color:#e6d18c;font-size:clamp(9px,.9vw,12px);font-weight:700;text-transform:uppercase;white-space:nowrap;transform:skewY(12deg)}.nav-tab.active{color:#fff1a4;text-shadow:0 0 8px #e8c65b}.nav-tab:hover{color:#fff}
-.left-column{position:relative;min-width:0;padding-top:103px;overflow:visible}.stats{width:108%;margin:0 0 0 7px;transform:rotate(-13deg);transform-origin:top left;color:#e8d79a;font-size:clamp(9px,.88vw,13px);font-weight:600}.stat{margin-bottom:13px;white-space:nowrap}.stat span{font-size:18px;margin-right:7px;color:#f5e6a4}.research-level{margin:19px 0 0 25px;color:#ffe6a2;font-size:clamp(10px,1vw,14px);line-height:1.4;font-weight:700;text-transform:uppercase}
-.panel{position:relative;min-width:0;min-height:0;background:#020202;border:1px solid var(--line);outline:1px solid rgba(190,175,100,.22)}.panel-title{position:absolute;top:-12px;left:50%;transform:translateX(-50%);z-index:2;padding:0 7px;background:#000;color:#f3dfa0;font-size:clamp(9px,.85vw,12px);font-weight:700;text-transform:uppercase;white-space:nowrap}
-/* Центральная зона: портрет + руководство, ниже предпочтения */
-.center-column{min-width:0;min-height:0;padding-top:91px;padding-bottom:37px;display:grid;grid-template-columns:minmax(0,43%) minmax(0,57%);grid-template-rows:minmax(0,1.15fr) minmax(0,.85fr);gap:9px;overflow:hidden}
-.profile-panel{grid-column:1;grid-row:1;min-height:0;padding:8px;display:grid;grid-template-rows:minmax(0,1fr) auto auto auto auto;gap:4px}.portrait{display:block;width:100%;height:100%;min-height:0;object-fit:cover;border:1px solid #514d3c}.character-caption{background:#171711;text-align:center;color:#b9ad7b;font-size:clamp(9px,.8vw,12px);padding:2px}.name-row{display:flex;align-items:center;justify-content:space-between;background:#171711;padding:2px 8px;font-size:clamp(10px,.9vw,13px)}.name-row strong{color:#ed454b;font-size:clamp(13px,1.1vw,16px)}.character-data{display:grid;grid-template-columns:1fr 1fr;gap:5px}.data-box{min-width:0;border:1px solid #55523d;padding:3px;text-align:center}.data-label{color:#bcb18a;font-size:clamp(8px,.7vw,10px)}.data-value{height:35px;color:#e9dfa6;font-size:21px;display:flex;align-items:center;justify-content:center}.data-value img{max-width:48px;max-height:34px;object-fit:contain}.attack-type{font-size:clamp(8px,.72vw,10px);color:#d8d2a6}.attack-type small{display:block;color:#e3e3b9;font-size:9px}.condition-box{border-top:1px solid #514c37;padding:3px 4px}.condition-title{color:#a79e73;font-size:9px;text-align:center}.condition{font-size:clamp(9px,.78vw,11px);padding:1px 3px}.condition.good{color:#69d77b}.condition.normal{color:#e5d64f}.condition.bad{color:#df604c}.condition span{float:right}
-.instructions{grid-column:2;grid-row:1;min-height:0;padding:10px 8px 17px;display:flex;flex-direction:column;gap:6px}.instruction-slider{position:relative;flex:1;min-height:0;overflow:hidden}.instruction-card{position:absolute;inset:0;display:none;border:1px solid #705439;padding:10px;background:#030303}.instruction-card.active{display:block}.instruction-card small{display:block;margin-bottom:7px;color:#d38e48;text-align:center;font-size:9px}.instruction-card p{margin:0;color:#d8a16c;font-size:clamp(9px,.78vw,12px);line-height:1.55}.instruction-controls{display:flex;align-items:center;gap:8px}.instruction-controls input{width:100%;accent-color:#ed994d;cursor:pointer}.instruction-count{color:#e49b52;font-size:10px;white-space:nowrap}
-.preferences{grid-column:1/3;grid-row:2;min-height:0;padding:13px 7px 7px}.preference-grid{height:100%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:6px}.preference{min-width:0;min-height:0;border:1px solid #60583f;display:grid;grid-template-columns:35% 1fr;align-items:center;padding:3px;overflow:hidden}.preference img{width:100%;height:100%;max-height:62px;object-fit:contain}.preference-info{min-width:0;color:#d4cda0;font-size:clamp(8px,.68vw,10px);line-height:1.25}.preference-info p{margin:1px 0;white-space:nowrap}.preference-info strong{color:#e5d89e;font-size:clamp(9px,.8vw,11px)}
-/* Правая зона */
-.right-column{min-width:0;min-height:0;padding-top:12px;padding-bottom:37px;display:flex;flex-direction:column;gap:8px;overflow:hidden}.escape-panel{flex:0 0 17%;min-height:62px;display:grid;grid-template-columns:34% 1fr;gap:5px}.escape-counter,.escape-result{border:1px solid #927346;padding:6px 4px;text-align:center;min-width:0}.escape-counter h3,.escape-result h3{margin:0 0 5px;color:#d99a57;font-size:clamp(8px,.75vw,10px)}.counter-number{font-size:clamp(20px,2vw,29px);color:#ed994d}.escape-result strong{display:block;margin-top:8px;color:#ef9b51;font-size:clamp(15px,1.55vw,23px)}.gift-panel{flex:0 0 17%;min-height:65px;display:grid;grid-template-columns:50px 1fr;gap:7px;padding:5px}.gift-panel img{width:48px;height:100%;max-height:58px;object-fit:contain;align-self:center}.gift-text{min-width:0;overflow:hidden}.gift-text h3{margin:0;color:#e8dc9e;font-size:clamp(9px,.85vw,12px)}.gift-text p{margin:3px 0 0;color:#aaa184;font-size:clamp(7px,.62vw,9px);line-height:1.25}.equipment-row{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}.equipment{min-width:0;min-height:0;border:1px solid #88815b;outline:1px solid #514d39;padding:8px 4px;display:flex;flex-direction:column;align-items:center;text-align:center;overflow:hidden}.equipment h3{margin:0 0 5px;color:#e5dba0;font-size:clamp(9px,.85vw,12px);white-space:nowrap}.equipment img{width:76%;height:43%;min-height:45px;object-fit:contain;margin:auto}.equipment strong{color:#e9dfa1;font-size:clamp(10px,.95vw,14px);line-height:1.2}.equipment small{margin-top:4px;color:#b3a985;font-size:clamp(7px,.62vw,9px);line-height:1.3}.bottom-info{flex:0 0 12%;min-height:42px;display:flex;align-items:center;justify-content:center;gap:8px}.bottom-info img{width:75px;height:100%;max-height:57px;object-fit:contain}.bottom-info strong{color:#f2e4a7;font-size:clamp(13px,1.3vw,18px);line-height:1.05}
-/* История */
-#history-page{display:none;position:absolute;left:16%;right:0;top:0;bottom:0;overflow-y:auto;padding:100px 25px 55px;color:#d6c99a;background:#000;scrollbar-color:#5d553d #000}#history-page.active{display:block}.history-heading{text-align:center;font-size:clamp(22px,3vw,36px);color:#e6d08d;text-transform:uppercase;margin-bottom:5px}.history-subtitle{text-align:center;color:#bc7947;font-size:12px;margin-bottom:30px}.history-section{max-width:1050px;margin:0 auto 30px;padding:0 12px}.history-section h2{font-size:18px;color:#e0a05b;border-bottom:1px solid #665438;padding-bottom:7px}.history-section p{font-family:Arial,sans-serif;font-size:13px;line-height:1.8;color:#b9ad8c;text-align:justify}.history-warning{color:#df6262!important;text-align:center!important;font-weight:bold;border:1px solid #713333;padding:12px}
-/* Нижние кнопки */
-.bottom-navigation{position:absolute;bottom:8px;left:8px;z-index:40;display:flex;gap:7px}.page-arrow{width:37px;height:37px;border:0;background:transparent;color:#e9dca4;font-size:33px;line-height:30px;text-shadow:0 0 6px #ad9747}.page-arrow:hover{color:#fff;transform:scale(1.1)}#exit-button{position:absolute;right:0;bottom:0;z-index:45;background:#d93a3d;color:#090000;border:0;font-weight:700;font-size:22px;padding:5px 25px;transform:skewX(-15deg)}#exit-button span{display:inline-block;transform:skewX(15deg)}#dossier.history-mode .center-column,#dossier.history-mode .right-column{display:none}#dossier.history-mode #history-page{display:block}
-@media(max-width:900px){#dossier{grid-template-columns:15% minmax(0,1fr) 28%;gap:5px;padding:5px}.center-column{grid-template-columns:minmax(0,42%) minmax(0,58%);gap:6px;padding-top:85px;padding-bottom:34px}.right-column{gap:5px;padding-bottom:34px}.left-column{padding-top:95px}.stats{font-size:9px}.stat{margin-bottom:10px}.research-level{font-size:10px;margin-left:16px}.top-navigation{transform:scale(.88);transform-origin:top left}}
-@media(max-height:650px){#dossier{padding-top:5px;padding-bottom:5px}.center-column{padding-top:78px;padding-bottom:32px;gap:6px;grid-template-rows:minmax(0,1.1fr) minmax(0,.9fr)}.right-column{padding-top:8px;padding-bottom:32px;gap:5px}.profile-panel{padding:5px;gap:2px}.instructions{padding:8px 6px 14px}.instruction-card{padding:7px}.preference img{max-height:45px}.preference-info{font-size:8px}.gift-text p{font-size:7px}.equipment small{font-size:7px}.left-column{padding-top:85px}}
-@media(max-width:650px){#dossier{grid-template-columns:1fr;overflow-y:auto;display:block}.left-column{display:none}.center-column,.right-column{padding-top:95px;min-height:620px}#history-page{left:0;top:0;padding-top:95px}.guardian{width:76px}#secret-top{width:95vw;height:150px}.diagonal-nav{width:70vw}}
+
+:root {
+    --gold: #c4b987;
+    --orange: #ed994d;
+    --red: #ed454b;
+    --green: #65d53e;
+    --line: #827d55;
+    --black: #000;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    color: #e8dfae;
+    font-family: 'Oswald', Arial, sans-serif;
+    overflow: hidden;
+    user-select: none;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+#main {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    min-height: 500px;
+    overflow: hidden;
+    background: #000;
+}
+
+/* ===================================
+   ВИДЕО
+=================================== */
+
+#video-container {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: #000;
+}
+
+#video-container iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* ===================================
+   ОХРАННИКИ (ОПУЩЕНЫ В САМЫЙ НИЗ)
+=================================== */
+
+.guardian {
+    position: absolute;
+    bottom: 0; /* Прижимаем к самому низу */
+    top: auto; /* Сбрасываем центровку по вертикали если была */
+    transform: none; /* Убираем translateY(-50%) */
+    width: clamp(76px, 11vw, 145px);
+    z-index: 10;
+    pointer-events: none;
+}
+
+.guardian img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+#left-guardian {
+    left: 0;
+}
+
+#right-guardian {
+    right: 0;
+}
+
+#right-guardian img {
+    transform: scaleX(-1);
+}
+
+.guard-close {
+    position: absolute;
+    top: -25px;
+    width: 25px;
+    height: 25px;
+    background: #080808;
+    border: 1px solid #c5b77d;
+    color: #e9d99c;
+    font-size: 17px;
+    line-height: 20px;
+    z-index: 15;
+    pointer-events: auto;
+}
+
+#left-guardian .guard-close {
+    left: 0;
+}
+
+#right-guardian .guard-close {
+    right: 0;
+}
+
+.guard-close:hover {
+    background: #a82e2e;
+    color: white;
+}
+
+.restore-guard {
+    position: absolute;
+    bottom: 12px;
+    background: #111;
+    border: 1px solid #a89d6a;
+    color: #e5dba7;
+    font-size: 24px;
+    width: 45px;
+    height: 27px;
+    z-index: 20;
+    display: none;
+    line-height: 18px;
+}
+
+#restore-left {
+    left: 10px;
+}
+
+#restore-right {
+    right: 10px;
+}
+
+/* ===================================
+   ВЕРХНЯЯ СЕКРЕТНАЯ ПЛАШКА
+=================================== */
+
+#secret-top {
+    position: absolute;
+    top: -230px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(680px, 80vw);
+    height: 215px;
+    z-index: 30;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: top .65s cubic-bezier(.2,.8,.2,1);
+    cursor: pointer;
+}
+
+#secret-top.active {
+    top: 0;
+}
+
+#secret-top img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: top center;
+    filter: drop-shadow(0 4px 12px #000);
+}
+
+/* ===================================
+   МОДАЛЬНОЕ ОКНО КАРТИНКИ
+=================================== */
+
+#modal {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0,0,0,.94);
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+}
+
+#modal.active {
+    display: flex;
+}
+
+.modal-window {
+    position: relative;
+    width: min(900px, 95vw);
+    max-height: 92vh;
+    overflow-y: auto;
+    background: #050505;
+    border: 2px solid #c5a35d;
+    outline: 1px solid #52452d;
+    box-shadow: 0 0 35px rgba(208,133,48,.2);
+    padding: 12px;
+}
+
+.modal-heading {
+    text-align: center;
+    color: #efa34f;
+    font-weight: 700;
+    border-bottom: 1px solid #80613a;
+    padding: 10px;
+    font-size: 22px;
+}
+
+.modal-art {
+    display: block;
+    width: 100%;
+    max-height: 65vh;
+    object-fit: contain;
+    margin: 10px auto;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-top: 1px solid #80613a;
+    padding: 12px;
+}
+
+.modal-buttons button {
+    background: #111;
+    border: 1px solid #bd9a59;
+    color: #e8d9a6;
+    padding: 8px 22px;
+    font-weight: bold;
+}
+
+.modal-buttons button:hover {
+    background: #51331d;
+}
+
+/* ===================================
+   ИНТЕРФЕЙС ДОСЬЕ
+=================================== */
+
+#dossier {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: 240px 1fr 310px; /* Чёткие пропорции колонок */
+    gap: 12px;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s;
+    background: #000;
+    overflow: hidden;
+}
+
+#dossier.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ШАПКА С НАКЛОНОМ */
+
+.top-navigation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 88px;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.logo-kok {
+    position: absolute;
+    top: 1px;
+    left: 5px;
+    width: 75px;
+    height: 75px;
+    padding: 4px;
+    background: #080808;
+    border: 3px solid #d6bd43;
+    transform: rotate(-12deg); /* Тот самый поворот */
+    pointer-events: auto;
+}
+.logo-kok img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.diagonal-nav {
+    position: absolute;
+    top: 12px;
+    left: 95px;
+    width: 460px;
+    height: 48px;
+    border-top: 2px solid #b9a65e;
+    border-bottom: 2px solid #b9a65e;
+    transform: skewX(-15deg);
+    display: flex;
+    align-items: center;
+    background: rgba(15, 12, 5, 0.85);
+    pointer-events: auto;
+}
+
+.nav-tab {
+    background: transparent;
+    border: none;
+    color: #e6d18c;
+    font-weight: bold;
+    font-size: 13.5px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    white-space: nowrap;
+    transform: skewX(15deg);
+}
+
+.nav-tab.active {
+    color: #fff1a4;
+    text-shadow: 0 0 8px #e8c65b;
+}
+
+.nav-tab:hover {
+    color: white;
+}
+
+/* ===================================
+   БОКОВЫЕ ХАРАКТЕРИСТИКИ
+=================================== */
+
+.left-column {
+    position: relative;
+    min-width: 0;
+    padding-top: 112px; /* Опускаем весь блок чуть ниже */
+    overflow: visible;
+}
+
+.stats {
+    transform: skewX(-6deg);
+    margin-left: 8px;
+    margin-top: 10px;
+    color: #e8d79a;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.stat {
+    margin-bottom: 14px;
+    white-space: nowrap;
+}
+
+.stat span {
+    font-size: 18px;
+    margin-right: 8px;
+    color: #f5e6a4;
+    font-weight: bold;
+}
+
+.research-level {
+    margin-top: 35px;
+    color: #ffe6a2;
+    font-size: 15px;
+    line-height: 1.4;
+    font-weight: bold;
+    text-transform: uppercase;
+    transform: skewX(0deg);
+}
+
+/* ===================================
+   ЦЕНТРАЛЬНЫЕ БЛОКИ
+=================================== */
+
+.center-column {
+    min-width: 0;
+    height: 100%;
+    padding-top: 85px;
+    padding-bottom: 45px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.panel {
+    border: 1px solid var(--line);
+    outline: 1px solid rgba(190,175,100,.25);
+    background: rgba(8,6,2,.95);
+    position: relative;
+    min-width: 0;
+}
+
+.panel-title {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #f3dfa0;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 0 10px;
+    white-space: nowrap;
+    z-index: 2;
+    border: 1px solid var(--line);
+}
+
+.profile-panel {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.portrait {
+    display: block;
+    width: 100%;
+    height: 140px; /* Уменьшаем высоту, чтобы портрет встал компактно и квадратно */
+    object-fit: contain; /* Запрещаем обрезать края, картинка влезет целиком */
+    background: #050505; /* Задник для пустых зон */
+    border: 1px solid #514d3c;
+}
+
+.character-caption {
+    background: #171711;
+    text-align: center;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 3px;
+}
+
+.name-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #171711;
+    padding: 4px 10px;
+    font-size: 13px;
+    color: #ccc;
+}
+
+.name-row strong {
+    color: #ed994d;
+    font-size: 14px;
+}
+
+.character-data {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.data-box {
+    border: 1px solid #55523d;
+    padding: 6px;
+    text-align: center;
+    min-width: 0;
+    background: #0a0905;
+}
+
+.data-label {
+    color: #bcb18a;
+    font-size: 11px;
+    margin-bottom: 2px;
+}
+
+.data-value {
+    color: #e9dfa6;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.data-value img {
+    height: 24px;
+    object-fit: contain;
+    vertical-align: middle;
+}
+
+.attack-type {
+    font-size: 11px;
+    color: #ed994d;
+    font-weight: bold;
+}
+
+.attack-type small {
+    display: block;
+    color: #aaa;
+    font-weight: normal;
+}
+
+.condition-box {
+    border: 1px solid #514c37;
+    padding: 6px 8px;
+    background: #0a0905;
+}
+
+.condition-title {
+    color: #f3dfa0;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.condition {
+    font-size: 12px;
+    margin-bottom: 2px;
+}
+
+.condition.good { color: #65d53e; }
+.condition.normal { color: #e5d64f; }
+.condition.bad { color: #ed454b; }
+
+.condition span {
+    float: right;
+    color: #ddd;
+}
+
+/* ===================================
+   ИНСТРУКЦИИ (РУКОВОДСТВА ПО ОБРАЩЕНИЮ)
+=================================== */
+
+.instructions-box {
+    border: 1px solid var(--line);
+    outline: 1px solid rgba(190,175,100,.25);
+    background: rgba(8,6,2,.95);
+    position: relative;
+    padding: 12px 10px 8px 10px;
+    display: flex;
+    flex-direction: column;
+    height: 140px;
+}
+
+.instructions-scroll {
+    overflow-y: auto;
+    flex: 1;
+    font-size: 11px;
+    line-height: 1.45;
+    color: #d8cba0;
+    padding-right: 6px;
+}
+
+.instructions-scroll::-webkit-scrollbar { width: 4px; }
+.instructions-scroll::-webkit-scrollbar-thumb { background: #b9a65e; }
+
+.instructions-scroll p {
+    margin: 0 0 8px 0;
+}
+
+.instructions-scroll strong {
+    color: #ed994d;
+}
+
+/* ===================================
+   ПРЕДПОЧТЕНИЯ
+=================================== */
+
+.preferences {
+    padding: 12px 8px 8px;
+}
+
+.preference-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.preference {
+    border: 1px solid #60583f;
+    background: #0a0905;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding: 6px;
+}
+
+.preference img {
+    width: 100%;
+    height: 100%;
+    max-height: 52px; /* Чуть увеличили иконку */
+    object-fit: contain;
+}
+.preference-info {
+    font-size: clamp(9px, 0.8vw, 11px); /* Чуть увеличили шрифт уровня */
+}
+
+.preference-info strong {
+    color: #fff;
+    display: block;
+    margin-bottom: 1px;
+}
+
+/* ===================================
+   ПРАВЫЙ БЛОК
+=================================== */
+
+.right-column {
+    padding-top: 85px;
+    padding-bottom: 45px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.escape-panel {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 6px;
+}
+
+.escape-counter {
+    border: 1px solid #927346;
+    background: #0a0905;
+    padding: 6px;
+    text-align: center;
+}
+
+.escape-counter h3,
+.escape-result h3 {
+    font-size: 10.5px;
+    color: #d99a57;
+    margin: 0 0 4px;
+    text-transform: uppercase;
+}
+
+.counter-number {
+    font-size: 26px;
+    font-weight: bold;
+    color: #ed994d;
+}
+
+.escape-result {
+    border: 1px solid #ed454b;
+    background: rgba(237, 69, 75, 0.1);
+    text-align: center;
+    padding: 6px;
+}
+
+.escape-result strong {
+    display: block;
+    color: #ed454b;
+    font-size: 20px;
+    margin-top: 4px;
+    letter-spacing: 1px;
+}
+
+.gift-panel {
+    display: flex;
+    padding: 8px;
+    gap: 10px;
+    align-items: center;
+}
+
+.gift-panel img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+}
+
+.gift-text h3 {
+    font-size: 11.5px;
+    color: #e8dc9e;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.gift-text p {
+    font-size: 10px;
+    color: #aaa184;
+    margin: 2px 0 0 0;
+    line-height: 1.35;
+}
+
+.equipment-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.equipment {
+    border: 1px solid #88815b;
+    background: #0a0905;
+    position: relative;
+    padding: 8px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 130px;
+    justify-content: space-between;
+}
+
+.equipment h3 {
+    font-size: 11px;
+    color: #e5dba0;
+    margin: 0 0 6px 0;
+    text-transform: uppercase;
+}
+
+.equipment img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin: 4px 0;
+}
+
+.equipment strong {
+    color: #fff;
+    font-size: 11.5px;
+}
+
+.equipment small {
+    font-size: 9.5px;
+    color: #aaa;
+    margin-top: 2px;
+}
+
+.bottom-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px;
+    border: 1px solid var(--line);
+    background: #0a0905;
+}
+
+.bottom-info img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.bottom-info strong {
+    font-size: 15px;
+    color: #f2e4a7;
+    line-height: 1.1;
+}
+
+/* ===================================
+   ИСТОРИЯ
+=================================== */
+
+#history-page {
+    display: none;
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    padding: 95px 30px 55px;
+    color: #d6c99a;
+    background: #000;
+    scrollbar-color: #5d553d #000;
+    pointer-events: auto;
+}
+
+#history-page.active {
+    display: block;
+}
+
+.history-heading {
+    text-align: center;
+    font-size: clamp(22px, 3vw, 36px);
+    color: #e6d08d;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.history-subtitle {
+    text-align: center;
+    color: #bc7947;
+    font-size: 12px;
+    margin-bottom: 35px;
+}
+
+.history-section {
+    max-width: 1050px;
+    margin: 0 auto 35px;
+    padding: 0 12px;
+}
+
+.history-section h2 {
+    font-size: 19px;
+    color: #e0a05b;
+    border-bottom: 1px solid #665438;
+    padding-bottom: 8px;
+}
+
+.history-section p {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.9;
+    color: #b9ad8c;
+    text-align: justify;
+}
+
+.history-warning {
+    color: #df6262 !important;
+    text-align: center !important;
+    font-weight: bold;
+    border: 1px solid #713333;
+    padding: 12px;
+}
+
+/* ===================================
+   НИЖНИЕ СТРЕЛКИ И ВЫХОД
+=================================== */
+
+.bottom-navigation {
+    position: absolute;
+    bottom: 10px;
+    left: 14px;
+    z-index: 40;
+    display: flex;
+    gap: 8px;
+}
+
+.page-arrow {
+    width: 32px;
+    height: 32px;
+    background: #ffcc00;
+    border: none;
+    clip-path: polygon(100% 0, 0 50%, 100% 100%);
+    cursor: pointer;
+}
+
+.page-arrow.right {
+    transform: scaleX(-1);
+}
+
+#exit-button {
+    position: absolute;
+    right: 14px;
+    bottom: 10px;
+    z-index: 45;
+    background: #d93a3d;
+    color: #fff;
+    border: 1px solid #ff5252;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 6px 28px;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+/* ===================================
+   РЕЖИМЫ
+=================================== */
+
+#dossier.history-mode .left-column,
+#dossier.history-mode .top-navigation,
+#dossier.history-mode .bottom-navigation,
+#dossier.history-mode #exit-button {
+    display: block;
+}
+
+#dossier.history-mode .center-column,
+#dossier.history-mode .right-column {
+    display: none;
+}
+
+#dossier.history-mode .left-column {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 100%;
+}
+
+#dossier.history-mode #history-page {
+    display: block;
+    position: absolute;
+    left: 240px;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
 </style>
 </head>
+
 <body>
+
 <div id="main">
-  <div id="video-container"><div id="youtube-player"></div></div>
-  <div class="guardian" id="left-guardian"><button class="guard-close" aria-label="Скрыть левого охранника" onclick="hideGuardian('left')">×</button><img id="left-gif" src="user/system/ms/banana.gif" alt=""></div>
-  <div class="guardian" id="right-guardian"><button class="guard-close" aria-label="Скрыть правого охранника" onclick="hideGuardian('right')">×</button><img id="right-gif" src="user/system/ms/clife.gif" alt=""></div>
-  <button class="restore-guard" id="restore-left" onclick="restoreGuardian('left')">_</button><button class="restore-guard" id="restore-right" onclick="restoreGuardian('right')">_</button>
-  <audio id="secret-music" src="user/music/seca.mp3" loop preload="auto"></audio>
-  <div id="secret-top" onclick="openDossier()" title="Открыть досье"><img src="user/system/to.png" alt="Секретное досье"></div>
 
-  <div id="dossier">
-    <div class="top-navigation"><div class="logo-kok"><img src="user/system/kok.png" alt="Аномалия Детали"></div><div class="diagonal-nav"><button class="nav-tab active" id="details-tab" onclick="switchPage('details')">☢ АНОМАЛИЯ ДЕТАЛИ</button><button class="nav-tab" id="history-tab" onclick="switchPage('history')">☢ АНОМАЛИЯ ИСТОРИЯ</button></div></div>
-    <div class="left-column"><div class="stats"><div class="stat"><span>I</span> Скорость работы +5</div><div class="stat"><span>II</span> Шанс успеха +5%</div><div class="stat"><span>III</span> Скорость работы +5</div><div class="stat"><span>IV</span> Шанс успеха +5%</div><div class="research-level">УРОВЕНЬ<br>ИССЛЕДОВАНИЯ 4</div></div></div>
-
-    <div class="center-column" id="details-content">
-      <div class="panel profile-panel"><div class="panel-title">АНОМАЛИЯ БАЗОВАЯ ИНФОРМАЦИЯ</div><img class="portrait" src="user/lobo/portrey.png" alt="Алкаш Хантер"><div class="character-caption">Алкаш Хантер</div><div class="name-row"><span>X-00-35</span><strong>ALEPH</strong></div>
-        <div class="character-data"><div class="data-box"><div class="data-label">Тип атаки</div><div class="data-value"><img src="user/lobo/att.png" alt="Тип атаки"></div><div class="attack-type">ОРАНЖЕВЫЙ<small>0.1 - 1</small></div></div><div class="data-box"><div class="data-label">Даёт PE-Ячеек</div><div class="data-value"><img src="user/lobo/ii.png" alt="PE-ячейки"></div></div></div>
-        <div class="condition-box"><div class="condition-title">Эмоциональное состояние</div><div class="condition good">🟢 Хорошо<span>Пообещает</span></div><div class="condition normal">🟡 Нормально<span>Поноет</span></div><div class="condition bad">🔴 Ужасно<span>Лень</span></div></div>
-      </div>
-
-      <div class="panel instructions"><div class="panel-title">РУКОВОДСТВО ПО ОБРАЩЕНИЮ</div><div class="instruction-slider" id="instruction-slider">
-        <div class="instruction-card active"><small>Руководство по обращению 1</small><p>Объект X-00-35 рекомендуется содержать в помещении с постоянным доступом к воде и стандартным питанием. Не оставляйте рядом с ним открытые алкогольные напитки без предварительного согласования.</p></div>
-        <div class="instruction-card"><small>Руководство по обращению 2</small><p>При взаимодействии с объектом рекомендуется использовать спокойный тон. Излишнее давление может вызвать раздражение. Предпочтительны прямые и понятные просьбы.</p></div>
-        <div class="instruction-card"><small>Руководство по обращению 3</small><p>При обнаружении признаков эмоциональной нестабильности рекомендуется предложить объекту отдых. Не пытайтесь провоцировать его ради получения дополнительных данных.</p></div>
-        <div class="instruction-card"><small>Руководство по обращению 4</small><p>В случае проявления агрессии персоналу следует увеличить дистанцию. Запрещается использовать бутылки в качестве отвлекающих предметов.</p></div>
-        <div class="instruction-card"><small>Руководство по обращению 5</small><p>Объект положительно реагирует на поддержку. При успешном взаимодействии допускается предоставление дополнительных привилегий и увеличение времени свободного пребывания.</p></div>
-        <div class="instruction-card"><small>Руководство по обращению 6</small><p>В случае попытки побега немедленно сообщите ответственному исследователю. Не пытайтесь задерживать объект самостоятельно. Уровень допуска должен быть проверен.</p></div>
-      </div><div class="instruction-controls"><span class="instruction-count" id="instruction-count">1 / 6</span><input type="range" min="1" max="6" value="1" step="1" aria-label="Страница руководства" oninput="changeInstruction(this.value)"></div></div>
-
-      <div class="panel preferences"><div class="panel-title">АНОМАЛИЯ ПРЕДПОЧТЕНИЕ</div><div class="preference-grid">
-        <div class="preference"><img src="user/lobo/y1.png" alt=""><div class="preference-info"><strong>Пригрозить</strong><p>I — Низкий</p><p>II — Низкий</p><p>III — Обычный</p><p>IV — Высокий</p><p>V — Высокий</p></div></div>
-        <div class="preference"><img src="user/lobo/y2.png" alt=""><div class="preference-info"><strong>Прибухнуть</strong><p>I — Высокий</p><p>II — Высокий</p><p>III — Высокий</p><p>IV — Высокий</p><p>V — Высокий</p></div></div>
-        <div class="preference"><img src="user/lobo/y3.png" alt=""><div class="preference-info"><strong>Приободрить</strong><p>I — Высокий</p><p>II — Высокий</p><p>III — Высокий</p><p>IV — Высокий</p><p>V — Высокий</p></div></div>
-        <div class="preference"><img src="user/lobo/y4.png" alt=""><div class="preference-info"><strong>Игнор</strong><p>I — Низкий</p><p>II — Низкий</p><p>III — Низкий</p><p>IV — Низкий</p><p>V — Низкий</p></div></div>
-      </div></div>
+    <!-- YOUTUBE PLAYER -->
+    <div id="video-container">
+        <div id="youtube-player"></div>
     </div>
 
-    <div class="right-column" id="right-content">
-      <div class="escape-panel"><div class="escape-counter"><h3>Счётчик Клипо́та</h3><div class="counter-number">2</div></div><div class="escape-result"><h3>АНОМАЛИЯ ИНФОРМАЦИЯ О ПОБЕГЕ</h3><strong>СБЕГАЕТ</strong></div></div>
-      <div class="panel gift-panel"><img src="user/lobo/phone.png" alt="Пробуханные наушники"><div class="gift-text"><h3>Э.П.О.С. ДАР (ШАНС ПОЛУЧЕНИЯ: 0%)</h3><p><b>Пробуханные наушники.</b> Необычный артефакт, позволяющий услышать даже самые тихие звуки. При использовании владелец получает +6 к концентрации и +6 к сопротивлению внешним раздражителям. Иногда вместо полезных звуков слышится звон бутылок.</p></div></div>
-      <div class="equipment-row"><div class="equipment"><h3>Э.П.О.С. ОРУЖИЕ</h3><img src="user/lobo/usss.png" alt="Бутылка коньяка"><strong>Бутылка Коньяка</strong><small>Урон: 0.1–1.<br>Может нанести дополнительный психологический ущерб противнику.</small></div><div class="equipment"><h3>Э.П.О.С. БРОНЯ</h3><img src="user/lobo/dopp.png" alt="Амуниция Алкаша"><strong>Амуниция Алкаша</strong><small>Повышает стойкость владельца к внешним воздействиям. Дополнительная защита от последствий собственных решений.</small></div></div>
-      <div class="bottom-info"><img src="user/lobo/som.png" alt=""><strong>СОБРАНО<br>PE-ЯЧЕЕК</strong></div>
+    <!-- ОХРАННИКИ (ОПУЩЕНЫ СНИЗУ К ЭКРАНУ) -->
+    <div class="guardian" id="left-guardian">
+        <button class="guard-close" onclick="hideGuardian('left')">×</button>
+        <img id="left-gif" src="user/system/ms/banana.gif" alt="">
     </div>
 
-    <div id="history-page">
-      <div class="history-heading">АНОМАЛИЯ X-00-35</div><div class="history-subtitle">АРХИВНОЕ ДОСЬЕ / АЛЬТЕРНАТИВНАЯ ВЕТВЬ / ДОСТУП ALEPH</div>
-      <section class="history-section"><h2>01. ПРОИСХОЖДЕНИЕ ОБЪЕКТА</h2><p>До появления объекта X-00-35 в архивах исследовательского комплекса существовали записи о людях, которые демонстрировали необычайную устойчивость к аномальным воздействиям. Однако ни один из них не проявлял себя так, как альтернативная версия Хантера.</p><p>В отличие от оригинального Хантера, эта версия однажды приняла решение отказаться от привычки использовать алкоголь как способ ухода от проблем. Это не превратило его в совершенно другого человека: он сохранил упрямство, резкость, чувство юмора и склонность спорить. Изменился прежде всего способ, которым он справлялся с последствиями собственных решений.</p><p>Согласно восстановленной предыстории, переломный момент наступил после череды неудач, в которых он увидел повторяющийся сценарий. Вместо очередной попытки забыть произошедшее он решил разобраться с причинами. Решение далось ему нелегко, но именно оно стало отправной точкой альтернативной ветви.</p></section>
-      <section class="history-section"><h2>02. ОБНАРУЖЕНИЕ И ИЗОЛЯЦИЯ</h2><p>Первые сообщения об объекте поступили от наблюдателей, заметивших человека, чьи поведенческие реакции почти полностью совпадали с известным профилем Хантера, но при этом отсутствовала одна из наиболее устойчивых привычек оригинала. Первоначально сотрудники предположили, что имеют дело с обычным изменением поведения.</p><p>Повторные наблюдения показали, что различие глубже. Объект сохранял узнаваемые черты характера, однако демонстрировал необычно последовательную способность отказываться от старых моделей поведения. После серии проверок ему присвоили временный номер X-00-35 и перевели в отдельный сектор наблюдения.</p><p>Изоляция была организована не как наказание, а как мера предосторожности: исследователи хотели исключить влияние внешних факторов и понять, является ли альтернативная личность самостоятельной аномалией.</p></section>
-      <section class="history-section"><h2>03. ПЕРВЫЕ ЭКСПЕРИМЕНТЫ</h2><p>На первом этапе специалисты проверяли реакцию объекта на психологическое давление, угрозы, игнорирование и попытки манипуляции. Результаты оказались неоднородными: объект мог раздражаться, спорить и отказываться выполнять требования, но редко менял принятое решение только ради прекращения неприятного разговора.</p><p>Особенно интересной оказалась реакция на поддержку. При доброжелательном отношении объект чаще соглашался сотрудничать, задавал встречные вопросы и добровольно участвовал в тестах. Исследователи отметили, что доверие формировалось медленно, но после формирования сохранялось заметно дольше, чем ожидалось.</p><p>В одном из отчётов было указано: «Объект не демонстрирует покорность. Он демонстрирует осознанное согласие — и это принципиально разные вещи».</p></section>
-      <section class="history-section"><h2>04. СРАВНЕНИЕ С ОРИГИНАЛОМ</h2><p>Сравнительный анализ подтвердил совпадение ряда базовых особенностей: обе версии способны проявлять упрямство, эмоциональную резкость и склонность скрывать неловкость за шутками. Однако их способы преодоления трудностей различаются.</p><p>Оригинальная версия чаще стремится отстраниться от проблемы и заглушить неприятные переживания. Альтернативная версия предпочитает столкнуться с ними напрямую, хотя это не делает её безошибочной или постоянно дисциплинированной.</p><p>Исследователи отдельно предупреждают: X-00-35 нельзя считать «улучшенной копией». Это самостоятельная версия личности, сформированная другим выбором и другим опытом. Попытки противопоставлять две версии друг другу могут вызвать конфликт.</p></section>
-      <section class="history-section"><h2>05. ПЕРИОД НАБЛЮДЕНИЯ</h2><p>После завершения основных экспериментов объект оставили под наблюдением. Он не проявлял постоянной агрессии к персоналу, соблюдал большую часть установленных правил и регулярно интересовался результатами исследований. Со временем сотрудники стали обращаться к нему не только как к объекту изучения, но и как к участнику бесед о природе привычек и личного выбора.</p><p>Вместе с тем X-00-35 не утратил способности к неожиданным поступкам. В нескольких случаях он покидал назначенное помещение без разрешения, объясняя это тем, что «ему нужно было проветрить голову». Именно после этих эпизодов в карточке появилась отметка о риске побега.</p><p>Счётчик Клипо́та был установлен на уровне 2. Уровень исследования оставили прежним до завершения дополнительной серии тестов.</p></section>
-      <section class="history-section"><h2>06. ЗАКЛЮЧЕНИЕ ИССЛЕДОВАТЕЛЕЙ</h2><p>Альтернативный Хантер является редким примером того, как значительное изменение поведения может произойти без полного изменения личности. Его история не доказывает, что одна версия лучше другой. Она показывает, что даже при сходных исходных чертах разные решения способны привести к разным жизненным траекториям.</p><p>Последняя запись в архиве содержит заметку старшего исследователя:</p><p class="history-warning">«Мы ожидали увидеть ещё одну версию привычной аномалии. Вместо этого мы обнаружили человека, который однажды решил больше не повторять собственные ошибки. Он всё ещё спорит, всё ещё упрямится и всё ещё умудряется нарушать расписание. Но теперь хотя бы помнит, зачем вообще решил измениться».</p><p>Статус объекта: НАБЛЮДЕНИЕ ПРОДОЛЖАЕТСЯ.<br>Класс доступа: ALEPH.<br>Код объекта: X-00-35.<br>Угроза побега: ПРИСУТСТВУЕТ.</p></section>
+    <div class="guardian" id="right-guardian">
+        <button class="guard-close" onclick="hideGuardian('right')">×</button>
+        <img id="right-gif" src="user/system/ms/clife.gif" alt="">
     </div>
-    <div class="bottom-navigation"><button class="page-arrow" aria-label="Аномалия детали" onclick="switchPage('details')">◁</button><button class="page-arrow" aria-label="Аномалия история" onclick="switchPage('history')">▶</button></div>
-    <button id="exit-button" onclick="exitDossier()"><span>Выйти</span></button>
-  </div>
+
+    <!-- ВОССТАНОВЛЕНИЕ ОХРАННИКОВ -->
+    <button class="restore-guard" id="restore-left" onclick="restoreGuardian('left')">_</button>
+    <button class="restore-guard" id="restore-right" onclick="restoreGuardian('right')">_</button>
+
+    <!-- СЕКРЕТНАЯ МУЗЫКА -->
+    <audio id="secret-music" src="user/music/seca.mp3" loop></audio>
+
+    <!-- ВЕРХНЯЯ КАРТИНКА -->
+    <div id="secret-top" onclick="openDossier()">
+        <img src="user/system/to.png" alt="Секретная аномалия">
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО -->
+    <div id="modal" onclick="closeModalOutside(event)">
+        <div class="modal-window">
+            <div class="modal-heading">ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ</div>
+            <img class="modal-art" src="user/system/to.png" alt="">
+            <div class="modal-buttons">
+                <button onclick="closeModal()">ЗАКРЫТЬ</button>
+                <button onclick="closeModal()">ВЕРНУТЬСЯ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ОСНОВНОЕ ДОСЬЕ -->
+    <div id="dossier">
+
+        <!-- НАВИГАЦИЯ -->
+        <div class="top-navigation">
+            <div class="logo-kok">
+                <img src="user/lobo/kok.png" alt="Аномалия Детали">
+            </div>
+
+            <!-- Заменяем кнопки на такие: -->
+	<div class="diagonal-nav">
+    	<button class="nav-tab active" id="details-tab" onclick="switchPage('details')">
+        	<img src="user/system/anoma.png" alt="Детали" style="height: 24px; object-fit: contain;">
+    	</button>
+    	<button class="nav-tab" id="history-tab" onclick="switchPage('history')">
+        	<img src="user/system/goty.png" alt="История" style="height: 24px; object-fit: contain;">
+    	</button>
+	</div>
+        </div>
+
+        <!-- ЛЕВАЯ КОЛОНКА -->
+        <div class="left-column">
+            <div class="stats">
+                <div class="stat"><span>│</span> Скорость работы +5</div>
+                <div class="stat"><span>II</span> Шанс успеха +5</div>
+                <div class="stat"><span>III</span> Скорость работы +5</div>
+                <div class="stat"><span>IV</span> Шанс успеха +5</div>
+                
+                <div class="research-level">
+                    УРОВЕНЬ<br>ИССЛЕДОВАНИЯ 4
+                </div>
+            </div>
+        </div>
+
+        <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА -->
+        <div class="center-column" id="details-content">
+
+            <!-- ПРОФИЛЬ -->
+            <div class="panel profile-panel">
+                <div class="panel-title">АНОМАЛИЯ БАЗОВАЯ ИНФОРМАЦИЯ</div>
+                <img class="portrait" src="user/lobo/portrey.png" alt="Алкаш Хантер">
+                <div class="character-caption">Алкаш Хантер</div>
+                
+                <div class="name-row">
+                    <span>X-00-35</span>
+                    <strong>XAHT</strong>
+                </div>
+
+                <div class="character-data">
+                    <div class="data-box">
+                        <div class="data-label">Тип атаки</div>
+                        <div class="data-value" style="color: var(--orange); font-weight: 700; font-size: 20px; text-transform: uppercase;">
+    				ORANGE
+			</div>
+                        <div class="attack-type">
+                            ОРАНЖЕВЫЙ
+                            <small>0.1 - 1</small>
+                        </div>
+                    </div>
+
+                    <div class="data-box">
+                        <div class="data-label">Даёт PE-Ячеек</div>
+                        <div class="data-value">
+                            <img src="user/lobo/ii.png" alt="">
+                        </div>
+                        <div style="font-size: 16px; color: #fff; font-weight: bold; margin-top: 2px;">10</div>
+                    </div>
+                </div>
+
+                <div class="condition-box">
+                    <div class="condition-title">Эмоциональное состояние</div>
+                    <div class="condition good">🟢 Хорошо <span>8-10</span></div>
+                    <div class="condition normal">🟡 Нормально <span>4-7</span></div>
+                    <div class="condition bad">🔴 Ужасно <span>0-3</span></div>
+                </div>
+            </div>
+
+            <!-- ИНСТРУКЦИИ (РУКОВОДСТВА ПО ОБРАЩЕНИЮ) -->
+            <div class="instructions-box">
+                <div class="panel-title">АНОМАЛИЯ ИЗУЧЕННЫЕ ОСОБЕННОСТИ</div>
+                <div class="instructions-scroll">
+                    <p><strong>Руководство по обращению 1:</strong> В результате плохой работы, уровень счётчика Клипота понизится.</p>
+                    <p><strong>Руководство по обращению 2:</strong> В результате хорошей работы, уровень счётчика Клипота понизится.</p>
+                    <p><strong>Руководство по обращению 3:</strong> Если уровень Чрезвычайного положения достигнет 2-х, уровень счётчика Клипота понизится.</p>
+                    <p><strong>Руководство по обращению 4:</strong> При регулярном пополнении запасов коньяка стабильность камеры содержания возрастает.</p>
+                    <p><strong>Руководство по обращению 5:</strong> Работа "Прибодрить" позволяет избежать падения рассудка сотрудников в секторе.</p>
+                    <p><strong>Руководство по обращению 6:</strong> Ни в коем случае не отбирайте у Аномалии Пробуханые наушники во время трансляции.</p>
+                </div>
+            </div>
+
+            <!-- ПРЕДПОЧТЕНИЯ -->
+            <div class="panel preferences">
+                <div class="panel-title">АНОМАЛИЯ ПРЕДПОЧТЕНИЕ</div>
+                <div class="preference-grid">
+                    <div class="preference">
+                        <img src="user/lobo/y1.png" alt="">
+                        <div class="preference-info">
+                            <strong>Пригрозить</strong>
+                            <span>1: Низкий | 2: Низкий<br>3: Обычный<br>4: Высокий | 5: Высокий</span>
+                        </div>
+                    </div>
+
+                    <div class="preference">
+                        <img src="user/lobo/y2.png" alt="">
+                        <div class="preference-info">
+                            <strong>Прибухнуть</strong>
+                            <span>Все 1-5: Высокий</span>
+                        </div>
+                    </div>
+
+                    <div class="preference">
+                        <img src="user/lobo/y3.png" alt="">
+                        <div class="preference-info">
+                            <strong>Прибодрить</strong>
+                            <span>Все 1-5: Высокий</span>
+                        </div>
+                    </div>
+
+                    <div class="preference">
+                        <img src="user/lobo/y4.png" alt="">
+                        <div class="preference-info">
+                            <strong>Игнор</strong>
+                            <span>Все 1-5: Низкие</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ПРАВАЯ КОЛОНКА -->
+        <div class="right-column" id="right-content">
+
+            <!-- СБЕГАНИЕ -->
+            <div class="escape-panel">
+                <div class="escape-counter">
+                    <h3>Счётчик Клипота</h3>
+                    <div class="counter-number">2</div>
+                </div>
+
+                <div class="escape-result">
+                    <h3>ИНФОРМАЦИЯ О ПОБЕГЕ</h3>
+                    <strong>СБЕГАЕТ</strong>
+                </div>
+            </div>
+
+            <!-- ДАР -->
+            <div class="panel gift-panel">
+                <img src="user/lobo/phone.png" alt="">
+                <div class="gift-text">
+                    <h3>З.П.О.С. ДАР (ШАНС: 0%)</h3>
+                    <p><strong>Пробуханые наушники</strong><br>+15 скорость работы, +6 шанс успеха.</p>
+                </div>
+            </div>
+
+            <!-- ОРУЖИЕ И БРОНЯ -->
+            <div class="equipment-row">
+                <div class="equipment">
+                    <h3>З.П.О.С. ОРУЖИЕ</h3>
+                    <img src="user/lobo/usss.png" alt="">
+                    <strong>Бутылка Коньяка</strong>
+                    <small>Урон: Оранжевый (10-18)</small>
+                </div>
+
+                <div class="equipment">
+                    <h3>З.П.О.С. БРОНЯ</h3>
+                    <img src="user/lobo/dopp.png" alt="">
+                    <strong>Амуниция Алкаша</strong>
+                    <small>Защита от похмелья</small>
+                </div>
+            </div>
+
+            <!-- СОБРАННЫЕ ЯЧЕЙКИ -->
+            <div class="bottom-info">
+                <img src="user/lobo/som.png" alt="">
+                <strong>СОБРАНО RE-ЯЧЕЕК</strong>
+            </div>
+
+        </div>
+
+        <!-- ИСТОРИЯ -->
+        <div id="history-page">
+            <div class="history-heading">АНОМАЛИЯ X-00-35</div>
+            <div class="history-subtitle">АРХИВНОЕ ДОСЬЕ / АЛЬТЕРНАТИВНАЯ ВЕТВЬ</div>
+
+            <section class="history-section">
+                <h2>01. ПРОИСХОЖДЕНИЕ ОБЪЕКТА</h2>
+                <p>Данный субъект представляет собой альтернативную версию Хантера, добровольно сдавшую оригинального создателя научным сотрудникам корпорации с целью избавиться от бесконечного цикла стримов и пагубной тяги к напиткам.</p>
+            </section>
+        </div>
+
+        <!-- ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ В СТИЛЕ СТРЕЛОК -->
+        <div class="bottom-navigation">
+            <button class="page-arrow" onclick="switchPage('details')"></button>
+            <button class="page-arrow right" onclick="switchPage('history')"></button>
+        </div>
+
+        <!-- ВЫХОД -->
+        <button id="exit-button" onclick="exitDossier()">Выйти</button>
+
+    </div>
+
 </div>
+
 <script>
-let player=null,secretMode=false,dossierOpen=false;
-const videoID='Bm6Z7b_Q40o';
-const ytTag=document.createElement('script');ytTag.src='https://www.youtube.com/iframe_api';document.head.appendChild(ytTag);
-function onYouTubeIframeAPIReady(){player=new YT.Player('youtube-player',{videoId:videoID,playerVars:{autoplay:1,mute:1,controls:1,playsinline:1,rel:0,modestbranding:1,iv_load_policy:3},events:{onReady:function(e){e.target.mute();e.target.playVideo()},onStateChange:function(e){if(e.data===YT.PlayerState.PLAYING)leaveSecretMode();if(e.data===YT.PlayerState.PAUSED)enterSecretMode()}}})}
-function enterSecretMode(){if(secretMode)return;secretMode=true;const music=document.getElementById('secret-music');music.volume=.75;music.play().catch(function(){});document.getElementById('secret-top').classList.add('active');document.getElementById('left-gif').src='user/system/ms/notnot.gif';document.getElementById('right-gif').src='user/system/ms/notnot.gif'}
-function leaveSecretMode(){if(!secretMode)return;secretMode=false;const music=document.getElementById('secret-music');music.pause();music.currentTime=0;document.getElementById('secret-top').classList.remove('active');document.getElementById('left-gif').src='user/system/ms/banana.gif';document.getElementById('right-gif').src='user/system/ms/clife.gif';if(dossierOpen){dossierOpen=false;document.getElementById('dossier').classList.remove('visible')}}
-function hideGuardian(side){const g=document.getElementById(side+'-guardian');g.dataset.hidden='true';g.style.display='none';document.getElementById('restore-'+side).style.display='block'}
-function restoreGuardian(side){const g=document.getElementById(side+'-guardian');g.dataset.hidden='false';g.style.display='block';document.getElementById('restore-'+side).style.display='none'}
-function openDossier(){if(!secretMode)return;dossierOpen=true;document.getElementById('dossier').classList.add('visible');document.getElementById('secret-top').style.display='none';document.getElementById('left-guardian').style.display='none';document.getElementById('right-guardian').style.display='none';document.getElementById('restore-left').style.display='none';document.getElementById('restore-right').style.display='none'}
-function exitDossier(){dossierOpen=false;document.getElementById('dossier').classList.remove('visible');document.getElementById('secret-top').style.display='flex';if(secretMode){['left','right'].forEach(function(side){const g=document.getElementById(side+'-guardian');g.style.display=g.dataset.hidden==='true'?'none':'block';document.getElementById('restore-'+side).style.display=g.dataset.hidden==='true'?'block':'none'})}}
-function switchPage(page){const d=document.getElementById('dossier');const a=document.getElementById('details-tab');const b=document.getElementById('history-tab');if(page==='history'){d.classList.add('history-mode');a.classList.remove('active');b.classList.add('active')}else{d.classList.remove('history-mode');a.classList.add('active');b.classList.remove('active')}}
-function changeInstruction(value){document.querySelectorAll('.instruction-card').forEach(function(card,i){card.classList.toggle('active',i===Number(value)-1)});document.getElementById('instruction-count').textContent=value+' / 6'}
-document.getElementById('left-guardian').dataset.hidden='false';document.getElementById('right-guardian').dataset.hidden='false';
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&dossierOpen)exitDossier()});
+let player;
+let secretMode = false;
+let playerReady = false;
+
+const videoID = 'Bm6Z7b_Q40o';
+
+const tag = document.createElement('script');
+tag.src = 'https://www.youtube.com/iframe_api';
+document.head.appendChild(tag);
+
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('youtube-player', {
+    videoId: videoID,
+    playerVars: {
+        autoplay: 1,
+        mute: 0,        // 0 — звук включен (1 — звук выключен)
+        controls: 1,
+        playsinline: 1,
+        rel: 0
+    },
+    events: {
+        onReady: function(event) {
+            playerReady = true;
+            event.target.playVideo();
+        },
+        onStateChange: function(event) {
+            if(event.data === YT.PlayerState.PLAYING) {
+                leaveSecretMode();
+            }
+            if(event.data === YT.PlayerState.PAUSED) {
+                enterSecretMode();
+            }
+        }
+    }
+});
+}
+
+function enterSecretMode() {
+    if(secretMode) return;
+    secretMode = true;
+
+    const music = document.getElementById('secret-music');
+    music.volume = 0.75;
+    music.loop = true;
+    music.play().catch(() => {});
+
+    document.getElementById('secret-top').classList.add('active');
+    document.getElementById('left-gif').src = 'user/system/ms/notnot.gif';
+    document.getElementById('right-gif').src = 'user/system/ms/notnot.gif';
+}
+
+function leaveSecretMode() {
+    if(!secretMode) return;
+    secretMode = false;
+
+    const music = document.getElementById('secret-music');
+    music.pause();
+    music.currentTime = 0;
+
+    document.getElementById('secret-top').classList.remove('active');
+    document.getElementById('left-gif').src = 'user/system/ms/banana.gif';
+    document.getElementById('right-gif').src = 'user/system/ms/clife.gif';
+}
+
+function hideGuardian(side) {
+    document.getElementById(side + '-guardian').style.display = 'none';
+    document.getElementById('restore-' + side).style.display = 'block';
+}
+
+function restoreGuardian(side) {
+    document.getElementById(side + '-guardian').style.display = 'block';
+    document.getElementById('restore-' + side).style.display = 'none';
+}
+
+function openModal() {
+    document.getElementById('modal').classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+}
+
+function closeModalOutside(event) {
+    if(event.target.id === 'modal') closeModal();
+}
+
+function switchPage(page) {
+    const dossier = document.getElementById('dossier');
+    const detailsTab = document.getElementById('details-tab');
+    const historyTab = document.getElementById('history-tab');
+
+    if(page === 'history') {
+        dossier.classList.add('history-mode');
+        detailsTab.classList.remove('active');
+        historyTab.classList.add('active');
+    } else {
+        dossier.classList.remove('history-mode');
+        detailsTab.classList.add('active');
+        historyTab.classList.remove('active');
+    }
+}
+
+function openDossier() {
+    if (!secretMode) return;
+    document.getElementById('dossier').classList.add('visible');
+    document.getElementById('secret-top').style.display = 'none';
+    document.getElementById('left-guardian').style.display = 'none';
+    document.getElementById('right-guardian').style.display = 'none';
+    document.getElementById('restore-left').style.display = 'none';
+    document.getElementById('restore-right').style.display = 'none';
+}
+
+function exitDossier() {
+    document.getElementById('dossier').classList.remove('visible');
+    document.getElementById('secret-top').style.display = 'flex';
+    if (secretMode) {
+        document.getElementById('left-guardian').style.display = 'block';
+        document.getElementById('right-guardian').style.display = 'block';
+    }
+}
+
+document.addEventListener('keydown', function(event) {
+    if(event.key === 'Escape') closeModal();
+});
 </script>
-</body></html>
+
+</body>
+</html>

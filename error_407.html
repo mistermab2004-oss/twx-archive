@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ошибка 407</title>
+<link rel="icon" type="image/png" href="user/system/wood_icon.png">
+<style>
+@font-face{font-family:Pixel;src:local("Courier New"),local("Consolas")}
+:root{--field:#54285a;--pink:#ed174c;--magenta:#b00080;--white:#f7f5ff}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100vh;width:100vw;background:#000;color:var(--white);font-family:Pixel,"Courier New",monospace;overflow:hidden}
+button{font-family:inherit}
+
+.page{position:relative;width:100%;height:100vh;overflow:hidden}
+.error-box{position:fixed;top:18px;left:18px;z-index:20;display:flex;align-items:center;gap:12px;background:#000;border:3px solid #eee;padding:9px 13px;box-shadow:4px 4px 0 #54285a;font-size:clamp(12px,1.4vw,18px);line-height:1.4}
+.error-box img{width:30px;height:30px;object-fit:contain}
+
+/* Сцена: Цитата слева, Дерево крупнее справа, высота под уменьшенный футер */
+.scene{display:flex;align-items:flex-end;justify-content:space-between;gap:2vw;height:calc(100vh - 70px);max-width:1400px;margin:auto;padding:60px 28px 0;box-sizing:border-box}
+.tree-button{border:0;background:transparent;padding:0;cursor:pointer;display:block;flex:0 0 min(62vw,780px);max-width:780px;outline:none;margin-left:auto;align-self:flex-end}
+.tree-button img{display:block;width:100%;height:auto;max-height:calc(100vh - 90px);object-fit:contain;image-rendering:pixelated}
+.tree-button:hover{filter:brightness(1.12)}
+.tree-button:active{transform:translateY(3px)}
+.side-note{color:#777;font-size:14px;max-width:300px;line-height:1.8;padding-bottom:8vh;flex-shrink:0}
+
+/* Футер сделан меньше */
+.footer{position:absolute;bottom:0;left:0;width:100%;height:70px;background:var(--field);border-top:4px solid #3a1d40;display:flex;align-items:center;justify-content:center;color:#9d6ca5;font-size:12px}
+
+/* Диалоговое окно */
+.dialog{position:fixed;left:5%;bottom:24px;width:90%;min-height:160px;z-index:30;background:#000;border:4px solid #eee;box-shadow:0 0 0 3px #777,0 0 0 7px #000;display:none;padding:24px 32px 28px;cursor:pointer}
+.dialog.show{display:block}
+.dialog:before,.dialog:after,.dialog .corner-a,.dialog .corner-b{content:"✣";position:absolute;color:#eee;font-size:25px;background:#000}
+.dialog:before{top:-17px;left:-17px}
+.dialog:after{bottom:-17px;right:-17px}
+.dialog .corner-a{top:-17px;right:-17px}
+.dialog .corner-b{bottom:-17px;left:-17px}
+.dialog-text{font-size:clamp(14px,1.6vw,20px);line-height:1.65;white-space:pre-wrap;min-height:90px}
+.dialog-hint{position:absolute;right:22px;bottom:9px;color:#aaa;font-size:15px;animation:blink 1s steps(2,start) infinite}
+@keyframes blink{to{visibility:hidden}}
+
+/* Выбор в диалоге (Кнопка "Я приготовил") */
+.dialog-choices{position:absolute;top:-55px;left:0;display:none;gap:12px;z-index:35}
+.dialog-choices.show{display:flex}
+.choice-btn{background:#000;border:3px solid #eee;color:#ffff00;padding:8px 18px;font-size:clamp(14px,1.4vw,18px);cursor:pointer;box-shadow:3px 3px 0 #54285a;display:flex;align-items:center;gap:8px;outline:none}
+.choice-btn:hover{background:#111;border-color:#ffff00;transform:scale(1.03)}
+.choice-heart{color:#ffff00;font-size:1.1em}
+
+/* Модальные окна для картинок */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:60;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal-card{position:relative;max-width:min(90vw,700px);max-height:88vh;display:flex;align-items:center;justify-content:center;animation:pop .22s steps(4)}
+.modal-card img{max-width:100%;max-height:82vh;object-fit:contain;image-rendering:pixelated}
+.close{position:absolute;top:-18px;right:-18px;width:42px;height:42px;border:3px solid white;background:#000;color:#fff;font:bold 25px monospace;cursor:pointer}
+@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+
+.music{position:fixed;right:18px;top:18px;z-index:40}
+.music-main{width:48px;height:48px;background:#000;border:3px solid var(--pink);color:var(--pink);font-size:22px;cursor:pointer}
+.music-menu{display:none;position:absolute;right:0;top:54px;width:220px;padding:15px;background:#000;border:3px solid var(--pink);color:#fff;box-shadow:4px 4px 0 #54285a}
+.music-menu.open{display:block}
+.music-menu label{display:block;margin:10px 0}
+.music-menu input{width:100%;accent-color:var(--pink)}
+.home{position:fixed;right:18px;bottom:18px;z-index:40;width:48px;height:48px;display:grid;place-items:center;background:#000;border:3px solid var(--pink);color:var(--pink);font-size:22px;text-decoration:none}
+
+@media(max-width:650px){
+.scene{padding-top:10vh;display:flex;flex-direction:column-reverse;justify-content:flex-end}
+.tree-button{width:100%;max-width:none;margin:auto}
+.side-note{padding:10px 5%;max-width:none}
+.dialog{left:4%;width:92%;bottom:16px;padding:20px 18px}
+.dialog-text{font-size:14px}
+.footer{height:50px}
+.error-box{top:8px;left:8px}
+.music{top:8px;right:8px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="error-box">
+<img src="user/system/wood_icon.png" alt="">
+<span>На этот вопрос нет ответа.<br>Ошибка 407.</span>
+</div>
+
+<div class="music">
+<button class="music-main" id="musicButton">♫</button>
+<div class="music-menu" id="musicMenu">
+<div>МУЗЫКА ДЕРЕВА</div>
+<label>Громкость
+<input id="volume" type="range" min="0" max="1" step=".01" value=".55">
+</label>
+<button id="toggleMusic" style="background:#000;color:#fff;border:2px solid #ed174c;padding:7px 12px;cursor:pointer">Выключить</button>
+</div>
+</div>
+
+<main class="scene">
+<div class="side-note">…<br><br>Иногда ответ находится не там, где ты его ищешь.</div>
+<button class="tree-button" id="tree" title="Поговорить с деревом">
+<img src="user/system/man.gif" alt="Дерево с человеком за ним">
+</button>
+</main>
+
+<footer class="footer"></footer>
+
+<div class="dialog" id="dialog" role="button" tabindex="0">
+<span class="corner-a"></span><span class="corner-b"></span>
+<div class="dialog-choices" id="dialogChoices">
+<button class="choice-btn" id="cookedBtn"><span class="choice-heart">💛</span> Я приготовил</button>
+</div>
+<div class="dialog-text" id="dialogText"></div>
+<div class="dialog-hint" id="hint">▼</div>
+</div>
+</div>
+
+<a class="home" href="gartic_phone_artistuno_gallery.html" title="Домой">⌂</a>
+
+<!-- ЯЙЦО -->
+<div class="modal" id="eggModal">
+<div class="modal-card">
+<img src="user/system/egggs.png" alt="Яйцо">
+<button class="close" aria-label="Закрыть">×</button>
+</div>
+</div>
+
+<!-- ЯИЧНИЦА -->
+<div class="modal" id="panModal">
+<div class="modal-card">
+<img src="user/system/egga.png" alt="Яичница">
+<button class="close" aria-label="Закрыть">×</button>
+</div>
+</div>
+
+<audio id="music" loop preload="auto">
+<source src="user/music/lost.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const dialog=document.getElementById('dialog');
+const textBox=document.getElementById('dialogText');
+const hint=document.getElementById('hint');
+const dialogChoices=document.getElementById('dialogChoices');
+const cookedBtn=document.getElementById('cookedBtn');
+
+const eggModal=document.getElementById('eggModal');
+const panModal=document.getElementById('panModal');
+
+const music=document.getElementById('music');
+const musicMenu=document.getElementById('musicMenu');
+
+let stage=0;
+let line=0;
+let active=false;
+let typing=false;
+let fullLine="";
+let typeTimer=null;
+let musicOn=true;
+
+/* ДИАЛОГИ */
+const speech=[
+
+/* 0: Основной монолог дерева */
+[
+"…",
+"Ты пришёл сюда за ответом.",
+"Забавно. Люди часто ищут ответы в местах, где их никогда не было.",
+"Но прежде чем я отдам тебе что-нибудь… послушай.",
+"Я не собираюсь говорить, что жизнь проста. Она не проста. Иногда всё идёт наперекосяк, иногда ты устаёшь настолько, что даже подняться с кресла кажется отдельным испытанием.",
+"И всё же ответственность — это не цепь, которую кто-то надевает на тебя. Это решение. Решение признать: если я хочу, чтобы что-то изменилось, мне придётся сделать хотя бы маленький шаг.",
+"Лень умеет говорить очень убедительно. Она шепчет: «Завтра». Потом: «На следующей неделе». А потом ты оглядываешься и понимаешь, что мечта всё ещё стоит на том же месте.",
+"Отдыхать — нормально. Останавливаться, чтобы перевести дыхание, — нормально. Но не путай отдых с отказом от себя.",
+"Не нужно быть идеальным. Не нужно каждый день побеждать. Нужно лишь не превращать одну неудачу в окончательный приговор.",
+"Если ты ошибся — исправь, если можешь. Если не можешь — извлеки урок. Если страшно — иди осторожно, но иди. Цель не обязана быть огромной. Иногда цель на сегодня — просто начать.",
+"И знаешь… я слышал, ты стримишь. Записываешь ролики. Может показаться, что это пустяк: включить игру, нажать запись, поговорить с экраном.",
+"Но это не пустяк. Ты создаёшь что-то, что останется после того, как вечер закончится. Ты учишься говорить, показывать, делиться моментами. Ты собираешь собственную историю — кусочек за кусочком.",
+"Зритель может не понять, сколько сил ушло на запись. Он не увидит, как ты переживал из-за ошибки, как пересматривал материал, как сомневался, стоит ли вообще выкладывать.",
+"И это нормально. Не каждый обязан понимать твой путь. Но тебе не нужно чужое разрешение, чтобы продолжать заниматься тем, что для тебя важно.",
+"Не измеряй всё только просмотрами. Иногда один человек улыбнулся твоему ролику. Иногда ты сам пересмотрел его и понял, что стал лучше. Это тоже результат.",
+"Записывай, когда можешь. Стримь, когда есть силы. Учись, экспериментируй, сохраняй воспоминания. Не превращай увлечение в наказание — пусть оно остаётся твоим.",
+"И главное: не сдавайся только потому, что сейчас никто не хлопает.",
+"…",
+"Ладно. Я слишком много говорил. Вот тебе яйцо.",
+"Пусть оно будет маленьким знаком удачи. Не обещанием, что всё получится само, а напоминанием: будущее ещё не написано. И ты можешь приложить к нему руку.",
+"Береги его. Или хотя бы не урони."
+],
+
+/* 1: Пасхалка про клочок красно-черной бумаги */
+[
+"Ты вернулся.",
+"Здесь никого нет. Только клочок красно-чёрной бумаги.",
+"…"
+],
+
+/* 2: Рецепт как полноценный диалог дерева */
+[
+"Ты подумал, что яйцо тебе не нужно.",
+"И решил приготовить яичницу.",
+"Что ж. В этом тоже есть своя логика.",
+"Яичница. Рецепт, который я однажды запомнил.",
+"Я достаю яйцо, сковородку, немного масла и соль. Сначала ставлю сковородку на плиту и включаю средний огонь. Не тороплюсь: холодная сковородка и слишком сильный жар — плохое сочетание.",
+"Я добавляю немного масла и жду, пока оно равномерно разойдётся по поверхности. Затем аккуратно разбиваю яйцо: можно в маленькую чашку, чтобы случайная скорлупа не испортила завтрак.",
+"Я выливаю яйцо на сковородку, стараясь не повредить желтки. Чуть солю белок. Жду, пока он станет белым и схватится, а края слегка подрумянятся. Если белок сверху остаётся жидким, я накрываю сковородку крышкой на минуту — пар доведёт его до готовности.",
+"Я выключаю огонь, перекладываю яичницу на тарелку и подаю её сразу. Рядом можно положить хлеб, овощи или что-нибудь ещё. Главное — не забыть поесть.",
+"Вот и всё. Никакой магии. Просто маленькое дело, которое ты сделал для себя."
+],
+
+/* 3: После приготовления яичницы */
+[
+"Вот так-то лучше.",
+"Иногда самое важное дело на день — просто нормально позавтракать.",
+"Не забывай заботиться о себе. Большие цели подождут, пока ты подкрепишься.",
+"Приятного аппетита."
+]
+
+];
+
+/* ДИАЛОГОВАЯ СИСТЕМА */
+function showDialog(){
+dialog.classList.add('show');
+}
+
+function hideDialog(){
+dialog.classList.remove('show');
+dialogChoices.classList.remove('show');
+}
+
+function stopTyping(){
+clearInterval(typeTimer);
+typing=false;
+}
+
+function displayLine(){
+stopTyping();
+dialogChoices.classList.remove('show');
+
+fullLine=speech[stage][line]||"";
+textBox.textContent="";
+hint.style.display="none";
+typing=true;
+
+let i=0;
+
+typeTimer=setInterval(()=>{
+textBox.textContent=fullLine.slice(0,++i);
+
+if(i>=fullLine.length){
+stopTyping();
+if(stage===2 && line===speech[2].length-1){
+dialogChoices.classList.add('show');
+}else{
+hint.style.display="block";
+}
+}
+},28);
+}
+
+function advance(){
+if(!active)return;
+
+if(stage===2 && line===speech[2].length-1 && !typing){
+return;
+}
+
+if(typing){
+stopTyping();
+textBox.textContent=fullLine;
+if(stage===2 && line===speech[2].length-1){
+dialogChoices.classList.add('show');
+}else{
+hint.style.display="block";
+}
+return;
+}
+
+line++;
+
+if(line<speech[stage].length){
+displayLine();
+return;
+}
+
+active=false;
+hideDialog();
+
+if(stage===0){
+openModal(eggModal);
+}
+else if(stage===3){
+stage=1;
+}
+}
+
+function beginTalk(targetStage=0){
+active=true;
+stage=targetStage;
+line=0;
+showDialog();
+displayLine();
+}
+
+/* ДЕРЕВО */
+document.getElementById('tree').addEventListener('click',()=>{
+if(active){
+advance();
+return;
+}
+
+if(stage===0){
+beginTalk(0);
+return;
+}
+
+beginTalk(1);
+});
+
+/* КЛИК ПО ДИАЛОГУ ДЛЯ ПРОДОЛЖЕНИЯ */
+dialog.addEventListener('click',advance);
+
+dialog.addEventListener('keydown',e=>{
+if(e.key==='Enter'||e.key===' '){
+e.preventDefault();
+advance();
+}
+});
+
+/* МОДАЛЬНЫЕ ОКНА */
+function openModal(m){
+m.classList.add('open');
+}
+
+function closeModal(m){
+m.classList.remove('open');
+}
+
+/* ЗАКРЫТИЕ ЯЙЦА -> ДИАЛОГ-РЕЦЕПТ */
+eggModal.querySelector('.close').addEventListener('click',()=>{
+closeModal(eggModal);
+beginTalk(2);
+});
+
+/* КНОПКА "Я ПРИГОТОВИЛ" ИЗ ВЫБОРА ДИАЛОГА */
+cookedBtn.addEventListener('click',(e)=>{
+e.stopPropagation();
+dialogChoices.classList.remove('show');
+hideDialog();
+active=false;
+openModal(panModal);
+});
+
+/* ЗАКРЫТИЕ ЯИЧНИЦЫ -> ФИНАЛЬНЫЙ ДИАЛОГ */
+panModal.querySelector('.close').addEventListener('click',()=>{
+closeModal(panModal);
+beginTalk(3);
+});
+
+/* ЗАКРЫТИЕ ПО КЛИКУ НА ФОН */
+eggModal.addEventListener('click',e=>{
+if(e.target===eggModal)
+eggModal.querySelector('.close').click();
+});
+
+panModal.addEventListener('click',e=>{
+if(e.target===panModal)
+panModal.querySelector('.close').click();
+});
+
+/* МУЗЫКА */
+document.getElementById('musicButton').addEventListener('click',()=>{
+musicMenu.classList.toggle('open');
+});
+
+document.getElementById('volume').addEventListener('input',e=>{
+music.volume=Number(e.target.value);
+});
+
+document.getElementById('toggleMusic').addEventListener('click',async()=>{
+if(musicOn){
+music.pause();
+musicOn=false;
+document.getElementById('toggleMusic').textContent='Включить';
+}
+else{
+try{
+await music.play();
+musicOn=true;
+document.getElementById('toggleMusic').textContent='Выключить';
+}catch(e){}
+}
+});
+
+/* АВТОЗАПУСК */
+music.volume=.55;
+music.play().catch(()=>{
+document.addEventListener('pointerdown',()=>{
+if(musicOn)
+music.play().catch(()=>{});
+},{once:true});
+});
+</script>
+</body>
+</html>

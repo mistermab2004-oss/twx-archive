@@ -119,6 +119,36 @@
             from { stroke-dashoffset: 0; }
             to { stroke-dashoffset: 44; } /* 2 * PI * r(7) = ~44 */
         }
+
+        /* Секретная кнопка в шапке */
+        .secret-jacky-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            background: transparent;
+            border: none;
+            outline: none;
+            box-shadow: none;
+            cursor: default;
+            text-decoration: none;
+        }
+        .secret-jacky-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            opacity: 0;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none;
+        }
+        .secret-jacky-btn:hover img {
+            opacity: 1;
+            transform: scale(1.08);
+        }
     </style>
 </head>
 <body class="dot-pattern min-h-screen flex flex-col justify-between text-white relative selection:bg-pink-500 selection:text-white p-4">
@@ -156,6 +186,11 @@
 
             <!-- Кнопки управления -->
             <div class="flex items-center space-x-2 sm:space-x-3">
+                <!-- Секретная невидимая кнопка-картинка -->
+                <a href="ukrop.html" class="secret-jacky-btn" aria-label="">
+                    <img src="user/system/jacky.png" alt="">
+                </a>
+
                 <a href="index.html" class="bg-[#a3ff00] hover:bg-[#8ee000] text-purple-950 font-black px-4 sm:px-5 py-2.5 rounded-xl retro-shadow border-2 border-white/60 text-xs sm:text-sm cursor-pointer transition-transform uppercase no-underline">
                     Главная
                 </a>
@@ -177,9 +212,9 @@
                 
                 <!-- Стрелочки и точки (таймер) -->
                 <div class="flex items-center justify-center space-x-3 w-full px-2">
-                    <button onclick="prevLeftSlide()" class="w-7 h-7 bg-yellow-400 text-purple-900 font-black rounded-full hover:bg-yellow-300 retro-shadow cursor-pointer flex items-center justify-center text-xs flex-shrink-0">&lt;</button>
+                    <button onclick="prevLeftSlide()" class="w-7 h-7 bg-yellow-400 text-purple-900 font-black rounded-full hover:bg-yellow-300 retro-shadow cursor-pointer flex items-center justify-center text-xs flex-shrink-0"><</button>
                     <div id="left-dots" class="flex gap-1 items-center flex-wrap justify-center max-w-[120px]"></div>
-                    <button onclick="nextLeftSlide()" class="w-7 h-7 bg-yellow-400 text-purple-900 font-black rounded-full hover:bg-yellow-300 retro-shadow cursor-pointer flex items-center justify-center text-xs flex-shrink-0">&gt;</button>
+                    <button onclick="nextLeftSlide()" class="w-7 h-7 bg-yellow-400 text-purple-900 font-black rounded-full hover:bg-yellow-300 retro-shadow cursor-pointer flex items-center justify-center text-xs flex-shrink-0">></button>
                 </div>
             </div>
         </aside>
@@ -224,9 +259,9 @@
                 
                 <!-- Стрелочки и точки (таймер) -->
                 <div class="flex items-center justify-center space-x-4 w-full">
-                    <button onclick="prevRightSlide()" class="w-8 h-8 bg-yellow-400 text-purple-900 font-black rounded-full hover:bg-yellow-300 retro-shadow cursor-pointer flex items-center justify-center text-sm flex-shrink-0">&lt;</button>
+                    <button onclick="prevRightSlide()" class="w-8 h-8 bg-yellow-400 text-purple-900 font-black rounded-full hover:bg-yellow-300 retro-shadow cursor-pointer flex items-center justify-center text-sm flex-shrink-0"><</button>
                     <div id="right-dots" class="flex gap-2 items-center flex-wrap justify-center"></div>
-                    <button onclick="nextRightSlide()" class="w-8 h-8 bg-yellow-400 text-purple-900 font-black rounded-full hover:bg-yellow-300 retro-shadow cursor-pointer flex items-center justify-center text-sm flex-shrink-0">&gt;</button>
+                    <button onclick="nextRightSlide()" class="w-8 h-8 bg-yellow-400 text-purple-900 font-black rounded-full hover:bg-yellow-300 retro-shadow cursor-pointer flex items-center justify-center text-sm flex-shrink-0">></button>
                 </div>
             </div>
         </aside>

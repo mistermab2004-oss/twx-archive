@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>КАК БЫ ВЫГЛЯДЕЛ АРХИВ ПО ДЖЕКБОКС — БРЕДОВУХА</title>
+<link rel="icon" href="user/system/twxj.png">
+
+<style>
+:root {
+  --olive:#a5b95e;
+  --black:#050604;
+  --cream:#ffffdc;
+  --gold:#d99a31;
+  --yellow:#ffdc00;
+  --cyan:#00dce9;
+  --blue:#0b2eff;
+  --pixel:"Arial Black","Impact",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:var(--pixel)}
+body{
+  overflow:hidden;
+  background-color:var(--olive);
+  background-image:
+  linear-gradient(90deg,transparent 11.6vw,rgba(204,226,124,.38) 12.65vw,transparent 12.65vw 24.8vw,rgba(204,226,124,.36) 25.85vw,transparent 25.85vw 37.1vw,rgba(204,226,124,.38) 38.15vw,transparent 38.15vw 49.6vw,rgba(204,226,124,.36) 50.65vw,transparent 50.65vw 62.1vw,rgba(204,226,124,.36) 63.15vw,transparent 63.15vw 74.6vw,rgba(204,226,124,.36) 75.65vw,transparent 75.65vw),
+  linear-gradient(0deg,transparent 12.9vh,rgba(204,226,124,.35) 14vh,transparent 14vh 25.8vh,rgba(204,226,124,.36) 27vh,transparent 27vh 38.7vh,rgba(204,226,124,.34) 39.9vh,transparent 39.9vh 51.7vh,rgba(204,226,124,.34) 52.9vh,transparent 52.9vh 64.7vh,rgba(204,226,124,.34) 65.9vh,transparent 65.9vh 77.7vh,rgba(204,226,124,.34) 78.9vh,transparent 78.9vh);
+}
+button{font:inherit;color:inherit}
+button:focus-visible{outline:4px dashed yellow;outline-offset:4px}
+
+/* ===================== ГЛАВНЫЙ АРХИВ ===================== */
+
+#archiveScreen{
+  position:relative;width:100vw;height:100dvh;min-height:620px;overflow:hidden;
+}
+.hero-black{
+  position:absolute;z-index:1;inset:0 0 auto;height:46%;
+  background:#050604;clip-path:polygon(0 25%,100% 0,100% 63%,0 100%);
+}
+.hero-purple{
+  position:absolute;z-index:2;inset:25.5% 0 auto;height:21%;
+  background:#bd00ff;clip-path:polygon(0 75%,100% 0,100% 81%,0 100%);
+}
+.hero-title{
+  position:absolute;z-index:3;top:5.5%;left:25.4%;width:71%;height:26%;
+  padding:0 1.2vw;display:flex;align-items:center;justify-content:center;
+  color:#ffffd7;font-size:clamp(18px,5vw,88px);font-weight:1000;
+  line-height:.96;letter-spacing:.045em;text-align:center;
+  text-transform:uppercase;overflow:hidden;transform:rotate(-4.2deg);
+  transform-origin:center;
+}
+.hero-title span{display:block;width:100%;overflow-wrap:anywhere}
+.hero-subtitle{
+  position:absolute;z-index:4;top:35.6%;left:37%;width:55%;
+  color:#fffbd0;text-align:center;font-size:clamp(17px,2.15vw,36px);
+  letter-spacing:.09em;transform:rotate(-4.8deg);
+}
+.main-left-rail{
+  position:absolute;z-index:10;left:0;top:2.4%;width:19.3vw;min-width:210px;
+  display:flex;flex-direction:column;gap:1.15vh;
+}
+.category-stack{width:100%;display:flex;flex-direction:column;gap:1.1vh}
+.category-image-button{
+  position:relative;border:0;padding:0;background:transparent;width:100%;
+  min-height:8.6vh;display:flex;align-items:center;cursor:pointer;
+}
+.category-image-button img{width:100%;max-height:13vh;object-fit:contain;object-position:left}
+.category-image-button .fallback{
+  display:none;width:100%;min-height:8vh;padding:12px;
+  background:#050604;border:5px solid #ffdc00;color:#f6b341;
+  font-size:clamp(14px,1.7vw,28px);text-align:center;
+}
+.category-image-button.is-active{filter:drop-shadow(0 0 8px yellow)}
+.category-image-button.is-active:after{
+  content:"";position:absolute;inset:-4px;border:4px solid #ffdc00;pointer-events:none;
+}
+.main-controls{display:flex;align-items:center;gap:.55vw;margin-left:.6vw}
+.arrow-pair{display:flex;gap:.15vw}
+.triangle-btn{
+  width:clamp(34px,3.7vw,66px);height:clamp(46px,5vw,86px);
+  padding:0;border:0;background:transparent;cursor:pointer;
+}
+.triangle-btn:before{content:"";display:block;width:100%;height:100%}
+.triangle-btn.prev:before{background:#ffd500;clip-path:polygon(100% 0,0 50%,100% 100%)}
+.triangle-btn.next:before{background:#ff6900;clip-path:polygon(0 0,100% 50%,0 100%)}
+.triangle-btn:hover{filter:drop-shadow(0 0 7px yellow);transform:scale(1.06)}
+.home-button{
+  width:clamp(68px,6.2vw,104px);height:clamp(68px,6.2vw,104px);
+  padding:6px;display:grid;place-items:center;border:7px solid #35ff00;
+  border-radius:14px;background:transparent;cursor:pointer;
+}
+.home-button svg{width:100%;height:100%}
+.home-button:hover{box-shadow:0 0 16px #35ff00}
+
+/* Сетка ответов: строго 5 в ширину и 2 в высоту */
+.answers-area{
+  position:absolute;z-index:6;top:44.5%;left:13.4%;width:82%;height:39.5%;
+  display:flex;flex-direction:column;justify-content:center;gap:1.2vh;overflow:hidden;
+  padding:0.5vh .5vw;
+}
+.answer-row{display:flex;align-items:center;justify-content:center;gap:1.1vw;width:100%;flex:0 0 auto}
+.answer-tile{
+  flex:0 1 15.8vw;width:15.8vw;max-width:270px;min-width:135px;
+  height:clamp(68px,9.2vh,106px);border:4px solid #d99a31;border-radius:13px;
+  background:var(--cream);box-shadow:inset 0 0 0 2px #fff8c5,0 0 0 3px #888d45;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:4px 7px;gap:2px;cursor:pointer;overflow:hidden;
+  transition:.12s;
+}
+.answer-tile.is-system-answer{cursor:default}
+.answer-tile.is-system-answer:hover{
+  transform:none;
+  box-shadow:inset 0 0 0 2px #fff8c5,0 0 0 3px #888d45;
+}
+.answer-text{
+  width:100%;max-height:100%;color:#050604;
+  line-height:1.05;text-align:center;
+  text-transform:uppercase;overflow-wrap:anywhere;word-break:break-word;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.answer-nick{
+  margin-top:1px;max-width:100%;font-size:clamp(8px,.8vw,12px);
+  line-height:1;flex:0 0 auto;text-align:center;overflow:hidden;
+  white-space:nowrap;text-overflow:ellipsis;text-transform:uppercase;
+}
+.empty-archive{
+  margin:auto;padding:2vh 2vw;color:#fffbd0;text-align:center;
+  font-size:clamp(14px,1.5vw,24px);line-height:1.4;
+}
+
+/* Нижняя лента участников */
+.participants-strip{
+  position:absolute;z-index:7;left:12.1%;right:12.4%;bottom:.5%;
+  height:13%;min-height:76px;padding:0 1vw;display:flex;
+  align-items:center;justify-content:center;gap:clamp(14px,3.5vw,60px);
+  overflow:visible;background:rgba(220,237,157,.13);
+}
+.avatar-holder{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;overflow:visible}
+.participant-avatar{
+  width:clamp(44px,6.2vw,95px);height:clamp(44px,6.2vw,95px);
+  object-fit:contain;pointer-events:none;transition:.16s;overflow:visible;
+}
+.participant-avatar.is-linked{
+  transform:scale(1.15);filter:drop-shadow(0 0 10px #fff1a1);
+}
+.flower-fallback{
+  width:clamp(44px,6.2vw,95px);aspect-ratio:1;position:relative;
+  background:repeating-conic-gradient(#ffb247 0 17deg,#f05a63 17deg 35deg,#e62942 35deg 52deg);
+  clip-path:polygon(50% 0,62% 11%,78% 5%,83% 23%,100% 33%,91% 49%,100% 65%,82% 77%,80% 95%,61% 89%,50% 100%,37% 88%,19% 96%,17% 77%,0 66%,9% 49%,0 33%,18% 23%,22% 5%,39% 11%);
+  pointer-events:none;
+}
+.flower-fallback:after{
+  content:"";position:absolute;inset:28%;border-radius:50%;
+  background:radial-gradient(circle,#293a41 0 18%,#eaffeb 20% 65%,#9ac7b9 67%);
+}
+
+/* ===================== ПРОФИЛЬ ===================== */
+
+#profileScreen{
+  position:fixed;z-index:40;inset:0;width:100vw;height:100dvh;
+  min-height:620px;overflow:hidden;display:none;background:var(--olive);
+}
+#profileScreen.is-open{display:block}
+.profile-topbar{
+  position:absolute;z-index:5;left:36.2%;right:11.2%;top:0;height:10.5vh;
+  display:flex;justify-content:center;gap:.7vw;
+}
+.profile-category-button{
+  flex:1;min-width:0;height:10.4vh;max-height:104px;
+  display:grid;place-items:center;padding:0;border:0;background:transparent;
+  cursor:pointer;position:relative;
+}
+.profile-category-button img{width:100%;height:100%;object-fit:contain}
+.profile-category-button .fallback{
+  display:none;width:100%;height:85%;align-items:center;justify-content:center;
+  background:#050604;border:5px solid #ffdc00;color:#f0a72d;
+  font-size:clamp(12px,1.6vw,25px);text-align:center;
+}
+.profile-category-button.is-active{filter:drop-shadow(0 0 9px yellow)}
+.profile-category-button.is-active:after{
+  content:"";position:absolute;inset:-3px;border:5px solid #ffdc00;pointer-events:none;
+}
+.profile-home{position:absolute;z-index:7;top:.7vh;right:2.9%}
+
+/* Жестко фиксируем высоту левой панели под ровно 8 карточек без скролла */
+.profile-left{
+  position:absolute;z-index:4;top:1vh;left:.8vw;width:34.2vw;min-width:240px;
+  display:flex;flex-direction:column;gap:0.4vh;height:98vh;overflow:hidden;
+}
+.selected-profile-banner{
+  position:relative;height:15vh;min-height:85px;display:flex;align-items:center;flex:0 0 auto;
+}
+.selected-avatar-frame{
+  position:relative;z-index:2;width:clamp(75px,9vw,130px);
+  height:clamp(75px,9vw,130px);margin-left:.9vw;flex:0 0 auto;
+  background:#050604;border:4px solid #fffbd5;clip-path:polygon(0 0,100% 8%,83% 100%,12% 100%);
+  display:grid;place-items:center;transform:rotate(-3deg);
+}
+.selected-avatar-frame img{width:86%;height:86%;object-fit:contain}
+.selected-avatar-frame .flower-fallback{width:86%}
+.selected-name-ribbon{
+  position:absolute;left:7.2vw;right:0;top:3.8vh;height:7.5vh;background:#050604;
+  clip-path:polygon(0 0,100% 0,78% 100%,0 80%);
+  display:flex;align-items:center;padding-left:5vw;padding-right:2vw;
+}
+.selected-name-ribbon span{
+  color:var(--profile-color,#ff182b);font-size:clamp(11px,1.4vw,20px);
+  letter-spacing:.06em;overflow-wrap:anywhere;text-transform:uppercase;
+}
+.profile-people-controls{
+  display:flex;align-items:center;gap:.5vw;margin-left:11.5vw;margin-top:-0.3vh;height:3.5vh;flex:0 0 auto;
+}
+.profile-people-controls .triangle-btn{width:clamp(22px,2vw,34px);height:clamp(26px,2.5vh,40px)}
+
+/* Список строго на 8 штук, скролл полностью удален, размер карточек рассчитывается автоматически */
+.profile-list{
+  position:relative;flex:1;min-height:0;
+  margin-top:0.2vh;padding:0 1vw 0.5vh 1.5vw;
+  display:flex;flex-direction:column;gap:0.4vh;
+  overflow:hidden;
+}
+
+.mini-profile{
+  height:calc((100% - 2.8vh) / 8);min-height:28px;width:100%;
+  display:flex;align-items:center;flex:0 0 auto;opacity:.75;cursor:pointer;
+  transition:.15s;
+}
+.mini-profile:hover{opacity:1}
+.mini-avatar-frame{
+  position:relative;z-index:2;width:clamp(30px,3.5vh,50px);
+  height:clamp(30px,3.5vh,50px);flex:0 0 auto;
+  display:grid;place-items:center;background:#050604;border:2px solid #fffbd5;
+  clip-path:polygon(0 0,100% 8%,82% 100%,12% 100%);transform:rotate(-3deg);
+}
+.mini-avatar-frame img{width:84%;height:84%;object-fit:contain}
+.mini-avatar-frame .flower-fallback{width:84%}
+.mini-name-ribbon{
+  margin-left:-1.5vw;height:70%;min-width:0;flex:1;background:#050604;
+  clip-path:polygon(0 0,100% 0,82% 100%,0 84%);
+  display:flex;align-items:center;padding:0 1vw 0 2vw;
+  font-size:clamp(8px,1vh,12px);text-transform:uppercase;overflow:hidden;
+}
+.mini-name-ribbon span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-profile.is-current{opacity:1;filter:drop-shadow(0 0 5px rgba(255,228,0,.7))}
+.mini-profile.is-current .mini-avatar-frame{border-color:#ffdf00}
+
+
+.profile-main{
+  position:absolute;z-index:3;left:35.4%;right:4.9%;top:13.8vh;bottom:5.3vh;
+  display:flex;flex-direction:column;min-width:0;
+}
+.profile-section-title{
+  flex:0 0 auto;margin:0 0 3vh;text-align:center;
+  font-size:clamp(22px,4vw,62px);line-height:.98;letter-spacing:.06em;
+  text-transform:uppercase;color:#050604;
+}
+.profile-scroll{
+  flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:0 3vw 2vh 0;
+  scrollbar-width:auto;scrollbar-color:var(--blue) var(--cyan);scrollbar-gutter:stable;
+}
+.profile-scroll::-webkit-scrollbar{width:22px}
+.profile-scroll::-webkit-scrollbar-track{background:var(--cyan);border-radius:12px}
+.profile-scroll::-webkit-scrollbar-thumb{background:var(--blue);border-radius:12px}
+.profile-answer-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:3vh 3.5vw;align-content:start;padding:0 .7vw 2vh;
+}
+.profile-answer-card{
+  min-height:10vh;width:100%;padding:8px 12px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:4px solid #d99a31;border-radius:14px;background:var(--cream);
+  box-shadow:inset 0 0 0 2px #fff8c5,0 0 0 3px rgba(120,128,45,.24);
+  text-align:center;overflow-wrap:anywhere;cursor:pointer;transition:.12s;
+}
+.profile-answer-card:hover{transform:translateY(-3px);box-shadow:0 0 0 4px #ffdc00}
+.profile-question-tag{
+  width:100%;margin-bottom:3px;color:#8f6a22;
+  font-size:clamp(8px,.75vw,12px);line-height:1.1;text-transform:uppercase;
+}
+.profile-answer-text{
+  color:#050604;font-size:clamp(13px,1.6vw,26px);
+  line-height:1.05;text-transform:uppercase;
+}
+.profile-empty{
+  padding:3vh 1vw;text-align:center;color:#fffbd0;
+  font-size:clamp(13px,1.25vw,20px);
+}
+
+/* ===================== КНОПКА «НАША ЛОЖЬ И ПРАВДА» В ПРОФИЛЕ ===================== */
+
+.personal-open-wrap{
+  display:flex;justify-content:center;padding:2vh 1vw 3vh;
+}
+.personal-open-button{
+  width:min(90%,600px);min-height:65px;padding:12px 18px;
+  border:5px solid #050604;background:#ffdc00;color:#050604;
+  box-shadow:6px 6px 0 rgba(0,0,0,.23);
+  font-size:clamp(13px,1.4vw,20px);text-transform:uppercase;cursor:pointer;
+  transition:.15s;
+}
+.personal-open-button:hover{transform:translateY(-3px);box-shadow:6px 9px 0 rgba(0,0,0,.23)}
+
+/* Экран «Наша ложь и правда» */
+
+#personalScreen{
+  position:fixed;z-index:60;inset:0;display:none;
+  background:var(--olive);overflow:hidden;
+}
+#personalScreen.is-open{display:block}
+.personal-header{
+  position:absolute;top:0;left:0;right:0;height:14vh;
+  background:#050604;clip-path:polygon(0 0,100% 0,100% 65%,0 100%);
+  display:flex;align-items:center;justify-content:center;
+  color:#fffbd7;text-align:center;padding:1vh 15vw 3vh;
+  font-size:clamp(16px,2.6vw,38px);text-transform:uppercase;
+}
+.personal-header span{max-width:100%;overflow-wrap:anywhere}
+.personal-close{
+  position:absolute;z-index:5;top:2vh;right:2vw;
+  width:54px;height:54px;border:4px solid #35ff00;border-radius:10px;
+  background:#050604;color:#35ff00;font-size:30px;cursor:pointer;
+}
+.personal-close:hover{box-shadow:0 0 14px #35ff00}
+.personal-content{
+  position:absolute;left:8%;right:8%;top:17%;bottom:12%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2vh;
+}
+.personal-person{
+  display:flex;align-items:center;justify-content:center;gap:1.5vw;
+  color:#050604;font-size:clamp(15px,1.8vw,26px);text-transform:uppercase;
+}
+.personal-person img{
+  width:clamp(55px,6.5vw,95px);height:clamp(55px,6.5vw,95px);object-fit:contain;
+}
+.personal-question{
+  width:min(90%,1050px);min-height:12vh;padding:1.5vh 2.5vw;
+  display:flex;align-items:center;justify-content:center;
+  background:#050604;color:#fffbd7;border:5px solid #fffbd7;
+  text-align:center;font-size:clamp(17px,2.6vw,40px);
+  line-height:1.1;text-transform:uppercase;overflow-wrap:anywhere;
+}
+.personal-choices{
+  width:min(90%,950px);display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));gap:2.5vw;
+}
+.personal-choice{
+  min-height:14vh;padding:1.5vh 1.2vw;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;border:5px solid #d99a31;border-radius:15px;
+  background:var(--cream);text-align:center;overflow-wrap:anywhere;
+}
+.personal-choice strong{font-size:clamp(16px,2.2vw,32px);text-transform:uppercase}
+.personal-choice span{font-size:clamp(12px,1.3vw,20px);line-height:1.15}
+.personal-choice.lie strong{color:#f02328}
+.personal-choice.truth strong{color:#35ad00}
+.personal-navigation{
+  position:absolute;bottom:2.5vh;left:0;right:0;
+  display:flex;align-items:center;justify-content:center;gap:3vw;
+}
+.personal-navigation .triangle-btn{width:clamp(35px,4vw,60px);height:clamp(45px,5vw,70px)}
+.personal-counter{font-size:clamp(13px,1.3vw,20px);color:#050604}
+.personal-empty{
+  color:#fffbd0;font-size:clamp(16px,2vw,28px);text-align:center;
+}
+
+/* ===================== АДАПТИВНОСТЬ ===================== */
+
+@media(max-width:900px){
+  #archiveScreen{min-height:900px}
+  .main-left-rail{width:29vw;min-width:0}
+  .hero-title{left:30%;top:9%;font-size:7.4vw}
+  .answers-area{left:5%;width:90%;top:49%;height:34%}
+  .answer-tile{flex-basis:30vw;width:30vw;min-width:0}
+  .profile-left{width:31vw}
+  .profile-topbar{left:32%;right:13%}
+  .profile-main{left:32%;right:4%}
+}
+@media(max-width:600px){
+  #archiveScreen{min-height:900px}
+  .main-left-rail{top:1%;left:1%;width:34vw}
+  .category-image-button{min-height:55px}
+  .category-image-button img{max-height:75px}
+  .main-controls{gap:6px;margin-top:5px}
+  .triangle-btn{width:36px;height:46px}
+  .home-button{width:54px;height:54px;border-width:5px}
+  .hero-title{left:36%;top:9%;width:62%;font-size:7vw}
+  .hero-subtitle{top:37%;left:33%;width:62%;font-size:13px}
+  .answers-area{top:48%;height:37%;left:3%;width:94%;gap:8px}
+  .answer-row{flex-wrap:wrap;gap:8px;justify-content:center}
+  .answer-tile{flex:1 1 30%;width:30%;min-width:0;height:65px}
+  .answer-nick{font-size:8px}
+  .participants-strip{left:0;right:0;height:12%;gap:10px}
+  .participant-avatar,.flower-fallback{width:40px}
+
+  #profileScreen{min-height:700px}
+  .profile-topbar{left:35%;right:15%;width:50%;height:9vh}
+  .profile-category-button{height:8.5vh}
+  .profile-home{top:1vh;right:2%}
+  .profile-home .home-button{width:50px;height:50px}
+  .profile-left{top:9vh;left:0;width:100%;height:auto}
+  .selected-profile-banner{height:15vh;min-height:105px;width:70%}
+  .selected-avatar-frame{width:100px;height:100px;border-width:4px}
+  .selected-name-ribbon{left:75px;top:3vh;height:9vh;padding-left:50px}
+  .selected-name-ribbon span{font-size:17px}
+  .profile-people-controls{margin-left:105px;margin-top:-10px}
+  .profile-list{display:none}
+  .profile-main{left:3%;right:2%;top:27vh;bottom:2vh}
+  .profile-section-title{font-size:6vw;margin-bottom:1.5vh}
+  .profile-scroll{padding-right:20px}
+  .profile-answer-grid{grid-template-columns:1fr;gap:12px}
+  .profile-answer-card{min-height:80px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===================== ГЛАВНЫЙ АРХИВ ===================== -->
+
+<main id="archiveScreen">
+
+  <div class="hero-black"></div>
+  <div class="hero-purple"></div>
+
+  <div class="hero-title" id="heroTitle"></div>
+  <div class="hero-subtitle">АРХИВ ТWX</div>
+
+  <aside class="main-left-rail">
+
+    <div class="category-stack">
+
+      <!-- БРЕДОВУХА (КАТЕГОРИЯ СЛЕВА): c1.png -->
+      <button class="category-image-button" data-category="bredo">
+        <img src="user/jack/c1.png" alt="Бредовуха">
+        <span class="fallback">Бредовуха</span>
+      </button>
+
+      <!-- МЫ ВСЁ ПРО ВАС ЗНАЕМ (КАТЕГОРИЯ СЛЕВА): b2.png -->
+      <button class="category-image-button" data-category="know">
+        <img src="user/jack/b2.png" alt="Мы всё про вас знаем">
+        <span class="fallback">Мы всё про вас знаем</span>
+      </button>
+
+    </div>
+
+    <div class="main-controls">
+
+      <div class="arrow-pair">
+        <button class="triangle-btn prev" id="questionPrev" aria-label="Предыдущий вопрос"></button>
+        <button class="triangle-btn next" id="questionNext" aria-label="Следующий вопрос"></button>
+      </div>
+
+      <button class="home-button" onclick="location.href='index.html'" aria-label="На главную">
+        <svg viewBox="0 0 64 64" shape-rendering="crispEdges">
+          <path d="M5 27 32 5 59 27 54 33 49 29 49 57 15 57 15 29 10 33Z" fill="#35ff00" stroke="#050604" stroke-width="4"/>
+          <path d="M25 38h14v19H25z" fill="#59634a" stroke="#050604" stroke-width="3"/>
+        </svg>
+      </button>
+
+    </div>
+  </aside>
+
+  <section class="answers-area" id="answersArea"></section>
+  <section class="participants-strip" id="participantsStrip"></section>
+
+</main>
+
+
+<!-- ===================== ПРОФИЛЬ ===================== -->
+
+<section id="profileScreen" role="dialog" aria-modal="true">
+
+  <div class="profile-topbar">
+
+    <!-- БРЕДОВУХА В ПРОФИЛЕ: c2.png -->
+    <button class="profile-category-button" data-category="bredo">
+      <img src="user/jack/c2.png" alt="Бредовуха">
+      <span class="fallback">Бредовуха</span>
+    </button>
+
+    <!-- МЫ ВСЁ ПРО ВАС ЗНАЕМ В ПРОФИЛЕ: b1.png -->
+    <button class="profile-category-button" data-category="know">
+      <img src="user/jack/b1.png" alt="Мы всё про вас знаем">
+      <span class="fallback">Мы всё про вас знаем</span>
+    </button>
+
+  </div>
+
+  <div class="profile-home">
+    <button class="home-button" onclick="location.href='index.html'" aria-label="На главную">
+      <svg viewBox="0 0 64 64" shape-rendering="crispEdges">
+        <path d="M5 27 32 5 59 27 54 33 49 29 49 57 15 57 15 29 10 33Z" fill="#35ff00" stroke="#050604" stroke-width="4"/>
+        <path d="M25 38h14v19H25z" fill="#59634a" stroke="#050604" stroke-width="3"/>
+      </svg>
+    </button>
+  </div>
+
+  <aside class="profile-left">
+
+    <div class="selected-profile-banner">
+
+      <div class="selected-avatar-frame" id="selectedAvatarFrame"></div>
+
+      <div class="selected-name-ribbon">
+        <span id="selectedProfileName">ИМЯ_НИК</span>
+      </div>
+
+    </div>
+
+    <div class="profile-people-controls">
+      <button class="triangle-btn prev" id="profilePrev" aria-label="Предыдущий профиль"></button>
+      <button class="triangle-btn next" id="profileNext" aria-label="Следующий профиль"></button>
+    </div>
+
+    <div class="profile-list" id="profileList"></div>
+
+  </aside>
+
+  <section class="profile-main">
+
+    <h1 class="profile-section-title" id="profileSectionTitle"></h1>
+
+    <div class="profile-scroll" id="profileScroll"></div>
+
+  </section>
+
+</section>
+
+
+<!-- ===================== ЭКРАН: НАША ЛОЖЬ И ПРАВДА ===================== -->
+
+<section id="personalScreen" aria-label="Наша ложь и правда участника">
+
+  <div class="personal-header">
+    <span>НАША ЛОЖЬ И ПРАВДА</span>
+  </div>
+
+  <button class="personal-close" id="personalClose" aria-label="Закрыть">×</button>
+
+  <div class="personal-content" id="personalContent"></div>
+
+  <div class="personal-navigation">
+    <button class="triangle-btn prev" id="personalPrev" aria-label="Предыдущий вопрос"></button>
+    <span class="personal-counter" id="personalCounter"></span>
+    <button class="triangle-btn next" id="personalNext" aria-label="Следующий вопрос"></button>
+  </div>
+
+</section>
+
+
+<audio id="backgroundMusic" src="user/music/jackbox.mp3" autoplay loop preload="auto"></audio>
+
+
+<script>
+
+/* =================================================================
+   РЕДАКТИРОВАНИЕ ДАННЫХ
+   ================================================================= */
+
+const PEOPLE = {
+
+  mab:{
+    nickname:"KILLER MAB",
+    displayName:"KILLER MAB",
+    color:"#ff0000",
+    avatar:"user/jack/ava/mab.png",
+
+    knownFacts:[
+      {
+        question:"КАКОЕ УТВЕРЖДЕНИЕ ОБ ИГРОКЕ KILLER MAB ЯВЛЯЕТСЯ ПРАВДОЙ?",
+        lie:"МОЙ ЛЮБИМЫЙ ЗАПАХ: ЗАПАХ ХЛОРКИ",
+        truth:"МОЙ ЛЮБИМЫЙ ЗАПАХ: ЗАПАХ КОФЕ"
+      }
+    ]
+  },
+
+  scary:{
+    nickname:"MRЖУТЬ",
+    displayName:"MRЖУТЬ",
+    color:"#004c8a",
+    avatar:"user/jack/ava/scary.png",
+    knownFacts:[
+      {
+        question:"КАКОЕ УТВЕРЖДЕНИЕ ОБ ИГРОКЕ MRЖУТЬ ЯВЛЯЕТСЯ ПРАВДОЙ?",
+        lie:"Я СМОТРЮ МНОГО СТРИМЕРОВ",
+        truth:"ХАНТЕР ЕДИНСТВЕННЫЙ СТРИМЕР КОТОРОГО Я СМОТРЮ"
+      }
+    ]
+  },
+
+  xahtep:{
+    nickname:"ХАНТЕР",
+    displayName:"ХАНТЕР",
+    color:"#ff7700",
+    avatar:"user/jack/ava/xahtep.png",
+    knownFacts:[
+      {
+        question:"КАКОЕ УТВЕРЖДЕНИЕ ОБ ИГРОКЕ ХАНТЕР ЯВЛЯЕТСЯ ПРАВДОЙ?",
+        lie:"Я АДМИНИСТРИРОВАЛ ШКОЛЬНЫЙ САЙТ, КОГДА УЧИЛСЯ",
+        truth:"Я ЛЮБЛЮ ФРУКТЫ"
+      }
+    ]
+  },
+
+  ragork:{
+    nickname:"РАГОРК",
+    displayName:"РАГОРК",
+    color:"#ffff00",
+    avatar:"user/jack/ava/ragork.png",
+    knownFacts:[
+      {
+        question:"КАКОЕ УТВЕРЖДЕНИЕ ОБ ИГРОКЕ РАГОРК ЯВЛЯЕТСЯ ПРАВДОЙ?",
+        lie:"У МЕНЯ ЕСТЬ WEB-CAMERA",
+        truth:"ЧУТЬ НЕ УМЕР В 6 МЕСЯЦЕВ РОЖДЕНИЯ"
+      }
+    ]
+  },
+
+  crash:{
+    nickname:"CRASH",
+    displayName:"CRASH",
+    color:"#008000",
+    avatar:"user/jack/ava/crash.png",
+    knownFacts:[
+      {
+        question:"КАКОЕ УТВЕРЖДЕНИЕ ОБ ИГРОКЕ CRASH (СУКА) ЯВЛЯЕТСЯ ПРАВДОЙ?",
+        lie:"ПОНОС",
+        truth:"ДРОЧИТЬ?"
+      }
+    ]
+  },
+
+  vladi4ka:{
+    nickname:"VLADI4KA",
+    displayName:"VLADI4KA",
+    color:"#30d5c8",
+    avatar:"user/jack/ava/vladi4ka.png",
+    knownFacts:[
+      {
+        question:"КАКОЕ УТВЕРЖДЕНИЕ ОБ ИГРОКЕ VLADI4KA ЯВЛЯЕТСЯ ПРАВДОЙ?",
+        lie:"Я ЛЮБЛЮ ОРЕХИ И СУХОФРУКТЫ В ТОРТАХ",
+        truth:"Я ЛЮБЛЮ МАТЕМАТИКУ"
+      }
+    ]
+  },
+
+  gnom3000:{
+    nickname:"ГНОМ3000",
+    displayName:"ГНОМ3000",
+    color:"#ffc0cb",
+    avatar:"user/jack/ava/gnom3000.png",
+    knownFacts:[
+      {
+        question:"КАКОЕ УТВЕРЖДЕНИЕ ОБ ИГРОКЕ ГНОМ3000 ЯВЛЯЕТСЯ ПРАВДОЙ?",
+        lie:"Я ЛОМАЛА РУКУ",
+        truth:"Я НЕ ЛОМАЛА НИЧЕГО В ЖИЗНИ"
+      }
+    ]
+  }
+
+};
+
+const ARCHIVE_DATA = {
+
+  bredo:[
+    {
+      id:"bredo-01",
+      question:"Каждое воскресенье октября дети возрастом до двух лет могут бесплатно посетить тюрьму-ферму Ангола в штате Луизиана. В эти дни в ней проходит __",
+
+      answers:[
+        {userId:"НАША ЛОЖЬ",text:"ПОСВЯЩЕНИЕ В ХИППИ И СКАУТЫ"},
+        {userId:"gnom3000",text:"ДЕНЬ ОБМЕНА КНИГАМИ"},
+        {userId:"ragork",text:"ГОНКИ НА ТРАКТОРАХ"},
+        {userId:"vladi4ka",text:"ВРЕМЕНЫЕ ОСВОБОЖДЕНИЕ ЗАКЛЮЧЁНЫХ"},
+        {userId:"scary",text:"ВЫСТУПЛЕНИЕ МЕСТНОГО ЦИРКА"},
+        {userId:"ПРАВДА",text:"РОДЕО"},
+        {userId:"mab",text:"ФЕСТЕВАЛЬ ЗАБОТЫ"},
+        {userId:"crash",text:"КОВБОЙСКОЕ СОРЕВНОВАНИЕ УРОЖАЯ"},
+        {userId:"xahtep",text:"ПРАЗДНИК КУКУРУЗЫ"}
+      ]
+    },
+
+    {
+      id:"bredo-02",
+      question:"В 2016 году шотландский пивоваренный завод BrewDog предложил 55-градусное пиво за 20 000 долларов с названием \"Конец истории\", которое подавалось внутри ______",
+      answers:[
+        {userId:"mab",text:"ГОЛОВЫ СВИНЬЫ"},
+        {userId:"crash",text:"ЧЕРЕПА КОЗЛА"},
+        {userId:"xahtep",text:"БУТЫЛКИ СКОТЧА"},
+        {userId:"scary",text:"УРНЫ ВРЕМЁН ДРЕВНЕЙ ГРЕЦИИ"},
+        {userId:"ragork",text:"БИЛЬЯРДНОГО ШАРА"},
+        {userId:"gnom3000",text:"ХРУСТАЛЬНОГО ЧЕРЕПА"},
+        {userId:"vladi4ka",text:"МУЗЕЯ ДРЕВНЕЙ ИСТОРИИ"},
+        {userId:"НАША ЛОЖЬ",text:"БАТИНОЙ КРУЖКИ"},
+        {userId:"ПРАВДА",text:"МЁРТВОЙ БЕЛКИ"}
+      ]
+    },
+
+    {
+      id:"bredo-03",
+      question:"Вместо того, чтобы молиться Святому Антонию, одна бабушка из Бразилии ежедневно молилась фигурке ______",
+      answers:[
+        {userId:"crash",text:"МИККИ МАУСА"},
+        {userId:"mab",text:"САТАНЫ"},
+        {userId:"xahtep",text:"ПИКАЧУ"},
+        {userId:"scary",text:"БАРТА СИМПСОНА"},
+        {userId:"gnom3000",text:"ЧЕЛОВЕКА-ПАУКА"},
+        {userId:"vladi4ka",text:"ВНУКА"},
+        {userId:"ragork",text:"ПАПЫ РИМСКОГО"},
+        {userId:"НАША ЛОЖЬ",text:"МИШКИ ГАММИ"},
+        {userId:"ПРАВДА",text:"ИЗ ВЛАСТЕЛИНА КОЛЕЦ"}
+      ]
+    },
+
+    {
+      id:"bredo-04",
+      question:"В 2016 году американская метал-группа Mötley Crüe дала своим поклонникам то, чего они всегда хотели, и выпустила собственную линейку ______",
+      answers:[
+        {userId:"xahtep",text:"КУКОЛ"},
+        {userId:"crash",text:"ЛАПШИ БЫСТРОГО ПРИГОТОВЛЕНИЯ"},
+        {userId:"mab",text:"НИЖНЕГО БЕЛЬЯ"},
+        {userId:"ragork",text:"ЖЕЛЕЗНЫХ ГИРЬ"},
+        {userId:"scary",text:"ШЛЯП"},
+        {userId:"vladi4ka",text:"ДУХОВ"},
+        {userId:"gnom3000",text:"ДЕКОРАТИВНЫХ ТАРЕЛОК"},
+        {userId:"НАША ЛОЖЬ",text:"ДЖИНСОВ"},
+        {userId:"ПРАВДА",text:"ВИБРАТОРОВ"}
+      ]
+    },
+
+    {
+      id:"bredo-05",
+      question:"Если украинец предложит вам попробовать \"равлыка\", стоит хорошенько подумать, ведь это ______",
+      answers:[
+        {userId:"xahtep",text:"ПРОКИСШИЙ КЕФИР"},
+        {userId:"mab",text:"НАСТОЙКА ИЗ КАНОПЛИ"},
+        {userId:"crash",text:"ГЛАЗУНЬЯ"},
+        {userId:"vladi4ka",text:"ТУШЁНАЯ КАПУСТА"},
+        {userId:"ragork",text:"ПЕЧЕНЬ СВИНИЬИ"},
+        {userId:"scary",text:"РАССОЛЬНИК"},
+        {userId:"gnom3000",text:"ХОЛОДЕЦ"},
+        {userId:"НАША ЛОЖЬ",text:"КУРИНЫЙЕ КОТЛЕТЫ"},
+        {userId:"ПРАВДА",text:"УЛИТКА"}
+      ]
+    },
+
+    {
+      id:"bredo-06",
+      question:"Первые беговые дорожки были изобретены Уильямом Кубиттом в 1818 году и предназначались не для сжигания лишних калорий, а как средство для ______",
+      answers:[
+        {userId:"crash",text:"ПОЛИРОВКА ПЛИТКИ"},
+        {userId:"mab",text:"ВЫРОБАТКА ЭНЕРГИЙ"},
+        {userId:"ragork",text:"ВЫГУЛИВАНИЕ СОБАК"},
+        {userId:"scary",text:"МОЙКИ"},
+        {userId:"vladi4ka",text:"РАЗВЛЕЧЕНИЕ"},
+        {userId:"НАША ЛОЖЬ",text:"БЫСТРОГО ПОДНЯТИЯ ФЛАГА"},
+        {userId:"ПРАВДА",text:"НАКАЗАНИЯ ПРЕСТУПНИКОВ"}
+      ]
+    },
+
+    {
+      id:"bredo-07",
+      question:"Фонд исследования нарушений обоняния и вкуса пришёл к выводу, что самый сексуально возбуждающий запах для женщин представляет собой комбинацию ______ и ______",
+      answers:[
+        {userId:"gnom3000",text:"ПОТА И ТРАВЫ"},
+        {userId:"НАША ЛОЖЬ",text:"ШОКОЛАДА И СОСИСОК"},
+        {userId:"scary",text:"ПОТА И OLD SPICE"},
+        {userId:"xahtep",text:"ЛИМОНА И МАРАКУЙЯ"},
+        {userId:"mab",text:"ДЕНЕГ И ШОППИНГА"},
+        {userId:"ПРАВДА",text:"ОГУРЦА И ЛАКРИЦЫ"},
+        {userId:"vladi4ka",text:"ДУХОВ И ПОТА"},
+        {userId:"crash",text:"ПОТА И ВАНИЛИ"},
+        {userId:"ragork",text:"ПОТА И ВОДКИ"}
+      ]
+    }
+  ],
+
+  know:[
+    {
+      id:"know-01",
+      question:"Самый трэшовый сайт, который KILLER MAB когда-либо посещал – это _______",
+      answers:[
+        {userId:"xahtep",text:"САЙТ ПО АНИМЕ"},
+        {userId:"ragork",text:"JACKBOX.COM"},
+        {userId:"gnom3000",text:"САЙТ ШКОЛЫ"},
+        {userId:"vladi4ka",text:"ОНЛИ ФАНС"},
+        {userId:"scary",text:"WIKIPEDIA"},
+        {userId:"mab",text:"САЙТ ПО КАТОЧНЫМ ИГРАМ"},
+        {userId:"crash",text:"VK.COM"}
+      ]
+    },
+
+    {
+      id:"know-02",
+      question:"ХАНТЕР очень не хватает времени на ______",
+      answers:[
+        {userId:"gnom3000",text:"ЗДОРОВЫЙ СОН"},
+        {userId:"crash",text:"УЖИН"},
+        {userId:"ragork",text:"СОН"},
+        {userId:"scary",text:"СОН"},
+        {userId:"mab",text:"РЕАКЦИЙ"},
+        {userId:"xahtep",text:"САМОРАЗВИТИЕ"},
+        {userId:"vladi4ka",text:"ЛИЧНУЮ ЖИЗНЬ"}
+      ]
+    },
+
+    {
+      id:"know-03",
+      question:"CRASH (СУКА) считает, что точно сможет _______, хотя делать этого ещё не доводилось.",
+      answers:[
+        {userId:"gnom3000",text:"УЧЁБУ"},
+        {userId:"ragork",text:"ДОВЕСТИ ХАНТЕРА"},
+        {userId:"scary",text:"АДЕКВАТНУЮ ШУТКУ"},
+        {userId:"xahtep",text:"СТАТЬ КОРОЛЕМ ШАМАНОВ"},
+        {userId:"crash",text:"СТАТЬ DANGEON MASTEROM"},
+        {userId:"vladi4ka",text:"ЗАРАБОТАТЬ ДЕНЬГИ"},
+        {userId:"mab",text:"ШПИОНИТЬ"}
+      ]
+    },
+
+    {
+      id:"know-04",
+      question:"РАГОРК раньше кое-что нравилось, а теперь не нравится. Это _______",
+      answers:[
+        {userId:"gnom3000",text:"СОЗДАВАТЬ БИТЫ"},
+        {userId:"crash",text:"РУИНА"},
+        {userId:"xahtep",text:"ЛЕТСПЛЕИ WINDY32"},
+        {userId:"ragork",text:"ОТЧИМ"},
+        {userId:"mab",text:"РПГ"},
+        {userId:"vladi4ka",text:"МОЛОКО"},
+        {userId:"scary",text:"БЫТЬ НОРМАЛЬНЫМ"}
+      ]
+    },
+
+    {
+      id:"know-05",
+      question:"Имя любимой плюшевой игрушки, которая была у ГНОМ3000 в детстве – это _______",
+      answers:[
+        {userId:"gnom3000",text:"Я НЕ ПРИДУМЫВАЛА ИМЕНА"},
+        {userId:"crash",text:"ВАЛЕРА"},
+        {userId:"xahtep",text:"МИШУТКА"},
+        {userId:"ragork",text:"ЛОБОТОМА"},
+        {userId:"scary",text:"ХУЙНЯ"},
+        {userId:"mab",text:"ПУГОВКА"},
+        {userId:"vladi4ka",text:"ОТЧИМ"}
+      ]
+    },
+
+    {
+      id:"know-06",
+      question:"Последним блюдом MRЖУТЬ определённо будет _______",
+      answers:[
+        {userId:"gnom3000",text:"БОКС МАСТЕР"},
+        {userId:"crash",text:"ВСМЫСЛЕ ПОСЛЕДНИМ ОХУЕЛИ?"},
+        {userId:"xahtep",text:"БЛЮДО ОТ ИРАТУСА"},
+        {userId:"ragork",text:"КОТЛЕТКИ ИЗ ХАНТЕРА"},
+        {userId:"scary",text:"ВОДА"},
+        {userId:"mab",text:"ТОСТ С МЁЛОМ"},
+        {userId:"vladi4ka",text:"БУТИК С КОЛБОСОЙ"}
+      ]
+    },
+
+    {
+      id:"know-07",
+      question:"Кличка любимого питомца, который когда-либо был у VLADI4KA – это _______",
+      answers:[
+        {userId:"gnom3000",text:"ТВИНКИ"},
+        {userId:"crash",text:"У МЕНЯ НЕ БЫЛО ПИТОМЦА"},
+        {userId:"xahtep",text:"БИМКА"},
+        {userId:"scary",text:"У МЕНЯ НЕ БЫЛО ПИТОМЦА"},
+        {userId:"ragork",text:"ШУРИК"},
+        {userId:"vladi4ka",text:"ДЫМОК"},
+        {userId:"mab",text:"КОПЧИК"}
+      ]
+    }
+  ]
+
+};
+
+const CATEGORY_NAMES={
+  bredo:"БРЕДОВУХА",
+  know:"МЫ ВСЁ ПРО ВАС ЗНАЕМ"
+};
+
+let currentMainCategory="bredo";
+let activeProfileCategory="bredo";
+
+let questionIndexes={bredo:0,know:0};
+
+let activeProfileIds=[];
+let activeProfileIndex=0;
+let personalQuestionIndex=0;
+
+const $=s=>document.querySelector(s);
+const $$=s=>Array.from(document.querySelectorAll(s));
+
+function getPerson(id){
+  return PEOPLE[id]||{
+    nickname:id||"БЕЗ НИКА",
+    displayName:id||"БЕЗ ИМЕНИ",
+    color:"#d99a31",
+    avatar:"",
+    knownFacts:[]
+  };
+}
+
+function getQuestions(category=currentMainCategory){
+  return Array.isArray(ARCHIVE_DATA[category])?ARCHIVE_DATA[category]:[];
+}
+
+function getCurrentQuestion(){
+  const list=getQuestions();
+  if(!list.length)return null;
+  return list[questionIndexes[currentMainCategory]%list.length];
+}
+
+function uniqueParticipants(question){
+  if(!question||!Array.isArray(question.answers))return [];
+  const systemIds=["НАША ЛОЖЬ", "ПРАВДА", "ЛОЖЬ"];
+  return [...new Set(question.answers.map(a=>a.userId).filter(id=>id&&!systemIds.includes(id)))];
+}
+
+function makeAvatar(userId,className=""){
+  const person=getPerson(userId);
+  const holder=document.createElement("span");
+  holder.className="avatar-holder";
+  holder.dataset.userId=userId;
+
+  if(person.avatar){
+    const img=document.createElement("img");
+    img.src=person.avatar;
+    img.alt=person.displayName;
+    img.className=className;
+
+    img.addEventListener("error",()=>{
+      const flower=document.createElement("div");
+      flower.className="flower-fallback";
+      img.replaceWith(flower);
+    },{once:true});
+
+    holder.appendChild(img);
+  }else{
+    const flower=document.createElement("div");
+    flower.className="flower-fallback";
+    holder.appendChild(flower);
+  }
+
+  return holder;
+}
+
+function setupCategoryImages(){
+  $$(".category-image-button img,.profile-category-button img").forEach(img=>{
+    img.addEventListener("error",()=>{
+      img.style.display="none";
+      const fallback=img.parentElement.querySelector(".fallback");
+      if(fallback)fallback.style.display="flex";
+    },{once:true});
+  });
+}
+
+function fitQuestionTitle(){
+  const title=$("#heroTitle");
+  if(!title)return;
+
+  let low=12;
+  let high=Math.min(92,window.innerWidth*.071);
+  let best=low;
+
+  for(let i=0;i<18;i++){
+    const mid=(low+high)/2;
+    title.style.fontSize=mid+"px";
+
+    if(title.scrollHeight<=title.clientHeight+1&&
+       title.scrollWidth<=title.clientWidth+1){
+      best=mid;
+      low=mid;
+    }else{
+      high=mid;
+    }
+  }
+
+  title.style.fontSize=Math.max(12,best)+"px";
+}
+
+function fitAnswerText(element, text){
+  element.textContent = text;
+  let size = 18;
+  const len = String(text || "").length;
+  
+  if (len > 12) size = 15;
+  if (len > 22) size = 12;
+  if (len > 35) size = 10;
+  if (len > 50) size = 8;
+  if (len > 75) size = 7;
+
+  element.style.fontSize = size + "px";
+}
+
+function setMainCategory(category){
+  if(!ARCHIVE_DATA[category])return;
+
+  currentMainCategory=category;
+
+  $$(".category-image-button").forEach(btn=>{
+    btn.classList.toggle("is-active",btn.dataset.category===category);
+  });
+
+  renderArchive();
+}
+
+function makeAnswerRows(answers){
+  const rows=[];
+  for(let i=0;i<answers.length;i+=5){
+    rows.push(answers.slice(i,i+5));
+  }
+  return rows;
+}
+
+function renderArchive(){
+  const question=getCurrentQuestion();
+  const area=$("#answersArea");
+  const strip=$("#participantsStrip");
+
+  area.innerHTML="";
+  strip.innerHTML="";
+
+  $("#heroTitle").innerHTML="";
+
+  const title=document.createElement("span");
+  title.textContent=(question?.question||"ЗДЕСЬ ТЕКСТ ВОПРОСА").toLocaleUpperCase("ru-RU");
+  $("#heroTitle").appendChild(title);
+
+  fitQuestionTitle();
+
+  if(!question){
+    const empty=document.createElement("div");
+    empty.className="empty-archive";
+    empty.textContent="В ЭТОЙ КАТЕГОРИИ ПОКА НЕТ ВОПРОСОВ.";
+    area.appendChild(empty);
+    return;
+  }
+
+  if(!question.answers||!question.answers.length){
+    const empty=document.createElement("div");
+    empty.className="empty-archive";
+    empty.textContent="ПОКА НЕТ ОТВЕТОВ НА ЭТОТ ВОПРОС.";
+    area.appendChild(empty);
+  }else{
+    makeAnswerRows(question.answers).forEach(rowAnswers=>{
+      const row=document.createElement("div");
+      row.className="answer-row";
+
+      rowAnswers.forEach(answer=>{
+        const person=getPerson(answer.userId);
+        const isSystem = ["НАША ЛОЖЬ", "ПРАВДА", "ЛОЖЬ"].includes(answer.userId);
+
+        const tile=document.createElement("button");
+        tile.type="button";
+        tile.className="answer-tile" + (isSystem ? " is-system-answer" : "");
+
+        const answerText=document.createElement("span");
+        answerText.className="answer-text";
+        fitAnswerText(answerText, answer.text);
+
+        const nick=document.createElement("span");
+        nick.className="answer-nick";
+        nick.textContent=isSystem ? answer.userId : person.nickname;
+        nick.style.color=isSystem ? "#d99a31" : person.color;
+
+        tile.append(answerText,nick);
+
+        if(!isSystem){
+          tile.addEventListener("click",()=>openProfile(answer.userId));
+
+          tile.addEventListener("mouseenter",()=>{
+            highlightParticipant(answer.userId,true);
+          });
+
+          tile.addEventListener("mouseleave",()=>{
+            highlightParticipant(answer.userId,false);
+          });
+        }
+
+        row.appendChild(tile);
+      });
+
+      area.appendChild(row);
+    });
+  }
+
+  uniqueParticipants(question).forEach(userId=>{
+    const avatar=makeAvatar(userId,"participant-avatar");
+    const img=avatar.querySelector("img");
+    if(img)img.classList.add("participant-avatar");
+    strip.appendChild(avatar);
+  });
+}
+
+function highlightParticipant(userId,active){
+  $$("#participantsStrip .avatar-holder").forEach(holder=>{
+    if(holder.dataset.userId===userId){
+      const img=holder.querySelector("img");
+      const flower=holder.querySelector(".flower-fallback");
+      if(img)img.classList.toggle("is-linked",active);
+      if(flower)flower.style.filter=active?"drop-shadow(0 0 10px #fff1a1)":"";
+    }
+  });
+}
+
+function stepQuestion(direction){
+  const questions=getQuestions();
+  if(!questions.length)return;
+
+  questionIndexes[currentMainCategory]=
+    (questionIndexes[currentMainCategory]+direction+questions.length)%questions.length;
+
+  renderArchive();
+}
+
+function collectUserAnswers(userId,category){
+  const result=[];
+  getQuestions(category).forEach((question,questionIndex)=>{
+    (question.answers||[]).forEach(answer=>{
+      if(answer.userId===userId){
+        result.push({
+          question:question.question,
+          text:answer.text,
+          questionIndex,
+          category
+        });
+      }
+    });
+  });
+  return result;
+}
+
+function openProfile(userId){
+  const question=getCurrentQuestion();
+  activeProfileIds=uniqueParticipants(question);
+
+  if(!activeProfileIds.includes(userId)){
+    activeProfileIds.unshift(userId);
+  }
+
+  activeProfileIndex=activeProfileIds.indexOf(userId);
+  activeProfileCategory=currentMainCategory;
+
+  $("#profileScreen").classList.add("is-open");
+  $("#personalScreen").classList.remove("is-open");
+  document.body.style.overflow="hidden";
+  renderProfile();
+}
+
+function closeProfile(){
+  $("#profileScreen").classList.remove("is-open");
+  $("#personalScreen").classList.remove("is-open");
+  document.body.style.overflow="";
+}
+
+function stepProfile(direction){
+  if(!activeProfileIds.length)return;
+  activeProfileIndex=
+    (activeProfileIndex+direction+activeProfileIds.length)%activeProfileIds.length;
+  renderProfile();
+}
+
+function setProfileCategory(category){
+  activeProfileCategory=category;
+  renderProfile();
+}
+
+function renderProfile(){
+  const userId=activeProfileIds[activeProfileIndex];
+  if(!userId)return;
+
+  const person=getPerson(userId);
+
+  $("#selectedProfileName").textContent=person.displayName||person.nickname;
+
+  $(".selected-name-ribbon").style.setProperty(
+    "--profile-color",person.color
+  );
+
+  const frame=$("#selectedAvatarFrame");
+  frame.innerHTML="";
+  frame.appendChild(makeAvatar(userId));
+
+  $$(".profile-category-button").forEach(button=>{
+    button.classList.toggle(
+      "is-active",
+      button.dataset.category===activeProfileCategory
+    );
+  });
+
+  const list=$("#profileList");
+  list.innerHTML="";
+
+  activeProfileIds.forEach((id,index)=>{
+    const p=getPerson(id);
+
+    const item=document.createElement("div");
+    item.className="mini-profile"+(index===activeProfileIndex?" is-current":"");
+
+    item.addEventListener("click",()=>{
+      activeProfileIndex=index;
+      renderProfile();
+    });
+
+    const avatarFrame=document.createElement("div");
+    avatarFrame.className="mini-avatar-frame";
+    avatarFrame.appendChild(makeAvatar(id));
+
+    const ribbon=document.createElement("div");
+    ribbon.className="mini-name-ribbon";
+
+    const name=document.createElement("span");
+    name.textContent=p.nickname;
+    name.style.color=p.color;
+
+    ribbon.appendChild(name);
+    item.append(avatarFrame,ribbon);
+    list.appendChild(item);
+  });
+
+  const activeItem = list.querySelector(".mini-profile.is-current");
+  if(activeItem){
+    activeItem.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  renderProfileContent();
+}
+
+function renderProfileContent(){
+  const userId=activeProfileIds[activeProfileIndex];
+  const content=$("#profileScroll");
+
+  content.innerHTML="";
+  content.scrollTop=0;
+
+  $("#profileSectionTitle").textContent=CATEGORY_NAMES[activeProfileCategory];
+
+  const answers=collectUserAnswers(userId,activeProfileCategory);
+
+  if(answers.length){
+    const grid=document.createElement("div");
+    grid.className="profile-answer-grid";
+
+    answers.forEach(item=>{
+      const card=document.createElement("button");
+      card.type="button";
+      card.className="profile-answer-card";
+
+      const questionTag=document.createElement("span");
+      questionTag.className="profile-question-tag";
+      questionTag.textContent=item.question;
+
+      const answerText=document.createElement("span");
+      answerText.className="profile-answer-text";
+      answerText.textContent=item.text;
+
+      card.append(questionTag,answerText);
+
+      card.addEventListener("click",()=>{
+        returnToArchiveQuestion(item.category,item.questionIndex);
+      });
+
+      grid.appendChild(card);
+    });
+
+    content.appendChild(grid);
+  }else{
+    const empty=document.createElement("div");
+    empty.className="profile-empty";
+    empty.textContent="У ЭТОГО УЧАСТНИКА ПОКА НЕТ ОТВЕТОВ В ЭТОЙ КАТЕГОРИИ.";
+    content.appendChild(empty);
+  }
+
+  const personalWrap=document.createElement("div");
+  personalWrap.className="personal-open-wrap";
+
+  const personalButton=document.createElement("button");
+  personalButton.type="button";
+  personalButton.className="personal-open-button";
+  personalButton.textContent="НАША ЛОЖЬ И ПРАВДА";
+
+  personalButton.addEventListener("click",openPersonalScreen);
+
+  personalWrap.appendChild(personalButton);
+  content.appendChild(personalWrap);
+}
+
+function returnToArchiveQuestion(category,questionIndex){
+  currentMainCategory=category;
+  questionIndexes[category]=questionIndex;
+
+  $$(".category-image-button").forEach(button=>{
+    button.classList.toggle("is-active",button.dataset.category===category);
+  });
+
+  closeProfile();
+  renderArchive();
+}
+
+function openPersonalScreen(){
+  personalQuestionIndex=0;
+  $("#personalScreen").classList.add("is-open");
+  renderPersonalQuestion();
+}
+
+function closePersonalScreen(){
+  $("#personalScreen").classList.remove("is-open");
+}
+
+function renderPersonalQuestion(){
+  const userId=activeProfileIds[activeProfileIndex];
+  const person=getPerson(userId);
+  const facts=person.knownFacts||[];
+  const content=$("#personalContent");
+
+  content.innerHTML="";
+
+  if(!facts.length){
+    const empty=document.createElement("div");
+    empty.className="personal-empty";
+    empty.textContent="У ЭТОГО УЧАСТНИКА НЕТ ЗАПИСЕЙ ЛОЖЬ И ПРАВДА.";
+    content.appendChild(empty);
+    $("#personalCounter").textContent="0 / 0";
+    return;
+  }
+
+  if(personalQuestionIndex>=facts.length){
+    personalQuestionIndex=0;
+  }
+
+  const fact=facts[personalQuestionIndex];
+
+  const personLine=document.createElement("div");
+  personLine.className="personal-person";
+
+  const avatar=makeAvatar(userId);
+  const img=avatar.querySelector("img");
+  if(img){
+    img.style.width="clamp(55px,6.5vw,95px)";
+    img.style.height="clamp(55px,6.5vw,95px)";
+    img.style.objectFit="contain";
+  }
+
+  const personName=document.createElement("span");
+  personName.textContent=person.displayName||person.nickname;
+  personName.style.color=person.color;
+
+  personLine.append(avatar,personName);
+
+  const question=document.createElement("div");
+  question.className="personal-question";
+  question.textContent=fact.question;
+
+  const choices=document.createElement("div");
+  choices.className="personal-choices";
+
+  const lie=document.createElement("div");
+  lie.className="personal-choice lie";
+
+  const lieTitle=document.createElement("strong");
+  lieTitle.textContent="ЛОЖЬ";
+
+  const lieText=document.createElement("span");
+  lieText.textContent=fact.lie||"";
+
+  lie.append(lieTitle,lieText);
+
+  const truth=document.createElement("div");
+  truth.className="personal-choice truth";
+
+  const truthTitle=document.createElement("strong");
+  truthTitle.textContent="ПРАВДА";
+
+  const truthText=document.createElement("span");
+  truthText.textContent=fact.truth||"";
+
+  truth.append(truthTitle,truthText);
+
+  choices.append(lie,truth);
+  content.append(personLine,question,choices);
+
+  $("#personalCounter").textContent=`${personalQuestionIndex+1} / ${facts.length}`;
+}
+
+function stepPersonalQuestion(direction){
+  const userId=activeProfileIds[activeProfileIndex];
+  const facts=getPerson(userId).knownFacts||[];
+  if(!facts.length)return;
+
+  personalQuestionIndex=(personalQuestionIndex+direction+facts.length)%facts.length;
+  renderPersonalQuestion();
+}
+
+$("#questionPrev").addEventListener("click",()=>stepQuestion(-1));
+$("#questionNext").addEventListener("click",()=>stepQuestion(1));
+
+$$(".category-image-button").forEach(button=>{
+  button.addEventListener("click",()=>{
+    setMainCategory(button.dataset.category);
+  });
+});
+
+$("#profilePrev").addEventListener("click",()=>stepProfile(-1));
+$("#profileNext").addEventListener("click",()=>stepProfile(1));
+
+$$(".profile-category-button").forEach(button=>{
+  button.addEventListener("click",()=>{
+    setProfileCategory(button.dataset.category);
+  });
+});
+
+$("#personalClose").addEventListener("click",closePersonalScreen);
+$("#personalPrev").addEventListener("click",()=>stepPersonalQuestion(-1));
+$("#personalNext").addEventListener("click",()=>stepPersonalQuestion(1));
+
+window.addEventListener("keydown",event=>{
+  if(event.key==="Escape"){
+    if($("#personalScreen").classList.contains("is-open")){
+      closePersonalScreen();
+    }else if($("#profileScreen").classList.contains("is-open")){
+      closeProfile();
+    }
+  }
+});
+
+const music=$("#backgroundMusic");
+music.volume=.42;
+
+function tryPlayMusic(){
+  const promise=music.play();
+  if(promise&&promise.catch)promise.catch(()=>{});
+}
+
+window.addEventListener("load",tryPlayMusic,{once:true});
+
+["pointerdown","keydown","touchstart"].forEach(eventName=>{
+  window.addEventListener(eventName,tryPlayMusic,{once:true,passive:true});
+});
+
+setupCategoryImages();
+setMainCategory("bredo");
+
+window.addEventListener("resize",()=>{
+  requestAnimationFrame(fitQuestionTitle);
+});
+
+/* ===================== ЛОГИКА МУЗЫКИ ДЛЯ ПРОФИЛЯ ===================== */
+
+const profileMusicSrc = "user/music/people.mp3"; // Путь к треку для профиля
+let previousMusicSrc = "";
+
+// Сохраняем оригинальную функцию открытия профиля и расширяем её
+const originalOpenProfile = window.openProfile || openProfile;
+window.openProfile = function(userId) {
+  if (typeof originalOpenProfile === "function") {
+    // Вызываем оригинальное открытие, если оно где-то переопределено
+    // (или просто заменяем логику ниже)
+  }
+  
+  // Сама логика смены трека:
+  if (music && music.src) {
+    if (!previousMusicSrc) {
+      previousMusicSrc = music.src;
+    }
+    if (!music.src.includes(profileMusicSrc)) {
+      music.src = profileMusicSrc;
+      music.play().catch(()=>{});
+    }
+  }
+
+  // Твой стандартный код открытия профиля
+  const question=getCurrentQuestion();
+  activeProfileIds=uniqueParticipants(question);
+
+  if(!activeProfileIds.includes(userId)){
+    activeProfileIds.unshift(userId);
+  }
+
+  activeProfileIndex=activeProfileIds.indexOf(userId);
+  activeProfileCategory=currentMainCategory;
+
+  $("#profileScreen").classList.add("is-open");
+  $("#personalScreen").classList.remove("is-open");
+  document.body.style.overflow="hidden";
+  renderProfile();
+};
+
+// Сохраняем и расширяем функцию закрытия профиля, чтобы вернуть старую музыку
+const originalCloseProfile = window.closeProfile || closeProfile;
+window.closeProfile = function() {
+  if (music && previousMusicSrc) {
+    if (!music.src.includes(previousMusicSrc)) {
+      music.src = previousMusicSrc;
+      music.play().catch(()=>{});
+    }
+  }
+
+  $("#profileScreen").classList.remove("is-open");
+  $("#personalScreen").classList.remove("is-open");
+  document.body.style.overflow="";
+};
+
+</script>
+
+</body>
+</html>
